@@ -1,0 +1,137 @@
+import { db } from '../db'
+import type {
+  Category,
+  Practice,
+  DailyRecord,
+  MissedReason,
+  ExamenEntry,
+  GuidingQuestion,
+  Proposito,
+} from '../types'
+
+export interface BackupData {
+  version: number
+  exportedAt: string
+  data: {
+    categories: Category[]
+    practices: Practice[]
+    dailyRecords: DailyRecord[]
+    missedReasons: MissedReason[]
+    examenEntries: ExamenEntry[]
+    guidingQuestions: GuidingQuestion[]
+    propositos: Proposito[]
+  }
+}
+
+export async function exportBackup(): Promise<BackupData> {
+  const [
+    categories,
+    practices,
+    dailyRecords,
+    missedReasons,
+    examenEntries,
+    guidingQuestions,
+    propositos,
+  ] = await Promise.all([
+    db.categories.toArray(),
+    db.practices.toArray(),
+    db.dailyRecords.toArray(),
+    db.missedReasons.toArray(),
+    db.examenEntries.toArray(),
+    db.guidingQuestions.toArray(),
+    db.propositos.toArray(),
+  ])
+
+  return {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    data: {
+      categories,
+      practices,
+      dailyRecords,
+      missedReasons,
+      examenEntries,
+      guidingQuestions,
+      propositos,
+    },
+  }
+}
+
+export async function importBackup(backup: BackupData): Promise<void> {
+  if (backup.version !== 1) {
+    throw new Error('Versão de backup incompatível')
+  }
+
+  await db.transaction(
+    'rw',
+    [
+      db.categories,
+      db.practices,
+      db.dailyRecords,
+      db.missedReasons,
+      db.examenEntries,
+      db.guidingQuestions,
+      db.propositos,
+    ],
+    async () => {
+      // Clear all existing data
+      await Promise.all([
+        db.categories.clear(),
+        db.practices.clear(),
+        db.dailyRecords.clear(),
+        db.missedReasons.clear(),
+        db.examenEntries.clear(),
+        db.guidingQuestions.clear(),
+        db.propositos.clear(),
+      ])
+
+      // Import new data
+      await Promise.all([
+        db.categories.bulkAdd(backup.data.categories),
+        db.practices.bulkAdd(backup.data.practices),
+        db.dailyRecords.bulkAdd(backup.data.dailyRecords),
+        db.missedReasons.bulkAdd(backup.data.missedReasons),
+        db.examenEntries.bulkAdd(backup.data.examenEntries),
+        db.guidingQuestions.bulkAdd(backup.data.guidingQuestions),
+        db.propositos.bulkAdd(backup.data.propositos),
+      ])
+    }
+  )
+}
+
+export function downloadBackup(backup: BackupData): void {
+  const json = JSON.stringify(backup, null, 2)
+  const blob = new Blob([json], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+
+  const date = new Date().toISOString().split('T')[0]
+  const filename = `plano-de-vida-backup-${date}.json`
+
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
+
+export function parseBackupFile(file: File): Promise<BackupData> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result as string) as BackupData
+        if (!data.version || !data.data) {
+          reject(new Error('Arquivo de backup inválido'))
+          return
+        }
+        resolve(data)
+      } catch {
+        reject(new Error('Erro ao ler arquivo de backup'))
+      }
+    }
+    reader.onerror = () => reject(new Error('Erro ao ler arquivo'))
+    reader.readAsText(file)
+  })
+}

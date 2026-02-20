@@ -1,0 +1,7 @@
+node_modules
+dist
+*.tsbuildinfo
+.claude
+.playwright-cli
+tests/browser-tests.json
+wobbly-napping-moore.md
