@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion } from 'motion/react'
 import { Link } from 'react-router'
 import { Plus, BookOpen, HelpCircle } from 'lucide-react'
 import { Header } from '../layout/Header'
@@ -65,7 +66,7 @@ export function ExamenView() {
         rightAction={
           <Link
             to="/examen/confession"
-            className="p-2 -mr-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+            className="p-2 -mr-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
             aria-label="Confissão"
           >
             <BookOpen className="w-5 h-5" />
@@ -73,7 +74,13 @@ export function ExamenView() {
         }
       />
 
-      <div className="flex-1 p-4 space-y-6">
+      <motion.div
+        className="flex-1 p-4 space-y-8"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.2 }}
+        key={dateStr}
+      >
         {(['gracias', 'perdon', 'ayudame'] as ExamenCategory[]).map((category) => (
           <section key={category}>
             <div
@@ -81,14 +88,14 @@ export function ExamenView() {
               style={{ borderColor: EXAMEN_COLORS[category] }}
             >
               <h2
-                className="text-sm font-semibold uppercase tracking-wide"
+                className="font-heading text-sm font-semibold uppercase tracking-widest"
                 style={{ color: EXAMEN_COLORS[category] }}
               >
                 {EXAMEN_LABELS[category]}
               </h2>
               <button
                 onClick={() => handleAddEntry(category)}
-                className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors"
+                className="p-1 hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded transition-colors"
                 style={{ color: EXAMEN_COLORS[category] }}
               >
                 <Plus className="w-5 h-5" />
@@ -98,7 +105,7 @@ export function ExamenView() {
             {entriesByCategory[category].length === 0 ? (
               <button
                 onClick={() => handleAddEntry(category)}
-                className="w-full py-4 text-sm text-slate-400 dark:text-slate-500 border border-dashed border-slate-200 dark:border-slate-700 rounded-lg hover:border-slate-300 dark:hover:border-slate-600 transition-colors"
+                className="w-full py-4 text-sm text-text-muted dark:text-text-muted-dark border border-dashed border-border dark:border-border-dark rounded-lg hover:border-text-muted dark:hover:border-text-muted-dark transition-colors"
               >
                 Toque para adicionar
               </button>
@@ -124,13 +131,13 @@ export function ExamenView() {
         <div className="pt-4">
           <Link
             to="/examen/questions"
-            className="flex items-center justify-center gap-2 py-3 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
+            className="flex items-center justify-center gap-2 py-3 text-sm text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors"
           >
             <HelpCircle className="w-4 h-4" />
             Perguntas orientadoras
           </Link>
         </div>
-      </div>
+      </motion.div>
 
       <ExamenEntryForm
         isOpen={showEntryForm}

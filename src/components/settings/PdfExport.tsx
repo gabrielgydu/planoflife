@@ -41,15 +41,15 @@ export function PdfExport() {
 
   return (
     <div className="min-h-full">
-      <header className="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 z-10">
-        <div className="flex items-center px-4 h-14">
+      <header className="sticky top-0 bg-surface-card/95 dark:bg-surface-card-dark/95 backdrop-blur-sm shadow-[0_1px_3px_rgba(26,32,48,0.04)] z-10">
+        <div className="flex items-center px-4 h-16">
           <button
             onClick={() => navigate('/settings')}
-            className="p-2 -ml-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+            className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <h1 className="flex-1 text-center text-lg font-semibold text-slate-900 dark:text-slate-100 pr-10">
+          <h1 className="flex-1 text-center font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark pr-10">
             Exportar PDF
           </h1>
         </div>
@@ -57,24 +57,24 @@ export function PdfExport() {
 
       <div className="p-4 space-y-6">
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-lg">
-            <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+          <div className="p-4 bg-[#9B6B6B]/10 border border-[#9B6B6B]/30 rounded-lg">
+            <p className="text-sm text-[#9B6B6B]">{error}</p>
           </div>
         )}
 
-        <section className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4">
+        <section className="bg-surface-secondary dark:bg-surface-secondary-dark rounded-lg p-4">
           <div className="flex items-start gap-4">
-            <FileText className="w-5 h-5 text-slate-600 dark:text-slate-400 mt-0.5" />
+            <FileText className="w-5 h-5 text-text-secondary dark:text-text-secondary-dark mt-0.5" />
             <div className="flex-1">
-              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-1">
+              <h2 className="text-sm font-semibold text-text-primary dark:text-text-primary-dark mb-1">
                 Gerar Relatório Mensal
               </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
+              <p className="text-xs text-text-muted dark:text-text-muted-dark mb-4">
                 Gera um PDF com a grade de práticas do mês, mostrando quais foram feitas a cada dia.
               </p>
 
               <div className="mb-4">
-                <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">
+                <label className="block text-xs font-medium text-text-secondary dark:text-text-secondary-dark mb-2">
                   Selecione o mês
                 </label>
                 <select
@@ -84,7 +84,7 @@ export function PdfExport() {
                     setSelectedYear(year)
                     setSelectedMonth(month)
                   }}
-                  className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 capitalize focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-3 bg-surface-card dark:bg-surface-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark capitalize focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
                   {monthOptions.map((opt) => (
                     <option key={`${opt.year}-${opt.month}`} value={`${opt.year}-${opt.month}`}>
@@ -105,12 +105,12 @@ export function PdfExport() {
           </div>
         </section>
 
-        <div className="p-4 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 rounded-lg">
+        <div className="p-4 bg-primary/5 border border-primary/15 rounded-lg">
           <div className="flex items-start gap-3">
-            <Lightbulb className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
+            <Lightbulb className="w-5 h-5 text-primary dark:text-primary-light mt-0.5 shrink-0" />
             <div>
-              <p className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-1">Dica</p>
-              <p className="text-xs text-blue-700 dark:text-blue-400">
+              <p className="text-sm font-medium text-text-primary dark:text-text-primary-dark mb-1">Dica</p>
+              <p className="text-xs text-text-secondary dark:text-text-secondary-dark">
                 O PDF é gerado em formato paisagem A4, ideal para imprimir e acompanhar suas práticas
                 ao longo do mês.
               </p>

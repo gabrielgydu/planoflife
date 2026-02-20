@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { motion } from 'motion/react'
 import { useNavigate } from 'react-router'
 import { ChevronRight, RotateCcw, ClipboardList } from 'lucide-react'
 import { Header } from '../layout/Header'
@@ -78,7 +79,7 @@ export function DailyView() {
           hasAnyCompleted ? (
             <button
               onClick={() => setShowClearDialog(true)}
-              className="p-2 -mr-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+              className="p-2 -mr-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
               aria-label="Limpar tudo"
             >
               <RotateCcw className="w-5 h-5" />
@@ -86,7 +87,7 @@ export function DailyView() {
           ) : (
             <button
               onClick={handleNextDay}
-              className="p-2 -mr-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+              className="p-2 -mr-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
               aria-label="Próximo dia"
             >
               <ChevronRight className="w-5 h-5" />
@@ -95,7 +96,13 @@ export function DailyView() {
         }
       />
 
-      <div className="flex-1">
+      <motion.div
+        className="flex-1"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.2 }}
+        key={dateStr}
+      >
         {/* Missed practice alerts (only for today) */}
         {showMissedAlerts && (
           <div className="p-4 space-y-3">
@@ -136,7 +143,7 @@ export function DailyView() {
             action={{ label: 'Adicionar práticas', onClick: () => navigate('/settings/practices') }}
           />
         )}
-      </div>
+      </motion.div>
 
       <ConfirmDialog
         isOpen={showClearDialog}

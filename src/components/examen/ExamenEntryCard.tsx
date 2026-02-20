@@ -21,21 +21,21 @@ export function ExamenEntryCard({
 
   return (
     <div
-      className="relative bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden"
-      style={{ borderLeftWidth: 4, borderLeftColor: color }}
+      className="relative bg-surface-card dark:bg-surface-card-dark rounded-lg shadow-sm border border-border dark:border-border-dark overflow-hidden"
+      style={{ borderLeftWidth: 3, borderLeftColor: color }}
     >
       <div className="p-3">
-        <p className="text-sm text-slate-900 dark:text-slate-100 whitespace-pre-wrap">{entry.text}</p>
+        <p className="text-sm text-text-primary dark:text-text-primary-dark whitespace-pre-wrap">{entry.text}</p>
 
-        <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-100 dark:border-slate-700">
+        <div className="flex items-center justify-between mt-3 pt-2 border-t border-border/30 dark:border-border-dark">
           <div className="flex items-center gap-2">
             {entry.category === 'perdon' && (
               <button
                 onClick={onToggleConfession}
                 className={`flex items-center gap-1 text-xs px-2 py-1 rounded-full transition-colors ${
                   entry.isForConfession
-                    ? 'bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400'
-                    : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                    ? 'bg-[#9B6B6B]/15 text-[#9B6B6B]'
+                    : 'bg-surface-secondary dark:bg-surface-secondary-dark text-text-muted dark:text-text-muted-dark'
                 }`}
               >
                 {entry.isForConfession ? (
@@ -50,7 +50,7 @@ export function ExamenEntryCard({
             {onMakeProposito && (
               <button
                 onClick={onMakeProposito}
-                className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-500/30 transition-colors"
+                className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-[#A89548]/15 text-[#A89548] hover:bg-[#A89548]/25 transition-colors"
               >
                 <ArrowRight className="w-3 h-3" />
                 Propósito
@@ -61,13 +61,13 @@ export function ExamenEntryCard({
           <div className="flex items-center gap-1">
             <button
               onClick={onEdit}
-              className="p-1.5 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors"
+              className="p-1.5 text-text-muted dark:text-text-muted-dark hover:text-text-secondary dark:hover:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded transition-colors"
             >
               <Pencil className="w-4 h-4" />
             </button>
             <button
               onClick={onDelete}
-              className="p-1.5 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors"
+              className="p-1.5 text-text-muted dark:text-text-muted-dark hover:text-[#9B6B6B] hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded transition-colors"
             >
               <Trash2 className="w-4 h-4" />
             </button>

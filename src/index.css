@@ -1,11 +1,37 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-primary: #6366f1;
-  --color-primary-dark: #4f46e5;
-  --color-success: #22c55e;
-  --color-success-dark: #16a34a;
-  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --color-primary: #4A5E78;
+  --color-primary-dark: #3A4D65;
+  --color-primary-light: #7A92B0;
+  --color-success: #5B8A72;
+  --color-success-dark: #4A7360;
+
+  /* Light surfaces */
+  --color-surface: #F7F8FA;
+  --color-surface-card: #FFFFFF;
+  --color-surface-secondary: #EEF0F4;
+
+  /* Dark surfaces */
+  --color-surface-dark: #13161B;
+  --color-surface-card-dark: #1C2028;
+  --color-surface-secondary-dark: #171B22;
+
+  /* Light text */
+  --color-text-primary: #1A2030;
+  --color-text-secondary: #4A5568;
+  --color-text-muted: #8494A7;
+
+  /* Dark text */
+  --color-text-primary-dark: #D8DEE8;
+  --color-text-secondary-dark: #94A3B8;
+  --color-text-muted-dark: #5E6E82;
+
+  /* Borders */
+  --color-border: #D8DEE8;
+  --color-border-dark: #2A3040;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
 :root {
@@ -13,6 +39,7 @@
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --safe-area-left: env(safe-area-inset-left, 0px);
   --safe-area-right: env(safe-area-inset-right, 0px);
+  --font-heading: 'Cormorant Garamond', serif;
 }
 
 html {
@@ -22,7 +49,7 @@ html {
 }
 
 body {
-  @apply bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100;
+  @apply bg-surface text-text-primary dark:bg-surface-dark dark:text-text-primary-dark;
   padding-top: var(--safe-area-top);
   padding-bottom: var(--safe-area-bottom);
   padding-left: var(--safe-area-left);
@@ -30,10 +57,26 @@ body {
   overscroll-behavior: none;
 }
 
+/* Subtle paper texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
 #root {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+}
+
+/* Heading font utility */
+.font-heading {
+  font-family: var(--font-heading);
 }
 
 /* Prevent iOS text selection on long press */
@@ -45,4 +88,32 @@ body {
 /* Smooth scrolling for iOS */
 .scroll-smooth {
   -webkit-overflow-scrolling: touch;
+}
+
+/* Cool-toned scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8494A7;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4A5568;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-thumb {
+    background: #2A3040;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #5E6E82;
+  }
 }

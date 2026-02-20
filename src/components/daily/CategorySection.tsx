@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import { ChevronDown } from 'lucide-react'
 import type { Category, Practice } from '../../types'
 import { PracticeRow } from './PracticeRow'
+import { CategoryIcon } from '../shared/CategoryIcon'
 
 interface CategorySectionProps {
   category: Category
@@ -29,33 +31,44 @@ export function CategorySection({
     <section className="mb-2">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        className="w-full flex items-center gap-2 px-5 py-4 hover:bg-surface-secondary/50 dark:hover:bg-surface-secondary-dark/50 transition-colors"
       >
-        <span className="text-base">{category.emoji}</span>
-        <span className="flex-1 text-left text-sm font-medium text-slate-700 dark:text-slate-300">
+        <CategoryIcon name={category.emoji} className="w-4 h-4 text-text-secondary dark:text-text-secondary-dark" />
+        <span className="flex-1 text-left font-heading text-base font-medium tracking-wide text-text-secondary dark:text-text-secondary-dark">
           {category.name}
         </span>
-        <span className="text-xs text-slate-500 dark:text-slate-400 mr-2">
+        <span className="text-xs text-text-muted dark:text-text-muted-dark mr-2">
           {completedCount}/{totalCount}
         </span>
-        <ChevronDown
-          className={`w-4 h-4 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-        />
+        <motion.div
+          animate={{ rotate: isExpanded ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <ChevronDown className="w-4 h-4 text-text-muted" />
+        </motion.div>
       </button>
 
-      {isExpanded && (
-        <div className="divide-y divide-slate-100 dark:divide-slate-800">
-          {practices.map((practice) => (
-            <PracticeRow
-              key={practice.id}
-              practice={practice}
-              isCompleted={isCompleted(practice.id)}
-              onToggle={() => onTogglePractice(practice.id)}
-              onOpenDetail={() => onOpenPracticeDetail(practice)}
-            />
-          ))}
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2, ease: 'easeInOut' }}
+            style={{ overflow: 'hidden' }}
+          >
+            {practices.map((practice) => (
+              <PracticeRow
+                key={practice.id}
+                practice={practice}
+                isCompleted={isCompleted(practice.id)}
+                onToggle={() => onTogglePractice(practice.id)}
+                onOpenDetail={() => onOpenPracticeDetail(practice)}
+              />
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

@@ -1,7 +1,7 @@
 export const EXAMEN_COLORS = {
-  gracias: '#22c55e', // green-500
-  perdon: '#ef4444', // red-500
-  ayudame: '#eab308', // yellow-500
+  gracias: '#5B8A72', // sage
+  perdon: '#9B6B6B', // dusty rose
+  ayudame: '#A89548', // muted gold
 } as const
 
 export const EXAMEN_LABELS = {

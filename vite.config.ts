@@ -17,8 +17,8 @@ export default defineConfig({
         name: 'Plano de Vida',
         short_name: 'Plano de Vida',
         description: 'Práticas espirituais diárias',
-        theme_color: '#6366f1',
-        background_color: '#ffffff',
+        theme_color: '#4A5E78',
+        background_color: '#F7F8FA',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',
@@ -40,6 +40,17 @@ export default defineConfig({
               cacheName: 'google-fonts-cache',
               expiration: {
                 maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+              },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-webfonts',
+              expiration: {
+                maxEntries: 30,
                 maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
               },
             },

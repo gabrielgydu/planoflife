@@ -27,15 +27,15 @@ export function ConfessionView() {
 
   return (
     <div className="min-h-full">
-      <header className="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 z-10">
-        <div className="flex items-center px-4 h-14">
+      <header className="sticky top-0 bg-surface-card/95 dark:bg-surface-card-dark/95 backdrop-blur-sm shadow-[0_1px_3px_rgba(26,32,48,0.04)] z-10">
+        <div className="flex items-center px-4 h-16">
           <button
             onClick={() => navigate(-1)}
-            className="p-2 -ml-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+            className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <h1 className="flex-1 text-center text-lg font-semibold text-slate-900 dark:text-slate-100">
+          <h1 className="flex-1 text-center font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark">
             Preparação para Confissão
           </h1>
           <div className="w-10" />
@@ -46,21 +46,21 @@ export function ConfessionView() {
         <EmptyState icon={Sparkles} message="Nenhum item pendente para confissão" />
       ) : (
         <>
-          <div className="p-4 space-y-6">
+          <div className="p-4 space-y-8">
             {sortedDates.map((date) => {
               const dateEntries = entriesByDate.get(date) ?? []
               return (
                 <section key={date}>
-                  <h3 className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                  <h3 className="font-heading text-xs font-medium text-text-muted dark:text-text-muted-dark uppercase tracking-widest mb-2">
                     {formatDateShort(parseDate(date))}
                   </h3>
                   <div className="space-y-2">
                     {dateEntries.map((entry) => (
                       <div
                         key={entry.id}
-                        className="p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 border-l-4 border-l-red-500"
+                        className="p-3 bg-surface-card dark:bg-surface-card-dark rounded-lg border border-border dark:border-border-dark border-l-[3px] border-l-[#9B6B6B]"
                       >
-                        <p className="text-sm text-slate-900 dark:text-slate-100 whitespace-pre-wrap">
+                        <p className="text-sm text-text-primary dark:text-text-primary-dark whitespace-pre-wrap">
                           {entry.text}
                         </p>
                       </div>
@@ -71,7 +71,7 @@ export function ConfessionView() {
             })}
           </div>
 
-          <div className="sticky bottom-0 p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700">
+          <div className="sticky bottom-0 p-4 bg-surface-card/95 dark:bg-surface-card-dark/95 backdrop-blur-sm border-t border-border dark:border-border-dark">
             <button
               onClick={() => setShowConfirmDialog(true)}
               className="w-full py-3 bg-success hover:bg-success-dark text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"

@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { useEffect } from 'react'
+import { useFont } from './hooks/useFont'
 import { AppShell } from './components/layout/AppShell'
 import { DailyView } from './components/daily/DailyView'
 import { ExamenView } from './components/examen/ExamenView'
@@ -17,10 +18,12 @@ import { BackupRestore } from './components/settings/BackupRestore'
 import { PdfExport } from './components/settings/PdfExport'
 import { InstallBanner } from './components/shared/InstallBanner'
 import { seedDatabase } from './db/seed'
+import { migrateEmojisToIcons } from './db'
 
 export function App() {
+  useFont() // Initialize heading font CSS variable from localStorage
   useEffect(() => {
-    seedDatabase()
+    seedDatabase().then(() => migrateEmojisToIcons())
   }, [])
 
   return (

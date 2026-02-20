@@ -112,21 +112,21 @@ export function PracticeForm() {
 
   return (
     <div className="min-h-full">
-      <header className="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 z-10">
-        <div className="flex items-center px-4 h-14">
+      <header className="sticky top-0 bg-surface-card/95 dark:bg-surface-card-dark/95 backdrop-blur-sm shadow-[0_1px_3px_rgba(26,32,48,0.04)] z-10">
+        <div className="flex items-center px-4 h-16">
           <button
             onClick={() => navigate(-1)}
-            className="p-2 -ml-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+            className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-lg transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <h1 className="flex-1 text-center text-lg font-semibold text-slate-900 dark:text-slate-100">
+          <h1 className="flex-1 text-center font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark">
             {isEditing ? 'Editar Prática' : 'Nova Prática'}
           </h1>
           <button
             onClick={handleSubmit}
             disabled={!name.trim() || !categoryId || isSaving}
-            className="px-3 py-1.5 text-sm font-medium text-primary dark:text-indigo-400 disabled:opacity-50"
+            className="px-3 py-1.5 text-sm font-medium text-primary dark:text-primary-light disabled:opacity-50"
           >
             {isSaving ? 'Salvando...' : 'Salvar'}
           </button>
@@ -135,31 +135,31 @@ export function PracticeForm() {
 
       <form onSubmit={handleSubmit} className="p-4 space-y-6">
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+          <label className="block text-sm font-medium text-text-secondary dark:text-text-secondary-dark mb-2">
             Nome
           </label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full px-4 py-3 bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-primary/50"
             placeholder="Nome da prática"
             autoFocus
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+          <label className="block text-sm font-medium text-text-secondary dark:text-text-secondary-dark mb-2">
             Categoria
           </label>
           <select
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
-            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full px-4 py-3 bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
-                {cat.emoji} {cat.name}
+                {cat.name}
               </option>
             ))}
           </select>
@@ -167,8 +167,8 @@ export function PracticeForm() {
 
         <div className="flex items-center justify-between py-2">
           <div>
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Obrigatória</span>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <span className="text-sm font-medium text-text-secondary dark:text-text-secondary-dark">Obrigatória</span>
+            <p className="text-xs text-text-muted dark:text-text-muted-dark">
               Práticas obrigatórias pedem justificativa quando não feitas
             </p>
           </div>
@@ -176,7 +176,7 @@ export function PracticeForm() {
             type="button"
             onClick={() => setIsRequired(!isRequired)}
             className={`relative w-12 h-7 rounded-full transition-colors ${
-              isRequired ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-700'
+              isRequired ? 'bg-primary' : 'bg-border dark:bg-border-dark'
             }`}
           >
             <span
@@ -188,7 +188,7 @@ export function PracticeForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+          <label className="block text-sm font-medium text-text-secondary dark:text-text-secondary-dark mb-2">
             Imagem
           </label>
           <input
@@ -204,7 +204,7 @@ export function PracticeForm() {
               <img
                 src={imageData}
                 alt="Preview"
-                className="w-full max-h-48 object-contain rounded-lg bg-slate-100 dark:bg-slate-800"
+                className="w-full max-h-48 object-contain rounded-lg bg-surface-secondary dark:bg-surface-secondary-dark"
               />
               <button
                 type="button"
@@ -219,7 +219,7 @@ export function PracticeForm() {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={isCompressing}
-              className="w-full py-8 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-lg text-slate-400 dark:text-slate-500 hover:border-slate-300 dark:hover:border-slate-600 hover:text-slate-500 dark:hover:text-slate-400 transition-colors"
+              className="w-full py-8 border-2 border-dashed border-border dark:border-border-dark rounded-lg text-text-muted dark:text-text-muted-dark hover:border-text-muted dark:hover:border-text-muted-dark hover:text-text-secondary dark:hover:text-text-secondary-dark transition-colors"
             >
               {isCompressing ? (
                 <span>Comprimindo...</span>
@@ -234,13 +234,13 @@ export function PracticeForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+          <label className="block text-sm font-medium text-text-secondary dark:text-text-secondary-dark mb-2">
             Conteúdo
           </label>
           <Suspense
             fallback={
-              <div className="min-h-[200px] p-4 bg-slate-50 dark:bg-slate-800 rounded-lg flex items-center justify-center">
-                <span className="text-slate-400">Carregando editor...</span>
+              <div className="min-h-[200px] p-4 bg-surface-secondary dark:bg-surface-secondary-dark rounded-lg flex items-center justify-center">
+                <span className="text-text-muted">Carregando editor...</span>
               </div>
             }
           >
@@ -249,11 +249,11 @@ export function PracticeForm() {
         </div>
 
         {isEditing && existingPractice && (
-          <div className="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-3">
+          <div className="pt-4 border-t border-border dark:border-border-dark space-y-3">
             <button
               type="button"
               onClick={handleArchiveToggle}
-              className="w-full py-3 text-sm font-medium text-amber-600 dark:text-amber-500 bg-amber-50 dark:bg-amber-500/10 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-500/20 transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 text-sm font-medium text-[#A89548] bg-[#A89548]/10 rounded-lg hover:bg-[#A89548]/20 transition-colors flex items-center justify-center gap-2"
             >
               <Archive className="w-4 h-4" />
               {existingPractice.isArchived ? 'Desarquivar' : 'Arquivar'}
@@ -261,7 +261,7 @@ export function PracticeForm() {
             <button
               type="button"
               onClick={() => setShowDeleteDialog(true)}
-              className="w-full py-3 text-sm font-medium text-red-600 dark:text-red-500 bg-red-50 dark:bg-red-500/10 rounded-lg hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 text-sm font-medium text-[#9B6B6B] bg-[#9B6B6B]/10 rounded-lg hover:bg-[#9B6B6B]/20 transition-colors flex items-center justify-center gap-2"
             >
               <Trash2 className="w-4 h-4" />
               Excluir prática

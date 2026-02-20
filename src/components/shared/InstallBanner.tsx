@@ -39,14 +39,14 @@ export function InstallBanner() {
 
   return (
     <div className="fixed bottom-20 left-4 right-4 z-40 animate-in fade-in slide-in-from-bottom-4">
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 p-4">
+      <div className="bg-surface-card dark:bg-surface-card-dark rounded-lg shadow-lg border border-border dark:border-border-dark p-4">
         <div className="flex items-start gap-3">
-          <Smartphone className="w-5 h-5 text-slate-600 dark:text-slate-400 mt-0.5 shrink-0" />
+          <Smartphone className="w-5 h-5 text-text-secondary dark:text-text-secondary-dark mt-0.5 shrink-0" />
           <div className="flex-1">
-            <p className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-1">
+            <p className="text-sm font-medium text-text-primary dark:text-text-primary-dark mb-1">
               Instale o app na tela inicial
             </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-text-muted dark:text-text-muted-dark">
               Toque em{' '}
               <Download className="w-4 h-4 inline-block mx-0.5 align-text-bottom" />{' '}
               e depois em <strong>"Adicionar à Tela de Início"</strong>
@@ -54,7 +54,7 @@ export function InstallBanner() {
           </div>
           <button
             onClick={handleDismiss}
-            className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+            className="p-1 text-text-muted hover:text-text-secondary dark:hover:text-text-secondary-dark"
           >
             <X className="w-5 h-5" />
           </button>

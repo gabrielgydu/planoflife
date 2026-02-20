@@ -5,12 +5,12 @@ import { generateId } from '../utils/id'
 const now = new Date().toISOString()
 
 const defaultCategories: Category[] = [
-  { id: generateId(), name: 'Orações da Manhã', sortOrder: 0, emoji: '🌅', createdAt: now, updatedAt: now },
-  { id: generateId(), name: 'Meio da Manhã', sortOrder: 1, emoji: '☀️', createdAt: now, updatedAt: now },
-  { id: generateId(), name: 'Meio-dia', sortOrder: 2, emoji: '🕛', createdAt: now, updatedAt: now },
-  { id: generateId(), name: 'Tarde', sortOrder: 3, emoji: '🌤️', createdAt: now, updatedAt: now },
-  { id: generateId(), name: 'Noite', sortOrder: 4, emoji: '🌙', createdAt: now, updatedAt: now },
-  { id: generateId(), name: 'Missa / Igreja', sortOrder: 5, emoji: '⛪', createdAt: now, updatedAt: now },
+  { id: generateId(), name: 'Orações da Manhã', sortOrder: 0, emoji: 'Sunrise', createdAt: now, updatedAt: now },
+  { id: generateId(), name: 'Meio da Manhã', sortOrder: 1, emoji: 'Sun', createdAt: now, updatedAt: now },
+  { id: generateId(), name: 'Meio-dia', sortOrder: 2, emoji: 'Clock', createdAt: now, updatedAt: now },
+  { id: generateId(), name: 'Tarde', sortOrder: 3, emoji: 'CloudSun', createdAt: now, updatedAt: now },
+  { id: generateId(), name: 'Noite', sortOrder: 4, emoji: 'Moon', createdAt: now, updatedAt: now },
+  { id: generateId(), name: 'Missa / Igreja', sortOrder: 5, emoji: 'Church', createdAt: now, updatedAt: now },
 ]
 
 function createDefaultPractices(categories: Category[]): Practice[] {

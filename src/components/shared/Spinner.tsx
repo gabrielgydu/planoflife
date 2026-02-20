@@ -10,7 +10,7 @@ interface SpinnerProps {
 export function Spinner({ size = 'md', className = '' }: SpinnerProps) {
   return (
     <div className={`flex items-center justify-center ${className}`}>
-      <Loader2 className={`${sizes[size]} animate-spin text-slate-400 dark:text-slate-500`} />
+      <Loader2 className={`${sizes[size]} animate-spin text-text-muted dark:text-text-muted-dark`} />
     </div>
   )
 }

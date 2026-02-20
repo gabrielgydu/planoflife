@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import { useNavigate } from 'react-router'
 import { ChevronLeft, Plus, GripVertical, Pencil, Archive, HelpCircle } from 'lucide-react'
 import { useGuidingQuestions } from '../../hooks/useGuidingQuestions'
@@ -65,20 +66,20 @@ export function GuidingQuestionsList() {
 
   return (
     <div className="min-h-full">
-      <header className="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 z-10">
-        <div className="flex items-center px-4 h-14">
+      <header className="sticky top-0 bg-surface-card/95 dark:bg-surface-card-dark/95 backdrop-blur-sm shadow-[0_1px_3px_rgba(26,32,48,0.04)] z-10">
+        <div className="flex items-center px-4 h-16">
           <button
             onClick={() => navigate(-1)}
-            className="p-2 -ml-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+            className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <h1 className="flex-1 text-center text-lg font-semibold text-slate-900 dark:text-slate-100">
+          <h1 className="flex-1 text-center font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark">
             Perguntas Orientadoras
           </h1>
           <button
             onClick={() => handleOpenForm()}
-            className="p-2 -mr-2 text-primary dark:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+            className="p-2 -mr-2 text-primary dark:text-primary-light hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
           >
             <Plus className="w-6 h-6" />
           </button>
@@ -92,22 +93,22 @@ export function GuidingQuestionsList() {
           action={{ label: 'Adicionar pergunta', onClick: () => handleOpenForm() }}
         />
       ) : (
-        <div className="divide-y divide-slate-100 dark:divide-slate-800">
+        <div className="divide-y divide-border/30 dark:divide-border-dark">
           <SortableList
             items={questions}
             onReorder={handleReorder}
             renderItem={(question) => (
-              <div className="flex items-center gap-3 px-4 py-4 bg-white dark:bg-slate-900">
-                <span className="text-slate-300 dark:text-slate-600 cursor-grab">
+              <div className="flex items-center gap-3 px-4 py-4 bg-surface-card dark:bg-surface-dark">
+                <span className="text-text-muted dark:text-text-muted-dark cursor-grab">
                   <GripVertical className="w-5 h-5" />
                 </span>
-                <span className="flex-1 text-sm text-slate-900 dark:text-slate-100">{question.text}</span>
+                <span className="flex-1 text-sm text-text-primary dark:text-text-primary-dark">{question.text}</span>
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
                     handleOpenForm(question)
                   }}
-                  className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                  className="p-1.5 text-text-muted hover:text-text-secondary dark:hover:text-text-secondary-dark transition-colors"
                 >
                   <Pencil className="w-4 h-4" />
                 </button>
@@ -116,7 +117,7 @@ export function GuidingQuestionsList() {
                     e.stopPropagation()
                     archiveQuestion(question.id)
                   }}
-                  className="p-1.5 text-slate-400 hover:text-amber-500 transition-colors"
+                  className="p-1.5 text-text-muted hover:text-[#A89548] transition-colors"
                 >
                   <Archive className="w-4 h-4" />
                 </button>
@@ -127,12 +128,26 @@ export function GuidingQuestionsList() {
       )}
 
       {/* Form Modal */}
-      {showForm && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setShowForm(false)} />
-          <div className="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-t-2xl shadow-lg">
-            <div className="p-4 border-b border-slate-200 dark:border-slate-700">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+      <AnimatePresence>
+        {showForm && (
+          <div className="fixed inset-0 z-50 flex items-end justify-center">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="absolute inset-0 bg-black/40"
+              onClick={() => setShowForm(false)}
+            />
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="relative w-full max-w-lg bg-surface-card dark:bg-surface-card-dark rounded-t-2xl shadow-lg"
+            >
+            <div className="p-4 border-b border-border dark:border-border-dark">
+              <h2 className="font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark">
                 {editingQuestion ? 'Editar Pergunta' : 'Nova Pergunta'}
               </h2>
             </div>
@@ -141,13 +156,13 @@ export function GuidingQuestionsList() {
                 value={formText}
                 onChange={(e) => setFormText(e.target.value)}
                 placeholder="Digite a pergunta orientadora..."
-                className="w-full h-24 px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 resize-none focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="w-full h-24 px-4 py-3 bg-surface-secondary dark:bg-surface-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark resize-none focus:outline-none focus:ring-2 focus:ring-primary/50"
                 autoFocus
               />
               <div className="flex gap-3 pb-4">
                 <button
                   onClick={() => setShowForm(false)}
-                  className="flex-1 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 rounded-lg"
+                  className="flex-1 py-3 text-sm font-medium text-text-secondary dark:text-text-secondary-dark bg-surface-secondary dark:bg-surface-secondary-dark rounded-lg"
                 >
                   Cancelar
                 </button>
@@ -160,9 +175,10 @@ export function GuidingQuestionsList() {
                 </button>
               </div>
             </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
 
       <ConfirmDialog
         isOpen={deleteTarget !== null}

@@ -90,7 +90,7 @@ export function MonthGrid({ month }: MonthGridProps) {
         {WEEKDAYS.map((day) => (
           <div
             key={day}
-            className="text-center text-xs font-medium text-slate-400 dark:text-slate-500 py-2"
+            className="text-center text-xs font-medium text-text-muted dark:text-text-muted-dark py-2"
           >
             {day}
           </div>
@@ -116,19 +116,19 @@ export function MonthGrid({ month }: MonthGridProps) {
             fillPercent = Math.round((stats.completed / stats.total) * 100)
           }
 
-          // Determine color based on completion
-          let bgColor = 'bg-slate-100 dark:bg-slate-800'
+          // Determine color based on completion — muted palette
+          let bgColor = 'bg-surface-secondary dark:bg-surface-secondary-dark'
           if (!isFutureDate && stats) {
             if (fillPercent === 100) {
-              bgColor = 'bg-green-500'
+              bgColor = 'bg-[#5B8A72]'
             } else if (fillPercent >= 75) {
-              bgColor = 'bg-green-400'
+              bgColor = 'bg-[#5B8A72]/75'
             } else if (fillPercent >= 50) {
-              bgColor = 'bg-yellow-400'
+              bgColor = 'bg-[#A89548]/70'
             } else if (fillPercent >= 25) {
-              bgColor = 'bg-orange-400'
+              bgColor = 'bg-[#A89548]/45'
             } else if (fillPercent > 0) {
-              bgColor = 'bg-red-400'
+              bgColor = 'bg-[#9B6B6B]/60'
             }
           }
 
@@ -138,13 +138,13 @@ export function MonthGrid({ month }: MonthGridProps) {
               to={`/history/${dateStr}`}
               className={`aspect-square rounded-lg flex flex-col items-center justify-center text-xs transition-colors ${
                 !isCurrentMonth ? 'opacity-30' : ''
-              } ${isTodayDate ? 'ring-2 ring-primary ring-offset-2 dark:ring-offset-slate-900' : ''} ${
+              } ${isTodayDate ? 'ring-2 ring-primary ring-offset-2 dark:ring-offset-surface-dark' : ''} ${
                 isFutureDate ? 'pointer-events-none' : ''
               } ${bgColor}`}
             >
               <span
                 className={`font-medium ${
-                  fillPercent > 50 ? 'text-white' : 'text-slate-700 dark:text-slate-300'
+                  fillPercent > 50 ? 'text-white' : 'text-text-secondary dark:text-text-secondary-dark'
                 }`}
               >
                 {format(day, 'd')}
@@ -152,7 +152,7 @@ export function MonthGrid({ month }: MonthGridProps) {
               {stats && !isFutureDate && (
                 <span
                   className={`text-[10px] ${
-                    fillPercent > 50 ? 'text-white/80' : 'text-slate-500 dark:text-slate-400'
+                    fillPercent > 50 ? 'text-white/80' : 'text-text-muted dark:text-text-muted-dark'
                   }`}
                 >
                   {stats.completed}/{stats.total}
@@ -163,26 +163,26 @@ export function MonthGrid({ month }: MonthGridProps) {
         })}
       </div>
 
-      {/* Legend */}
-      <div className="flex items-center justify-center gap-4 mt-6 text-xs text-slate-500 dark:text-slate-400">
+      {/* Legend — muted palette */}
+      <div className="flex items-center justify-center gap-4 mt-6 text-xs text-text-muted dark:text-text-muted-dark">
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded bg-red-400" />
+          <div className="w-3 h-3 rounded bg-[#9B6B6B]/60" />
           <span>&lt;25%</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded bg-orange-400" />
+          <div className="w-3 h-3 rounded bg-[#A89548]/45" />
           <span>25-50%</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded bg-yellow-400" />
+          <div className="w-3 h-3 rounded bg-[#A89548]/70" />
           <span>50-75%</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded bg-green-400" />
+          <div className="w-3 h-3 rounded bg-[#5B8A72]/75" />
           <span>&gt;75%</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded bg-green-500" />
+          <div className="w-3 h-3 rounded bg-[#5B8A72]" />
           <span>100%</span>
         </div>
       </div>

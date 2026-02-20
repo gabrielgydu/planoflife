@@ -6,8 +6,7 @@ import { db } from '../../db'
 import { useCategories } from '../../hooks/useCategories'
 import { Spinner } from '../shared/Spinner'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
-
-const EMOJI_OPTIONS = ['🌅', '☀️', '🕛', '🌤️', '🌙', '⛪', '📿', '✝️', '🙏', '📖', '❤️', '⭐']
+import { CategoryIcon, ICON_OPTIONS } from '../shared/CategoryIcon'
 
 export function CategoryForm() {
   const navigate = useNavigate()
@@ -18,7 +17,7 @@ export function CategoryForm() {
   const existingCategory = useLiveQuery(() => (id ? db.categories.get(id) : undefined), [id])
 
   const [name, setName] = useState('')
-  const [emoji, setEmoji] = useState('📿')
+  const [emoji, setEmoji] = useState('Cross')
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
 
@@ -58,21 +57,21 @@ export function CategoryForm() {
 
   return (
     <div className="min-h-full">
-      <header className="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 z-10">
-        <div className="flex items-center px-4 h-14">
+      <header className="sticky top-0 bg-surface-card/95 dark:bg-surface-card-dark/95 backdrop-blur-sm shadow-[0_1px_3px_rgba(26,32,48,0.04)] z-10">
+        <div className="flex items-center px-4 h-16">
           <button
             onClick={() => navigate(-1)}
-            className="p-2 -ml-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+            className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-lg transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <h1 className="flex-1 text-center text-lg font-semibold text-slate-900 dark:text-slate-100">
+          <h1 className="flex-1 text-center font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark">
             {isEditing ? 'Editar Categoria' : 'Nova Categoria'}
           </h1>
           <button
             onClick={handleSubmit}
             disabled={!name.trim() || isSaving}
-            className="px-3 py-1.5 text-sm font-medium text-primary dark:text-indigo-400 disabled:opacity-50"
+            className="px-3 py-1.5 text-sm font-medium text-primary dark:text-primary-light disabled:opacity-50"
           >
             {isSaving ? 'Salvando...' : 'Salvar'}
           </button>
@@ -81,52 +80,52 @@ export function CategoryForm() {
 
       <form onSubmit={handleSubmit} className="p-4 space-y-6">
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+          <label className="block text-sm font-medium text-text-secondary dark:text-text-secondary-dark mb-2">
             Nome
           </label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full px-4 py-3 bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-primary/50"
             placeholder="Nome da categoria"
             autoFocus
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-            Emoji
+          <label className="block text-sm font-medium text-text-secondary dark:text-text-secondary-dark mb-2">
+            Ícone
           </label>
           <div className="flex flex-wrap gap-2">
-            {EMOJI_OPTIONS.map((e) => (
+            {ICON_OPTIONS.map((icon) => (
               <button
-                key={e}
+                key={icon}
                 type="button"
-                onClick={() => setEmoji(e)}
-                className={`w-12 h-12 text-2xl rounded-lg transition-colors ${
-                  emoji === e
-                    ? 'bg-primary/10 border-2 border-primary'
-                    : 'bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
+                onClick={() => setEmoji(icon)}
+                className={`w-12 h-12 flex items-center justify-center rounded-lg transition-colors ${
+                  emoji === icon
+                    ? 'bg-primary/10 border-2 border-primary text-primary dark:text-primary-light'
+                    : 'bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark hover:bg-border dark:hover:bg-border-dark text-text-secondary dark:text-text-secondary-dark'
                 }`}
               >
-                {e}
+                <CategoryIcon name={icon} className="w-5 h-5" />
               </button>
             ))}
           </div>
         </div>
 
         {isEditing && (
-          <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
+          <div className="pt-4 border-t border-border dark:border-border-dark">
             <button
               type="button"
               onClick={() => setShowDeleteDialog(true)}
-              className="w-full py-3 text-sm font-medium text-red-600 dark:text-red-500 bg-red-50 dark:bg-red-500/10 rounded-lg hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 text-sm font-medium text-[#9B6B6B] bg-[#9B6B6B]/10 rounded-lg hover:bg-[#9B6B6B]/20 transition-colors flex items-center justify-center gap-2"
             >
               <Trash2 className="w-4 h-4" />
               Excluir categoria
             </button>
-            <p className="mt-2 text-xs text-center text-slate-500 dark:text-slate-400">
+            <p className="mt-2 text-xs text-center text-text-muted dark:text-text-muted-dark">
               Todas as práticas desta categoria também serão excluídas
             </p>
           </div>
