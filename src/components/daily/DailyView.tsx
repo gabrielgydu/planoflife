@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router'
 import { ChevronRight, RotateCcw, ClipboardList } from 'lucide-react'
 import { Header } from '../layout/Header'
 import { CategorySection } from './CategorySection'
-import { MissedPracticeAlert } from './MissedPracticeAlert'
+import { YesterdayReviewModal } from './YesterdayReviewModal'
+import { MissedReasonsModal } from './MissedReasonsModal'
 import { PropositoCard } from './PropositoCard'
 import { Spinner } from '../shared/Spinner'
 import { EmptyState } from '../shared/EmptyState'
@@ -12,9 +13,9 @@ import { ConfirmDialog } from '../shared/ConfirmDialog'
 import { useCategories } from '../../hooks/useCategories'
 import { usePractices } from '../../hooks/usePractices'
 import { useDailyRecords } from '../../hooks/useDailyRecords'
-import { useMissedRequiredPractices, useMissedReasons } from '../../hooks/useMissedReasons'
+import { useMorningFlow } from '../../hooks/useMorningFlow'
 import { useProposito } from '../../hooks/usePropositos'
-import { formatDate, getToday, addDay, subDay, isToday } from '../../utils/dates'
+import { formatDate, getToday, addDay, subDay } from '../../utils/dates'
 import type { Practice } from '../../types'
 
 export function DailyView() {
@@ -29,9 +30,7 @@ export function DailyView() {
   const { practices, isLoading: practicesLoading } = usePractices()
   const { isCompleted, togglePractice, clearAllForDate } = useDailyRecords(dateStr)
 
-  // Only show missed practices alert for today
-  const { missedPractices } = useMissedRequiredPractices(yesterdayStr)
-  const { addReason } = useMissedReasons(yesterdayStr)
+  const { step, advanceToMissedReasons, completeFlow } = useMorningFlow()
 
   // Proposito for today
   const { proposito, setProposito } = useProposito(dateStr)
@@ -63,7 +62,6 @@ export function DailyView() {
   }
 
   const hasAnyCompleted = practices.some((p) => isCompleted(p.id))
-  const showMissedAlerts = isToday(currentDate) && missedPractices.length > 0
 
   if (categoriesLoading || practicesLoading) {
     return <Spinner className="h-64" />
@@ -103,19 +101,6 @@ export function DailyView() {
         transition={{ duration: 0.2 }}
         key={dateStr}
       >
-        {/* Missed practice alerts (only for today) */}
-        {showMissedAlerts && (
-          <div className="p-4 space-y-3">
-            {missedPractices.map((practice) => (
-              <MissedPracticeAlert
-                key={practice.id}
-                practice={practice}
-                onSaveReason={(reason) => addReason(practice.id, reason)}
-              />
-            ))}
-          </div>
-        )}
-
         {/* Proposito card */}
         <div className="px-4 py-2">
           <PropositoCard proposito={proposito} onSetProposito={setProposito} />
@@ -144,6 +129,9 @@ export function DailyView() {
           />
         )}
       </motion.div>
+
+      <YesterdayReviewModal isOpen={step === 'yesterday-review'} yesterdayStr={yesterdayStr} onComplete={advanceToMissedReasons} />
+      <MissedReasonsModal isOpen={step === 'missed-reasons'} yesterdayStr={yesterdayStr} onComplete={completeFlow} />
 
       <ConfirmDialog
         isOpen={showClearDialog}

@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import { ClipboardList, FolderOpen, Download, FileText, ChevronRight, type LucideIcon } from 'lucide-react'
 import { useFont, FONT_MAP, type FontKey } from '../../hooks/useFont'
+import { useIndividualReasons } from '../../hooks/useSettings'
 
 const menuItems: { to: string; label: string; icon: LucideIcon; description: string }[] = [
   { to: '/settings/practices', label: 'Práticas', icon: ClipboardList, description: 'Gerenciar práticas espirituais' },
@@ -17,6 +18,7 @@ const fontOptions: { key: FontKey; label: string }[] = [
 
 export function SettingsView() {
   const [fontKey, setFontKey] = useFont()
+  const [individualReasons, setIndividualReasons] = useIndividualReasons()
 
   return (
     <div className="min-h-full">
@@ -48,6 +50,30 @@ export function SettingsView() {
               </button>
             ))}
           </div>
+        </section>
+
+        {/* Morning Review */}
+        <section>
+          <h2 className="font-heading text-xs font-medium text-text-muted dark:text-text-muted-dark uppercase tracking-widest mb-3">
+            Revisão matinal
+          </h2>
+          <button
+            onClick={() => setIndividualReasons(!individualReasons)}
+            className="flex items-center justify-between w-full p-4 bg-surface-secondary dark:bg-surface-secondary-dark rounded-lg"
+          >
+            <span className="text-sm text-text-primary dark:text-text-primary-dark">Razão individual por prática</span>
+            <div
+              className={`relative w-10 h-6 rounded-full transition-colors duration-200 ${
+                individualReasons ? 'bg-primary' : 'bg-border dark:bg-border-dark'
+              }`}
+            >
+              <div
+                className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${
+                  individualReasons ? 'translate-x-5' : 'translate-x-1'
+                }`}
+              />
+            </div>
+          </button>
         </section>
 
         {/* Menu Items */}
