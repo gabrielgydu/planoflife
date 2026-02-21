@@ -1,11 +1,25 @@
 import { NavLink } from 'react-router'
-import { ClipboardList, BookOpen, Calendar, Settings, type LucideIcon } from 'lucide-react'
+import { Scale, Calendar, Settings, type LucideIcon } from 'lucide-react'
 
-const tabs: { to: string; label: string; icon: LucideIcon }[] = [
-  { to: '/', label: 'Hoje', icon: ClipboardList },
-  { to: '/examen', label: 'Exame', icon: BookOpen },
-  { to: '/history', label: 'Histórico', icon: Calendar },
-  { to: '/settings', label: 'Config', icon: Settings },
+function OpusDeiSeal({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 510 510"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={12}
+      className={className}
+    >
+      <path d="m254,11a244,244 0 1,0 2,0z M255,6V499 M43,132H467" />
+    </svg>
+  )
+}
+
+const tabs: { to: string; icon: LucideIcon | null }[] = [
+  { to: '/', icon: null },
+  { to: '/examen', icon: Scale },
+  { to: '/history', icon: Calendar },
+  { to: '/settings', icon: Settings },
 ]
 
 export function BottomNav() {
@@ -17,15 +31,18 @@ export function BottomNav() {
             key={tab.to}
             to={tab.to}
             className={({ isActive }) =>
-              `flex flex-col items-center justify-center px-4 py-2 text-xs font-heading tracking-wide transition-colors ${
+              `flex items-center justify-center w-12 h-12 transition-colors ${
                 isActive
                   ? 'text-primary dark:text-primary-light'
                   : 'text-text-muted dark:text-text-muted-dark'
               }`
             }
           >
-            <tab.icon className="w-5 h-5 mb-0.5" />
-            <span>{tab.label}</span>
+            {tab.icon ? (
+              <tab.icon className="w-6 h-6" />
+            ) : (
+              <OpusDeiSeal className="w-7 h-7" />
+            )}
           </NavLink>
         ))}
       </div>

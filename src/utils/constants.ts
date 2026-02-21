@@ -7,5 +7,5 @@ export const EXAMEN_COLORS = {
 export const EXAMEN_LABELS = {
   gracias: 'Gracias',
   perdon: 'Perdón',
-  ayudame: 'Ayúdame',
+  ayudame: 'Ayúdame más',
 } as const
