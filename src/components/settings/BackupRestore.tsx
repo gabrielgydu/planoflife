@@ -1,8 +1,17 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router'
-import { ChevronLeft, Download, Upload, AlertTriangle } from 'lucide-react'
-import { exportBackup, importBackup, downloadBackup, parseBackupFile } from '../../utils/backup'
+import { ChevronLeft, Download, Upload, AlertTriangle, Lock } from 'lucide-react'
+import { motion, AnimatePresence } from 'motion/react'
+import {
+  exportBackup,
+  importBackup,
+  downloadBackup,
+  downloadEncryptedBackup,
+  parseBackupFile,
+  parseEncryptedBackupFile,
+} from '../../utils/backup'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
+import { PasswordInput } from '../shared/PasswordInput'
 
 export function BackupRestore() {
   const navigate = useNavigate()
@@ -10,17 +19,27 @@ export function BackupRestore() {
   const [isExporting, setIsExporting] = useState(false)
   const [isImporting, setIsImporting] = useState(false)
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
+  const [showPasswordPrompt, setShowPasswordPrompt] = useState(false)
   const [pendingFile, setPendingFile] = useState<File | null>(null)
+  const [exportPassword, setExportPassword] = useState('')
+  const [importPassword, setImportPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
+
+  const isEncryptedExport = exportPassword.length > 0
 
   const handleExport = async () => {
     setError(null)
     setIsExporting(true)
     try {
       const backup = await exportBackup()
-      downloadBackup(backup)
+      if (isEncryptedExport) {
+        await downloadEncryptedBackup(backup, exportPassword)
+      } else {
+        downloadBackup(backup)
+      }
       setSuccess('Backup exportado com sucesso!')
+      setExportPassword('')
       setTimeout(() => setSuccess(null), 3000)
     } catch (err) {
       setError('Erro ao exportar backup')
@@ -36,10 +55,21 @@ export function BackupRestore() {
 
     setError(null)
     setPendingFile(file)
-    setShowConfirmDialog(true)
 
-    // Reset input so the same file can be selected again
+    if (file.name.endsWith('.enc')) {
+      setImportPassword('')
+      setShowPasswordPrompt(true)
+    } else {
+      setShowConfirmDialog(true)
+    }
+
     e.target.value = ''
+  }
+
+  const handlePasswordSubmit = () => {
+    if (!importPassword) return
+    setShowPasswordPrompt(false)
+    setShowConfirmDialog(true)
   }
 
   const handleImportConfirm = async () => {
@@ -50,7 +80,10 @@ export function BackupRestore() {
     setError(null)
 
     try {
-      const backup = await parseBackupFile(pendingFile)
+      const isEncrypted = pendingFile.name.endsWith('.enc')
+      const backup = isEncrypted
+        ? await parseEncryptedBackupFile(pendingFile, importPassword)
+        : await parseBackupFile(pendingFile)
       await importBackup(backup)
       setSuccess('Backup importado com sucesso! Recarregue a página.')
       setTimeout(() => {
@@ -62,6 +95,7 @@ export function BackupRestore() {
     } finally {
       setIsImporting(false)
       setPendingFile(null)
+      setImportPassword('')
     }
   }
 
@@ -103,15 +137,32 @@ export function BackupRestore() {
                 Exportar Backup
               </h2>
               <p className="text-xs text-text-muted dark:text-text-muted-dark mb-3">
-                Salva todas as suas práticas, registros e exames em um arquivo JSON.
+                Salva todas as suas práticas, registros e exames em um arquivo.
               </p>
-              <button
-                onClick={handleExport}
-                disabled={isExporting}
-                className="px-4 py-2.5 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark disabled:opacity-50 transition-colors"
-              >
-                {isExporting ? 'Exportando...' : 'Exportar Backup'}
-              </button>
+              <div className="space-y-3">
+                <div>
+                  <label className="flex items-center gap-1.5 text-xs text-text-secondary dark:text-text-secondary-dark mb-1.5">
+                    <Lock className="w-3.5 h-3.5" />
+                    Senha (opcional)
+                  </label>
+                  <PasswordInput
+                    value={exportPassword}
+                    onChange={setExportPassword}
+                    placeholder="Deixe vazio para exportar sem criptografia"
+                  />
+                </div>
+                <button
+                  onClick={handleExport}
+                  disabled={isExporting}
+                  className="px-4 py-2.5 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark disabled:opacity-50 transition-colors"
+                >
+                  {isExporting
+                    ? 'Exportando...'
+                    : isEncryptedExport
+                      ? 'Exportar Criptografado'
+                      : 'Exportar Backup'}
+                </button>
+              </div>
             </div>
           </div>
         </section>
@@ -130,7 +181,7 @@ export function BackupRestore() {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".json"
+                accept=".json,.enc"
                 onChange={handleFileSelect}
                 className="hidden"
               />
@@ -162,6 +213,65 @@ export function BackupRestore() {
         </div>
       </div>
 
+      {/* Password prompt for encrypted import */}
+      <AnimatePresence>
+        {showPasswordPrompt && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="absolute inset-0 bg-black/40"
+              onClick={() => {
+                setShowPasswordPrompt(false)
+                setPendingFile(null)
+              }}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+              className="relative bg-surface-card dark:bg-surface-card-dark rounded-2xl shadow-lg max-w-sm w-full p-6"
+            >
+              <h2 className="font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark mb-2">
+                Backup Criptografado
+              </h2>
+              <p className="text-sm text-text-secondary dark:text-text-secondary-dark mb-4">
+                Digite a senha usada para criptografar este backup.
+              </p>
+              <div className="mb-6">
+                <PasswordInput
+                  value={importPassword}
+                  onChange={setImportPassword}
+                  placeholder="Senha do backup"
+                  autoFocus
+                />
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    setShowPasswordPrompt(false)
+                    setPendingFile(null)
+                  }}
+                  className="flex-1 py-2.5 px-4 text-sm font-medium text-text-secondary dark:text-text-secondary-dark bg-surface-secondary dark:bg-surface-secondary-dark rounded-lg hover:bg-border dark:hover:bg-border-dark transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handlePasswordSubmit}
+                  disabled={!importPassword}
+                  className="flex-1 py-2.5 px-4 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark disabled:opacity-50 transition-colors"
+                >
+                  Continuar
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       <ConfirmDialog
         isOpen={showConfirmDialog}
         title="Importar Backup"
@@ -171,6 +281,7 @@ export function BackupRestore() {
         onCancel={() => {
           setShowConfirmDialog(false)
           setPendingFile(null)
+          setImportPassword('')
         }}
         variant="danger"
       />

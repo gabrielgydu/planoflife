@@ -8,6 +8,7 @@ import type {
   GuidingQuestion,
   Proposito,
 } from '../types'
+import { encryptData, decryptData } from './crypto'
 
 export interface BackupData {
   version: number
@@ -134,4 +135,39 @@ export function parseBackupFile(file: File): Promise<BackupData> {
     reader.onerror = () => reject(new Error('Erro ao ler arquivo'))
     reader.readAsText(file)
   })
+}
+
+export async function downloadEncryptedBackup(
+  backup: BackupData,
+  password: string
+): Promise<void> {
+  const json = JSON.stringify(backup)
+  const encrypted = await encryptData(json, password)
+  const blob = new Blob([encrypted], { type: 'application/octet-stream' })
+  const url = URL.createObjectURL(blob)
+
+  const date = new Date().toISOString().split('T')[0]
+  const filename = `plano-de-vida-backup-${date}.enc`
+
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
+
+export async function parseEncryptedBackupFile(
+  file: File,
+  password: string
+): Promise<BackupData> {
+  const buffer = await file.arrayBuffer()
+  const json = await decryptData(buffer, password)
+
+  const data = JSON.parse(json) as BackupData
+  if (!data.version || !data.data) {
+    throw new Error('Arquivo de backup inválido')
+  }
+  return data
 }
