@@ -8,8 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Plano de Vida" />
-    <meta name="theme-color" content="#4A5E78" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#13161B" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#FFFFFF" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,10 +16,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
 
     <!-- Icons -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/planoflife/favicon.svg" />
+    <link rel="apple-touch-icon" href="/planoflife/apple-touch-icon.png" />
 
     <title>Plano de Vida</title>
+    <script>
+      ;(function() {
+        var m = localStorage.getItem('theme-mode')
+        if (!m) m = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'black' : 'light'
+        if (m === 'dark' || m === 'black') document.documentElement.classList.add(m)
+        var c = m === 'dark' ? '#13161B' : m === 'black' ? '#000000' : '#FFFFFF'
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', c)
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

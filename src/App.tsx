@@ -27,7 +27,7 @@ export function App() {
   }, [])
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/planoflife">
       <InstallBanner />
       <Routes>
         <Route element={<AppShell />}>

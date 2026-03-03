@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  base: '/planoflife/',
   optimizeDeps: {
     include: ['lucide-react'],
   },
@@ -17,14 +18,14 @@ export default defineConfig({
         name: 'Plano de Vida',
         short_name: 'Plano de Vida',
         description: 'Práticas espirituais diárias',
-        theme_color: '#4A5E78',
-        background_color: '#F7F8FA',
+        theme_color: '#FFFFFF',
+        background_color: '#FFFFFF',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
+        start_url: '/planoflife/',
         icons: [
           {
-            src: '/favicon.svg',
+            src: '/planoflife/favicon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
           },
