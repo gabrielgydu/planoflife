@@ -137,6 +137,90 @@ export function parseBackupFile(file: File): Promise<BackupData> {
   })
 }
 
+// Practice import types and functions
+
+export interface PracticeImportItem {
+  name: string
+  content: string
+  category?: string
+}
+
+function textToHtml(text: string): string {
+  const paragraphs = text.split(/\n\n+/)
+  return paragraphs
+    .map((p) => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+    .join('')
+}
+
+function normalizeStr(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+}
+
+export function parsePracticeImportFile(file: File): Promise<PracticeImportItem[]> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result as string)
+        if (!Array.isArray(data)) {
+          reject(new Error('Arquivo deve conter um array JSON'))
+          return
+        }
+        for (const item of data) {
+          if (!item.name || !item.content) {
+            reject(new Error(`Item inválido: cada prática precisa de "name" e "content"`))
+            return
+          }
+        }
+        resolve(data as PracticeImportItem[])
+      } catch {
+        reject(new Error('Erro ao ler arquivo JSON'))
+      }
+    }
+    reader.onerror = () => reject(new Error('Erro ao ler arquivo'))
+    reader.readAsText(file)
+  })
+}
+
+export async function importPractices(
+  items: PracticeImportItem[],
+  categories: Category[]
+): Promise<number> {
+  const now = new Date().toISOString()
+  const maxSortOrder = await db.practices.orderBy('sortOrder').last()
+  let sortOrder = (maxSortOrder?.sortOrder ?? 0) + 1
+
+  const categoryMap = new Map<string, string>()
+  for (const cat of categories) {
+    categoryMap.set(normalizeStr(cat.name), cat.id)
+  }
+
+  const practices: Practice[] = items.map((item) => {
+    const categoryId = item.category
+      ? categoryMap.get(normalizeStr(item.category)) ?? ''
+      : ''
+    return {
+      id: crypto.randomUUID(),
+      name: item.name,
+      categoryId,
+      content: textToHtml(item.content),
+      imageData: null,
+      isRequired: false,
+      sortOrder: sortOrder++,
+      isArchived: false,
+      createdAt: now,
+      updatedAt: now,
+    }
+  })
+
+  await db.practices.bulkAdd(practices)
+  return practices.length
+}
+
 export async function downloadEncryptedBackup(
   backup: BackupData,
   password: string

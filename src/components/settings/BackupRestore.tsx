@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router'
-import { ChevronLeft, Download, Upload, AlertTriangle, Lock } from 'lucide-react'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { ChevronLeft, Download, Upload, AlertTriangle, Lock, FilePlus } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 import {
   exportBackup,
@@ -9,18 +10,27 @@ import {
   downloadEncryptedBackup,
   parseBackupFile,
   parseEncryptedBackupFile,
+  parsePracticeImportFile,
+  importPractices,
 } from '../../utils/backup'
+import type { PracticeImportItem } from '../../utils/backup'
+import { db } from '../../db'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
 import { PasswordInput } from '../shared/PasswordInput'
 
 export function BackupRestore() {
   const navigate = useNavigate()
+  const categories = useLiveQuery(() => db.categories.toArray()) ?? []
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const practiceFileInputRef = useRef<HTMLInputElement>(null)
   const [isExporting, setIsExporting] = useState(false)
   const [isImporting, setIsImporting] = useState(false)
+  const [isImportingPractices, setIsImportingPractices] = useState(false)
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
+  const [showPracticeConfirmDialog, setShowPracticeConfirmDialog] = useState(false)
   const [showPasswordPrompt, setShowPasswordPrompt] = useState(false)
   const [pendingFile, setPendingFile] = useState<File | null>(null)
+  const [pendingPractices, setPendingPractices] = useState<PracticeImportItem[]>([])
   const [exportPassword, setExportPassword] = useState('')
   const [importPassword, setImportPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -70,6 +80,38 @@ export function BackupRestore() {
     if (!importPassword) return
     setShowPasswordPrompt(false)
     setShowConfirmDialog(true)
+  }
+
+  const handlePracticeFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setError(null)
+    try {
+      const items = await parsePracticeImportFile(file)
+      setPendingPractices(items)
+      setShowPracticeConfirmDialog(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao ler arquivo')
+    }
+    e.target.value = ''
+  }
+
+  const handlePracticeImportConfirm = async () => {
+    setShowPracticeConfirmDialog(false)
+    setIsImportingPractices(true)
+    setError(null)
+    try {
+      const count = await importPractices(pendingPractices, categories)
+      setSuccess(`${count} práticas importadas com sucesso!`)
+      setTimeout(() => setSuccess(null), 3000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao importar práticas')
+      console.error(err)
+    } finally {
+      setIsImportingPractices(false)
+      setPendingPractices([])
+    }
   }
 
   const handleImportConfirm = async () => {
@@ -196,6 +238,35 @@ export function BackupRestore() {
           </div>
         </section>
 
+        {/* Import practices section */}
+        <section className="bg-surface-secondary dark:bg-surface-secondary-dark rounded-lg p-4">
+          <div className="flex items-start gap-4">
+            <FilePlus className="w-5 h-5 text-text-secondary dark:text-text-secondary-dark mt-0.5" />
+            <div className="flex-1">
+              <h2 className="text-sm font-semibold text-text-primary dark:text-text-primary-dark mb-1">
+                Importar Práticas
+              </h2>
+              <p className="text-xs text-text-muted dark:text-text-muted-dark mb-3">
+                Adiciona práticas a partir de um arquivo JSON. Não substitui dados existentes.
+              </p>
+              <input
+                ref={practiceFileInputRef}
+                type="file"
+                accept=".json"
+                onChange={handlePracticeFileSelect}
+                className="hidden"
+              />
+              <button
+                onClick={() => practiceFileInputRef.current?.click()}
+                disabled={isImportingPractices}
+                className="px-4 py-2.5 text-sm font-medium text-text-secondary dark:text-text-secondary-dark bg-surface-card dark:bg-surface-card-dark border border-border dark:border-border-dark rounded-lg hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark disabled:opacity-50 transition-colors"
+              >
+                {isImportingPractices ? 'Importando...' : 'Selecionar Arquivo'}
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* Warning */}
         <div className="p-4 bg-[#A89548]/10 dark:bg-gray-400/10 border border-[#A89548]/30 dark:border-gray-400/30 rounded-lg">
           <div className="flex items-start gap-3">
@@ -271,6 +342,19 @@ export function BackupRestore() {
           </div>
         )}
       </AnimatePresence>
+
+      <ConfirmDialog
+        isOpen={showPracticeConfirmDialog}
+        title="Importar Práticas"
+        message={`Importar ${pendingPractices.length} práticas?`}
+        confirmLabel="Importar"
+        onConfirm={handlePracticeImportConfirm}
+        onCancel={() => {
+          setShowPracticeConfirmDialog(false)
+          setPendingPractices([])
+        }}
+        variant="default"
+      />
 
       <ConfirmDialog
         isOpen={showConfirmDialog}
