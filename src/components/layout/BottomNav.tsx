@@ -7,10 +7,12 @@ function OpusDeiSeal({ className }: { className?: string }) {
       viewBox="0 0 510 510"
       fill="none"
       stroke="currentColor"
-      strokeWidth={12}
+      strokeWidth={16}
       className={className}
     >
-      <path d="m254,11a244,244 0 1,0 2,0z M255,6V499 M43,132H467" />
+      <g transform="translate(255,255) scale(0.85) translate(-255,-255)">
+        <path d="m254,11a244,244 0 1,0 2,0z M255,6V499 M43,132H467" />
+      </g>
     </svg>
   )
 }
