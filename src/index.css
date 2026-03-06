@@ -68,7 +68,7 @@ html.black {
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --safe-area-left: env(safe-area-inset-left, 0px);
   --safe-area-right: env(safe-area-inset-right, 0px);
-  --font-heading: 'Cormorant Garamond', serif;
+  --font-heading: 'DM Sans', sans-serif;
 }
 
 html {
@@ -137,7 +137,7 @@ body {
 
 /* Prayer text prose styling */
 .prose-prayer {
-  font-family: 'Times New Roman', Times, serif;
+  font-family: 'DM Sans', sans-serif;
   line-height: 1.7;
   font-size: 1.05rem;
   color: var(--color-text-primary);
@@ -150,7 +150,7 @@ body {
 .prose-prayer h1,
 .prose-prayer h2,
 .prose-prayer h3 {
-  font-family: 'Times New Roman', Times, serif;
+  font-family: 'DM Sans', sans-serif;
   text-align: center;
   font-weight: 700;
   margin-top: 1.5em;

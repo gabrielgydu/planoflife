@@ -1,6 +1,5 @@
 import { Link } from 'react-router'
 import { ClipboardList, FolderOpen, Download, FileText, ChevronRight, Sun, Moon, Circle, type LucideIcon } from 'lucide-react'
-import { useFont, FONT_MAP, type FontKey } from '../../hooks/useFont'
 import { useThemeMode, type ThemeMode } from '../../hooks/useThemeMode'
 import { useIndividualReasons } from '../../hooks/useSettings'
 
@@ -11,12 +10,6 @@ const menuItems: { to: string; label: string; icon: LucideIcon; description: str
   { to: '/settings/pdf', label: 'Exportar PDF', icon: FileText, description: 'Gerar relatório mensal' },
 ]
 
-const fontOptions: { key: FontKey; label: string }[] = [
-  { key: 'cormorant', label: 'Cormorant' },
-  { key: 'lora', label: 'Lora' },
-  { key: 'dm-sans', label: 'DM Sans' },
-]
-
 const themeOptions: { key: ThemeMode; label: string; icon: LucideIcon }[] = [
   { key: 'light', label: 'Claro', icon: Sun },
   { key: 'dark', label: 'Escuro', icon: Moon },
@@ -24,7 +17,6 @@ const themeOptions: { key: ThemeMode; label: string; icon: LucideIcon }[] = [
 ]
 
 export function SettingsView() {
-  const [fontKey, setFontKey] = useFont()
   const [themeMode, setThemeMode] = useThemeMode()
   const [individualReasons, setIndividualReasons] = useIndividualReasons()
 
@@ -37,29 +29,6 @@ export function SettingsView() {
       </header>
 
       <div className="p-4 space-y-4">
-        {/* Font Picker */}
-        <section>
-          <h2 className="font-heading text-xs font-medium text-text-muted dark:text-text-muted-dark uppercase tracking-widest mb-3">
-            Fonte
-          </h2>
-          <div className="flex gap-2">
-            {fontOptions.map((opt) => (
-              <button
-                key={opt.key}
-                onClick={() => setFontKey(opt.key)}
-                className={`flex-1 py-2.5 px-3 text-sm rounded-lg transition-colors ${
-                  fontKey === opt.key
-                    ? 'bg-btn dark:bg-btn-dark text-btn-text dark:text-btn-dark-text'
-                    : 'bg-surface-secondary dark:bg-surface-secondary-dark text-text-secondary dark:text-text-secondary-dark hover:bg-border dark:hover:bg-border-dark'
-                }`}
-                style={{ fontFamily: FONT_MAP[opt.key] }}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-        </section>
-
         {/* Theme Picker */}
         <section>
           <h2 className="font-heading text-xs font-medium text-text-muted dark:text-text-muted-dark uppercase tracking-widest mb-3">
