@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence, type PanInfo } from 'motion/react'
 import { X, Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import { CategoryIcon } from '../shared/CategoryIcon'
+import { MarkdownRenderer } from '../shared/MarkdownRenderer'
+import { getBundledText } from '../../data/bundledTexts'
 import type { Practice, Category } from '../../types'
 
 interface PracticeWithCategory {
@@ -19,6 +21,14 @@ interface PracticeReaderProps {
 
 const SWIPE_THRESHOLD = 50
 const VELOCITY_THRESHOLD = 500
+const LANG_KEY = 'practiceTextLang'
+
+type Lang = 'pt' | 'la'
+
+const LANG_LABELS: Record<Lang, string> = {
+  pt: 'Portugues',
+  la: 'Latim',
+}
 
 export function PracticeReader({
   items,
@@ -29,9 +39,12 @@ export function PracticeReader({
 }: PracticeReaderProps) {
   const initialIndex = items.findIndex((i) => i.practice.id === initialPracticeId)
   const [currentIndex, setCurrentIndex] = useState(Math.max(0, initialIndex))
-  const [direction, setDirection] = useState(0) // -1 left, 1 right
+  const [direction, setDirection] = useState(0)
+  const [lang, setLang] = useState<Lang>(() => {
+    const saved = localStorage.getItem(LANG_KEY)
+    return saved === 'la' ? 'la' : 'pt'
+  })
 
-  // Lock body scroll
   useEffect(() => {
     const original = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -40,11 +53,26 @@ export function PracticeReader({
     }
   }, [])
 
+  useEffect(() => {
+    localStorage.setItem(LANG_KEY, lang)
+  }, [lang])
+
   const current = items[currentIndex]
   if (!current) return null
 
   const { practice, category } = current
   const completed = isCompleted(practice.id)
+  const bundledText = getBundledText(practice.bundledTextId)
+  const isBundled = !!bundledText
+
+  const hasMultipleLangs = isBundled && Object.keys(bundledText.texts).length > 1
+  const activeLang = isBundled && bundledText.texts[lang] ? lang : Object.keys(bundledText?.texts ?? {})[0] as Lang
+  const toggleLang = () => setLang((l) => (l === 'pt' ? 'la' : 'pt'))
+  const toggleLabel = lang === 'pt' ? LANG_LABELS.la : LANG_LABELS.pt
+
+  const headerTitle = isBundled
+    ? (bundledText.title[activeLang] ?? bundledText.title[Object.keys(bundledText.title)[0]])
+    : practice.name
 
   const goTo = useCallback(
     (next: number) => {
@@ -73,6 +101,10 @@ export function PracticeReader({
     exit: (d: number) => ({ x: d > 0 ? '-100%' : '100%', opacity: 0 }),
   }
 
+  const imageSrc = isBundled && bundledText.hasImage
+    ? `${import.meta.env.BASE_URL}practice-images/${bundledText.id}.png`
+    : practice.imageData
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -92,7 +124,7 @@ export function PracticeReader({
         </button>
 
         <h1 className="flex-1 text-center font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark truncate px-2">
-          {practice.name}
+          {headerTitle}
         </h1>
 
         <motion.button
@@ -114,7 +146,7 @@ export function PracticeReader({
       <div className="flex-1 overflow-hidden relative">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
-            key={practice.id}
+            key={`${practice.id}-${activeLang}`}
             custom={direction}
             variants={slideVariants}
             initial="enter"
@@ -128,10 +160,10 @@ export function PracticeReader({
             onDragEnd={handleDragEnd}
             className="absolute inset-0 overflow-y-auto touch-pan-y"
           >
-            {practice.imageData && (
+            {imageSrc && (
               <div className="w-full max-h-[40vh] overflow-hidden bg-surface-secondary dark:bg-surface-secondary-dark">
                 <img
-                  src={practice.imageData}
+                  src={imageSrc}
                   alt={practice.name}
                   className="w-full h-full object-contain"
                   draggable={false}
@@ -139,14 +171,34 @@ export function PracticeReader({
               </div>
             )}
 
-            {practice.content && (
-              <div
-                className="prose prose-slate dark:prose-invert max-w-none p-4"
-                dangerouslySetInnerHTML={{ __html: practice.content }}
-              />
+            {isBundled ? (
+              <div className="p-5 pb-20">
+                <MarkdownRenderer
+                  markdown={bundledText.texts[activeLang] ?? ''}
+                  className="prose-prayer"
+                />
+              </div>
+            ) : (
+              practice.content && (
+                <div
+                  className="prose prose-slate dark:prose-invert max-w-none p-4"
+                  dangerouslySetInnerHTML={{ __html: practice.content }}
+                />
+              )
             )}
           </motion.div>
         </AnimatePresence>
+
+        {/* Language toggle button */}
+        {hasMultipleLangs && (
+          <button
+            onClick={toggleLang}
+            className="absolute bottom-4 right-4 px-4 py-2 rounded-full text-sm font-medium text-white shadow-lg transition-transform active:scale-95"
+            style={{ backgroundColor: '#41a6d9' }}
+          >
+            {toggleLabel}
+          </button>
+        )}
       </div>
 
       {/* Footer */}

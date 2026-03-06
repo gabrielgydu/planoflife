@@ -29,6 +29,26 @@ export class PlanOfLifeDB extends Dexie {
       guidingQuestions: 'id, sortOrder, isArchived',
       propositos: 'id, date, sourceExamenEntryId',
     })
+
+    this.version(2).stores({}).upgrade(async (tx) => {
+      const nameToId: Record<string, string> = {
+        'oferecimento de obras': 'oferecimento_de_obras',
+        'preces da obra': 'preces_da_obra',
+        'angelus': 'angelus',
+        'lembrai-vos': 'lembrai_vos',
+        'visita ao santissimo': 'visita_ao_santissimo',
+      }
+      const normalize = (s: string) =>
+        s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      const practices = tx.table('practices')
+      const all = await practices.toArray()
+      for (const p of all) {
+        const id = nameToId[normalize(p.name)]
+        if (id && !p.bundledTextId) {
+          await practices.update(p.id, { bundledTextId: id })
+        }
+      }
+    })
   }
 }
 

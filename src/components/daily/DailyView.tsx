@@ -17,6 +17,7 @@ import { useDailyRecords } from '../../hooks/useDailyRecords'
 import { useMorningFlow } from '../../hooks/useMorningFlow'
 import { useProposito } from '../../hooks/usePropositos'
 import { formatDate, getToday, addDay, subDay } from '../../utils/dates'
+import { practiceHasText } from '../../data/bundledTexts'
 import type { Practice, Category } from '../../types'
 
 export function DailyView() {
@@ -58,7 +59,7 @@ export function DailyView() {
     for (const category of categories) {
       const categoryPractices = practicesByCategory.get(category.id) ?? []
       for (const practice of categoryPractices) {
-        if (practice.content || practice.imageData) {
+        if (practiceHasText(practice)) {
           items.push({ practice, category: categoryMap.get(practice.categoryId)! })
         }
       }
@@ -70,10 +71,8 @@ export function DailyView() {
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
 
   const handleOpenPracticeDetail = (practice: Practice) => {
-    if (practice.content || practice.imageData) {
+    if (practiceHasText(practice)) {
       setReaderPracticeId(practice.id)
-    } else {
-      navigate(`/settings/practices/${practice.id}`)
     }
   }
 
@@ -136,6 +135,7 @@ export function DailyView() {
               category={category}
               practices={categoryPractices}
               isCompleted={isCompleted}
+              practiceHasText={practiceHasText}
               onTogglePractice={togglePractice}
               onOpenPracticeDetail={handleOpenPracticeDetail}
             />

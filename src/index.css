@@ -134,3 +134,43 @@ body {
 :is(.dark, .black) ::-webkit-scrollbar-thumb:hover {
   background: #555555;
 }
+
+/* Prayer text prose styling */
+.prose-prayer {
+  font-family: 'Times New Roman', Times, serif;
+  line-height: 1.7;
+  font-size: 1.05rem;
+  color: var(--color-text-primary);
+}
+
+:is(.dark, .black) .prose-prayer {
+  color: var(--color-text-primary-dark);
+}
+
+.prose-prayer h1,
+.prose-prayer h2,
+.prose-prayer h3 {
+  font-family: 'Times New Roman', Times, serif;
+  text-align: center;
+  font-weight: 700;
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+}
+
+.prose-prayer h1 { font-size: 1.5rem; }
+.prose-prayer h2 { font-size: 1.3rem; }
+.prose-prayer h3 { font-size: 1.15rem; }
+
+.prose-prayer h1:first-child,
+.prose-prayer h2:first-child,
+.prose-prayer h3:first-child {
+  margin-top: 0;
+}
+
+.prose-prayer p {
+  margin-bottom: 1em;
+}
+
+.prose-prayer strong {
+  font-weight: 700;
+}

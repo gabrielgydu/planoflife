@@ -5,3 +5,6 @@ dist
 .playwright-cli
 tests/browser-tests.json
 wobbly-napping-moore.md
+StJosemariaDocs/
+design_inspo/
+practice_texts/

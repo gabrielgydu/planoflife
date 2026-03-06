@@ -13,6 +13,7 @@ export interface Practice {
   categoryId: string
   content: string // HTML string
   imageData: string | null // base64 string
+  bundledTextId?: string
   isRequired: boolean
   sortOrder: number
   isArchived: boolean

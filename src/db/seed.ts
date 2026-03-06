@@ -18,14 +18,16 @@ function createDefaultPractices(categories: Category[]): Practice[] {
 
   return [
     // Orações da Manhã
-    { id: generateId(), name: 'Oferecimento de Obras', categoryId: catMap['Orações da Manhã'], content: '', imageData: null, isRequired: true, sortOrder: 0, isArchived: false, createdAt: now, updatedAt: now },
+    { id: generateId(), name: 'Oferecimento de Obras', categoryId: catMap['Orações da Manhã'], content: '', imageData: null, bundledTextId: 'oferecimento_de_obras', isRequired: true, sortOrder: 0, isArchived: false, createdAt: now, updatedAt: now },
     { id: generateId(), name: 'Meditação', categoryId: catMap['Orações da Manhã'], content: '', imageData: null, isRequired: true, sortOrder: 1, isArchived: false, createdAt: now, updatedAt: now },
+    { id: generateId(), name: 'Preces da Obra', categoryId: catMap['Orações da Manhã'], content: '', imageData: null, bundledTextId: 'preces_da_obra', isRequired: false, sortOrder: 2, isArchived: false, createdAt: now, updatedAt: now },
 
     // Meio da Manhã
-    { id: generateId(), name: 'Visita ao Santíssimo', categoryId: catMap['Meio da Manhã'], content: '', imageData: null, isRequired: false, sortOrder: 0, isArchived: false, createdAt: now, updatedAt: now },
+    { id: generateId(), name: 'Visita ao Santíssimo', categoryId: catMap['Meio da Manhã'], content: '', imageData: null, bundledTextId: 'visita_ao_santissimo', isRequired: false, sortOrder: 0, isArchived: false, createdAt: now, updatedAt: now },
 
     // Meio-dia
-    { id: generateId(), name: 'Angelus', categoryId: catMap['Meio-dia'], content: '', imageData: null, isRequired: false, sortOrder: 0, isArchived: false, createdAt: now, updatedAt: now },
+    { id: generateId(), name: 'Angelus', categoryId: catMap['Meio-dia'], content: '', imageData: null, bundledTextId: 'angelus', isRequired: false, sortOrder: 0, isArchived: false, createdAt: now, updatedAt: now },
+    { id: generateId(), name: 'Lembrai-vos', categoryId: catMap['Meio-dia'], content: '', imageData: null, bundledTextId: 'lembrai_vos', isRequired: false, sortOrder: 1, isArchived: false, createdAt: now, updatedAt: now },
 
     // Tarde
     { id: generateId(), name: 'Rosário', categoryId: catMap['Tarde'], content: '', imageData: null, isRequired: true, sortOrder: 0, isArchived: false, createdAt: now, updatedAt: now },
