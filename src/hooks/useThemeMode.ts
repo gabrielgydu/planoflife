@@ -23,6 +23,9 @@ function applyTheme(mode: ThemeMode) {
 
   const meta = document.querySelector('meta[name="theme-color"]')
   if (meta) meta.setAttribute('content', THEME_COLORS[mode])
+
+  const setFavicon = (window as any).__setThemedFavicon
+  if (setFavicon) setFavicon(mode)
 }
 
 export function useThemeMode(): [ThemeMode, (mode: ThemeMode) => void] {

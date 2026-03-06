@@ -27,6 +27,21 @@
         if (m === 'dark' || m === 'black') document.documentElement.classList.add(m)
         var c = m === 'dark' ? '#13161B' : m === 'black' ? '#000000' : '#FFFFFF'
         document.querySelector('meta[name="theme-color"]').setAttribute('content', c)
+
+        window.__setThemedFavicon = function(mode) {
+          var isDark = mode === 'dark' || mode === 'black'
+          var bg = isDark ? '#1a1a1a' : '#FFFFFF'
+          var fg = isDark ? '#FFFFFF' : '#1a1a1a'
+          var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
+            + '<rect width="512" height="512" rx="96" fill="' + bg + '"/>'
+            + '<g transform="translate(256,256) scale(0.65)">'
+            + '<path d="m-1,-244a244,244 0 1,0 2,0z M0,-249V244 M-212,-123H212" fill="none" stroke="' + fg + '" stroke-width="14"/>'
+            + '</g></svg>'
+          var url = 'data:image/svg+xml,' + encodeURIComponent(svg)
+          var link = document.querySelector('link[rel="icon"]')
+          if (link) link.setAttribute('href', url)
+        }
+        window.__setThemedFavicon(m)
       })()
     </script>
   </head>

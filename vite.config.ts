@@ -13,7 +13,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg'],
+      includeAssets: ['favicon.svg', 'favicon-dark.svg'],
       manifest: {
         name: 'Plano de Vida',
         short_name: 'Plano de Vida',
@@ -28,6 +28,12 @@ export default defineConfig({
             src: '/planoflife/favicon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
+          },
+          {
+            src: '/planoflife/favicon-dark.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'any',
           },
         ],
       },
