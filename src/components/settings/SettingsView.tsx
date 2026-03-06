@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
-import { ClipboardList, FolderOpen, Download, FileText, ChevronRight, type LucideIcon } from 'lucide-react'
+import { ClipboardList, FolderOpen, Download, FileText, ChevronRight, Sun, Moon, Circle, type LucideIcon } from 'lucide-react'
 import { useFont, FONT_MAP, type FontKey } from '../../hooks/useFont'
+import { useThemeMode, type ThemeMode } from '../../hooks/useThemeMode'
 import { useIndividualReasons } from '../../hooks/useSettings'
 
 const menuItems: { to: string; label: string; icon: LucideIcon; description: string }[] = [
@@ -16,13 +17,20 @@ const fontOptions: { key: FontKey; label: string }[] = [
   { key: 'dm-sans', label: 'DM Sans' },
 ]
 
+const themeOptions: { key: ThemeMode; label: string; icon: LucideIcon }[] = [
+  { key: 'light', label: 'Claro', icon: Sun },
+  { key: 'dark', label: 'Escuro', icon: Moon },
+  { key: 'black', label: 'Preto', icon: Circle },
+]
+
 export function SettingsView() {
   const [fontKey, setFontKey] = useFont()
+  const [themeMode, setThemeMode] = useThemeMode()
   const [individualReasons, setIndividualReasons] = useIndividualReasons()
 
   return (
     <div className="min-h-full">
-      <header className="sticky top-0 bg-surface-card/95 dark:bg-surface-card-dark/95 backdrop-blur-sm shadow-[0_1px_3px_rgba(26,32,48,0.04)] z-10">
+      <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
         <div className="flex items-center justify-center px-4 h-16">
           <h1 className="font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark">Configurações</h1>
         </div>
@@ -41,11 +49,34 @@ export function SettingsView() {
                 onClick={() => setFontKey(opt.key)}
                 className={`flex-1 py-2.5 px-3 text-sm rounded-lg transition-colors ${
                   fontKey === opt.key
-                    ? 'bg-primary text-white'
+                    ? 'bg-btn dark:bg-btn-dark text-btn-text dark:text-btn-dark-text'
                     : 'bg-surface-secondary dark:bg-surface-secondary-dark text-text-secondary dark:text-text-secondary-dark hover:bg-border dark:hover:bg-border-dark'
                 }`}
                 style={{ fontFamily: FONT_MAP[opt.key] }}
               >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* Theme Picker */}
+        <section>
+          <h2 className="font-heading text-xs font-medium text-text-muted dark:text-text-muted-dark uppercase tracking-widest mb-3">
+            Tema
+          </h2>
+          <div className="flex gap-2">
+            {themeOptions.map((opt) => (
+              <button
+                key={opt.key}
+                onClick={() => setThemeMode(opt.key)}
+                className={`flex-1 py-2.5 px-3 text-sm rounded-lg transition-colors flex items-center justify-center gap-2 ${
+                  themeMode === opt.key
+                    ? 'bg-btn dark:bg-btn-dark text-btn-text dark:text-btn-dark-text'
+                    : 'bg-surface-secondary dark:bg-surface-secondary-dark text-text-secondary dark:text-text-secondary-dark hover:bg-border dark:hover:bg-border-dark'
+                }`}
+              >
+                <opt.icon className="w-4 h-4" />
                 {opt.label}
               </button>
             ))}
@@ -64,11 +95,11 @@ export function SettingsView() {
             <span className="text-sm text-text-primary dark:text-text-primary-dark">Razão individual por prática</span>
             <div
               className={`relative w-10 h-6 rounded-full transition-colors duration-200 ${
-                individualReasons ? 'bg-primary' : 'bg-border dark:bg-border-dark'
+                individualReasons ? 'bg-btn dark:bg-btn-dark' : 'bg-border dark:bg-border-dark'
               }`}
             >
               <div
-                className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${
+                className={`absolute top-1 w-4 h-4 rounded-full bg-btn-text dark:bg-btn-dark-text shadow transition-transform duration-200 ${
                   individualReasons ? 'translate-x-5' : 'translate-x-1'
                 }`}
               />

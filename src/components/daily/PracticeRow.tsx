@@ -18,12 +18,12 @@ export function PracticeRow({ practice, isCompleted, onToggle, onOpenDetail }: P
         transition={{ type: 'spring', stiffness: 400, damping: 15 }}
         className={`w-5 h-5 rounded-full flex items-center justify-center transition-all duration-200 ${
           isCompleted
-            ? 'bg-primary border-[1.5px] border-primary'
+            ? 'bg-btn border-[1.5px] border-btn dark:bg-btn-dark dark:border-btn-dark'
             : 'border-[1.5px] border-border dark:border-border-dark'
         }`}
         aria-label={isCompleted ? 'Desmarcar' : 'Marcar como feito'}
       >
-        {isCompleted && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+        {isCompleted && <Check className="w-3 h-3 text-btn-text dark:text-btn-dark-text" strokeWidth={3} />}
       </motion.button>
 
       <span

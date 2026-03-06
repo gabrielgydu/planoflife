@@ -112,7 +112,7 @@ export function PracticeForm() {
 
   return (
     <div className="min-h-full">
-      <header className="sticky top-0 bg-surface-card/95 dark:bg-surface-card-dark/95 backdrop-blur-sm shadow-[0_1px_3px_rgba(26,32,48,0.04)] z-10">
+      <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
         <div className="flex items-center px-4 h-16">
           <button
             onClick={() => navigate(-1)}
@@ -142,7 +142,7 @@ export function PracticeForm() {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-3 bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full px-4 py-3 bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-primary/50 dark:focus:ring-ring-dark/30"
             placeholder="Nome da prática"
             autoFocus
           />
@@ -155,7 +155,7 @@ export function PracticeForm() {
           <select
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
-            className="w-full px-4 py-3 bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full px-4 py-3 bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-primary/50 dark:focus:ring-ring-dark/30"
           >
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
@@ -176,11 +176,11 @@ export function PracticeForm() {
             type="button"
             onClick={() => setIsRequired(!isRequired)}
             className={`relative w-12 h-7 rounded-full transition-colors ${
-              isRequired ? 'bg-primary' : 'bg-border dark:bg-border-dark'
+              isRequired ? 'bg-btn dark:bg-btn-dark' : 'bg-border dark:bg-border-dark'
             }`}
           >
             <span
-              className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow transition-transform ${
+              className={`absolute top-1 w-5 h-5 bg-btn-text dark:bg-btn-dark-text rounded-full shadow transition-transform ${
                 isRequired ? 'translate-x-6' : 'translate-x-1'
               }`}
             />
@@ -253,7 +253,7 @@ export function PracticeForm() {
             <button
               type="button"
               onClick={handleArchiveToggle}
-              className="w-full py-3 text-sm font-medium text-[#A89548] bg-[#A89548]/10 rounded-lg hover:bg-[#A89548]/20 transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 text-sm font-medium text-[#A89548] dark:text-gray-400 bg-[#A89548]/10 dark:bg-gray-400/10 rounded-lg hover:bg-[#A89548]/20 transition-colors flex items-center justify-center gap-2"
             >
               <Archive className="w-4 h-4" />
               {existingPractice.isArchived ? 'Desarquivar' : 'Arquivar'}
@@ -261,7 +261,7 @@ export function PracticeForm() {
             <button
               type="button"
               onClick={() => setShowDeleteDialog(true)}
-              className="w-full py-3 text-sm font-medium text-[#9B6B6B] bg-[#9B6B6B]/10 rounded-lg hover:bg-[#9B6B6B]/20 transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 text-sm font-medium text-[#9B6B6B] dark:text-gray-500 bg-[#9B6B6B]/10 dark:bg-gray-500/10 rounded-lg hover:bg-[#9B6B6B]/20 transition-colors flex items-center justify-center gap-2"
             >
               <Trash2 className="w-4 h-4" />
               Excluir prática

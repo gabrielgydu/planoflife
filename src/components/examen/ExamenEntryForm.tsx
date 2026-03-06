@@ -80,7 +80,7 @@ export function ExamenEntryForm({ isOpen, category, entry, onSave, onClose }: Ex
                       ? 'pede perdão'
                       : 'pede ajuda'
                 }?`}
-                className="w-full h-32 px-4 py-3 bg-surface-secondary dark:bg-surface-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark resize-none focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="w-full h-32 px-4 py-3 bg-surface-secondary dark:bg-surface-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 dark:focus:ring-ring-dark/30"
                 autoFocus
               />
 

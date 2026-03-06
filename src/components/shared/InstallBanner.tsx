@@ -39,7 +39,7 @@ export function InstallBanner() {
 
   return (
     <div className="fixed bottom-20 left-4 right-4 z-40 animate-in fade-in slide-in-from-bottom-4">
-      <div className="bg-surface-card dark:bg-surface-card-dark rounded-lg shadow-lg border border-border dark:border-border-dark p-4">
+      <div className="bg-surface-card dark:bg-surface-card-dark rounded-lg border border-border dark:border-border-dark p-4">
         <div className="flex items-start gap-3">
           <Smartphone className="w-5 h-5 text-text-secondary dark:text-text-secondary-dark mt-0.5 shrink-0" />
           <div className="flex-1">

@@ -24,7 +24,7 @@ const tabs: { to: string; icon: LucideIcon | null }[] = [
 
 export function BottomNav() {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-surface-card/95 dark:bg-surface-card-dark/95 backdrop-blur-sm shadow-[0_-1px_3px_rgba(26,32,48,0.04)] pb-[var(--safe-area-bottom)]">
+    <nav className="fixed bottom-0 left-0 right-0 bg-surface-card dark:bg-surface-card-dark border-t border-border dark:border-border-dark pb-[var(--safe-area-bottom)]">
       <div className="flex justify-around items-center h-16">
         {tabs.map((tab) => (
           <NavLink

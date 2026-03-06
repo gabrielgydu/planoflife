@@ -46,13 +46,13 @@ export function PropositoCard({ proposito, onSetProposito }: PropositoCardProps)
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Qual é seu propósito hoje?"
-            className="flex-1 px-3 py-2 text-sm bg-surface-card dark:bg-surface-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="flex-1 px-3 py-2 text-sm bg-surface-card dark:bg-surface-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 dark:focus:ring-ring-dark/30"
             autoFocus
           />
           <button
             onClick={handleSubmit}
             disabled={!text.trim()}
-            className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg disabled:opacity-50"
+            className="px-4 py-2 text-sm font-medium text-btn-text bg-btn rounded-lg dark:bg-btn-dark dark:text-btn-dark-text disabled:opacity-50"
           >
             OK
           </button>

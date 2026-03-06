@@ -101,7 +101,7 @@ export function BackupRestore() {
 
   return (
     <div className="min-h-full">
-      <header className="sticky top-0 bg-surface-card/95 dark:bg-surface-card-dark/95 backdrop-blur-sm shadow-[0_1px_3px_rgba(26,32,48,0.04)] z-10">
+      <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
         <div className="flex items-center px-4 h-16">
           <button
             onClick={() => navigate('/settings')}
@@ -154,7 +154,7 @@ export function BackupRestore() {
                 <button
                   onClick={handleExport}
                   disabled={isExporting}
-                  className="px-4 py-2.5 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark disabled:opacity-50 transition-colors"
+                  className="px-4 py-2.5 text-sm font-medium text-btn-text dark:text-btn-dark-text bg-btn dark:bg-btn-dark rounded-lg hover:bg-btn-hover disabled:opacity-50 transition-colors"
                 >
                   {isExporting
                     ? 'Exportando...'
@@ -197,7 +197,7 @@ export function BackupRestore() {
         </section>
 
         {/* Warning */}
-        <div className="p-4 bg-[#A89548]/10 border border-[#A89548]/30 rounded-lg">
+        <div className="p-4 bg-[#A89548]/10 dark:bg-gray-400/10 border border-[#A89548]/30 dark:border-gray-400/30 rounded-lg">
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-[#A89548] mt-0.5 shrink-0" />
             <div>
@@ -262,7 +262,7 @@ export function BackupRestore() {
                 <button
                   onClick={handlePasswordSubmit}
                   disabled={!importPassword}
-                  className="flex-1 py-2.5 px-4 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark disabled:opacity-50 transition-colors"
+                  className="flex-1 py-2.5 px-4 text-sm font-medium text-btn-text dark:text-btn-dark-text bg-btn dark:bg-btn-dark rounded-lg hover:bg-btn-hover disabled:opacity-50 transition-colors"
                 >
                   Continuar
                 </button>

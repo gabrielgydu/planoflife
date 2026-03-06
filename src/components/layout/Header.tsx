@@ -14,7 +14,7 @@ export function Header({ date, onPrevDay, onNextDay, title, rightAction }: Heade
   const todayLabel = isToday(date) ? ' (Hoje)' : ''
 
   return (
-    <header className="sticky top-0 bg-surface-card/95 dark:bg-surface-card-dark/95 backdrop-blur-sm shadow-[0_1px_3px_rgba(26,32,48,0.04)] z-10">
+    <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
       <div className="flex items-center justify-between px-4 h-16">
         <button
           onClick={onPrevDay}

@@ -20,14 +20,14 @@ export function EmptyState({ icon: Icon, message, action }: EmptyStateProps) {
         action.to ? (
           <Link
             to={action.to}
-            className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium"
+            className="px-4 py-2 bg-btn dark:bg-btn-dark text-btn-text dark:text-btn-dark-text rounded-lg text-sm font-medium"
           >
             {action.label}
           </Link>
         ) : action.onClick ? (
           <button
             onClick={action.onClick}
-            className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium"
+            className="px-4 py-2 bg-btn dark:bg-btn-dark text-btn-text dark:text-btn-dark-text rounded-lg text-sm font-medium"
           >
             {action.label}
           </button>

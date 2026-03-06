@@ -1,9 +1,10 @@
 import { useState, useMemo } from 'react'
-import { motion } from 'motion/react'
+import { motion, AnimatePresence } from 'motion/react'
 import { useNavigate } from 'react-router'
 import { ChevronRight, RotateCcw, ClipboardList } from 'lucide-react'
 import { Header } from '../layout/Header'
 import { CategorySection } from './CategorySection'
+import { PracticeReader } from './PracticeReader'
 import { YesterdayReviewModal } from './YesterdayReviewModal'
 import { MissedReasonsModal } from './MissedReasonsModal'
 import { PropositoCard } from './PropositoCard'
@@ -16,12 +17,13 @@ import { useDailyRecords } from '../../hooks/useDailyRecords'
 import { useMorningFlow } from '../../hooks/useMorningFlow'
 import { useProposito } from '../../hooks/usePropositos'
 import { formatDate, getToday, addDay, subDay } from '../../utils/dates'
-import type { Practice } from '../../types'
+import type { Practice, Category } from '../../types'
 
 export function DailyView() {
   const navigate = useNavigate()
   const [currentDate, setCurrentDate] = useState(getToday)
   const [showClearDialog, setShowClearDialog] = useState(false)
+  const [readerPracticeId, setReaderPracticeId] = useState<string | null>(null)
 
   const dateStr = formatDate(currentDate)
   const yesterdayStr = formatDate(subDay(currentDate, 1))
@@ -49,11 +51,30 @@ export function DailyView() {
     return map
   }, [categories, practices])
 
+  // Flat ordered list of practices with content, for the reader overlay
+  const readerItems = useMemo(() => {
+    const categoryMap = new Map(categories.map((c) => [c.id, c]))
+    const items: { practice: Practice; category: Category }[] = []
+    for (const category of categories) {
+      const categoryPractices = practicesByCategory.get(category.id) ?? []
+      for (const practice of categoryPractices) {
+        if (practice.content || practice.imageData) {
+          items.push({ practice, category: categoryMap.get(practice.categoryId)! })
+        }
+      }
+    }
+    return items
+  }, [categories, practicesByCategory])
+
   const handlePrevDay = () => setCurrentDate((d) => subDay(d, 1))
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
 
   const handleOpenPracticeDetail = (practice: Practice) => {
-    navigate(`/settings/practices/${practice.id}`)
+    if (practice.content || practice.imageData) {
+      setReaderPracticeId(practice.id)
+    } else {
+      navigate(`/settings/practices/${practice.id}`)
+    }
   }
 
   const handleClearAll = async () => {
@@ -141,6 +162,18 @@ export function DailyView() {
         onConfirm={handleClearAll}
         onCancel={() => setShowClearDialog(false)}
       />
+
+      <AnimatePresence>
+        {readerPracticeId && readerItems.length > 0 && (
+          <PracticeReader
+            items={readerItems}
+            initialPracticeId={readerPracticeId}
+            isCompleted={isCompleted}
+            onTogglePractice={togglePractice}
+            onClose={() => setReaderPracticeId(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }

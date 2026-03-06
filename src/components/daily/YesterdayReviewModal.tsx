@@ -57,7 +57,7 @@ export function YesterdayReviewModal({ isOpen, yesterdayStr, onComplete }: Yeste
           </p>
           <button
             onClick={onComplete}
-            className="w-full py-2.5 px-4 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark transition-colors"
+            className="w-full py-2.5 px-4 text-sm font-medium text-btn-text bg-btn rounded-lg hover:bg-btn-hover dark:bg-btn-dark dark:text-btn-dark-text transition-colors"
           >
             Continuar
           </button>
@@ -88,11 +88,11 @@ export function YesterdayReviewModal({ isOpen, yesterdayStr, onComplete }: Yeste
                   transition={{ type: 'spring', stiffness: 400, damping: 15 }}
                   className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all duration-200 ${
                     isChecked
-                      ? 'bg-primary border-[1.5px] border-primary'
+                      ? 'bg-btn border-[1.5px] border-btn dark:bg-btn-dark dark:border-btn-dark'
                       : 'border-[1.5px] border-border dark:border-border-dark'
                   }`}
                 >
-                  {isChecked && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+                  {isChecked && <Check className="w-3 h-3 text-btn-text dark:text-btn-dark-text" strokeWidth={3} />}
                 </motion.div>
                 <span className="text-sm text-text-primary dark:text-text-primary-dark">
                   {practice.name}
@@ -115,7 +115,7 @@ export function YesterdayReviewModal({ isOpen, yesterdayStr, onComplete }: Yeste
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="flex-1 py-2.5 px-4 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark disabled:opacity-50 transition-colors"
+            className="flex-1 py-2.5 px-4 text-sm font-medium text-btn-text bg-btn rounded-lg hover:bg-btn-hover dark:bg-btn-dark dark:text-btn-dark-text disabled:opacity-50 transition-colors"
           >
             {isSaving ? '...' : 'Salvar'}
           </button>

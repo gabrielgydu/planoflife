@@ -78,7 +78,7 @@ export function MissedReasonsModal({ isOpen, yesterdayStr, onComplete }: MissedR
     <Modal isOpen={isOpen}>
       <div className="p-6">
         <div className="flex items-center gap-2 mb-1">
-          <AlertTriangle className="w-5 h-5 text-[#A89548] shrink-0" />
+          <AlertTriangle className="w-5 h-5 text-[#A89548] dark:text-gray-400 shrink-0" />
           <h2 className="font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark">
             Práticas não realizadas
           </h2>
@@ -99,7 +99,7 @@ export function MissedReasonsModal({ isOpen, yesterdayStr, onComplete }: MissedR
                     value={state.reason}
                     onChange={(e) => updateState(practice.id, { reason: e.target.value })}
                     placeholder="Por quê?"
-                    className="w-full px-3 py-2 text-sm bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full px-3 py-2 text-sm bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 dark:focus:ring-ring-dark/30"
                   />
                   <label className="flex items-center gap-2 mt-2 cursor-pointer">
                     <input
@@ -131,7 +131,7 @@ export function MissedReasonsModal({ isOpen, yesterdayStr, onComplete }: MissedR
               value={groupedReason}
               onChange={(e) => setGroupedReason(e.target.value)}
               placeholder="Por quê?"
-              className="w-full px-3 py-2 text-sm bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 mb-3"
+              className="w-full px-3 py-2 text-sm bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 dark:focus:ring-ring-dark/30 mb-3"
             />
             <div className="space-y-2">
               {missedPractices.map((practice) => {
@@ -164,7 +164,7 @@ export function MissedReasonsModal({ isOpen, yesterdayStr, onComplete }: MissedR
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="flex-1 py-2.5 px-4 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark disabled:opacity-50 transition-colors"
+            className="flex-1 py-2.5 px-4 text-sm font-medium text-btn-text bg-btn rounded-lg hover:bg-btn-hover dark:bg-btn-dark dark:hover:bg-btn-dark-hover dark:text-btn-dark-text disabled:opacity-50 transition-colors"
           >
             {isSaving ? '...' : 'Salvar'}
           </button>

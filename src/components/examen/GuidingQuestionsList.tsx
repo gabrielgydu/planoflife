@@ -66,7 +66,7 @@ export function GuidingQuestionsList() {
 
   return (
     <div className="min-h-full">
-      <header className="sticky top-0 bg-surface-card/95 dark:bg-surface-card-dark/95 backdrop-blur-sm shadow-[0_1px_3px_rgba(26,32,48,0.04)] z-10">
+      <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
         <div className="flex items-center px-4 h-16">
           <button
             onClick={() => navigate(-1)}
@@ -156,7 +156,7 @@ export function GuidingQuestionsList() {
                 value={formText}
                 onChange={(e) => setFormText(e.target.value)}
                 placeholder="Digite a pergunta orientadora..."
-                className="w-full h-24 px-4 py-3 bg-surface-secondary dark:bg-surface-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark resize-none focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="w-full h-24 px-4 py-3 bg-surface-secondary dark:bg-surface-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 dark:focus:ring-ring-dark/30"
                 autoFocus
               />
               <div className="flex gap-3 pb-4">
@@ -169,7 +169,7 @@ export function GuidingQuestionsList() {
                 <button
                   onClick={handleSave}
                   disabled={!formText.trim()}
-                  className="flex-1 py-3 text-sm font-medium text-white bg-primary rounded-lg disabled:opacity-50"
+                  className="flex-1 py-3 text-sm font-medium text-btn-text dark:text-btn-dark-text bg-btn dark:bg-btn-dark rounded-lg disabled:opacity-50"
                 >
                   Salvar
                 </button>

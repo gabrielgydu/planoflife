@@ -1,19 +1,24 @@
 import { useEffect, useState } from 'react'
 
+function getThemeFromClasses(): 'light' | 'dark' {
+  const html = document.documentElement
+  return html.classList.contains('dark') || html.classList.contains('black') ? 'dark' : 'light'
+}
+
 export function useTheme(): 'light' | 'dark' {
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    if (typeof window === 'undefined') return 'light'
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-  })
+  const [theme, setTheme] = useState<'light' | 'dark'>(getThemeFromClasses)
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handler = (e: MediaQueryListEvent) => {
-      setTheme(e.matches ? 'dark' : 'light')
-    }
+    const observer = new MutationObserver(() => {
+      setTheme(getThemeFromClasses())
+    })
 
-    mediaQuery.addEventListener('change', handler)
-    return () => mediaQuery.removeEventListener('change', handler)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    })
+
+    return () => observer.disconnect()
   }, [])
 
   return theme

@@ -14,6 +14,7 @@ import {
   isFuture,
 } from 'date-fns'
 import { formatDate } from '../../utils/dates'
+import { useTheme } from '../../hooks/useTheme'
 
 interface MonthGridProps {
   month: Date
@@ -21,7 +22,34 @@ interface MonthGridProps {
 
 const WEEKDAYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
 
+// Grayscale completion colors
+const LIGHT_COLORS: Record<string, string> = {
+  none: 'transparent',
+  low: '#D4D4D4',
+  medium: '#888888',
+  high: '#444444',
+  full: '#111111',
+}
+
+const DARK_COLORS: Record<string, string> = {
+  none: 'transparent',
+  low: '#333333',
+  medium: '#666666',
+  high: '#999999',
+  full: '#FFFFFF',
+}
+
+function getCompletionLevel(fillPercent: number): string {
+  if (fillPercent === 100) return 'full'
+  if (fillPercent >= 75) return 'high'
+  if (fillPercent >= 50) return 'medium'
+  if (fillPercent > 0) return 'low'
+  return 'none'
+}
+
 export function MonthGrid({ month }: MonthGridProps) {
+  const theme = useTheme()
+  const colors = theme === 'dark' ? DARK_COLORS : LIGHT_COLORS
   const monthStart = startOfMonth(month)
   const monthEnd = endOfMonth(month)
   const startDateStr = formatDate(monthStart)
@@ -116,45 +144,43 @@ export function MonthGrid({ month }: MonthGridProps) {
             fillPercent = Math.round((stats.completed / stats.total) * 100)
           }
 
-          // Determine color based on completion — muted palette
-          let bgColor = 'bg-surface-secondary dark:bg-surface-secondary-dark'
-          if (!isFutureDate && stats) {
-            if (fillPercent === 100) {
-              bgColor = 'bg-[#5B8A72]'
-            } else if (fillPercent >= 75) {
-              bgColor = 'bg-[#5B8A72]/75'
-            } else if (fillPercent >= 50) {
-              bgColor = 'bg-[#A89548]/70'
-            } else if (fillPercent >= 25) {
-              bgColor = 'bg-[#A89548]/45'
-            } else if (fillPercent > 0) {
-              bgColor = 'bg-[#9B6B6B]/60'
-            }
-          }
+          const level = !isFutureDate && stats ? getCompletionLevel(fillPercent) : 'none'
+          const bgStyle = level !== 'none' ? { backgroundColor: colors[level] } : undefined
+          // Text color: for light mode use white on dark fills (high/full), black otherwise
+          // For dark mode use black on light fills (high/full), white otherwise
+          const isDarkFill =
+            theme === 'light' ? (level === 'high' || level === 'full') : false
+          const isLightFill =
+            theme === 'dark' ? (level === 'high' || level === 'full') : false
+          const textClass =
+            isDarkFill
+              ? 'text-white'
+              : isLightFill
+              ? 'text-black'
+              : 'text-text-secondary dark:text-text-secondary-dark'
+          const subTextClass =
+            isDarkFill
+              ? 'text-white/80'
+              : isLightFill
+              ? 'text-black/70'
+              : 'text-text-muted dark:text-text-muted-dark'
 
           return (
             <Link
               key={dateStr}
               to={`/history/${dateStr}`}
+              style={bgStyle}
               className={`aspect-square rounded-lg flex flex-col items-center justify-center text-xs transition-colors ${
                 !isCurrentMonth ? 'opacity-30' : ''
-              } ${isTodayDate ? 'ring-2 ring-primary ring-offset-2 dark:ring-offset-surface-dark' : ''} ${
+              } ${isTodayDate ? 'ring-2 ring-primary dark:ring-ring-dark ring-offset-2 dark:ring-offset-surface-dark' : ''} ${
                 isFutureDate ? 'pointer-events-none' : ''
-              } ${bgColor}`}
+              } ${level === 'none' ? 'bg-surface-secondary dark:bg-surface-secondary-dark' : ''}`}
             >
-              <span
-                className={`font-medium ${
-                  fillPercent > 50 ? 'text-white' : 'text-text-secondary dark:text-text-secondary-dark'
-                }`}
-              >
+              <span className={`font-medium ${textClass}`}>
                 {format(day, 'd')}
               </span>
               {stats && !isFutureDate && (
-                <span
-                  className={`text-[10px] ${
-                    fillPercent > 50 ? 'text-white/80' : 'text-text-muted dark:text-text-muted-dark'
-                  }`}
-                >
+                <span className={`text-[10px] ${subTextClass}`}>
                   {stats.completed}/{stats.total}
                 </span>
               )}
@@ -163,26 +189,22 @@ export function MonthGrid({ month }: MonthGridProps) {
         })}
       </div>
 
-      {/* Legend — muted palette */}
+      {/* Legend */}
       <div className="flex items-center justify-center gap-4 mt-6 text-xs text-text-muted dark:text-text-muted-dark">
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded bg-[#9B6B6B]/60" />
-          <span>&lt;25%</span>
+          <div className="w-3 h-3 rounded" style={{ backgroundColor: colors.low }} />
+          <span>&lt;50%</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded bg-[#A89548]/45" />
-          <span>25-50%</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded bg-[#A89548]/70" />
+          <div className="w-3 h-3 rounded" style={{ backgroundColor: colors.medium }} />
           <span>50-75%</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded bg-[#5B8A72]/75" />
-          <span>&gt;75%</span>
+          <div className="w-3 h-3 rounded" style={{ backgroundColor: colors.high }} />
+          <span>75-99%</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded bg-[#5B8A72]" />
+          <div className="w-3 h-3 rounded" style={{ backgroundColor: colors.full }} />
           <span>100%</span>
         </div>
       </div>
