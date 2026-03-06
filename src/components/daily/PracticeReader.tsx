@@ -102,7 +102,7 @@ export function PracticeReader({
   }
 
   const imageSrc = isBundled && bundledText.hasImage
-    ? `${import.meta.env.BASE_URL}practice-images/${bundledText.id}.png`
+    ? `${import.meta.env.BASE_URL}practice-images/${bundledText.id}.jpg`
     : practice.imageData
 
   return (
