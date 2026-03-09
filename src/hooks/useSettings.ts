@@ -21,9 +21,9 @@ const UI_FONT_SIZE_KEY = 'settings-ui-font-size'
 export type FontSizeLevel = 'small' | 'medium' | 'large'
 
 const practiceFontScales: Record<FontSizeLevel, number> = {
-  small: 0.9,
-  medium: 1,
-  large: 1.15,
+  small: 1,
+  medium: 1.15,
+  large: 1.35,
 }
 
 const uiFontScales: Record<FontSizeLevel, number> = {
