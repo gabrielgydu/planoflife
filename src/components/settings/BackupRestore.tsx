@@ -102,8 +102,11 @@ export function BackupRestore() {
     setIsImportingPractices(true)
     setError(null)
     try {
-      const count = await importPractices(pendingPractices, categories)
-      setSuccess(`${count} práticas importadas com sucesso!`)
+      const { added, updated } = await importPractices(pendingPractices, categories)
+      const parts: string[] = []
+      if (added > 0) parts.push(`${added} novas`)
+      if (updated > 0) parts.push(`${updated} atualizadas`)
+      setSuccess(parts.length > 0 ? `Práticas: ${parts.join(', ')}` : 'Nenhuma alteração')
       setTimeout(() => setSuccess(null), 3000)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao importar práticas')

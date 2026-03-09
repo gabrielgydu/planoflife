@@ -190,7 +190,7 @@ export function parsePracticeImportFile(file: File): Promise<PracticeImportItem[
 export async function importPractices(
   items: PracticeImportItem[],
   categories: Category[]
-): Promise<number> {
+): Promise<{ added: number; updated: number }> {
   const now = new Date().toISOString()
   const maxSortOrder = await db.practices.orderBy('sortOrder').last()
   let sortOrder = (maxSortOrder?.sortOrder ?? 0) + 1
@@ -200,26 +200,46 @@ export async function importPractices(
     categoryMap.set(normalizeStr(cat.name), cat.id)
   }
 
-  const practices: Practice[] = items.map((item) => {
+  const existingPractices = await db.practices.toArray()
+  const existingByName = new Map<string, Practice>()
+  for (const p of existingPractices) {
+    existingByName.set(normalizeStr(p.name), p)
+  }
+
+  let added = 0
+  let updated = 0
+
+  for (const item of items) {
     const categoryId = item.category
       ? categoryMap.get(normalizeStr(item.category)) ?? ''
       : ''
-    return {
-      id: generateId(),
-      name: item.name,
-      categoryId,
-      content: textToHtml(item.content),
-      imageData: null,
-      isRequired: false,
-      sortOrder: sortOrder++,
-      isArchived: false,
-      createdAt: now,
-      updatedAt: now,
-    }
-  })
+    const existing = existingByName.get(normalizeStr(item.name))
 
-  await db.practices.bulkAdd(practices)
-  return practices.length
+    if (existing) {
+      await db.practices.update(existing.id, {
+        content: textToHtml(item.content),
+        categoryId,
+        updatedAt: now,
+      })
+      updated++
+    } else {
+      await db.practices.add({
+        id: generateId(),
+        name: item.name,
+        categoryId,
+        content: textToHtml(item.content),
+        imageData: null,
+        isRequired: false,
+        sortOrder: sortOrder++,
+        isArchived: false,
+        createdAt: now,
+        updatedAt: now,
+      })
+      added++
+    }
+  }
+
+  return { added, updated }
 }
 
 export async function downloadEncryptedBackup(
