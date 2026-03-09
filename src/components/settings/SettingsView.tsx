@@ -1,7 +1,7 @@
 import { Link } from 'react-router'
 import { ClipboardList, FolderOpen, Download, FileText, ChevronRight, Sun, Moon, Circle, type LucideIcon } from 'lucide-react'
 import { useThemeMode, type ThemeMode } from '../../hooks/useThemeMode'
-import { useIndividualReasons } from '../../hooks/useSettings'
+import { useIndividualReasons, usePracticeFontSize, useUIFontSize, type FontSizeLevel } from '../../hooks/useSettings'
 
 const menuItems: { to: string; label: string; icon: LucideIcon; description: string }[] = [
   { to: '/settings/practices', label: 'Práticas', icon: ClipboardList, description: 'Gerenciar práticas espirituais' },
@@ -16,9 +16,17 @@ const themeOptions: { key: ThemeMode; label: string; icon: LucideIcon }[] = [
   { key: 'black', label: 'Preto', icon: Circle },
 ]
 
+const fontSizeOptions: { key: FontSizeLevel; label: string }[] = [
+  { key: 'small', label: 'Pequeno' },
+  { key: 'medium', label: 'Médio' },
+  { key: 'large', label: 'Grande' },
+]
+
 export function SettingsView() {
   const [themeMode, setThemeMode] = useThemeMode()
   const [individualReasons, setIndividualReasons] = useIndividualReasons()
+  const [practiceFontSize, setPracticeFontSize] = usePracticeFontSize()
+  const [uiFontSize, setUIFontSize] = useUIFontSize()
 
   return (
     <div className="min-h-full">
@@ -46,6 +54,50 @@ export function SettingsView() {
                 }`}
               >
                 <opt.icon className="w-4 h-4" />
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* Font Size - Practice Texts */}
+        <section>
+          <h2 className="font-heading text-xs font-medium text-text-muted dark:text-text-muted-dark uppercase tracking-widest mb-3">
+            Tamanho da fonte — Orações
+          </h2>
+          <div className="flex gap-2">
+            {fontSizeOptions.map((opt) => (
+              <button
+                key={opt.key}
+                onClick={() => setPracticeFontSize(opt.key)}
+                className={`flex-1 py-2.5 px-3 text-sm rounded-lg transition-colors ${
+                  practiceFontSize === opt.key
+                    ? 'bg-btn dark:bg-btn-dark text-btn-text dark:text-btn-dark-text'
+                    : 'bg-surface-secondary dark:bg-surface-secondary-dark text-text-secondary dark:text-text-secondary-dark hover:bg-border dark:hover:bg-border-dark'
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* Font Size - UI */}
+        <section>
+          <h2 className="font-heading text-xs font-medium text-text-muted dark:text-text-muted-dark uppercase tracking-widest mb-3">
+            Tamanho da fonte — Interface
+          </h2>
+          <div className="flex gap-2">
+            {fontSizeOptions.map((opt) => (
+              <button
+                key={opt.key}
+                onClick={() => setUIFontSize(opt.key)}
+                className={`flex-1 py-2.5 px-3 text-sm rounded-lg transition-colors ${
+                  uiFontSize === opt.key
+                    ? 'bg-btn dark:bg-btn-dark text-btn-text dark:text-btn-dark-text'
+                    : 'bg-surface-secondary dark:bg-surface-secondary-dark text-text-secondary dark:text-text-secondary-dark hover:bg-border dark:hover:bg-border-dark'
+                }`}
+              >
                 {opt.label}
               </button>
             ))}

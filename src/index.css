@@ -73,6 +73,7 @@ html.black {
 
 html {
   font-family: var(--font-sans);
+  font-size: calc(16px * var(--font-scale-ui, 1));
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
 }
@@ -139,7 +140,7 @@ body {
 .prose-prayer {
   font-family: 'DM Sans', sans-serif;
   line-height: 1.7;
-  font-size: 1.05rem;
+  font-size: calc(1.05rem * var(--font-scale-practice, 1));
   color: var(--color-text-primary);
 }
 
@@ -157,9 +158,9 @@ body {
   margin-bottom: 0.75em;
 }
 
-.prose-prayer h1 { font-size: 1.5rem; }
-.prose-prayer h2 { font-size: 1.3rem; }
-.prose-prayer h3 { font-size: 1.15rem; }
+.prose-prayer h1 { font-size: calc(1.5rem * var(--font-scale-practice, 1)); }
+.prose-prayer h2 { font-size: calc(1.3rem * var(--font-scale-practice, 1)); }
+.prose-prayer h3 { font-size: calc(1.15rem * var(--font-scale-practice, 1)); }
 
 .prose-prayer h1:first-child,
 .prose-prayer h2:first-child,

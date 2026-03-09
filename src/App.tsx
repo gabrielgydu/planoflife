@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { useEffect } from 'react'
+import { usePracticeFontSize, useUIFontSize } from './hooks/useSettings'
 import { AppShell } from './components/layout/AppShell'
 import { DailyView } from './components/daily/DailyView'
 import { ExamenView } from './components/examen/ExamenView'
@@ -20,6 +21,9 @@ import { seedDatabase } from './db/seed'
 import { migrateEmojisToIcons } from './db'
 
 export function App() {
+  usePracticeFontSize()
+  useUIFontSize()
+
   useEffect(() => {
     seedDatabase().then(() => migrateEmojisToIcons())
   }, [])

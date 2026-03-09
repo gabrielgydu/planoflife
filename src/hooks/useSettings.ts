@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const INDIVIDUAL_REASONS_KEY = 'settings-individual-reasons'
 
@@ -13,4 +13,59 @@ export function useIndividualReasons(): [boolean, (value: boolean) => void] {
   }
 
   return [enabled, setEnabled]
+}
+
+const PRACTICE_FONT_SIZE_KEY = 'settings-practice-font-size'
+const UI_FONT_SIZE_KEY = 'settings-ui-font-size'
+
+export type FontSizeLevel = 'small' | 'medium' | 'large'
+
+const practiceFontScales: Record<FontSizeLevel, number> = {
+  small: 0.9,
+  medium: 1,
+  large: 1.15,
+}
+
+const uiFontScales: Record<FontSizeLevel, number> = {
+  small: 0.9,
+  medium: 1,
+  large: 1.1,
+}
+
+function applyFontSize(key: string, scale: number) {
+  document.documentElement.style.setProperty(key, String(scale))
+}
+
+export function usePracticeFontSize(): [FontSizeLevel, (level: FontSizeLevel) => void] {
+  const [level, setLevelState] = useState<FontSizeLevel>(() => {
+    return (localStorage.getItem(PRACTICE_FONT_SIZE_KEY) as FontSizeLevel) || 'medium'
+  })
+
+  useEffect(() => {
+    applyFontSize('--font-scale-practice', practiceFontScales[level])
+  }, [level])
+
+  const setLevel = (value: FontSizeLevel) => {
+    localStorage.setItem(PRACTICE_FONT_SIZE_KEY, value)
+    setLevelState(value)
+  }
+
+  return [level, setLevel]
+}
+
+export function useUIFontSize(): [FontSizeLevel, (level: FontSizeLevel) => void] {
+  const [level, setLevelState] = useState<FontSizeLevel>(() => {
+    return (localStorage.getItem(UI_FONT_SIZE_KEY) as FontSizeLevel) || 'medium'
+  })
+
+  useEffect(() => {
+    applyFontSize('--font-scale-ui', uiFontScales[level])
+  }, [level])
+
+  const setLevel = (value: FontSizeLevel) => {
+    localStorage.setItem(UI_FONT_SIZE_KEY, value)
+    setLevelState(value)
+  }
+
+  return [level, setLevel]
 }
