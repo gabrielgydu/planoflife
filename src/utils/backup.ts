@@ -9,6 +9,7 @@ import type {
   Proposito,
 } from '../types'
 import { encryptData, decryptData } from './crypto'
+import { generateId } from './id'
 
 export interface BackupData {
   version: number
@@ -204,7 +205,7 @@ export async function importPractices(
       ? categoryMap.get(normalizeStr(item.category)) ?? ''
       : ''
     return {
-      id: crypto.randomUUID(),
+      id: generateId(),
       name: item.name,
       categoryId,
       content: textToHtml(item.content),
