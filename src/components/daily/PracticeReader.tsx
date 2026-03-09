@@ -193,7 +193,7 @@ export function PracticeReader({
         {hasMultipleLangs && (
           <button
             onClick={toggleLang}
-            className="absolute bottom-4 right-4 px-4 py-2 rounded-full text-sm font-medium bg-btn text-btn-text dark:bg-btn-dark dark:text-btn-dark-text shadow-lg transition-transform active:scale-95"
+            className="absolute bottom-4 right-4 px-4 py-2 rounded-full text-sm font-medium bg-surface-secondary text-text-primary dark:bg-surface-secondary-dark dark:text-text-primary-dark shadow-lg transition-transform active:scale-95"
           >
             {toggleLabel}
           </button>
