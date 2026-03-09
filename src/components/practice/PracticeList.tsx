@@ -1,14 +1,15 @@
 import { useNavigate, Link } from 'react-router'
-import { ChevronLeft, ChevronRight, Plus, Archive, ClipboardList } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Plus, Archive, ClipboardList, GripVertical } from 'lucide-react'
 import { useCategories } from '../../hooks/useCategories'
 import { usePractices } from '../../hooks/usePractices'
 import { EmptyState } from '../shared/EmptyState'
 import { CategoryIcon } from '../shared/CategoryIcon'
+import { SortableList } from '../shared/SortableList'
 
 export function PracticeList() {
   const navigate = useNavigate()
   const { categories } = useCategories()
-  const { practices } = usePractices({ includeArchived: true })
+  const { practices, reorderPractices } = usePractices({ includeArchived: true })
 
   const categoryMap = new Map(categories.map((c) => [c.id, c]))
 
@@ -52,21 +53,25 @@ export function PracticeList() {
                     <CategoryIcon name={category.emoji} className="w-3.5 h-3.5 inline-block mr-1 align-text-bottom" /> {category.name}
                   </span>
                 </div>
-                {catPractices.map((practice) => (
-                  <Link
-                    key={practice.id}
-                    to={`/settings/practices/${practice.id}`}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark transition-colors"
-                  >
-                    <span className="flex-1 text-sm text-text-primary dark:text-text-primary-dark">
-                      {practice.name}
-                      {practice.isRequired && (
-                        <span className="ml-1 text-xs text-[#A89548]">*</span>
-                      )}
-                    </span>
-                    <ChevronRight className="w-5 h-5 text-text-muted" />
-                  </Link>
-                ))}
+                <SortableList
+                  items={catPractices}
+                  onReorder={(reordered) => reorderPractices(category.id, reordered.map((p) => p.id))}
+                  renderItem={(practice) => (
+                    <Link
+                      to={`/settings/practices/${practice.id}`}
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark transition-colors"
+                    >
+                      <GripVertical className="w-4 h-4 text-text-muted dark:text-text-muted-dark flex-shrink-0" />
+                      <span className="flex-1 text-sm text-text-primary dark:text-text-primary-dark">
+                        {practice.name}
+                        {practice.isRequired && (
+                          <span className="ml-1 text-xs text-[#A89548]">*</span>
+                        )}
+                      </span>
+                      <ChevronRight className="w-5 h-5 text-text-muted" />
+                    </Link>
+                  )}
+                />
               </>
             )}
           </div>
