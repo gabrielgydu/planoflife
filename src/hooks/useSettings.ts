@@ -1,5 +1,22 @@
 import { useState, useEffect } from 'react'
 
+export type ExamenPropositoTarget = 'today' | 'tomorrow'
+
+const EXAMEN_PROPOSITO_TARGET_KEY = 'settings-examen-proposito-target'
+
+export function useExamenPropositoTarget(): [ExamenPropositoTarget, (value: ExamenPropositoTarget) => void] {
+  const [target, setTargetState] = useState<ExamenPropositoTarget>(() => {
+    return (localStorage.getItem(EXAMEN_PROPOSITO_TARGET_KEY) as ExamenPropositoTarget) || 'tomorrow'
+  })
+
+  const setTarget = (value: ExamenPropositoTarget) => {
+    localStorage.setItem(EXAMEN_PROPOSITO_TARGET_KEY, value)
+    setTargetState(value)
+  }
+
+  return [target, setTarget]
+}
+
 const INDIVIDUAL_REASONS_KEY = 'settings-individual-reasons'
 
 export function useIndividualReasons(): [boolean, (value: boolean) => void] {

@@ -1,28 +1,33 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
-import { Link } from 'react-router'
-import { Plus, BookOpen, HelpCircle } from 'lucide-react'
+import { Link, useParams } from 'react-router'
+import { Plus, BookOpen, CalendarDays, HelpCircle } from 'lucide-react'
 import { Header } from '../layout/Header'
 import { ExamenEntryCard } from './ExamenEntryCard'
 import { ExamenEntryForm } from './ExamenEntryForm'
 import { Spinner } from '../shared/Spinner'
 import { useExamenEntries } from '../../hooks/useExamen'
 import { useProposito } from '../../hooks/usePropositos'
-import { formatDate, getToday, addDay, subDay } from '../../utils/dates'
+import { useExamenPropositoTarget } from '../../hooks/useSettings'
+import { formatDate, getToday, parseDate, addDay, subDay } from '../../utils/dates'
 import { EXAMEN_COLORS, EXAMEN_LABELS } from '../../utils/constants'
 import type { ExamenCategory, ExamenEntry } from '../../types'
 
 export function ExamenView() {
-  const [currentDate, setCurrentDate] = useState(getToday)
+  const { date: dateParam } = useParams<{ date: string }>()
+  const [currentDate, setCurrentDate] = useState(() =>
+    dateParam ? parseDate(dateParam) : getToday()
+  )
   const [showEntryForm, setShowEntryForm] = useState(false)
   const [formCategory, setFormCategory] = useState<ExamenCategory>('gracias')
   const [editingEntry, setEditingEntry] = useState<ExamenEntry | null>(null)
 
   const dateStr = formatDate(currentDate)
-  const tomorrowStr = formatDate(addDay(currentDate, 1))
+  const [propositoTarget] = useExamenPropositoTarget()
+  const propositoDateStr = propositoTarget === 'today' ? dateStr : formatDate(addDay(currentDate, 1))
   const { entriesByCategory, addEntry, updateEntry, deleteEntry, toggleConfession, isLoading } =
     useExamenEntries(dateStr)
-  const { setProposito } = useProposito(tomorrowStr)
+  const { setProposito } = useProposito(propositoDateStr)
 
   const handlePrevDay = () => setCurrentDate((d) => subDay(d, 1))
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
@@ -64,13 +69,22 @@ export function ExamenView() {
         onPrevDay={handlePrevDay}
         onNextDay={handleNextDay}
         rightAction={
-          <Link
-            to="/examen/confession"
-            className="p-2 -mr-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
-            aria-label="Confissão"
-          >
-            <BookOpen className="w-5 h-5" />
-          </Link>
+          <div className="flex items-center gap-1 -mr-2">
+            <Link
+              to="/examen/history"
+              className="p-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
+              aria-label="Histórico"
+            >
+              <CalendarDays className="w-5 h-5" />
+            </Link>
+            <Link
+              to="/examen/confession"
+              className="p-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
+              aria-label="Confissão"
+            >
+              <BookOpen className="w-5 h-5" />
+            </Link>
+          </div>
         }
       />
 

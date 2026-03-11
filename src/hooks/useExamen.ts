@@ -62,9 +62,7 @@ export function useExamenEntries(date: string) {
 export function useUnconfessedEntries() {
   const entries = useLiveQuery(() =>
     db.examenEntries
-      .where('isForConfession')
-      .equals(1)
-      .and((e) => e.confessionDate === null)
+      .filter((e) => e.isForConfession && e.confessionDate === null)
       .toArray()
   )
 

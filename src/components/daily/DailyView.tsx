@@ -36,7 +36,7 @@ export function DailyView() {
   const { step, advanceToMissedReasons, completeFlow } = useMorningFlow()
 
   // Proposito for today
-  const { proposito, setProposito } = useProposito(dateStr)
+  const { proposito, setProposito, clearProposito } = useProposito(dateStr)
 
   const practicesByCategory = useMemo(() => {
     const map = new Map<string, Practice[]>()
@@ -123,7 +123,7 @@ export function DailyView() {
       >
         {/* Proposito card */}
         <div className="px-4 py-2">
-          <PropositoCard proposito={proposito} onSetProposito={setProposito} />
+          <PropositoCard proposito={proposito} onSetProposito={setProposito} onClearProposito={clearProposito} />
         </div>
 
         {/* Categories and practices */}

@@ -5,9 +5,10 @@ import type { Proposito } from '../../types'
 interface PropositoCardProps {
   proposito: Proposito | undefined
   onSetProposito: (text: string) => void
+  onClearProposito: () => void
 }
 
-export function PropositoCard({ proposito, onSetProposito }: PropositoCardProps) {
+export function PropositoCard({ proposito, onSetProposito, onClearProposito }: PropositoCardProps) {
   const [showForm, setShowForm] = useState(false)
   const [text, setText] = useState('')
 
@@ -29,6 +30,13 @@ export function PropositoCard({ proposito, onSetProposito }: PropositoCardProps)
             </p>
             <p className="text-sm italic text-text-primary dark:text-text-primary-dark">{proposito.text}</p>
           </div>
+          <button
+            onClick={onClearProposito}
+            className="p-1 -mt-1 -mr-1 text-text-muted dark:text-text-muted-dark hover:text-text-secondary dark:hover:text-text-secondary-dark transition-colors"
+            aria-label="Limpar propósito"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
       </div>
     )

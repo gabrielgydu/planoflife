@@ -1,13 +1,10 @@
 import { useParams, useNavigate } from 'react-router'
-import { useLiveQuery } from 'dexie-react-hooks'
-import { ChevronLeft, Target, ClipboardList, BookOpen, Check } from 'lucide-react'
-import { db } from '../../db'
+import { ChevronLeft, Target, ClipboardList, Check } from 'lucide-react'
 import { useDailyRecords } from '../../hooks/useDailyRecords'
 import { useProposito } from '../../hooks/usePropositos'
 import { useCategories } from '../../hooks/useCategories'
 import { usePractices } from '../../hooks/usePractices'
 import { parseDate, formatDateLong } from '../../utils/dates'
-import { EXAMEN_COLORS, EXAMEN_LABELS } from '../../utils/constants'
 import { CategoryIcon } from '../shared/CategoryIcon'
 
 export function DayDetail() {
@@ -18,11 +15,6 @@ export function DayDetail() {
   const { practices } = usePractices()
   const { isCompleted } = useDailyRecords(date ?? '')
   const { proposito } = useProposito(date ?? '')
-
-  const examenEntries = useLiveQuery(
-    () => (date ? db.examenEntries.where('date').equals(date).toArray() : []),
-    [date]
-  )
 
   if (!date) return null
 
@@ -120,43 +112,6 @@ export function DayDetail() {
           </div>
         </section>
 
-        {/* Examen */}
-        {examenEntries && examenEntries.length > 0 && (
-          <section>
-            <h2 className="flex items-center gap-2 font-heading text-xs font-medium text-text-muted dark:text-text-muted-dark uppercase tracking-widest mb-3">
-              <BookOpen className="w-4 h-4" />
-              Exame de Consciência
-            </h2>
-            <div className="space-y-3">
-              {(['gracias', 'perdon', 'ayudame'] as const).map((category) => {
-                const entries = examenEntries.filter((e) => e.category === category)
-                if (entries.length === 0) return null
-
-                return (
-                  <div key={category}>
-                    <p
-                      className="font-heading text-xs font-medium uppercase tracking-widest mb-2"
-                      style={{ color: EXAMEN_COLORS[category] }}
-                    >
-                      {EXAMEN_LABELS[category]}
-                    </p>
-                    <div className="space-y-2">
-                      {entries.map((entry) => (
-                        <div
-                          key={entry.id}
-                          className="p-3 bg-surface-card dark:bg-surface-card-dark rounded-lg border-l-[3px]"
-                          style={{ borderColor: EXAMEN_COLORS[category] }}
-                        >
-                          <p className="text-sm text-text-primary dark:text-text-primary-dark">{entry.text}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </section>
-        )}
       </div>
     </div>
   )
