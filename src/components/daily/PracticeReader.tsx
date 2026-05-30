@@ -16,6 +16,7 @@ interface PracticeReaderProps {
   initialPracticeId: string
   isCompleted: (practiceId: string) => boolean
   onTogglePractice: (practiceId: string) => void
+  onMarkViewed: (practiceId: string) => void
   onClose: () => void
 }
 
@@ -35,6 +36,7 @@ export function PracticeReader({
   initialPracticeId,
   isCompleted,
   onTogglePractice,
+  onMarkViewed,
   onClose,
 }: PracticeReaderProps) {
   const initialIndex = items.findIndex((i) => i.practice.id === initialPracticeId)
@@ -44,6 +46,8 @@ export function PracticeReader({
     const saved = localStorage.getItem(LANG_KEY)
     return saved === 'la' ? 'la' : 'pt'
   })
+
+  const currentPracticeId = items[currentIndex]?.practice.id
 
   useEffect(() => {
     const original = document.body.style.overflow
@@ -56,6 +60,12 @@ export function PracticeReader({
   useEffect(() => {
     localStorage.setItem(LANG_KEY, lang)
   }, [lang])
+
+  // Auto-mark each viewed practice as done (set-only; never un-marks). Fires on
+  // open and on every navigation to a different practice.
+  useEffect(() => {
+    if (currentPracticeId) onMarkViewed(currentPracticeId)
+  }, [currentPracticeId, onMarkViewed])
 
   const current = items[currentIndex]
   if (!current) return null
@@ -178,14 +188,18 @@ export function PracticeReader({
                   className="prose-prayer"
                 />
               </div>
-            ) : (
-              practice.content && (
-                <div
-                  className="prose prose-slate dark:prose-invert max-w-none p-4"
-                  dangerouslySetInnerHTML={{ __html: practice.content }}
-                />
-              )
-            )}
+            ) : practice.content ? (
+              <div
+                className="prose prose-slate dark:prose-invert max-w-none p-4"
+                dangerouslySetInnerHTML={{ __html: practice.content }}
+              />
+            ) : !imageSrc ? (
+              <div className="flex items-center justify-center min-h-[50vh] px-8 text-center">
+                <p className="font-heading text-2xl font-medium text-text-secondary dark:text-text-secondary-dark">
+                  {practice.name}
+                </p>
+              </div>
+            ) : null}
           </motion.div>
         </AnimatePresence>
 

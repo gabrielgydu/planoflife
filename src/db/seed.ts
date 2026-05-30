@@ -1,4 +1,4 @@
-import { db } from './index'
+import { db, ADDITIONAL_PRACTICES } from './index'
 import type { Category, Practice } from '../types'
 import { generateId } from '../utils/id'
 
@@ -16,7 +16,7 @@ const defaultCategories: Category[] = [
 function createDefaultPractices(categories: Category[]): Practice[] {
   const catMap = Object.fromEntries(categories.map((c) => [c.name, c.id]))
 
-  return [
+  const base: Practice[] = [
     // Orações da Manhã
     { id: generateId(), name: 'Oferecimento de Obras', categoryId: catMap['Orações da Manhã'], content: '', imageData: null, bundledTextId: 'oferecimento_de_obras', isRequired: true, sortOrder: 0, isArchived: false, createdAt: now, updatedAt: now },
     { id: generateId(), name: 'Meditação', categoryId: catMap['Orações da Manhã'], content: '', imageData: null, isRequired: true, sortOrder: 1, isArchived: false, createdAt: now, updatedAt: now },
@@ -41,6 +41,31 @@ function createDefaultPractices(categories: Category[]): Practice[] {
     { id: generateId(), name: 'Missa', categoryId: catMap['Missa / Igreja'], content: '', imageData: null, isRequired: false, sortOrder: 0, isArchived: false, createdAt: now, updatedAt: now },
     { id: generateId(), name: 'Comunhão Espiritual', categoryId: catMap['Missa / Igreja'], content: '', imageData: null, isRequired: false, sortOrder: 1, isArchived: false, createdAt: now, updatedAt: now },
   ]
+
+  // Practices added after the initial seed — appended to the end of their
+  // category. Kept in sync with the version(3) upgrade via ADDITIONAL_PRACTICES.
+  for (const spec of ADDITIONAL_PRACTICES) {
+    const categoryId = catMap[spec.categoryName]
+    if (!categoryId) continue
+    const maxSortOrder = base
+      .filter((p) => p.categoryId === categoryId)
+      .reduce((m, p) => Math.max(m, p.sortOrder), -1)
+    base.push({
+      id: generateId(),
+      name: spec.name,
+      categoryId,
+      content: '',
+      imageData: null,
+      isRequired: spec.isRequired,
+      sortOrder: maxSortOrder + 1,
+      isArchived: false,
+      createdAt: now,
+      updatedAt: now,
+      ...(spec.bundledTextId ? { bundledTextId: spec.bundledTextId } : {}),
+    })
+  }
+
+  return base
 }
 
 export async function seedDatabase(): Promise<void> {

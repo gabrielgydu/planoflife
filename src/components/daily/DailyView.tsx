@@ -17,7 +17,6 @@ import { useDailyRecords } from '../../hooks/useDailyRecords'
 import { useMorningFlow } from '../../hooks/useMorningFlow'
 import { useProposito } from '../../hooks/usePropositos'
 import { formatDate, getToday, addDay, subDay } from '../../utils/dates'
-import { practiceHasText } from '../../data/bundledTexts'
 import type { Practice, Category } from '../../types'
 
 export function DailyView() {
@@ -31,7 +30,7 @@ export function DailyView() {
 
   const { categories, isLoading: categoriesLoading } = useCategories()
   const { practices, isLoading: practicesLoading } = usePractices()
-  const { isCompleted, togglePractice, clearAllForDate } = useDailyRecords(dateStr)
+  const { isCompleted, togglePractice, markCompleted, clearAllForDate } = useDailyRecords(dateStr)
 
   const { step, advanceToMissedReasons, completeFlow } = useMorningFlow()
 
@@ -52,16 +51,15 @@ export function DailyView() {
     return map
   }, [categories, practices])
 
-  // Flat ordered list of practices with content, for the reader overlay
+  // Flat ordered list of all practices, for the reader overlay. Includes
+  // text-less practices so the reader can page through every practice.
   const readerItems = useMemo(() => {
     const categoryMap = new Map(categories.map((c) => [c.id, c]))
     const items: { practice: Practice; category: Category }[] = []
     for (const category of categories) {
       const categoryPractices = practicesByCategory.get(category.id) ?? []
       for (const practice of categoryPractices) {
-        if (practiceHasText(practice)) {
-          items.push({ practice, category: categoryMap.get(practice.categoryId)! })
-        }
+        items.push({ practice, category: categoryMap.get(practice.categoryId)! })
       }
     }
     return items
@@ -71,9 +69,7 @@ export function DailyView() {
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
 
   const handleOpenPracticeDetail = (practice: Practice) => {
-    if (practiceHasText(practice)) {
-      setReaderPracticeId(practice.id)
-    }
+    setReaderPracticeId(practice.id)
   }
 
   const handleClearAll = async () => {
@@ -135,7 +131,6 @@ export function DailyView() {
               category={category}
               practices={categoryPractices}
               isCompleted={isCompleted}
-              practiceHasText={practiceHasText}
               onTogglePractice={togglePractice}
               onOpenPracticeDetail={handleOpenPracticeDetail}
             />
@@ -170,6 +165,7 @@ export function DailyView() {
             initialPracticeId={readerPracticeId}
             isCompleted={isCompleted}
             onTogglePractice={togglePractice}
+            onMarkViewed={markCompleted}
             onClose={() => setReaderPracticeId(null)}
           />
         )}

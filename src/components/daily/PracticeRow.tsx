@@ -5,12 +5,11 @@ import type { Practice } from '../../types'
 interface PracticeRowProps {
   practice: Practice
   isCompleted: boolean
-  hasText: boolean
   onToggle: () => void
   onOpenDetail: () => void
 }
 
-export function PracticeRow({ practice, isCompleted, hasText, onToggle, onOpenDetail }: PracticeRowProps) {
+export function PracticeRow({ practice, isCompleted, onToggle, onOpenDetail }: PracticeRowProps) {
   const nameClasses = `flex-1 text-sm text-left transition-colors duration-200 ${
     isCompleted
       ? 'text-text-muted dark:text-text-muted-dark'
@@ -33,21 +32,12 @@ export function PracticeRow({ practice, isCompleted, hasText, onToggle, onOpenDe
         {isCompleted && <Check className="w-3 h-3 text-btn-text dark:text-btn-dark-text" strokeWidth={3} />}
       </motion.button>
 
-      {hasText ? (
-        <button onClick={onOpenDetail} className={nameClasses}>
-          {practice.name}
-          {practice.isRequired && (
-            <span className="ml-1 text-xs text-[#A89548]">*</span>
-          )}
-        </button>
-      ) : (
-        <span className={nameClasses}>
-          {practice.name}
-          {practice.isRequired && (
-            <span className="ml-1 text-xs text-[#A89548]">*</span>
-          )}
-        </span>
-      )}
+      <button onClick={onOpenDetail} className={nameClasses}>
+        {practice.name}
+        {practice.isRequired && (
+          <span className="ml-1 text-xs text-[#A89548]">*</span>
+        )}
+      </button>
     </div>
   )
 }

@@ -9,7 +9,6 @@ interface CategorySectionProps {
   category: Category
   practices: Practice[]
   isCompleted: (practiceId: string) => boolean
-  practiceHasText: (practice: Practice) => boolean
   onTogglePractice: (practiceId: string) => void
   onOpenPracticeDetail: (practice: Practice) => void
 }
@@ -18,7 +17,6 @@ export function CategorySection({
   category,
   practices,
   isCompleted,
-  practiceHasText,
   onTogglePractice,
   onOpenPracticeDetail,
 }: CategorySectionProps) {
@@ -64,7 +62,6 @@ export function CategorySection({
                 key={practice.id}
                 practice={practice}
                 isCompleted={isCompleted(practice.id)}
-                hasText={practiceHasText(practice)}
                 onToggle={() => onTogglePractice(practice.id)}
                 onOpenDetail={() => onOpenPracticeDetail(practice)}
               />
