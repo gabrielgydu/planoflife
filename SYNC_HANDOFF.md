@@ -39,10 +39,11 @@ locally verified (e2e 11/11) and ready to deploy.**
 | End-to-end encryption (Worker sees only ciphertext) | ✅ |
 | Device prefs (theme, font sizes, examen target) sync | ✅ |
 
-> **Deploy state:** Phase 4 app code is built + verified locally but **not yet pushed
-> to master** at the time of writing (per request: review/test on real devices first).
-> The Worker's `?meta=1` endpoint is additive + backward-compatible; until the Worker is
-> redeployed the app still works (it just re-downloads the blob on each idle pull).
+> **Deploy state:** Phase 4 app code is **deployed to production** (commit `cc20c68`,
+> Pages Actions green, 2026-06-04). The Worker's `?meta=1` endpoint is additive +
+> backward-compatible; **the Worker still needs a manual `wrangler deploy`** for the
+> bandwidth saving — until then the app works but re-downloads the blob on each idle pull.
+> Recommended: exercise it on the real phone + desktop to confirm before relying on it.
 
 ---
 
