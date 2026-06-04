@@ -32,8 +32,11 @@ export function useCategories() {
   }
 
   async function reorderCategories(orderedIds: string[]) {
+    const now = new Date().toISOString()
     await db.transaction('rw', db.categories, async () => {
-      const updates = orderedIds.map((id, index) => db.categories.update(id, { sortOrder: index }))
+      const updates = orderedIds.map((id, index) =>
+        db.categories.update(id, { sortOrder: index, updatedAt: now })
+      )
       await Promise.all(updates)
     })
   }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { onSettingsChanged } from '../sync/settingsBus'
+import { onSettingsChanged, setSyncedSetting } from '../sync/settingsBus'
 
 export type ExamenPropositoTarget = 'today' | 'tomorrow'
 
@@ -19,7 +19,7 @@ export function useExamenPropositoTarget(): [ExamenPropositoTarget, (value: Exam
   )
 
   const setTarget = (value: ExamenPropositoTarget) => {
-    localStorage.setItem(EXAMEN_PROPOSITO_TARGET_KEY, value)
+    setSyncedSetting(EXAMEN_PROPOSITO_TARGET_KEY, value)
     setTargetState(value)
   }
 
@@ -39,7 +39,7 @@ export function useIndividualReasons(): [boolean, (value: boolean) => void] {
   )
 
   const setEnabled = (value: boolean) => {
-    localStorage.setItem(INDIVIDUAL_REASONS_KEY, String(value))
+    setSyncedSetting(INDIVIDUAL_REASONS_KEY, String(value))
     setEnabledState(value)
   }
 
@@ -82,7 +82,7 @@ export function usePracticeFontSize(): [FontSizeLevel, (level: FontSizeLevel) =>
   )
 
   const setLevel = (value: FontSizeLevel) => {
-    localStorage.setItem(PRACTICE_FONT_SIZE_KEY, value)
+    setSyncedSetting(PRACTICE_FONT_SIZE_KEY, value)
     setLevelState(value)
   }
 
@@ -104,7 +104,7 @@ export function useUIFontSize(): [FontSizeLevel, (level: FontSizeLevel) => void]
   )
 
   const setLevel = (value: FontSizeLevel) => {
-    localStorage.setItem(UI_FONT_SIZE_KEY, value)
+    setSyncedSetting(UI_FONT_SIZE_KEY, value)
     setLevelState(value)
   }
 

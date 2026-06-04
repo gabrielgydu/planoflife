@@ -1,6 +1,8 @@
 import { db } from '../db'
 import { dbReady } from '../db/init'
 import { collectSettings, applySettings } from './settingsBus'
+import { runWithApplyingRemote } from './mutationCapture'
+import { mergeStates } from './merge'
 import { SYNC_SCHEMA, type SyncState } from './types'
 
 const ALL_TABLES = [
@@ -58,6 +60,20 @@ export async function snapshotLocal(): Promise<SyncState> {
   }
 }
 
+/** Clear + repopulate all tables from a state. Must run inside an rw transaction. */
+async function clearAndBulkAdd(state: SyncState): Promise<void> {
+  await Promise.all(ALL_TABLES.map((t) => t.clear()))
+  await Promise.all([
+    db.categories.bulkAdd(state.data.categories),
+    db.practices.bulkAdd(state.data.practices),
+    db.dailyRecords.bulkAdd(state.data.dailyRecords),
+    db.missedReasons.bulkAdd(state.data.missedReasons),
+    db.examenEntries.bulkAdd(state.data.examenEntries),
+    db.guidingQuestions.bulkAdd(state.data.guidingQuestions),
+    db.propositos.bulkAdd(state.data.propositos),
+  ])
+}
+
 /**
  * Replace the entire local DB with a pulled snapshot, then apply its settings.
  * Full clear+bulkAdd in one transaction = snapshot semantics (handles deletes).
@@ -69,18 +85,36 @@ export async function applyRemoteState(
   // Ensure first-run seeding/migration is done before we clear+repopulate,
   // otherwise the two can interleave into a Dexie BulkError.
   await dbReady
-  await db.transaction('rw', ALL_TABLES, async () => {
-    await Promise.all(ALL_TABLES.map((t) => t.clear()))
-    await Promise.all([
-      db.categories.bulkAdd(state.data.categories),
-      db.practices.bulkAdd(state.data.practices),
-      db.dailyRecords.bulkAdd(state.data.dailyRecords),
-      db.missedReasons.bulkAdd(state.data.missedReasons),
-      db.examenEntries.bulkAdd(state.data.examenEntries),
-      db.guidingQuestions.bulkAdd(state.data.guidingQuestions),
-      db.propositos.bulkAdd(state.data.propositos),
-    ])
+  // Suppress mutation capture for the whole apply: these writes come FROM a pull,
+  // so they must not schedule a push (which would echo straight back to the cloud).
+  return runWithApplyingRemote(async () => {
+    await db.transaction('rw', ALL_TABLES, () => clearAndBulkAdd(state))
+    const settingsChanged = applySettings(state.settings)
+    return { settingsChanged }
   })
-  const settingsChanged = applySettings(state.settings)
-  return { settingsChanged }
+}
+
+/**
+ * Conflict-safe merge. In ONE transaction: read the current local DB, merge it
+ * with the remote snapshot, and rewrite the tables. Doing the read and the write
+ * in the same transaction means a concurrent local write can't be lost in the
+ * gap — it queues behind this transaction and re-marks the state dirty afterwards
+ * (mutation capture is suppressed only for our own merge writes). Returns the
+ * merged state so the caller can push it.
+ */
+export async function mergeRemoteIntoLocal(
+  remoteState: SyncState,
+  oursSettingKeys?: Iterable<string>
+): Promise<SyncState> {
+  await dbReady
+  return runWithApplyingRemote(async () => {
+    let merged: SyncState | undefined
+    await db.transaction('rw', ALL_TABLES, async () => {
+      const local = await snapshotLocal() // reads join this transaction
+      merged = mergeStates(remoteState, local, oursSettingKeys)
+      await clearAndBulkAdd(merged)
+    })
+    applySettings(merged!.settings)
+    return merged!
+  })
 }

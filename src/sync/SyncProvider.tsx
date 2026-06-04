@@ -12,6 +12,7 @@ import {
   setSyncUrl,
   getAuthToken,
   setAuthToken,
+  getAccountSalt,
   setAccountSalt,
   getSyncVersion,
   setSyncVersion,
@@ -22,16 +23,41 @@ import {
 import {
   deriveAuthToken,
   deriveEncKey,
+  encryptState,
   decryptState,
   base64ToBytes,
   assertCryptoAvailable,
 } from './syncCrypto'
-import { fetchRemote, SyncAuthError } from './syncClient'
-import { applyRemoteState, hasUserData, snapshotLocal } from './applyState'
+import {
+  fetchRemote,
+  fetchRemoteMeta,
+  pushRemote,
+  SyncAuthError,
+  SyncConflictError,
+} from './syncClient'
+import {
+  applyRemoteState,
+  mergeRemoteIntoLocal,
+  hasUserData,
+  snapshotLocal,
+} from './applyState'
+import { setDirtyHandler } from './mutationCapture'
+import {
+  onLocalSettingChanged,
+  getLocallyChangedSettingKeys,
+  markSettingsPushed,
+  clearLocallyChangedSettings,
+} from './settingsBus'
 import { clearEncKey, loadEncKey, saveEncKey } from './keyStore'
 import { SYNC_TABLES, type SyncState, type SyncStatus } from './types'
 
 type Counts = Record<string, number>
+
+// How long to coalesce local writes before pushing, the periodic pull cadence,
+// and how many times to pull-merge-retry on a push conflict before giving up.
+const PUSH_DEBOUNCE_MS = 1500
+const POLL_INTERVAL_MS = 60_000
+const MAX_PUSH_CONFLICT_RETRIES = 3
 
 export type ConnectResult =
   | { ok: true }
@@ -42,6 +68,7 @@ interface SyncContextValue {
   status: SyncStatus
   configured: boolean
   unlocked: boolean
+  pendingPush: boolean
   lastSyncedAt: string | null
   error: string | null
   workerUrl: string | null
@@ -70,13 +97,18 @@ async function localCounts(): Promise<Counts> {
 export function SyncProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<SyncStatus>('unconfigured')
   const [unlocked, setUnlocked] = useState(false)
+  const [pendingPush, setPendingPush] = useState(false)
   const [lastSyncedAt, setLast] = useState<string | null>(getLastSyncedAt())
   const [error, setError] = useState<string | null>(null)
   const [workerUrl, setWorkerUrl] = useState<string | null>(getSyncUrl())
 
   const keyRef = useRef<CryptoKey | null>(null)
   const tokenRef = useRef<string | null>(null)
-  const syncingRef = useRef(false)
+  const syncingRef = useRef(false) // a pull or push is in flight
+  const dirtyRef = useRef(false) // local edits not yet pushed
+  const initialPullDoneRef = useRef(false) // gate pushes until first pull ran
+  const pushTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const pushNowRef = useRef<(() => Promise<void>) | null>(null)
   const pending = useRef<{
     key: CryptoKey
     token: string
@@ -92,21 +124,49 @@ export function SyncProvider({ children }: { children: ReactNode }) {
     setLast(now)
   }, [])
 
+  // Debounce: (re)arm a single push timer. Reads the latest pushNow via a ref so
+  // schedulePush itself never needs to depend on pushNow.
+  const schedulePush = useCallback((delay: number) => {
+    if (pushTimerRef.current) clearTimeout(pushTimerRef.current)
+    pushTimerRef.current = setTimeout(() => {
+      pushTimerRef.current = null
+      void pushNowRef.current?.()
+    }, delay)
+  }, [])
+
+  // Pull: cheap version probe first, full GET + apply only when the cloud is ahead.
+  // Data-safety: applyRemoteState is a destructive full replace. If there are
+  // unpushed local edits, a plain pull would clobber them, so we push instead
+  // (the push merges on a 409). We also re-check dirtiness right before applying,
+  // to catch an edit that landed during the network round-trip.
   const syncNow = useCallback(async () => {
     if (!keyRef.current || !tokenRef.current || syncingRef.current) return
+    if (dirtyRef.current) {
+      schedulePush(0) // have local edits → push-merge instead of pull-overwrite
+      return
+    }
     const url = getSyncUrl()
     if (!url) return
     syncingRef.current = true
     setStatus('syncing')
     setError(null)
     try {
-      const remote = await fetchRemote(url, tokenRef.current)
-      if (remote.blob && remote.version > getSyncVersion()) {
-        const state = await decryptState(remote.blob, keyRef.current)
-        await applyRemoteState(state)
-        markSynced(remote.version)
-      } else if (remote.blob) {
-        // already up to date
+      const meta = await fetchRemoteMeta(url, tokenRef.current)
+      if (meta.version > getSyncVersion()) {
+        const remote = await fetchRemote(url, tokenRef.current)
+        if (remote.blob && remote.version > getSyncVersion()) {
+          const remoteState = await decryptState(remote.blob, keyRef.current)
+          if (dirtyRef.current) {
+            // An edit landed mid-fetch — merge it in atomically rather than
+            // overwrite, then push the merged result so the cloud converges too.
+            await mergeRemoteIntoLocal(remoteState, getLocallyChangedSettingKeys())
+            setSyncVersion(remote.version)
+            schedulePush(0)
+          } else {
+            await applyRemoteState(remoteState)
+            markSynced(remote.version)
+          }
+        }
       }
       setStatus('idle')
     } catch (e) {
@@ -119,9 +179,104 @@ export function SyncProvider({ children }: { children: ReactNode }) {
     } finally {
       syncingRef.current = false
     }
-  }, [markSynced])
+  }, [markSynced, schedulePush])
 
-  // Restore unlocked session on load.
+  // Push: encrypt the local snapshot and PUT it. On a 409 (cloud advanced under
+  // us) pull-merge-retry so a concurrent edit on the other device isn't lost.
+  const pushNow = useCallback(async () => {
+    const key = keyRef.current
+    const token = tokenRef.current
+    if (!key || !token) return
+    // Don't push before the first pull has run (avoids a needless startup conflict).
+    if (!initialPullDoneRef.current) {
+      schedulePush(500)
+      return
+    }
+    const url = getSyncUrl()
+    if (!url) return
+    const salt = getAccountSalt()
+    if (!salt) {
+      // We think we're unlocked but the account salt is gone — most likely another
+      // tab called disconnect(). Surface it (dirtyRef stays true) rather than
+      // silently dropping the edit; reconnecting restores the salt and retries.
+      setError('Sincronização desconectada em outra aba. Reconecte.')
+      setStatus('error')
+      return
+    }
+    if (syncingRef.current) {
+      schedulePush(400) // a pull/push is running; try again shortly
+      return
+    }
+    syncingRef.current = true
+    // Optimistic: clear now so writes that land DURING the push re-set dirtyRef
+    // (via the Dexie hook) and get picked up by the finally re-schedule. The
+    // snapshot below reads the live DB, so such a write is never lost.
+    dirtyRef.current = false
+    setStatus('syncing')
+    setError(null)
+    setPendingPush(true)
+    try {
+      for (let attempt = 0; ; attempt++) {
+        try {
+          const state = await snapshotLocal()
+          // Settings included in THIS snapshot; only forget these on success so a
+          // pref changed during the round-trip stays tracked for a later conflict.
+          const pushedSettingKeys = getLocallyChangedSettingKeys()
+          const blob = await encryptState(state, key)
+          const res = await pushRemote(url, token, {
+            baseVersion: getSyncVersion(),
+            blob,
+            salt,
+          })
+          markSynced(res.version)
+          markSettingsPushed(pushedSettingKeys) // these settings are now in the cloud
+          break
+        } catch (e) {
+          if (e instanceof SyncConflictError && attempt < MAX_PUSH_CONFLICT_RETRIES) {
+            // Cloud moved ahead: pull it, merge into local atomically, retry.
+            const remote = await fetchRemote(url, token)
+            if (!remote.blob) {
+              // Cloud was emptied/reset mid-conflict — don't silently overwrite.
+              throw new Error('Conflito: a nuvem foi esvaziada durante o envio.')
+            }
+            const remoteState = await decryptState(remote.blob, key)
+            await mergeRemoteIntoLocal(remoteState, getLocallyChangedSettingKeys())
+            setSyncVersion(remote.version) // base for the retry push
+            continue
+          }
+          throw e
+        }
+      }
+      setStatus('idle')
+    } catch (e) {
+      if (e instanceof SyncAuthError) {
+        setError('Sessão inválida. Reconecte.')
+        setStatus('error')
+      } else {
+        setStatus('offline')
+      }
+      dirtyRef.current = true // unpushed changes remain; retry later
+    } finally {
+      syncingRef.current = false
+      setPendingPush(dirtyRef.current)
+      if (dirtyRef.current) schedulePush(PUSH_DEBOUNCE_MS)
+    }
+  }, [markSynced, schedulePush])
+
+  // A local write (DB row or synced setting) happened → schedule a push.
+  const onDirty = useCallback(() => {
+    if (!keyRef.current) return // not unlocked
+    dirtyRef.current = true
+    setPendingPush(true)
+    schedulePush(PUSH_DEBOUNCE_MS)
+  }, [schedulePush])
+
+  // Keep the debounce timer pointed at the latest pushNow.
+  useEffect(() => {
+    pushNowRef.current = pushNow
+  }, [pushNow])
+
+  // Restore an unlocked session on load, then run the first pull.
   useEffect(() => {
     let cancelled = false
     ;(async () => {
@@ -139,7 +294,8 @@ export function SyncProvider({ children }: { children: ReactNode }) {
         tokenRef.current = token
         setUnlocked(true)
         setStatus('idle')
-        void syncNow()
+        await syncNow()
+        initialPullDoneRef.current = true
       } else {
         setStatus('locked')
       }
@@ -164,6 +320,26 @@ export function SyncProvider({ children }: { children: ReactNode }) {
     }
   }, [unlocked, syncNow])
 
+  // Capture local writes (DB + synced settings) and push them while unlocked.
+  useEffect(() => {
+    if (!unlocked) return
+    setDirtyHandler(onDirty)
+    const offSettings = onLocalSettingChanged(onDirty)
+    return () => {
+      setDirtyHandler(null)
+      offSettings()
+    }
+  }, [unlocked, onDirty])
+
+  // Poll while visible so an idle, open device refreshes without a focus event.
+  useEffect(() => {
+    if (!unlocked) return
+    const id = setInterval(() => {
+      if (document.visibilityState === 'visible') void syncNow()
+    }, POLL_INTERVAL_MS)
+    return () => clearInterval(id)
+  }, [unlocked, syncNow])
+
   const finishUnlock = useCallback(
     async (key: CryptoKey, token: string, salt: string) => {
       await saveEncKey(key)
@@ -171,6 +347,9 @@ export function SyncProvider({ children }: { children: ReactNode }) {
       setAccountSalt(salt)
       keyRef.current = key
       tokenRef.current = token
+      // We just adopted the cloud snapshot — drop any pre-connect local setting
+      // edits so they don't override the adopted settings on a later conflict.
+      clearLocallyChangedSettings()
       setUnlocked(true)
       setStatus('idle')
       void navigator.storage?.persist?.()
@@ -187,13 +366,16 @@ export function SyncProvider({ children }: { children: ReactNode }) {
         assertCryptoAvailable()
         const token = await deriveAuthToken(passphrase)
         const remote = await fetchRemote(cleanUrl, token) // 401 => SyncAuthError
-        setSyncUrl(cleanUrl)
-        setWorkerUrl(cleanUrl)
 
         if (!remote.blob || !remote.salt) {
-          setStatus('locked')
+          // Don't persist the URL for an empty/incomplete account: another tab may
+          // be unlocked against a different account whose credentials still apply.
+          setStatus(getAuthToken() ? 'idle' : 'locked')
           return { ok: false, reason: 'empty' }
         }
+
+        setSyncUrl(cleanUrl)
+        setWorkerUrl(cleanUrl)
 
         const key = await deriveEncKey(passphrase, base64ToBytes(remote.salt))
         const state = await decryptState(remote.blob, key) // wrong passphrase => throws
@@ -211,6 +393,7 @@ export function SyncProvider({ children }: { children: ReactNode }) {
         await applyRemoteState(state)
         await finishUnlock(key, token, remote.salt)
         markSynced(remote.version)
+        initialPullDoneRef.current = true
         return { ok: true }
       } catch (e) {
         if (e instanceof SyncAuthError) setError('Não autorizado — verifique a senha e a URL.')
@@ -225,10 +408,18 @@ export function SyncProvider({ children }: { children: ReactNode }) {
   const confirmAdopt = useCallback(async () => {
     const p = pending.current
     if (!p) return
-    await applyRemoteState(p.state)
-    await finishUnlock(p.key, p.token, p.salt)
-    markSynced(p.version)
-    pending.current = null
+    try {
+      await applyRemoteState(p.state) // transactional — rolls back on failure
+      await finishUnlock(p.key, p.token, p.salt)
+      markSynced(p.version)
+      initialPullDoneRef.current = true
+      pending.current = null
+    } catch (e) {
+      // e.g. saveEncKey failed: the device stays locked. Surface it; reload +
+      // reconnect recovers (no data loss — the DB apply is atomic).
+      setError(e instanceof Error ? e.message : 'Erro ao adotar dados da nuvem.')
+      setStatus('locked')
+    }
   }, [finishUnlock, markSynced])
 
   const cancelAdopt = useCallback(() => {
@@ -237,6 +428,13 @@ export function SyncProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const disconnect = useCallback(async () => {
+    if (pushTimerRef.current) {
+      clearTimeout(pushTimerRef.current)
+      pushTimerRef.current = null
+    }
+    dirtyRef.current = false
+    initialPullDoneRef.current = false
+    setPendingPush(false)
     await clearEncKey()
     clearSyncCredentials()
     keyRef.current = null
@@ -252,6 +450,7 @@ export function SyncProvider({ children }: { children: ReactNode }) {
     status,
     configured: Boolean(workerUrl),
     unlocked,
+    pendingPush,
     lastSyncedAt,
     error,
     workerUrl,

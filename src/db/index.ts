@@ -132,6 +132,19 @@ export class PlanOfLifeDB extends Dexie {
         }
       }
     })
+
+    // Backfill updatedAt on dailyRecords (added for sync conflict merge). Use the
+    // record's completedAt when present, else the Unix epoch so a never-completed
+    // record always loses to a real edit. Idempotent: skips rows already migrated.
+    this.version(5).stores({}).upgrade(async (tx) => {
+      const records = tx.table('dailyRecords')
+      const all = (await records.toArray()) as DailyRecord[]
+      const epoch = new Date(0).toISOString()
+      for (const r of all) {
+        if (r.updatedAt) continue
+        await records.update(r.id, { updatedAt: r.completedAt ?? epoch })
+      }
+    })
   }
 }
 

@@ -27,6 +27,7 @@ export interface DailyRecord {
   practiceId: string
   isCompleted: boolean
   completedAt: string | null
+  updatedAt: string // bumped on every check/uncheck — used by sync merge
 }
 
 export interface MissedReason {

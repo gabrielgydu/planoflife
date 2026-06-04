@@ -13,7 +13,53 @@ export const SYNCED_SETTING_KEYS = [
   'settings-individual-reasons',
 ] as const
 
+// Two distinct events, on purpose:
+//  - SETTINGS_EVENT: a REMOTE snapshot changed a setting → hooks refresh the UI.
+//    Must NOT trigger a push (that would echo the pull back to the cloud).
+//  - LOCAL_SETTINGS_EVENT: the USER changed a setting in the UI → sync should push.
 const SETTINGS_EVENT = 'planoflife:settings-changed'
+const LOCAL_SETTINGS_EVENT = 'planoflife:settings-local-changed'
+
+// Setting keys the user changed locally since the last successful push. On a
+// push conflict only these override the remote, so a concurrent setting change
+// on the other device isn't clobbered (settings carry no per-key timestamp).
+const locallyChangedKeys = new Set<string>()
+
+/**
+ * Write a synced setting locally and notify the sync layer to push it. Settings
+ * hooks use this instead of localStorage.setItem so a pref edit propagates to
+ * other devices (Phase 4). Non-synced keys should keep using localStorage directly.
+ */
+export function setSyncedSetting(key: string, value: string): void {
+  localStorage.setItem(key, value)
+  locallyChangedKeys.add(key)
+  window.dispatchEvent(new Event(LOCAL_SETTINGS_EVENT))
+}
+
+/** Keys changed locally since the last successful push (for conflict merge). */
+export function getLocallyChangedSettingKeys(): string[] {
+  return [...locallyChangedKeys]
+}
+
+/**
+ * Called after a successful push: forget exactly the keys that were in the pushed
+ * snapshot. NOT a blanket clear — a setting changed during the push round-trip (so
+ * not in that snapshot) must stay tracked, or a following conflict would clobber it.
+ */
+export function markSettingsPushed(pushedKeys: Iterable<string>): void {
+  for (const k of pushedKeys) locallyChangedKeys.delete(k)
+}
+
+/** Full reset of local-change tracking (on adopt/disconnect). */
+export function clearLocallyChangedSettings(): void {
+  locallyChangedKeys.clear()
+}
+
+/** Subscribe the sync layer to user-initiated synced-setting writes. */
+export function onLocalSettingChanged(cb: () => void): () => void {
+  window.addEventListener(LOCAL_SETTINGS_EVENT, cb)
+  return () => window.removeEventListener(LOCAL_SETTINGS_EVENT, cb)
+}
 
 /** Snapshot the synced settings from localStorage. */
 export function collectSettings(): Record<string, string> {

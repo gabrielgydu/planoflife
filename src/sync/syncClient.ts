@@ -14,6 +14,27 @@ export class SyncConflictError extends Error {
   }
 }
 
+/**
+ * Cheap version probe — GET /state?meta=1. Lets polling / focus-pulls check
+ * whether the cloud advanced without downloading the (potentially large) blob.
+ * Backward-compatible: a Worker that doesn't understand `?meta=1` returns the
+ * full body and we just read `version`, so the app works against an old Worker.
+ */
+export async function fetchRemoteMeta(
+  url: string,
+  token: string
+): Promise<{ version: number }> {
+  const res = await fetch(`${url}/state?meta=1`, {
+    method: 'GET',
+    headers: { Authorization: `Bearer ${token}` },
+    cache: 'no-store',
+  })
+  if (res.status === 401) throw new SyncAuthError()
+  if (!res.ok) throw new Error(`GET /state?meta=1 falhou (${res.status})`)
+  const j = (await res.json()) as { version?: number }
+  return { version: Number(j.version ?? 0) }
+}
+
 /** GET /state. Always network (no SW/HTTP cache). */
 export async function fetchRemote(url: string, token: string): Promise<RemoteState> {
   const res = await fetch(`${url}/state`, {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { onSettingsChanged } from '../sync/settingsBus'
+import { onSettingsChanged, setSyncedSetting } from '../sync/settingsBus'
 
 export type ThemeMode = 'light' | 'dark' | 'black'
 
@@ -40,7 +40,7 @@ export function useThemeMode(): [ThemeMode, (mode: ThemeMode) => void] {
   useEffect(() => onSettingsChanged(() => setModeState(getInitialMode())), [])
 
   const setMode = (newMode: ThemeMode) => {
-    localStorage.setItem(STORAGE_KEY, newMode)
+    setSyncedSetting(STORAGE_KEY, newMode)
     setModeState(newMode)
   }
 

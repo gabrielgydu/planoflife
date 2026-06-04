@@ -15,10 +15,12 @@ export function useDailyRecords(date: string) {
     const recordId = `${date}|${practiceId}`
     const existing = await db.dailyRecords.get(recordId)
 
+    const now = new Date().toISOString()
     if (existing) {
       await db.dailyRecords.update(recordId, {
         isCompleted: !existing.isCompleted,
-        completedAt: existing.isCompleted ? null : new Date().toISOString(),
+        completedAt: existing.isCompleted ? null : now,
+        updatedAt: now,
       })
     } else {
       const record: DailyRecord = {
@@ -26,7 +28,8 @@ export function useDailyRecords(date: string) {
         date,
         practiceId,
         isCompleted: true,
-        completedAt: new Date().toISOString(),
+        completedAt: now,
+        updatedAt: now,
       }
       await db.dailyRecords.add(record)
     }
@@ -38,11 +41,13 @@ export function useDailyRecords(date: string) {
     async (practiceId: string) => {
       const recordId = `${date}|${practiceId}`
       const existing = await db.dailyRecords.get(recordId)
+      const now = new Date().toISOString()
       if (existing) {
         if (!existing.isCompleted) {
           await db.dailyRecords.update(recordId, {
             isCompleted: true,
-            completedAt: new Date().toISOString(),
+            completedAt: now,
+            updatedAt: now,
           })
         }
       } else {
@@ -51,7 +56,8 @@ export function useDailyRecords(date: string) {
           date,
           practiceId,
           isCompleted: true,
-          completedAt: new Date().toISOString(),
+          completedAt: now,
+          updatedAt: now,
         })
       }
     },
@@ -59,7 +65,10 @@ export function useDailyRecords(date: string) {
   )
 
   async function clearAllForDate() {
-    await db.dailyRecords.where('date').equals(date).modify({ isCompleted: false, completedAt: null })
+    await db.dailyRecords
+      .where('date')
+      .equals(date)
+      .modify({ isCompleted: false, completedAt: null, updatedAt: new Date().toISOString() })
   }
 
   function isCompleted(practiceId: string): boolean {

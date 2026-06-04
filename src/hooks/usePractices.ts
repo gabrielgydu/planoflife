@@ -54,8 +54,11 @@ export function usePractices(options?: { includeArchived?: boolean }) {
   }
 
   async function reorderPractices(_categoryId: string, orderedIds: string[]) {
+    const now = new Date().toISOString()
     await db.transaction('rw', db.practices, async () => {
-      const updates = orderedIds.map((id, index) => db.practices.update(id, { sortOrder: index }))
+      const updates = orderedIds.map((id, index) =>
+        db.practices.update(id, { sortOrder: index, updatedAt: now })
+      )
       await Promise.all(updates)
     })
   }

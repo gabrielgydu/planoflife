@@ -106,6 +106,10 @@ export function SyncSettingsSection() {
           )}
         </div>
 
+        {sync.unlocked && sync.pendingPush && sync.status !== 'syncing' && (
+          <p className="text-xs text-text-muted dark:text-text-muted-dark">Salvando alterações…</p>
+        )}
+
         {sync.error && (
           <p className="text-xs text-amber-600 dark:text-amber-400">{sync.error}</p>
         )}

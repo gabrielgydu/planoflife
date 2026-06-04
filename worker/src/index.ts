@@ -7,10 +7,11 @@
  * only ciphertext it cannot read.
  *
  * Routes:
- *   GET    /health   -> { ok: true }                         (no auth)
- *   GET    /state    -> { version, blob, salt }              (auth)
- *   PUT    /state    -> body { baseVersion, blob, salt? }    (auth, optimistic concurrency)
- *   DELETE /state    -> { ok: true }                         (auth, wipes all keys)
+ *   GET    /health        -> { ok: true }                    (no auth)
+ *   GET    /state         -> { version, blob, salt }         (auth)
+ *   GET    /state?meta=1  -> { version, blob: null, salt }   (auth, cheap version probe)
+ *   PUT    /state         -> body { baseVersion, blob, salt? } (auth, optimistic concurrency)
+ *   DELETE /state         -> { ok: true }                    (auth, wipes all keys)
  *
  * Auth: `Authorization: Bearer <token>` compared to the SYNC_TOKEN secret.
  * The token is PBKDF2(passphrase, fixed app salt) computed client-side — see
@@ -94,6 +95,19 @@ export default {
 
     if (url.pathname === '/state') {
       if (req.method === 'GET') {
+        // Cheap version probe for polling/focus-pulls: skip reading the (large)
+        // blob from KV and report just the version (+ salt, which is tiny).
+        if (url.searchParams.get('meta') === '1') {
+          const [versionStr, salt] = await Promise.all([
+            env.SYNC_KV.get(KEY_VERSION),
+            env.SYNC_KV.get(KEY_SALT),
+          ])
+          return json(
+            { version: Number(versionStr ?? '0'), blob: null, salt: salt ?? null },
+            200,
+            cors
+          )
+        }
         const [blob, versionStr, salt] = await Promise.all([
           env.SYNC_KV.get(KEY_BLOB),
           env.SYNC_KV.get(KEY_VERSION),
