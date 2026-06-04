@@ -29,6 +29,19 @@ function base64url(bytes: Uint8Array): string {
   return bytesToBase64(bytes).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 }
 
+/** Web Crypto (crypto.subtle) exists only in a secure context (HTTPS / localhost). */
+export function isCryptoAvailable(): boolean {
+  return typeof crypto !== 'undefined' && !!crypto.subtle
+}
+
+export function assertCryptoAvailable(): void {
+  if (!isCryptoAvailable()) {
+    throw new Error(
+      'Sincronização requer HTTPS. Abra o app por https:// (não http).'
+    )
+  }
+}
+
 /** Bearer token sent to the Worker. Derived from passphrase with a FIXED app salt. */
 export async function deriveAuthToken(passphrase: string): Promise<string> {
   const km = await crypto.subtle.importKey(

@@ -19,7 +19,13 @@ import {
   setLastSyncedAt,
   clearSyncCredentials,
 } from './config'
-import { deriveAuthToken, deriveEncKey, decryptState, base64ToBytes } from './syncCrypto'
+import {
+  deriveAuthToken,
+  deriveEncKey,
+  decryptState,
+  base64ToBytes,
+  assertCryptoAvailable,
+} from './syncCrypto'
 import { fetchRemote, SyncAuthError } from './syncClient'
 import { applyRemoteState, hasUserData, snapshotLocal } from './applyState'
 import { clearEncKey, loadEncKey, saveEncKey } from './keyStore'
@@ -178,6 +184,7 @@ export function SyncProvider({ children }: { children: ReactNode }) {
       setStatus('syncing')
       const cleanUrl = url.replace(/\/+$/, '')
       try {
+        assertCryptoAvailable()
         const token = await deriveAuthToken(passphrase)
         const remote = await fetchRemote(cleanUrl, token) // 401 => SyncAuthError
         setSyncUrl(cleanUrl)

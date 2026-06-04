@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { RefreshCw, Cloud, CloudOff, Check, AlertTriangle, Loader2 } from 'lucide-react'
 import { useSync } from '../../sync/SyncProvider'
+import { isCryptoAvailable } from '../../sync/syncCrypto'
 import { PasswordInput } from '../shared/PasswordInput'
 
 const COUNT_LABELS: Record<string, string> = {
@@ -20,6 +21,7 @@ function summarizeCounts(counts: Record<string, number>): string {
 
 export function SyncSettingsSection() {
   const sync = useSync()
+  const secure = isCryptoAvailable() && (typeof window === 'undefined' || window.isSecureContext)
   const [url, setUrl] = useState(sync.workerUrl ?? '')
   const [passphrase, setPassphrase] = useState('')
   const [busy, setBusy] = useState(false)
@@ -109,7 +111,16 @@ export function SyncSettingsSection() {
         )}
         {notice && <p className="text-xs text-text-secondary dark:text-text-secondary-dark">{notice}</p>}
 
-        {confirm ? (
+        {!secure ? (
+          <div className="flex items-start gap-2 text-xs text-amber-700 dark:text-amber-400">
+            <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+            <span>
+              Sincronização requer HTTPS. Abra o app por <b>https://</b> (não http) — toque em
+              Compartilhar → recarregar pela URL https, ou reinstale o ícone a partir do endereço
+              https.
+            </span>
+          </div>
+        ) : confirm ? (
           <div className="space-y-3">
             <div className="flex items-start gap-2 text-xs text-amber-700 dark:text-amber-400">
               <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
