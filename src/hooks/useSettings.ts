@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { onSettingsChanged } from '../sync/settingsBus'
 
 export type ExamenPropositoTarget = 'today' | 'tomorrow'
 
@@ -8,6 +9,14 @@ export function useExamenPropositoTarget(): [ExamenPropositoTarget, (value: Exam
   const [target, setTargetState] = useState<ExamenPropositoTarget>(() => {
     return (localStorage.getItem(EXAMEN_PROPOSITO_TARGET_KEY) as ExamenPropositoTarget) || 'tomorrow'
   })
+
+  useEffect(
+    () =>
+      onSettingsChanged(() =>
+        setTargetState((localStorage.getItem(EXAMEN_PROPOSITO_TARGET_KEY) as ExamenPropositoTarget) || 'tomorrow')
+      ),
+    []
+  )
 
   const setTarget = (value: ExamenPropositoTarget) => {
     localStorage.setItem(EXAMEN_PROPOSITO_TARGET_KEY, value)
@@ -23,6 +32,11 @@ export function useIndividualReasons(): [boolean, (value: boolean) => void] {
   const [enabled, setEnabledState] = useState(() => {
     return localStorage.getItem(INDIVIDUAL_REASONS_KEY) === 'true'
   })
+
+  useEffect(
+    () => onSettingsChanged(() => setEnabledState(localStorage.getItem(INDIVIDUAL_REASONS_KEY) === 'true')),
+    []
+  )
 
   const setEnabled = (value: boolean) => {
     localStorage.setItem(INDIVIDUAL_REASONS_KEY, String(value))
@@ -62,6 +76,11 @@ export function usePracticeFontSize(): [FontSizeLevel, (level: FontSizeLevel) =>
     applyFontSize('--font-scale-practice', practiceFontScales[level])
   }, [level])
 
+  useEffect(
+    () => onSettingsChanged(() => setLevelState((localStorage.getItem(PRACTICE_FONT_SIZE_KEY) as FontSizeLevel) || 'medium')),
+    []
+  )
+
   const setLevel = (value: FontSizeLevel) => {
     localStorage.setItem(PRACTICE_FONT_SIZE_KEY, value)
     setLevelState(value)
@@ -78,6 +97,11 @@ export function useUIFontSize(): [FontSizeLevel, (level: FontSizeLevel) => void]
   useEffect(() => {
     applyFontSize('--font-scale-ui', uiFontScales[level])
   }, [level])
+
+  useEffect(
+    () => onSettingsChanged(() => setLevelState((localStorage.getItem(UI_FONT_SIZE_KEY) as FontSizeLevel) || 'medium')),
+    []
+  )
 
   const setLevel = (value: FontSizeLevel) => {
     localStorage.setItem(UI_FONT_SIZE_KEY, value)

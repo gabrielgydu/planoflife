@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { onSettingsChanged } from '../sync/settingsBus'
 
 export type ThemeMode = 'light' | 'dark' | 'black'
 
@@ -34,6 +35,9 @@ export function useThemeMode(): [ThemeMode, (mode: ThemeMode) => void] {
   useEffect(() => {
     applyTheme(mode)
   }, [mode])
+
+  // Reflect settings pulled from another device.
+  useEffect(() => onSettingsChanged(() => setModeState(getInitialMode())), [])
 
   const setMode = (newMode: ThemeMode) => {
     localStorage.setItem(STORAGE_KEY, newMode)

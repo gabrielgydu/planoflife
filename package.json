@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sync:status": "node scripts/sync.mjs status",
+    "sync:pull": "node scripts/sync.mjs pull",
+    "sync:push": "node scripts/sync.mjs push"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

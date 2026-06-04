@@ -1,0 +1,20 @@
+name = "planoflife-sync"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+workers_dev = true
+preview_urls = false
+
+# Allowed CORS origins for the browser PWA. localhost is for `vite dev`.
+[vars]
+ALLOWED_ORIGINS = "https://gabrielschutz.de,http://localhost:5173"
+
+# KV namespace holding the encrypted blob, version, and account salt.
+# Create it with:  npx wrangler kv namespace create SYNC_KV
+# then paste the printed id below.
+[[kv_namespaces]]
+binding = "SYNC_KV"
+id = "79fdd0c03e6c4fada9025c2ce67a3991"
+
+# SYNC_TOKEN is a SECRET, not a var. Set it with:
+#   node derive-token.mjs            (prints the token for your passphrase)
+#   npx wrangler secret put SYNC_TOKEN

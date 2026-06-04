@@ -2,6 +2,7 @@ import { Link } from 'react-router'
 import { ClipboardList, FolderOpen, Download, FileText, ChevronRight, Sun, Moon, Circle, type LucideIcon } from 'lucide-react'
 import { useThemeMode, type ThemeMode } from '../../hooks/useThemeMode'
 import { useIndividualReasons, usePracticeFontSize, useUIFontSize, useExamenPropositoTarget, type FontSizeLevel, type ExamenPropositoTarget } from '../../hooks/useSettings'
+import { SyncSettingsSection } from '../sync/SyncSettingsSection'
 
 const menuItems: { to: string; label: string; icon: LucideIcon; description: string }[] = [
   { to: '/settings/practices', label: 'Práticas', icon: ClipboardList, description: 'Gerenciar práticas espirituais' },
@@ -43,6 +44,8 @@ export function SettingsView() {
       </header>
 
       <div className="p-4 space-y-4">
+        <SyncSettingsSection />
+
         {/* Theme Picker */}
         <section>
           <h2 className="font-heading text-xs font-medium text-text-muted dark:text-text-muted-dark uppercase tracking-widest mb-3">

@@ -8,3 +8,7 @@ wobbly-napping-moore.md
 StJosemariaDocs/
 design_inspo/
 practice_texts/
+
+# Sync: local secrets and decrypted working copy (PLAINTEXT — never commit)
+.env.local
+.sync/

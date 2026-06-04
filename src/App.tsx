@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
-import { useEffect } from 'react'
 import { usePracticeFontSize, useUIFontSize } from './hooks/useSettings'
 import { AppShell } from './components/layout/AppShell'
 import { DailyView } from './components/daily/DailyView'
@@ -18,18 +17,15 @@ import { CategoryForm } from './components/practice/CategoryForm'
 import { BackupRestore } from './components/settings/BackupRestore'
 import { PdfExport } from './components/settings/PdfExport'
 import { InstallBanner } from './components/shared/InstallBanner'
-import { seedDatabase } from './db/seed'
-import { migrateEmojisToIcons } from './db'
+import { SyncProvider } from './sync/SyncProvider'
+import './db/init' // kicks off first-run seeding + migration (exposes dbReady)
 
 export function App() {
   usePracticeFontSize()
   useUIFontSize()
 
-  useEffect(() => {
-    seedDatabase().then(() => migrateEmojisToIcons())
-  }, [])
-
   return (
+    <SyncProvider>
     <BrowserRouter basename="/planoflife">
       <InstallBanner />
       <Routes>
@@ -55,5 +51,6 @@ export function App() {
         <Route path="/settings/pdf" element={<PdfExport />} />
       </Routes>
     </BrowserRouter>
+    </SyncProvider>
   )
 }
