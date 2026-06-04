@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/postbuild.mjs",
     "preview": "vite preview",
     "sync:status": "node scripts/sync.mjs status",
     "sync:pull": "node scripts/sync.mjs pull",
