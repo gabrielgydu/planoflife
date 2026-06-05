@@ -46,6 +46,26 @@ export function useIndividualReasons(): [boolean, (value: boolean) => void] {
   return [enabled, setEnabled]
 }
 
+const HIDE_COMPLETED_KEY = 'settings-hide-completed'
+
+export function useHideCompleted(): [boolean, (value: boolean) => void] {
+  const [enabled, setEnabledState] = useState(() => {
+    return localStorage.getItem(HIDE_COMPLETED_KEY) === 'true'
+  })
+
+  useEffect(
+    () => onSettingsChanged(() => setEnabledState(localStorage.getItem(HIDE_COMPLETED_KEY) === 'true')),
+    []
+  )
+
+  const setEnabled = (value: boolean) => {
+    setSyncedSetting(HIDE_COMPLETED_KEY, String(value))
+    setEnabledState(value)
+  }
+
+  return [enabled, setEnabled]
+}
+
 const PRACTICE_FONT_SIZE_KEY = 'settings-practice-font-size'
 const UI_FONT_SIZE_KEY = 'settings-ui-font-size'
 

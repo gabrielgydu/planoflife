@@ -16,6 +16,7 @@ import { usePractices } from '../../hooks/usePractices'
 import { useDailyRecords } from '../../hooks/useDailyRecords'
 import { useMorningFlow } from '../../hooks/useMorningFlow'
 import { useProposito } from '../../hooks/usePropositos'
+import { useHideCompleted } from '../../hooks/useSettings'
 import { formatDate, getToday, addDay, subDay } from '../../utils/dates'
 import type { Practice, Category } from '../../types'
 
@@ -24,9 +25,9 @@ export function DailyView() {
   const [currentDate, setCurrentDate] = useState(getToday)
   const [showClearDialog, setShowClearDialog] = useState(false)
   const [readerPracticeId, setReaderPracticeId] = useState<string | null>(null)
-  // Session-only: the daily list always opens showing everything; the user opts to
-  // hide completed within a session. Filters only the list, not the reader pager.
-  const [hideCompleted, setHideCompleted] = useState(false)
+  // Persisted, synced preference: the hide-completed choice survives navigation,
+  // reloads, and propagates to other devices. Filters only the list, not the reader pager.
+  const [hideCompleted, setHideCompleted] = useHideCompleted()
 
   const dateStr = formatDate(currentDate)
   const yesterdayStr = formatDate(subDay(currentDate, 1))
@@ -129,7 +130,7 @@ export function DailyView() {
         {hasAnyCompleted && (
           <div className="px-4 pb-1">
             <button
-              onClick={() => setHideCompleted((v) => !v)}
+              onClick={() => setHideCompleted(!hideCompleted)}
               className="flex items-center gap-2 text-sm text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors"
             >
               {hideCompleted ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}

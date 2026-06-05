@@ -11,6 +11,7 @@ export const SYNCED_SETTING_KEYS = [
   'settings-ui-font-size',
   'settings-examen-proposito-target',
   'settings-individual-reasons',
+  'settings-hide-completed',
 ] as const
 
 // Two distinct events, on purpose:
