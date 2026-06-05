@@ -4,6 +4,7 @@ import { X, Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import { CategoryIcon } from '../shared/CategoryIcon'
 import { MarkdownRenderer } from '../shared/MarkdownRenderer'
 import { getBundledText } from '../../data/bundledTexts'
+import { isLifestyle } from '../../utils/domain'
 import type { Practice, Category } from '../../types'
 
 interface PracticeWithCategory {
@@ -47,8 +48,6 @@ export function PracticeReader({
     return saved === 'la' ? 'la' : 'pt'
   })
 
-  const currentPracticeId = items[currentIndex]?.practice.id
-
   useEffect(() => {
     const original = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -62,10 +61,13 @@ export function PracticeReader({
   }, [lang])
 
   // Auto-mark each viewed practice as done (set-only; never un-marks). Fires on
-  // open and on every navigation to a different practice.
+  // open and on every navigation to a different practice. Lifestyle habits are
+  // skipped: they stay in the pager so you can still read/swipe them, but paging
+  // past one must NOT silently check it off — only the explicit ✓ marks a habit.
   useEffect(() => {
-    if (currentPracticeId) onMarkViewed(currentPracticeId)
-  }, [currentPracticeId, onMarkViewed])
+    const cur = items[currentIndex]
+    if (cur && !isLifestyle(cur.practice)) onMarkViewed(cur.practice.id)
+  }, [currentIndex, items, onMarkViewed])
 
   const current = items[currentIndex]
   if (!current) return null

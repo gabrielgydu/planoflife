@@ -2,11 +2,24 @@ import { useState } from 'react'
 import { Link } from 'react-router'
 import { ChevronLeft, ChevronRight, FileText } from 'lucide-react'
 import { MonthGrid } from './MonthGrid'
+import { DomainToggle } from './DomainToggle'
+import { usePractices } from '../../hooks/usePractices'
+import { useHistoryDomain } from '../../hooks/useHistoryDomain'
+import { isLifestyle } from '../../utils/domain'
 import { format, addMonths, subMonths, startOfMonth } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
 export function HistoryView() {
   const [currentMonth, setCurrentMonth] = useState(() => startOfMonth(new Date()))
+  const { practices } = usePractices()
+  const [domain, setDomain] = useHistoryDomain()
+
+  // Only surface the spiritual/habit split once the user actually has a lifestyle
+  // habit — religious-only users see the history exactly as before. effectiveDomain
+  // falls back to spiritual so a stale 'lifestyle' selection (e.g. after archiving
+  // all habits) can't leave the grid stuck on an empty view.
+  const hasLifestyle = practices.some(isLifestyle)
+  const effectiveDomain = hasLifestyle ? domain : 'spiritual'
 
   const handlePrevMonth = () => setCurrentMonth((d) => subMonths(d, 1))
   const handleNextMonth = () => setCurrentMonth((d) => addMonths(d, 1))
@@ -39,7 +52,9 @@ export function HistoryView() {
         </div>
       </header>
 
-      <MonthGrid month={currentMonth} />
+      {hasLifestyle && <DomainToggle value={effectiveDomain} onChange={setDomain} />}
+
+      <MonthGrid month={currentMonth} domain={effectiveDomain} />
 
       <div className="p-4 border-t border-border dark:border-border-dark">
         <Link

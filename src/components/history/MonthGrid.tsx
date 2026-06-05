@@ -15,9 +15,12 @@ import {
 } from 'date-fns'
 import { formatDate } from '../../utils/dates'
 import { useTheme } from '../../hooks/useTheme'
+import { getPracticeDomain } from '../../utils/domain'
+import type { PracticeDomain } from '../../types'
 
 interface MonthGridProps {
   month: Date
+  domain: PracticeDomain
 }
 
 const WEEKDAYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
@@ -47,7 +50,7 @@ function getCompletionLevel(fillPercent: number): string {
   return 'none'
 }
 
-export function MonthGrid({ month }: MonthGridProps) {
+export function MonthGrid({ month, domain }: MonthGridProps) {
   const theme = useTheme()
   const colors = theme === 'dark' ? DARK_COLORS : LIGHT_COLORS
   const monthStart = startOfMonth(month)
@@ -76,12 +79,19 @@ export function MonthGrid({ month }: MonthGridProps) {
     if (!records || !practices) return new Map()
 
     const stats = new Map<string, { completed: number; total: number }>()
-    const totalPractices = practices.length
+    // Scope BOTH the denominator and the numerator to the selected domain so
+    // spiritual and lifestyle stats never mix. dailyRecords carry no domain, so a
+    // completed record only counts when its practice is in the domain set — this
+    // also guarantees completed <= total.
+    const domainIds = new Set(
+      practices.filter((p) => getPracticeDomain(p) === domain).map((p) => p.id)
+    )
+    const totalPractices = domainIds.size
 
     // Group records by date
     const recordsByDate = new Map<string, Set<string>>()
     for (const record of records) {
-      if (record.isCompleted) {
+      if (record.isCompleted && domainIds.has(record.practiceId)) {
         const set = recordsByDate.get(record.date) ?? new Set()
         set.add(record.practiceId)
         recordsByDate.set(record.date, set)
@@ -94,7 +104,7 @@ export function MonthGrid({ month }: MonthGridProps) {
     }
 
     return stats
-  }, [records, practices])
+  }, [records, practices, domain])
 
   // Generate calendar grid
   const days = useMemo(() => {
