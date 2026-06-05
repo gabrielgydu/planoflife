@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useNavigate } from 'react-router'
-import { ChevronRight, RotateCcw, ClipboardList } from 'lucide-react'
+import { ChevronRight, RotateCcw, ClipboardList, Eye, EyeOff } from 'lucide-react'
 import { Header } from '../layout/Header'
 import { CategorySection } from './CategorySection'
 import { PracticeReader } from './PracticeReader'
@@ -24,6 +24,9 @@ export function DailyView() {
   const [currentDate, setCurrentDate] = useState(getToday)
   const [showClearDialog, setShowClearDialog] = useState(false)
   const [readerPracticeId, setReaderPracticeId] = useState<string | null>(null)
+  // Session-only: the daily list always opens showing everything; the user opts to
+  // hide completed within a session. Filters only the list, not the reader pager.
+  const [hideCompleted, setHideCompleted] = useState(false)
 
   const dateStr = formatDate(currentDate)
   const yesterdayStr = formatDate(subDay(currentDate, 1))
@@ -122,6 +125,19 @@ export function DailyView() {
           <PropositoCard proposito={proposito} onSetProposito={setProposito} onClearProposito={clearProposito} />
         </div>
 
+        {/* Hide-completed toggle — only useful once something is done */}
+        {hasAnyCompleted && (
+          <div className="px-4 pb-1">
+            <button
+              onClick={() => setHideCompleted((v) => !v)}
+              className="flex items-center gap-2 text-sm text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors"
+            >
+              {hideCompleted ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+              {hideCompleted ? 'Mostrar concluídas' : 'Ocultar concluídas'}
+            </button>
+          </div>
+        )}
+
         {/* Categories and practices */}
         {categories.map((category) => {
           const categoryPractices = practicesByCategory.get(category.id) ?? []
@@ -133,6 +149,7 @@ export function DailyView() {
               isCompleted={isCompleted}
               onTogglePractice={togglePractice}
               onOpenPracticeDetail={handleOpenPracticeDetail}
+              hideCompleted={hideCompleted}
             />
           )
         })}

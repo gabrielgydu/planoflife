@@ -11,6 +11,7 @@ interface CategorySectionProps {
   isCompleted: (practiceId: string) => boolean
   onTogglePractice: (practiceId: string) => void
   onOpenPracticeDetail: (practice: Practice) => void
+  hideCompleted?: boolean
 }
 
 export function CategorySection({
@@ -19,13 +20,19 @@ export function CategorySection({
   isCompleted,
   onTogglePractice,
   onOpenPracticeDetail,
+  hideCompleted = false,
 }: CategorySectionProps) {
   const [isExpanded, setIsExpanded] = useState(true)
 
+  // Counts always reflect the full set; only the rendered rows are filtered, so
+  // the "2/5" badge stays truthful while completed rows are hidden.
   const completedCount = practices.filter((p) => isCompleted(p.id)).length
   const totalCount = practices.length
 
-  if (practices.length === 0) return null
+  const visiblePractices = hideCompleted ? practices.filter((p) => !isCompleted(p.id)) : practices
+
+  // Collapses empty categories, and fully-completed ones when hiding completed.
+  if (visiblePractices.length === 0) return null
 
   return (
     <section className="mb-2">
@@ -57,7 +64,7 @@ export function CategorySection({
             transition={{ duration: 0.2, ease: 'easeInOut' }}
             style={{ overflow: 'hidden' }}
           >
-            {practices.map((practice) => (
+            {visiblePractices.map((practice) => (
               <PracticeRow
                 key={practice.id}
                 practice={practice}
