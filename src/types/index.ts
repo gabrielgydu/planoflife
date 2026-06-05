@@ -7,6 +7,8 @@ export interface Category {
   updatedAt: string
 }
 
+export type PracticeDomain = 'spiritual' | 'lifestyle'
+
 export interface Practice {
   id: string
   name: string
@@ -14,6 +16,10 @@ export interface Practice {
   content: string // HTML string
   imageData: string | null // base64 string
   bundledTextId?: string
+  // Spiritual devotion vs. non-religious lifestyle habit. Optional: legacy rows
+  // (and whole-DB snapshots imported before the v6 migration) are treated as
+  // 'spiritual' — read via getPracticeDomain(), never `.domain` directly.
+  domain?: PracticeDomain
   isRequired: boolean
   sortOrder: number
   isArchived: boolean

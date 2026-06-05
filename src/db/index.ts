@@ -101,6 +101,7 @@ export class PlanOfLifeDB extends Dexie {
           categoryId: category.id,
           content: '',
           imageData: null,
+          domain: 'spiritual',
           isRequired: spec.isRequired,
           sortOrder,
           isArchived: false,
@@ -143,6 +144,20 @@ export class PlanOfLifeDB extends Dexie {
       for (const r of all) {
         if (r.updatedAt) continue
         await records.update(r.id, { updatedAt: r.completedAt ?? epoch })
+      }
+    })
+
+    // Tag every existing practice as spiritual — the lifestyle-habits feature adds
+    // an optional `domain` field, and pre-feature rows are all devotions. Idempotent:
+    // skips already-tagged rows. Deliberately does NOT bump updatedAt: both devices
+    // backfill the identical value, so the sync merge keeps real-edit recency and
+    // converges without a spurious conflict winner.
+    this.version(6).stores({}).upgrade(async (tx) => {
+      const practices = tx.table('practices')
+      const all = (await practices.toArray()) as Practice[]
+      for (const p of all) {
+        if (p.domain) continue
+        await practices.update(p.id, { domain: 'spiritual' })
       }
     })
   }

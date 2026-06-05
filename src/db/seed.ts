@@ -65,7 +65,9 @@ function createDefaultPractices(categories: Category[]): Practice[] {
     })
   }
 
-  return base
+  // Every seeded practice is a spiritual devotion. Tag here so fresh installs
+  // match the v6 migration that backfills existing installs.
+  return base.map((p) => ({ ...p, domain: 'spiritual' as const }))
 }
 
 export async function seedDatabase(): Promise<void> {

@@ -8,6 +8,8 @@ import { usePractices } from '../../hooks/usePractices'
 import { Spinner } from '../shared/Spinner'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
 import { compressImage } from '../../utils/imageCompression'
+import { getPracticeDomain } from '../../utils/domain'
+import type { PracticeDomain } from '../../types'
 
 const RichTextEditor = lazy(() =>
   import('../shared/RichTextEditor').then((m) => ({ default: m.RichTextEditor }))
@@ -28,6 +30,7 @@ export function PracticeForm() {
   const [name, setName] = useState('')
   const [categoryId, setCategoryId] = useState('')
   const [isRequired, setIsRequired] = useState(false)
+  const [domain, setDomain] = useState<PracticeDomain>('spiritual')
   const [content, setContent] = useState('')
   const [imageData, setImageData] = useState<string | null>(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
@@ -39,6 +42,7 @@ export function PracticeForm() {
       setName(existingPractice.name)
       setCategoryId(existingPractice.categoryId)
       setIsRequired(existingPractice.isRequired)
+      setDomain(getPracticeDomain(existingPractice))
       setContent(existingPractice.content)
       setImageData(existingPractice.imageData)
     } else if (categories.length > 0 && !categoryId) {
@@ -72,6 +76,7 @@ export function PracticeForm() {
           name: name.trim(),
           categoryId,
           isRequired,
+          domain,
           content,
           imageData,
         })
@@ -80,6 +85,7 @@ export function PracticeForm() {
           name: name.trim(),
           categoryId,
           isRequired,
+          domain,
           content,
           imageData,
         })
@@ -163,6 +169,28 @@ export function PracticeForm() {
               </option>
             ))}
           </select>
+        </div>
+
+        <div className="flex items-center justify-between py-2">
+          <div>
+            <span className="text-sm font-medium text-text-secondary dark:text-text-secondary-dark">Hábito</span>
+            <p className="text-xs text-text-muted dark:text-text-muted-dark">
+              Hábito de estilo de vida, separado das devoções espirituais
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setDomain((d) => (d === 'lifestyle' ? 'spiritual' : 'lifestyle'))}
+            className={`relative w-12 h-7 rounded-full transition-colors ${
+              domain === 'lifestyle' ? 'bg-btn dark:bg-btn-dark' : 'bg-border dark:bg-border-dark'
+            }`}
+          >
+            <span
+              className={`absolute top-1 w-5 h-5 bg-btn-text dark:bg-btn-dark-text rounded-full shadow transition-transform ${
+                domain === 'lifestyle' ? 'translate-x-6' : 'translate-x-1'
+              }`}
+            />
+          </button>
         </div>
 
         <div className="flex items-center justify-between py-2">
