@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useNavigate } from 'react-router'
-import { ChevronRight, RotateCcw, ClipboardList, Eye, EyeOff } from 'lucide-react'
+import { ChevronRight, RotateCcw, ClipboardList, Eye, EyeOff, CheckCircle2 } from 'lucide-react'
 import { Header } from '../layout/Header'
 import { CategorySection } from './CategorySection'
 import { PracticeReader } from './PracticeReader'
@@ -153,6 +153,11 @@ export function DailyView() {
             />
           )
         })}
+
+        {/* When hiding completed empties the whole list, affirm rather than show a blank gap */}
+        {hideCompleted && practices.length > 0 && practices.every((p) => isCompleted(p.id)) && (
+          <EmptyState icon={CheckCircle2} message="Tudo concluído por hoje" />
+        )}
 
         {practices.length === 0 && (
           <EmptyState
