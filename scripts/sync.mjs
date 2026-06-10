@@ -25,7 +25,7 @@ import {
   encryptState,
   decryptState,
   validateSyncState,
-  normalizeSyncState,
+  assertKnownSchema,
   syncStateFromBackup,
   randomSalt,
   b64,
@@ -119,9 +119,10 @@ async function cmdPull() {
   }
   if (!remote.salt) die('Cloud has data but no salt — inconsistent state.')
   const key = await deriveEncKey(SYNC_PASSPHRASE, unb64(remote.salt))
-  // Normalize: a snapshot pushed by a pre-career app lacks the career tables;
-  // fill them as empty so state.json always has the full current shape.
-  const state = normalizeSyncState(await decryptState(remote.blob, key))
+  // NOTE: a snapshot from a pre-career writer lacks the career table keys.
+  // They stay missing in state.json on purpose — missing means "no opinion,
+  // preserve device rows"; filling [] here would wipe devices on the next push.
+  const state = assertKnownSchema(await decryptState(remote.blob, key))
   validateSyncState(state)
   writeJson(STATE_FILE, state)
   writeJson(META_FILE, { version: remote.version, salt: remote.salt })
@@ -137,7 +138,7 @@ async function cmdPush(args) {
   const sourceFile = fromFile ?? STATE_FILE
 
   if (!existsSync(sourceFile)) die(`No file to push at ${sourceFile} (run \`pull\` first).`)
-  const state = normalizeSyncState(readJson(sourceFile))
+  const state = assertKnownSchema(readJson(sourceFile))
   validateSyncState(state)
 
   const remote = await getState()

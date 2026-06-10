@@ -143,6 +143,21 @@ export function SyncProvider({ children }: { children: ReactNode }) {
     }, delay)
   }, [])
 
+  // The applied snapshot came from an older writer and LACKED tables this app
+  // knows, so local rows were preserved instead of cleared (see clearAndBulkAdd).
+  // Push them back promptly — without this, the cloud stays stripped until an
+  // organic edit, and another up-to-date client could push authoritative empty
+  // tables in the meantime, cementing the loss.
+  const repairAfterPreserve = useCallback(
+    (res: { preservedLocalRows: boolean }) => {
+      if (!res.preservedLocalRows) return
+      dirtyRef.current = true
+      setPendingPush(true)
+      schedulePush(PUSH_DEBOUNCE_MS)
+    },
+    [schedulePush]
+  )
+
   // Pull: cheap version probe first, full GET + apply only when the cloud is ahead.
   // Data-safety: applyRemoteState is a destructive full replace. If there are
   // unpushed local edits, a plain pull would clobber them, so we push instead
@@ -174,8 +189,9 @@ export function SyncProvider({ children }: { children: ReactNode }) {
             setSyncVersion(remote.version)
             schedulePush(0)
           } else {
-            await applyRemoteState(remoteState)
+            const applied = await applyRemoteState(remoteState)
             markSynced(remote.version)
+            repairAfterPreserve(applied)
           }
         }
       }
@@ -193,7 +209,7 @@ export function SyncProvider({ children }: { children: ReactNode }) {
     } finally {
       syncingRef.current = false
     }
-  }, [markSynced, schedulePush])
+  }, [markSynced, schedulePush, repairAfterPreserve])
 
   // Push: encrypt the local snapshot and PUT it. On a 409 (cloud advanced under
   // us) pull-merge-retry so a concurrent edit on the other device isn't lost.
@@ -410,10 +426,11 @@ export function SyncProvider({ children }: { children: ReactNode }) {
           }
         }
 
-        await applyRemoteState(state)
+        const applied = await applyRemoteState(state)
         await finishUnlock(key, token, remote.salt)
         markSynced(remote.version)
         initialPullDoneRef.current = true
+        repairAfterPreserve(applied)
         return { ok: true }
       } catch (e) {
         if (e instanceof SyncAuthError) setError('Não autorizado — verifique a senha e a URL.')
@@ -423,17 +440,18 @@ export function SyncProvider({ children }: { children: ReactNode }) {
         throw e
       }
     },
-    [finishUnlock, markSynced]
+    [finishUnlock, markSynced, repairAfterPreserve]
   )
 
   const confirmAdopt = useCallback(async () => {
     const p = pending.current
     if (!p) return
     try {
-      await applyRemoteState(p.state) // transactional — rolls back on failure
+      const applied = await applyRemoteState(p.state) // transactional — rolls back on failure
       await finishUnlock(p.key, p.token, p.salt)
       markSynced(p.version)
       initialPullDoneRef.current = true
+      repairAfterPreserve(applied)
       pending.current = null
     } catch (e) {
       // e.g. saveEncKey failed: the device stays locked. Surface it; reload +
@@ -441,7 +459,7 @@ export function SyncProvider({ children }: { children: ReactNode }) {
       setError(e instanceof Error ? e.message : 'Erro ao adotar dados da nuvem.')
       setStatus('locked')
     }
-  }, [finishUnlock, markSynced])
+  }, [finishUnlock, markSynced, repairAfterPreserve])
 
   const cancelAdopt = useCallback(() => {
     pending.current = null

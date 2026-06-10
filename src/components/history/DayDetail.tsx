@@ -6,6 +6,7 @@ import { useCategories } from '../../hooks/useCategories'
 import { usePractices } from '../../hooks/usePractices'
 import { useHistoryDomain } from '../../hooks/useHistoryDomain'
 import { getPracticeDomain, isLifestyle, isCareer } from '../../utils/domain'
+import { isScheduledOn } from '../../utils/schedule'
 import { DomainToggle } from './DomainToggle'
 import { parseDate, formatDateLong } from '../../utils/dates'
 import { CategoryIcon } from '../shared/CategoryIcon'
@@ -89,11 +90,20 @@ export function DayDetail() {
           </h2>
           <div className="space-y-4">
             {categories.map((category) => {
-              const categoryPractices = practicesByCategory.get(category.id) ?? []
-              if (categoryPractices.length === 0) return null
+              // Match MonthGrid's neutral-day semantics: unscheduled practices
+              // don't count against the day (career Sundays). An off-schedule
+              // completion still shows, marked as bonus, but isn't in the total.
+              const dayPractices = (practicesByCategory.get(category.id) ?? [])
+                .map((p) => ({
+                  practice: p,
+                  scheduled: isScheduledOn(p, parsedDate),
+                  done: isCompleted(p.id),
+                }))
+                .filter((x) => x.scheduled || x.done)
+              if (dayPractices.length === 0) return null
 
-              const completed = categoryPractices.filter((p) => isCompleted(p.id)).length
-              const total = categoryPractices.length
+              const completed = dayPractices.filter((x) => x.scheduled && x.done).length
+              const total = dayPractices.filter((x) => x.scheduled).length
 
               return (
                 <div key={category.id} className="bg-surface-secondary dark:bg-surface-secondary-dark rounded-lg p-3">
@@ -102,25 +112,30 @@ export function DayDetail() {
                       <CategoryIcon name={category.emoji} className="w-3.5 h-3.5 inline-block mr-1 align-text-bottom" /> {category.name}
                     </span>
                     <span className="text-xs text-text-muted dark:text-text-muted-dark">
-                      {completed}/{total}
+                      {total > 0 ? `${completed}/${total}` : `+${dayPractices.length}`}
                     </span>
                   </div>
                   <div className="space-y-1">
-                    {categoryPractices.map((practice) => (
+                    {dayPractices.map(({ practice, scheduled, done }) => (
                       <div key={practice.id} className="flex items-center gap-2 text-sm">
-                        {isCompleted(practice.id) ? (
+                        {done ? (
                           <Check className="w-4 h-4 text-success" />
                         ) : (
                           <span className="text-text-muted dark:text-text-muted-dark">○</span>
                         )}
                         <span
                           className={
-                            isCompleted(practice.id)
+                            done
                               ? 'text-text-primary dark:text-text-primary-dark'
                               : 'text-text-muted dark:text-text-muted-dark'
                           }
                         >
                           {practice.name}
+                          {!scheduled && (
+                            <span className="ml-1.5 text-xs text-text-muted dark:text-text-muted-dark">
+                              (fora da agenda)
+                            </span>
+                          )}
                         </span>
                       </div>
                     ))}

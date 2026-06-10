@@ -120,12 +120,25 @@ export async function decryptState(blobBase64, key) {
   return JSON.parse(new TextDecoder().decode(pt))
 }
 
-/** Minimal structural validation of a SyncState before pushing. */
+/**
+ * Minimal structural validation of a SyncState before pushing.
+ *
+ * Career tables are allowed to be MISSING (not just empty): a missing key means
+ * "this snapshot's writer had no opinion about that table" and app clients then
+ * PRESERVE their local rows instead of clearing them. Filling missing keys with
+ * `[]` before a push would launder "no opinion" into "authoritatively empty"
+ * and wipe every device's rows on their next pull — never do that.
+ */
 export function validateSyncState(state) {
   if (!state || typeof state !== 'object') throw new Error('state must be an object')
   if (!state.data || typeof state.data !== 'object') throw new Error('state.data missing')
-  for (const t of TABLES) {
+  for (const t of LEGACY_TABLES) {
     if (!Array.isArray(state.data[t])) throw new Error(`state.data.${t} must be an array`)
+  }
+  for (const t of CAREER_TABLES) {
+    if (state.data[t] !== undefined && !Array.isArray(state.data[t])) {
+      throw new Error(`state.data.${t} must be an array when present`)
+    }
   }
   if (state.settings && typeof state.settings !== 'object') {
     throw new Error('state.settings must be an object')
@@ -134,12 +147,11 @@ export function validateSyncState(state) {
 }
 
 /**
- * Upgrade a snapshot produced by an older client to the current shape: fill the
- * table arrays its schema didn't have yet and stamp the current schema. Refuses
- * snapshots NEWER than this code — pushing one back would strip the tables this
- * version doesn't know about.
+ * Refuse snapshots NEWER than this code understands — pushing one back would
+ * strip the tables this version doesn't know about. Returns the state as-is;
+ * deliberately does NOT fill missing career keys (see validateSyncState).
  */
-export function normalizeSyncState(state) {
+export function assertKnownSchema(state) {
   if (!state || typeof state !== 'object' || !state.data) {
     throw new Error('not a SyncState (missing .data)')
   }
@@ -148,17 +160,13 @@ export function normalizeSyncState(state) {
       `snapshot schema v${state.schema} is newer than this CLI (v${SYNC_SCHEMA}) — update the repo first`
     )
   }
-  const data = { ...state.data }
-  for (const t of CAREER_TABLES) {
-    if (data[t] === undefined) data[t] = []
-  }
-  return { ...state, schema: SYNC_SCHEMA, data }
+  return state
 }
 
 /** Build a SyncState from an app BackupData file ({version, exportedAt, data}). */
 export function syncStateFromBackup(backup) {
   if (!backup?.data) throw new Error('Not a Plano de Vida backup (missing .data)')
-  return normalizeSyncState({ schema: SYNC_SCHEMA, data: backup.data, settings: backup.settings ?? {} })
+  return { schema: SYNC_SCHEMA, data: backup.data, settings: backup.settings ?? {} }
 }
 
 export function summarize(state) {

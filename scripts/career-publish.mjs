@@ -19,37 +19,46 @@
  *                      rows the input doesn't know are left alone
  *        habits (optional) — SEED-ONLY: inserts the career category + practices
  *                      (domain 'career') once by fixed id; after that the app
- *                      owns them (never updated or deleted by a publish)
+ *                      owns them (never updated or deleted by a publish). Ids
+ *                      ever seeded are remembered in .last-publish.json so an
+ *                      in-app DELETE is not resurrected by the next publish.
  *      careerOutreach, dailyRecords, all other legacy tables and settings are
- *      never touched.
+ *      never touched. If the pulled snapshot LACKS a career table key (written
+ *      by a pre-career client), non-published keys stay ABSENT in the output —
+ *      missing means "no opinion" and devices preserve their local rows.
  *      Rows identical to the cloud keep their updatedAt (no merge churn).
  *   3. PUT back with the pulled baseVersion; on a 409 (a device pushed during
  *      the cycle) pull + retry once.
  *   4. Write .last-publish.json next to the input (read by the career project's
  *      SessionStart drift guard).
  *
+ * Known small window (accepted): if a device holds an UNPUSHED status/notes edit
+ * to a move/rung (offline, or within the ~2s push debounce) while a publish
+ * changes that same row's content, the publish's updatedAt wins the later LWW
+ * merge and the device edit reverts. Publish right after editing STATE.md and
+ * the window is effectively zero for online devices.
+ *
  * Usage:
  *   node scripts/career-publish.mjs [--input <plan.publish.json>] [--dry-run]
  *                                   [--allow-empty-cloud]
- * Config: SYNC_URL + SYNC_PASSPHRASE from the environment or ./.env.local.
- * Default input: ~/notes/morningpages/career/plan.publish.json
+ * Config: SYNC_URL + SYNC_PASSPHRASE from the environment or ./.env.local;
+ * the default input path comes from CAREER_PUBLISH_INPUT (same sources).
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
-import { homedir } from 'node:os'
 import {
   deriveAuthToken,
   deriveEncKey,
   encryptState,
   decryptState,
-  normalizeSyncState,
+  assertKnownSchema,
   validateSyncState,
   randomSalt,
   b64,
   unb64,
+  SYNC_SCHEMA,
+  TABLES,
 } from './sync-core.mjs'
-
-const DEFAULT_INPUT = join(homedir(), 'notes/morningpages/career/plan.publish.json')
 
 try {
   process.loadEnvFile('.env.local')
@@ -63,16 +72,25 @@ const args = process.argv.slice(2)
 const DRY_RUN = args.includes('--dry-run')
 const ALLOW_EMPTY = args.includes('--allow-empty-cloud')
 const inputIdx = args.indexOf('--input')
-const INPUT_FILE = resolve(inputIdx !== -1 ? args[inputIdx + 1] : DEFAULT_INPUT)
 
 function die(msg) {
   console.error(`✗ ${msg}`)
   process.exit(1)
 }
 
+const inputArg = inputIdx !== -1 ? args[inputIdx + 1] : process.env.CAREER_PUBLISH_INPUT
+if (!inputArg) {
+  die('No input: pass --input <plan.publish.json> or set CAREER_PUBLISH_INPUT in .env.local')
+}
+const INPUT_FILE = resolve(inputArg)
+
 // --- input validation (strict: this file is LLM-written) -----------------------
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
+// Regex + round-trip: rejects impossible dates like 2026-06-31 (which would
+// otherwise reach the UI as Invalid Date).
+const isRealDate = (v) =>
+  typeof v === 'string' && DATE_RE.test(v) && new Date(`${v}T00:00:00Z`).toISOString().slice(0, 10) === v
 const isStr = (v) => typeof v === 'string' && v.length > 0
 const optStr = (v) => v === undefined || typeof v === 'string'
 
@@ -108,20 +126,20 @@ function validateInput(input) {
   }
   for (const m of moves) {
     if (!isStr(m.title)) fail('moves[].title', 'must be a non-empty string')
-    if (typeof m.sortOrder !== 'number') fail('moves[].sortOrder', 'must be a number')
+    if (!Number.isFinite(m.sortOrder)) fail('moves[].sortOrder', 'must be a finite number')
     if (!optStr(m.detail) || !optStr(m.gate)) fail('moves[]', 'detail/gate must be strings when present')
     if (m.status !== undefined && !['pending', 'done'].includes(m.status)) fail('moves[].status', 'must be pending|done')
   }
   for (const d of deadlines) {
-    if (!DATE_RE.test(d.date ?? '')) fail('deadlines[].date', 'must be YYYY-MM-DD')
+    if (!isRealDate(d.date)) fail('deadlines[].date', 'must be a real YYYY-MM-DD date')
     if (!isStr(d.label)) fail('deadlines[].label', 'must be a non-empty string')
   }
   for (const w of wins) {
-    if (!DATE_RE.test(w.date ?? '')) fail('wins[].date', 'must be YYYY-MM-DD')
+    if (!isRealDate(w.date)) fail('wins[].date', 'must be a real YYYY-MM-DD date')
     if (!isStr(w.text)) fail('wins[].text', 'must be a non-empty string')
   }
   for (const l of log) {
-    if (!DATE_RE.test(l.date ?? '')) fail('log[].date', 'must be YYYY-MM-DD')
+    if (!isRealDate(l.date)) fail('log[].date', 'must be a real YYYY-MM-DD date')
     if (!isStr(l.title) || !isStr(l.summary)) fail('log[]', 'needs title + summary')
   }
   for (const r of ladder) {
@@ -137,6 +155,9 @@ function validateInput(input) {
     const h = input.habits
     if (!h || typeof h !== 'object') fail('habits', 'must be an object')
     if (!isStr(h.categoryName)) fail('habits.categoryName', 'must be a non-empty string')
+    if (h.categoryIcon !== undefined && !isStr(h.categoryIcon)) {
+      fail('habits.categoryIcon', 'must be a non-empty string when present')
+    }
     if (!Array.isArray(h.practices) || h.practices.length === 0) fail('habits.practices', 'must be a non-empty array')
     checkIds(h.practices, 'habits.practices')
     for (const p of h.practices) {
@@ -166,8 +187,12 @@ function stamped(next, prev, now) {
   return { ...next, updatedAt: now }
 }
 
-function transform(state, input, now) {
-  const prevById = (rows) => new Map(rows.map((r) => [r.id, r]))
+function transform(state, input, now, alreadySeededIds) {
+  const prevById = (rows) => new Map((rows ?? []).map((r) => [r.id, r]))
+  // NOTE: spread keeps only the keys that exist. A career key MISSING from the
+  // pulled snapshot (pre-career writer) stays missing in the output unless this
+  // publish owns it — missing = "no opinion", devices preserve their local rows.
+  // Never synthesize an empty array for a table we don't own (careerOutreach).
   const data = { ...state.data }
 
   // publishedAt = "the bridge last ran", even when nothing changed — that is what
@@ -177,32 +202,47 @@ function transform(state, input, now) {
       id: 'career-plan',
       currentPhase: input.plan.currentPhase,
       focusLine: input.plan.focusLine,
-      phases: input.plan.phases,
+      // explicit pick: nothing beyond the four known fields rides into the snapshot
+      phases: input.plan.phases.map((p) => ({
+        name: p.name,
+        timeframe: p.timeframe,
+        summary: p.summary,
+        status: p.status,
+      })),
       publishedAt: now,
       updatedAt: now,
     },
   ]
 
-  const prevMoves = prevById(data.careerMoves)
-  data.careerMoves = input.moves.map((m) => {
-    const prev = prevMoves.get(m.id)
-    const status =
-      prev?.status === 'done' && (m.status ?? 'pending') === 'pending'
-        ? 'done' // the app checked it off; markdown hasn't caught up yet
-        : (m.status ?? 'pending')
-    return stamped(
-      {
-        id: m.id,
-        title: m.title,
-        detail: m.detail ?? '',
-        gate: m.gate ?? '',
-        sortOrder: m.sortOrder,
-        status,
-      },
-      prev,
-      now
-    )
-  })
+  // careerMoves and careerLadder embed APP-OWNED state (move status, rung
+  // status/notes). If the pulled snapshot LACKS the key — an old client stripped
+  // it — the devices hold the only copy of that state, and publishing rows on
+  // top would overwrite it on their next pull. So: skip those tables this run,
+  // let the devices' preserve-and-repair push restore them, republish after.
+  if (data.careerMoves === undefined) {
+    console.log('  ! cloud lacks careerMoves (stripped by an old client) — skipped this run; republish after devices sync')
+  } else {
+    const prevMoves = prevById(data.careerMoves)
+    data.careerMoves = input.moves.map((m) => {
+      const prev = prevMoves.get(m.id)
+      const status =
+        prev?.status === 'done' && (m.status ?? 'pending') === 'pending'
+          ? 'done' // the app checked it off; markdown hasn't caught up yet
+          : (m.status ?? 'pending')
+      return stamped(
+        {
+          id: m.id,
+          title: m.title,
+          detail: m.detail ?? '',
+          gate: m.gate ?? '',
+          sortOrder: m.sortOrder,
+          status,
+        },
+        prev,
+        now
+      )
+    })
+  }
 
   const prevDl = prevById(data.careerDeadlines)
   data.careerDeadlines = input.deadlines.map((d) =>
@@ -223,70 +263,90 @@ function transform(state, input, now) {
   // practice is inserted once (by fixed id) with domain 'career'; after that the
   // app owns the rows — renames, schedule edits, archives are never overwritten,
   // and rows are never deleted by a publish. dailyRecords are untouched.
+  // alreadySeededIds (from .last-publish.json) remembers everything ever seeded,
+  // so an id the user DELETED in-app is not resurrected by the next publish.
+  const seededNow = []
   if (input.habits) {
     const h = input.habits
     const CAT_ID = 'career-cat'
-    if (!data.categories.some((c) => c.id === CAT_ID)) {
-      const maxSort = Math.max(-1, ...data.categories.map((c) => c.sortOrder))
-      data.categories = [
-        ...data.categories,
-        {
-          id: CAT_ID,
-          name: h.categoryName,
-          sortOrder: maxSort + 1,
-          emoji: h.categoryIcon ?? 'Briefcase',
+    const categoryDeleted =
+      alreadySeededIds.has(CAT_ID) && !data.categories.some((c) => c.id === CAT_ID)
+    if (categoryDeleted) {
+      console.log('  ! career category was deleted in-app — skipping habit seeding entirely')
+    } else {
+      if (!alreadySeededIds.has(CAT_ID) && !data.categories.some((c) => c.id === CAT_ID)) {
+        const maxSort = Math.max(-1, ...data.categories.map((c) => c.sortOrder))
+        data.categories = [
+          ...data.categories,
+          {
+            id: CAT_ID,
+            name: h.categoryName,
+            sortOrder: maxSort + 1,
+            emoji: h.categoryIcon ?? 'Briefcase',
+            createdAt: now,
+            updatedAt: now,
+          },
+        ]
+        seededNow.push(CAT_ID)
+      }
+      const existingPracticeIds = new Set(data.practices.map((p) => p.id))
+      let nextSort =
+        Math.max(-1, ...data.practices.filter((p) => p.categoryId === CAT_ID).map((p) => p.sortOrder)) + 1
+      const seeded = []
+      for (const p of h.practices) {
+        if (existingPracticeIds.has(p.id)) continue
+        if (alreadySeededIds.has(p.id)) {
+          console.log(`  ! habit ${p.id} was deleted in-app — not re-seeding`)
+          continue
+        }
+        seeded.push({
+          id: p.id,
+          name: p.name,
+          categoryId: CAT_ID,
+          content: p.content ?? '',
+          imageData: null,
+          domain: 'career',
+          ...(p.scheduleDays?.length ? { scheduleDays: [...p.scheduleDays].sort((a, b) => a - b) } : {}),
+          isRequired: false,
+          sortOrder: nextSort++,
+          isArchived: false,
           createdAt: now,
           updatedAt: now,
-        },
-      ]
+        })
+        seededNow.push(p.id)
+      }
+      if (seeded.length) data.practices = [...data.practices, ...seeded]
     }
-    const existingPracticeIds = new Set(data.practices.map((p) => p.id))
-    let nextSort =
-      Math.max(-1, ...data.practices.filter((p) => p.categoryId === CAT_ID).map((p) => p.sortOrder)) + 1
-    const seeded = []
-    for (const p of h.practices) {
-      if (existingPracticeIds.has(p.id)) continue
-      seeded.push({
-        id: p.id,
-        name: p.name,
-        categoryId: CAT_ID,
-        content: p.content ?? '',
-        imageData: null,
-        domain: 'career',
-        ...(p.scheduleDays?.length ? { scheduleDays: [...p.scheduleDays].sort((a, b) => a - b) } : {}),
-        isRequired: false,
-        sortOrder: nextSort++,
-        isArchived: false,
-        createdAt: now,
-        updatedAt: now,
-      })
-    }
-    if (seeded.length) data.practices = [...data.practices, ...seeded]
   }
 
   // Ladder: input owns rung/title/description; the app owns status/notes.
-  const ladderById = prevById(data.careerLadder)
-  for (const r of input.ladder) {
-    const prev = ladderById.get(r.id)
-    ladderById.set(
-      r.id,
-      stamped(
-        {
-          id: r.id,
-          rung: r.rung,
-          title: r.title,
-          description: r.description,
-          status: prev?.status ?? r.status ?? 'pending',
-          notes: prev?.notes ?? r.notes ?? '',
-        },
-        prev,
-        now
+  // Same stripped-cloud rule as careerMoves (app state lives in these rows).
+  if (data.careerLadder === undefined) {
+    console.log('  ! cloud lacks careerLadder (stripped by an old client) — skipped this run; republish after devices sync')
+  } else {
+    const ladderById = prevById(data.careerLadder)
+    for (const r of input.ladder) {
+      const prev = ladderById.get(r.id)
+      ladderById.set(
+        r.id,
+        stamped(
+          {
+            id: r.id,
+            rung: r.rung,
+            title: r.title,
+            description: r.description,
+            status: prev?.status ?? r.status ?? 'pending',
+            notes: prev?.notes ?? r.notes ?? '',
+          },
+          prev,
+          now
+        )
       )
-    )
+    }
+    data.careerLadder = [...ladderById.values()].sort((a, b) => a.rung - b.rung)
   }
-  data.careerLadder = [...ladderById.values()].sort((a, b) => a.rung - b.rung)
 
-  return { ...state, data }
+  return { next: { ...state, schema: SYNC_SCHEMA, data }, seededNow }
 }
 
 // --- sync I/O --------------------------------------------------------------------
@@ -314,45 +374,54 @@ async function api(method, body) {
 
 const summarizeCareer = (state) =>
   ['careerPlan', 'careerMoves', 'careerDeadlines', 'careerOutreach', 'careerLadder', 'careerWins', 'careerLog']
-    .map((t) => `${t.replace('career', '').toLowerCase()}=${state.data[t].length}`)
+    .map((t) => `${t.replace('career', '').toLowerCase()}=${state.data[t] ? state.data[t].length : '–'}`)
     .join(' ')
 
-async function publishOnce(input, now) {
-  const remote = (await api('GET')).json
+async function publishOnce(input, now, alreadySeededIds) {
+  const { status: getStatus, json: remote } = await api('GET')
+  if (getStatus !== 200) {
+    die(`GET /state failed (${getStatus}) — not an empty cloud, do NOT use --allow-empty-cloud. Body: ${JSON.stringify(remote).slice(0, 200)}`)
+  }
   let state
   let salt = remote.salt
   if (!remote.blob) {
     if (!ALLOW_EMPTY) {
       die('Cloud is empty. Refusing to seed from a publish (use --allow-empty-cloud if intended).')
     }
+    console.log(
+      '  ! seeding an EMPTY cloud: the snapshot will have empty spiritual tables — ' +
+        'any device that pulls it before pushing its own data may lose local rows on adopt.'
+    )
     salt = salt ?? b64(randomSalt())
-    state = normalizeSyncState({ schema: 2, data: {}, settings: {} })
-    for (const k of ['categories', 'practices', 'dailyRecords', 'missedReasons', 'examenEntries', 'guidingQuestions', 'propositos']) {
+    // Fresh account: every table is authoritatively empty (arrays PRESENT), so
+    // the stripped-cloud skip rule above doesn't trigger on a first seed.
+    state = { schema: SYNC_SCHEMA, data: {}, settings: {} }
+    for (const k of TABLES) {
       state.data[k] = []
     }
   } else {
     const key = await deriveEncKey(SYNC_PASSPHRASE, unb64(salt))
-    state = normalizeSyncState(await decryptState(remote.blob, key))
+    state = assertKnownSchema(await decryptState(remote.blob, key))
   }
 
-  const next = transform(state, input, now)
+  const { next, seededNow } = transform(state, input, now, alreadySeededIds)
   validateSyncState(next)
 
   if (DRY_RUN) {
     console.log(`dry-run against cloud v${remote.version}:`)
     console.log(`  before: ${summarizeCareer(state)}`)
     console.log(`  after:  ${summarizeCareer(next)}`)
-    return { done: true, version: remote.version }
+    return { done: true, version: remote.version, seededNow }
   }
 
   const key = await deriveEncKey(SYNC_PASSPHRASE, unb64(salt))
   const blob = await encryptState(next, key)
   const { status, json } = await api('PUT', { baseVersion: remote.version, blob, salt })
-  if (status === 409) return { done: false }
+  if (status === 409) return { done: false, seededNow: [] }
   if (status !== 200) die(`PUT /state failed (${status}): ${JSON.stringify(json)}`)
   console.log(`✓ published -> cloud v${json.version}`)
   console.log(`  ${summarizeCareer(next)}`)
-  return { done: true, version: json.version }
+  return { done: true, version: json.version, seededNow }
 }
 
 async function main() {
@@ -368,18 +437,31 @@ async function main() {
   }
   validateInput(input)
 
+  // Everything ever seeded into categories/practices, so an in-app delete is
+  // never resurrected. Losing the marker only risks one redundant re-seed.
+  const markerPath = join(dirname(INPUT_FILE), '.last-publish.json')
+  const prevMarker = existsSync(markerPath) ? JSON.parse(readFileSync(markerPath, 'utf8')) : {}
+  const alreadySeededIds = new Set(prevMarker.seededHabitIds ?? [])
+
   const now = new Date().toISOString()
-  let result = await publishOnce(input, now)
+  let result = await publishOnce(input, now, alreadySeededIds)
   if (!result.done) {
     console.log('  conflict (a device pushed mid-publish) — pulling fresh and retrying once…')
-    result = await publishOnce(input, now)
+    result = await publishOnce(input, now, alreadySeededIds)
     if (!result.done) die('still conflicting after retry — try again in a minute.')
   }
 
   if (!DRY_RUN) {
-    const marker = join(dirname(INPUT_FILE), '.last-publish.json')
-    writeFileSync(marker, JSON.stringify({ publishedAt: now, cloudVersion: result.version, input: INPUT_FILE }, null, 2) + '\n')
-    console.log(`  marker -> ${marker}`)
+    const seededHabitIds = [...new Set([...alreadySeededIds, ...result.seededNow])]
+    writeFileSync(
+      markerPath,
+      JSON.stringify(
+        { publishedAt: now, cloudVersion: result.version, input: INPUT_FILE, seededHabitIds },
+        null,
+        2
+      ) + '\n'
+    )
+    console.log(`  marker -> ${markerPath}`)
   }
 }
 

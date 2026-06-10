@@ -10,11 +10,14 @@ const MAX_LOOKBACK_DAYS = 730
  * Current career-habit chain, in scheduled days.
  *
  * A scheduled day joins the chain when AT LEAST ONE career practice scheduled
- * that day was completed — deliberately lenient: routine.md pre-authorizes a
- * "newborn mode" floor of the win log only, and the chain must survive it.
- * Days where nothing is scheduled (Sundays) are neutral: skipped, never a break.
- * Today only counts once something is done; an empty today never breaks the
- * chain (the day isn't over).
+ * that day was completed — deliberately lenient: on a minimal-floor day a single
+ * kept habit keeps the chain alive; volume is optional. Days where nothing is
+ * scheduled are neutral: skipped, never a break. Today only counts once
+ * something is done; an empty today never breaks the chain (the day isn't over).
+ *
+ * Known trade-off: the chain is computed against the CURRENT practice set and
+ * schedules. Archiving/deleting a practice or editing its scheduleDays
+ * re-reads history through the new lens and can shorten the displayed chain.
  *
  * @param completedByDate date (YYYY-MM-DD) → set of completed practiceIds
  */

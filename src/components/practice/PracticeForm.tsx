@@ -241,7 +241,9 @@ export function PracticeForm() {
           </div>
         )}
 
-        {domain !== 'spiritual' && (
+        {/* Gated like the Tipo control: public installs (no career data) keep the
+            exact pre-career form — zero visible change for them. */}
+        {showCareerOption && domain !== 'spiritual' && (
           <div className="py-2">
             <span className="text-sm font-medium text-text-secondary dark:text-text-secondary-dark">
               Dias da semana

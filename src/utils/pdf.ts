@@ -9,6 +9,7 @@ import {
 } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { formatDate } from './dates'
+import { isCareer } from './domain'
 
 export async function generateMonthPdf(year: number, month: number): Promise<void> {
   const monthDate = new Date(year, month, 1)
@@ -18,9 +19,11 @@ export async function generateMonthPdf(year: number, month: number): Promise<voi
   const startDateStr = formatDate(monthStart)
   const endDateStr = formatDate(monthEnd)
 
-  // Get data
+  // Get data. Career habits are excluded: this export is the spiritual
+  // plan-of-life report (the one shared with a director), not the career
+  // tracker. Lifestyle habits keep their existing (included) behavior.
   const [practices, records] = await Promise.all([
-    db.practices.filter((p) => !p.isArchived).sortBy('sortOrder'),
+    db.practices.filter((p) => !p.isArchived && !isCareer(p)).sortBy('sortOrder'),
     db.dailyRecords
       .where('date')
       .between(startDateStr, endDateStr, true, true)

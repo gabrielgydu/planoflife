@@ -95,13 +95,27 @@ export async function snapshotLocal(): Promise<SyncState> {
  * A table key MISSING from the snapshot (undefined, not `[]`) means it was
  * produced by an older app that doesn't know that table — old clients strip
  * unknown tables on push because snapshotLocal only reads their own list. For
- * those tables, preserve the local rows instead of clearing: the data survives
- * on this device and re-enters the cloud on its next push-merge.
+ * those tables, preserve the local rows instead of clearing.
+ *
+ * Returns true when any preserved table actually held rows: the caller must
+ * then schedule a push so the preserved rows re-enter the cloud — otherwise the
+ * cloud stays stripped until an organic edit, and another schema-2 client
+ * (whose snapshot has the key PRESENT as an empty array) could cement the loss.
  */
-async function clearAndBulkAdd(state: SyncState): Promise<void> {
+async function clearAndBulkAdd(state: SyncState): Promise<boolean> {
   const d = state.data
-  const replace = <T>(table: { clear(): Promise<void>; bulkAdd(rows: T[]): unknown }, rows: T[] | undefined) =>
-    rows ? table.clear().then(() => table.bulkAdd(rows)) : Promise.resolve()
+  let preserved = false
+  const replace = async <T>(
+    table: { clear(): Promise<void>; bulkAdd(rows: T[]): unknown; count(): Promise<number> },
+    rows: T[] | undefined
+  ) => {
+    if (rows) {
+      await table.clear()
+      await table.bulkAdd(rows)
+    } else if ((await table.count()) > 0) {
+      preserved = true
+    }
+  }
   await Promise.all([
     replace(db.categories, d.categories),
     replace(db.practices, d.practices),
@@ -118,6 +132,7 @@ async function clearAndBulkAdd(state: SyncState): Promise<void> {
     replace(db.careerWins, d.careerWins),
     replace(db.careerLog, d.careerLog),
   ])
+  return preserved
 }
 
 /**
@@ -127,16 +142,19 @@ async function clearAndBulkAdd(state: SyncState): Promise<void> {
  */
 export async function applyRemoteState(
   state: SyncState
-): Promise<{ settingsChanged: boolean }> {
+): Promise<{ settingsChanged: boolean; preservedLocalRows: boolean }> {
   // Ensure first-run seeding/migration is done before we clear+repopulate,
   // otherwise the two can interleave into a Dexie BulkError.
   await dbReady
   // Suppress mutation capture for the whole apply: these writes come FROM a pull,
   // so they must not schedule a push (which would echo straight back to the cloud).
   return runWithApplyingRemote(async () => {
-    await db.transaction('rw', ALL_TABLES, () => clearAndBulkAdd(state))
+    let preservedLocalRows = false
+    await db.transaction('rw', ALL_TABLES, async () => {
+      preservedLocalRows = await clearAndBulkAdd(state)
+    })
     const settingsChanged = applySettings(state.settings)
-    return { settingsChanged }
+    return { settingsChanged, preservedLocalRows }
   })
 }
 

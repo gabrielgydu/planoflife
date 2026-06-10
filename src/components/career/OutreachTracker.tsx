@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Plus, Send } from 'lucide-react'
-import { differenceInCalendarWeeks, parseISO, format } from 'date-fns'
+import { differenceInCalendarDays, parseISO, format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Modal } from '../shared/Modal'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
@@ -14,12 +14,11 @@ import {
 import { getTodayStr } from '../../utils/dates'
 import type { CareerOutreachAttempt } from '../../types'
 
-// "Outreach = experiment: checkpoint after ~20 attempts or 8 weeks — revise rate
-// floor/channels from data." (career STATE.md, decided 2026-06-09)
+// Outreach is treated as an experiment: after ~N attempts or M weeks, review
+// the data (response rate, channels) instead of pushing on blindly.
 const CHECKPOINT_ATTEMPTS = 20
 const CHECKPOINT_WEEKS = 8
 
-// Tier order from the US-2nd-client playbook.
 const CHANNELS = ['Direct', 'Braintrust', 'Toptal', 'YC/Wellfound', 'Job board', 'Inbound', 'Outro']
 
 const emptyDraft = (): OutreachDraft => ({
@@ -192,10 +191,13 @@ export function OutreachTracker() {
   const firstDate = attempts.length
     ? attempts.reduce((min, a) => (a.date < min ? a.date : min), attempts[0].date)
     : null
-  const weeks = firstDate
-    ? differenceInCalendarWeeks(new Date(), parseISO(firstDate), { weekStartsOn: 1 }) + 1
-    : 0
-  const checkpointHit = attempts.length >= CHECKPOINT_ATTEMPTS || weeks >= CHECKPOINT_WEEKS
+  // Elapsed weeks since the first attempt (week 1 = days 0–6), not calendar-week
+  // boundary crossings — those would fire the "8 weeks" tripwire 1–2 weeks early.
+  // Clamped to ≥1 so a future-dated attempt can't show "semana -5".
+  const daysElapsed = firstDate ? differenceInCalendarDays(new Date(), parseISO(firstDate)) : 0
+  const weeks = firstDate ? Math.max(1, Math.floor(daysElapsed / 7) + 1) : 0
+  const checkpointHit =
+    attempts.length >= CHECKPOINT_ATTEMPTS || daysElapsed >= CHECKPOINT_WEEKS * 7
   const progress = Math.min(100, Math.round((attempts.length / CHECKPOINT_ATTEMPTS) * 100))
 
   return (

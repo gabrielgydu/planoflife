@@ -331,6 +331,8 @@ async function main() {
   // --- publish bridge: career-publish.mjs → cloud → device pull → Now panel ---
   console.log('• publish bridge…')
   const publishInput = '/tmp/plife-e2e-publish-input.json'
+  const publishMarker = '/tmp/.last-publish.json'
+  rmSync(publishMarker, { force: true }) // a stale marker would make its check vacuous
   copyFileSync('scripts/fixtures/career-plan-fixture.json', publishInput)
   const publishEnv = { ...process.env, SYNC_URL: WORKER_URL, SYNC_PASSPHRASE: PASS }
   const runPublish = (extra = '') =>
@@ -359,7 +361,13 @@ async function main() {
       return n === cloud.state.data[t].length
     })
   check('PUBLISH: legacy tables untouched (except habit seed)', legacyAsExpected(afterPublish.state))
-  check('PUBLISH: marker written', existsSync('/tmp/.last-publish.json'))
+  const marker1 = existsSync(publishMarker) ? JSON.parse(readFileSync(publishMarker, 'utf8')) : null
+  check(
+    'PUBLISH: marker written with matching version + seeded ids',
+    marker1?.cloudVersion === afterPublish.version &&
+      Array.isArray(marker1?.seededHabitIds) &&
+      marker1.seededHabitIds.includes('career-prac-winlog')
+  )
 
   // Device pulls on reload → tab appears, Now panel renders the published plan.
   await page.goto(`${APP_ORIGIN}${BASE}`, { waitUntil: 'networkidle' })
@@ -392,6 +400,13 @@ async function main() {
   check(
     'REPUBLISH: publishedAt bumped',
     afterRepublish.state.data.careerPlan[0].publishedAt > afterPublish.state.data.careerPlan[0].publishedAt
+  )
+  // No-churn: an unchanged row must keep its exact updatedAt across a republish,
+  // or offline device edits would lose later LWW merges they should win.
+  check(
+    'REPUBLISH: unchanged deadline keeps its updatedAt',
+    afterRepublish.state.data.careerDeadlines.find((d) => d.id === 'dl-a')?.updatedAt ===
+      afterPublish.state.data.careerDeadlines.find((d) => d.id === 'dl-a')?.updatedAt
   )
 
   // Conflict: the device (not yet pulled past the re-publish) checks move-b →
@@ -528,6 +543,71 @@ async function main() {
     'FEED: log timeline renders',
     (await page.getByText('Diário do plano').count()) === 1 &&
       (await page.getByText('Log A').count()) === 1
+  )
+
+  // --- old-client strip → no-launder publish → device preserve + repair push ---
+  // Simulates a stale schema-1 PWA pushing a snapshot without career keys while
+  // career data exists, then verifies the two mitigations: (a) a publish on that
+  // cloud must NOT synthesize an authoritative empty careerOutreach, and (b) a
+  // device that pulls the stripped/career-less-outreach snapshot preserves its
+  // local rows AND pushes them back on its own.
+  console.log('• old-client strip → preserve → repair…')
+  await page.goto('about:blank') // park the device so it can't pull mid-setup
+  const beforeStrip = await getCloud()
+  const cloudSalt = (await api('GET')).json.salt
+  const stripped = {
+    schema: 1,
+    data: Object.fromEntries(LEGACY_STORES.map((t) => [t, beforeStrip.state.data[t]])),
+    settings: beforeStrip.state.settings ?? {},
+  }
+  const stripPut = await api('PUT', '/state', {
+    baseVersion: beforeStrip.version,
+    blob: await encryptState(stripped, encKey),
+    salt: cloudSalt,
+  })
+  check('STRIP: simulated old-client push accepted', stripPut.status === 200)
+
+  runPublish()
+  const afterStripPublish = await getCloud()
+  check(
+    'LAUNDER: publish on a stripped cloud leaves app-state tables ABSENT (no opinion), not []',
+    !('careerOutreach' in afterStripPublish.state.data) &&
+      !('careerMoves' in afterStripPublish.state.data) &&
+      !('careerLadder' in afterStripPublish.state.data) &&
+      afterStripPublish.state.data.careerPlan.length === 1 &&
+      afterStripPublish.state.data.careerWins.length === 1
+  )
+
+  await page.goto(`${APP_ORIGIN}${BASE}career`, { waitUntil: 'networkidle' })
+  await waitFor(
+    async () => {
+      const c = await getCloud()
+      return (c.state.data.careerOutreach ?? []).some((a) => a.target === 'Acme Corp — CTO')
+    },
+    { tries: 20, label: 'repair push restoring careerOutreach' }
+  )
+  const repaired = await getCloud()
+  check('REPAIR: device preserved + pushed outreach back after pull', true)
+  // The right baseline is the pre-strip cloud: every table must round-trip the
+  // strip cycle unchanged (legacy counts AND app-owned career state).
+  check(
+    'REPAIR: nothing else lost through the strip cycle',
+    LEGACY_STORES.every(
+      (t) => repaired.state.data[t].length === beforeStrip.state.data[t].length
+    ) &&
+      repaired.state.data.careerLadder.find((r) => r.id === 'rung-1')?.status === 'done' &&
+      repaired.state.data.careerMoves.find((m) => m.id === 'move-a')?.status === 'done'
+  )
+
+  // After the devices repaired the cloud, a republish reconciles full ownership:
+  // input content lands, app-owned statuses survive.
+  runPublish()
+  const reconciled = await getCloud()
+  check(
+    'RECONCILE: republish after repair keeps app-owned statuses',
+    reconciled.state.data.careerMoves.find((m) => m.id === 'move-a')?.status === 'done' &&
+      reconciled.state.data.careerLadder.find((r) => r.id === 'rung-1')?.status === 'done' &&
+      reconciled.state.data.careerOutreach.length === 1
   )
 
   await browser.close()
