@@ -1,6 +1,8 @@
+import { motion } from 'motion/react'
 import { Briefcase } from 'lucide-react'
 import { useCareerEnabled } from '../../hooks/useCareerEnabled'
 import { EmptyState } from '../shared/EmptyState'
+import { NowPanel } from './NowPanel'
 
 /**
  * Career section ("Carreira" tab). Only reachable on installs whose synced data
@@ -8,8 +10,8 @@ import { EmptyState } from '../shared/EmptyState'
  * of the app; the career content itself renders in whatever language the
  * published data carries (mostly EN).
  *
- * Build phases fill this view in: Now panel (1), habit chain (2), outreach +
- * ladder trackers (3), roadmap + wins/log feed (4).
+ * One glanceable scroll: Now panel (phase 1), habit chain (2), outreach + ladder
+ * trackers (3), roadmap + wins/log feed (4).
  */
 export function CareerView() {
   const enabled = useCareerEnabled()
@@ -24,7 +26,18 @@ export function CareerView() {
         </div>
       </header>
 
-      {!enabled && <EmptyState icon={Briefcase} message="Nenhum dado de carreira" />}
+      {enabled ? (
+        <motion.div
+          className="flex-1 px-4 py-4 space-y-6"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <NowPanel />
+        </motion.div>
+      ) : (
+        <EmptyState icon={Briefcase} message="Nenhum dado de carreira" />
+      )}
     </div>
   )
 }

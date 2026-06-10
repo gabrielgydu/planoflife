@@ -326,6 +326,87 @@ async function main() {
     `${await navLinks(fresh)} links`)
   await fresh.goto(`${APP_ORIGIN}${BASE}career`, { waitUntil: 'networkidle' })
   check('FRESH: direct /career shows empty state', await fresh.getByText('Nenhum dado de carreira').count() === 1)
+  await freshCtx.close()
+
+  // --- publish bridge: career-publish.mjs → cloud → device pull → Now panel ---
+  console.log('• publish bridge…')
+  const publishInput = '/tmp/plife-e2e-publish-input.json'
+  copyFileSync('scripts/fixtures/career-plan-fixture.json', publishInput)
+  const publishEnv = { ...process.env, SYNC_URL: WORKER_URL, SYNC_PASSPHRASE: PASS }
+  const runPublish = (extra = '') =>
+    execSync(`node ${process.cwd()}/scripts/career-publish.mjs --input ${publishInput} ${extra}`, {
+      cwd: '/tmp', env: publishEnv, encoding: 'utf8',
+    })
+  const out1 = runPublish()
+  console.log(out1.trim().split('\n').map((l) => `  ${l}`).join('\n'))
+  const afterPublish = await getCloud()
+  check(
+    'PUBLISH: career tables landed in cloud',
+    afterPublish.state.data.careerPlan.length === 1 &&
+      afterPublish.state.data.careerMoves.length === 2 &&
+      afterPublish.state.data.careerDeadlines.length === 1 &&
+      afterPublish.state.data.careerWins.length === 1 &&
+      afterPublish.state.data.careerLog.length === 1 &&
+      afterPublish.state.data.careerLadder.length === 2
+  )
+  check(
+    'PUBLISH: legacy tables untouched',
+    LEGACY_STORES.every((t) => afterPublish.state.data[t].length === cloud.state.data[t].length)
+  )
+  check('PUBLISH: marker written', existsSync('/tmp/.last-publish.json'))
+
+  // Device pulls on reload → tab appears, Now panel renders the published plan.
+  await page.goto(`${APP_ORIGIN}${BASE}`, { waitUntil: 'networkidle' })
+  await waitFor(async () => (await careerNavLinks(page)) === 1, { tries: 20, label: 'Carreira tab after pull' })
+  check('PUBLISH: Carreira tab appeared after pull', true)
+  await page.goto(`${APP_ORIGIN}${BASE}career`, { waitUntil: 'networkidle' })
+  check('PUBLISH: phase badge renders', await page.getByText('Phase 1 — Test').count() === 1)
+  check('PUBLISH: next move renders', await page.getByText('Move Alpha').count() === 1)
+  check('PUBLISH: deadline countdown renders', await page.getByText('Far deadline').count() === 1)
+
+  // In-app move check-off pushes back to the cloud.
+  console.log('• in-app move check-off…')
+  const vBeforeCheck = (await getCloud()).version
+  await page.getByRole('button', { name: 'Concluir Move Alpha' }).click()
+  await waitFor(async () => (await getCloud()).version > vBeforeCheck, { tries: 15, label: 'move check push' })
+  const afterCheck = await getCloud()
+  check(
+    'MOVE: done status reached cloud',
+    afterCheck.state.data.careerMoves.find((m) => m.id === 'move-a')?.status === 'done'
+  )
+
+  // Re-publish with the same (pending) input: the app's done check-off must survive.
+  const out2 = runPublish()
+  console.log(out2.trim().split('\n').map((l) => `  ${l}`).join('\n'))
+  const afterRepublish = await getCloud()
+  check(
+    'REPUBLISH: app done-status preserved over pending input',
+    afterRepublish.state.data.careerMoves.find((m) => m.id === 'move-a')?.status === 'done'
+  )
+  check(
+    'REPUBLISH: publishedAt bumped',
+    afterRepublish.state.data.careerPlan[0].publishedAt > afterPublish.state.data.careerPlan[0].publishedAt
+  )
+
+  // Conflict: the device (not yet pulled past the re-publish) checks move-b →
+  // its push 409s → per-record merge → both the publish and the edit survive.
+  console.log('• publish-vs-edit conflict…')
+  await page.getByRole('button', { name: 'Concluir Move Beta' }).click()
+  await sleep(6000) // push → 409 → merge → re-push
+  const final2 = await getCloud()
+  check(
+    'CONFLICT: app edit survived (move-b done)',
+    final2.state.data.careerMoves.find((m) => m.id === 'move-b')?.status === 'done'
+  )
+  check(
+    'CONFLICT: publish content survived (win + republished plan)',
+    final2.state.data.careerWins.length === 1 &&
+      final2.state.data.careerPlan[0].publishedAt === afterRepublish.state.data.careerPlan[0].publishedAt
+  )
+  check(
+    'CONFLICT: legacy data intact at the end',
+    LEGACY_STORES.every((t) => final2.state.data[t].length === cloud.state.data[t].length)
+  )
 
   await browser.close()
 }

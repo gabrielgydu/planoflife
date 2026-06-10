@@ -1,0 +1,27 @@
+{
+  "plan": {
+    "currentPhase": "Phase 1 — Test",
+    "focusLine": "Fixture focus line for the publish e2e",
+    "phases": [
+      { "name": "Phase 1", "timeframe": "now", "summary": "first phase", "status": "active" },
+      { "name": "Phase 2", "timeframe": "later", "summary": "second phase", "status": "upcoming" }
+    ]
+  },
+  "moves": [
+    { "id": "move-a", "title": "Move Alpha", "detail": "do the first thing", "sortOrder": 0 },
+    { "id": "move-b", "title": "Move Beta", "gate": "after alpha", "sortOrder": 1 }
+  ],
+  "deadlines": [
+    { "id": "dl-a", "date": "2099-01-01", "label": "Far deadline" }
+  ],
+  "wins": [
+    { "id": "win-a", "date": "2026-06-01", "text": "Test win" }
+  ],
+  "log": [
+    { "id": "log-a", "date": "2026-06-01", "title": "Log A", "summary": "first log entry" }
+  ],
+  "ladder": [
+    { "id": "rung-1", "rung": 1, "title": "Rung One", "description": "first rung", "status": "in-progress" },
+    { "id": "rung-2", "rung": 2, "title": "Rung Two", "description": "second rung" }
+  ]
+}
