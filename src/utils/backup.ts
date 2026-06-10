@@ -7,6 +7,13 @@ import type {
   ExamenEntry,
   GuidingQuestion,
   Proposito,
+  CareerPlan,
+  CareerMove,
+  CareerDeadline,
+  CareerOutreachAttempt,
+  CareerLadderRung,
+  CareerWin,
+  CareerLogEntry,
 } from '../types'
 import { encryptData, decryptData } from './crypto'
 import { generateId } from './id'
@@ -22,6 +29,16 @@ export interface BackupData {
     examenEntries: ExamenEntry[]
     guidingQuestions: GuidingQuestion[]
     propositos: Proposito[]
+    // Optional: absent from backups exported before the career section existed.
+    // On import, an ABSENT array preserves the local table (older file, no
+    // opinion) — mirroring how sync treats snapshots from older clients.
+    careerPlan?: CareerPlan[]
+    careerMoves?: CareerMove[]
+    careerDeadlines?: CareerDeadline[]
+    careerOutreach?: CareerOutreachAttempt[]
+    careerLadder?: CareerLadderRung[]
+    careerWins?: CareerWin[]
+    careerLog?: CareerLogEntry[]
   }
 }
 
@@ -34,6 +51,13 @@ export async function exportBackup(): Promise<BackupData> {
     examenEntries,
     guidingQuestions,
     propositos,
+    careerPlan,
+    careerMoves,
+    careerDeadlines,
+    careerOutreach,
+    careerLadder,
+    careerWins,
+    careerLog,
   ] = await Promise.all([
     db.categories.toArray(),
     db.practices.toArray(),
@@ -42,6 +66,13 @@ export async function exportBackup(): Promise<BackupData> {
     db.examenEntries.toArray(),
     db.guidingQuestions.toArray(),
     db.propositos.toArray(),
+    db.careerPlan.toArray(),
+    db.careerMoves.toArray(),
+    db.careerDeadlines.toArray(),
+    db.careerOutreach.toArray(),
+    db.careerLadder.toArray(),
+    db.careerWins.toArray(),
+    db.careerLog.toArray(),
   ])
 
   return {
@@ -55,6 +86,13 @@ export async function exportBackup(): Promise<BackupData> {
       examenEntries,
       guidingQuestions,
       propositos,
+      careerPlan,
+      careerMoves,
+      careerDeadlines,
+      careerOutreach,
+      careerLadder,
+      careerWins,
+      careerLog,
     },
   }
 }
@@ -74,28 +112,36 @@ export async function importBackup(backup: BackupData): Promise<void> {
       db.examenEntries,
       db.guidingQuestions,
       db.propositos,
+      db.careerPlan,
+      db.careerMoves,
+      db.careerDeadlines,
+      db.careerOutreach,
+      db.careerLadder,
+      db.careerWins,
+      db.careerLog,
     ],
     async () => {
-      // Clear all existing data
-      await Promise.all([
-        db.categories.clear(),
-        db.practices.clear(),
-        db.dailyRecords.clear(),
-        db.missedReasons.clear(),
-        db.examenEntries.clear(),
-        db.guidingQuestions.clear(),
-        db.propositos.clear(),
-      ])
+      const d = backup.data
+      const replace = <T>(
+        table: { clear(): Promise<void>; bulkAdd(rows: T[]): unknown },
+        rows: T[] | undefined
+      ) => (rows ? table.clear().then(() => table.bulkAdd(rows)) : Promise.resolve())
 
-      // Import new data
       await Promise.all([
-        db.categories.bulkAdd(backup.data.categories),
-        db.practices.bulkAdd(backup.data.practices),
-        db.dailyRecords.bulkAdd(backup.data.dailyRecords),
-        db.missedReasons.bulkAdd(backup.data.missedReasons),
-        db.examenEntries.bulkAdd(backup.data.examenEntries),
-        db.guidingQuestions.bulkAdd(backup.data.guidingQuestions),
-        db.propositos.bulkAdd(backup.data.propositos),
+        replace(db.categories, d.categories),
+        replace(db.practices, d.practices),
+        replace(db.dailyRecords, d.dailyRecords),
+        replace(db.missedReasons, d.missedReasons),
+        replace(db.examenEntries, d.examenEntries),
+        replace(db.guidingQuestions, d.guidingQuestions),
+        replace(db.propositos, d.propositos),
+        replace(db.careerPlan, d.careerPlan),
+        replace(db.careerMoves, d.careerMoves),
+        replace(db.careerDeadlines, d.careerDeadlines),
+        replace(db.careerOutreach, d.careerOutreach),
+        replace(db.careerLadder, d.careerLadder),
+        replace(db.careerWins, d.careerWins),
+        replace(db.careerLog, d.careerLog),
       ])
     }
   )

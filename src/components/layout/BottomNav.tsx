@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router'
-import { Scale, Calendar, Settings, type LucideIcon } from 'lucide-react'
+import { Scale, Calendar, Briefcase, Settings, type LucideIcon } from 'lucide-react'
+import { useCareerEnabled } from '../../hooks/useCareerEnabled'
 
 function OpusDeiSeal({ className }: { className?: string }) {
   return (
@@ -17,14 +18,22 @@ function OpusDeiSeal({ className }: { className?: string }) {
   )
 }
 
-const tabs: { to: string; icon: LucideIcon | null }[] = [
+const baseTabs: { to: string; icon: LucideIcon | null }[] = [
   { to: '/', icon: null },
   { to: '/examen', icon: Scale },
   { to: '/history', icon: Calendar },
   { to: '/settings', icon: Settings },
 ]
 
+const careerTab = { to: '/career', icon: Briefcase }
+
 export function BottomNav() {
+  // The Carreira tab exists only when career data is present (Gabriel's devices);
+  // every other install sees the unchanged four-tab bar.
+  const careerEnabled = useCareerEnabled()
+  const tabs = careerEnabled
+    ? [...baseTabs.slice(0, 3), careerTab, ...baseTabs.slice(3)]
+    : baseTabs
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-surface-card dark:bg-surface-card-dark border-t border-border dark:border-border-dark pb-[var(--safe-area-bottom)]">
       <div className="flex justify-around items-center h-16">

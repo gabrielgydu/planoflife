@@ -8,6 +8,7 @@ import { ConfessionView } from './components/examen/ConfessionView'
 import { GuidingQuestionsList } from './components/examen/GuidingQuestionsList'
 import { HistoryView } from './components/history/HistoryView'
 import { DayDetail } from './components/history/DayDetail'
+import { CareerView } from './components/career/CareerView'
 import { SettingsView } from './components/settings/SettingsView'
 import { PracticeList } from './components/practice/PracticeList'
 import { PracticeDetail } from './components/practice/PracticeDetail'
@@ -33,6 +34,7 @@ export function App() {
           <Route path="/" element={<DailyView />} />
           <Route path="/examen" element={<ExamenView />} />
           <Route path="/history" element={<HistoryView />} />
+          <Route path="/career" element={<CareerView />} />
           <Route path="/settings" element={<SettingsView />} />
         </Route>
         <Route path="/history/:date" element={<DayDetail />} />

@@ -13,17 +13,25 @@ const ALL_TABLES = [
   db.examenEntries,
   db.guidingQuestions,
   db.propositos,
+  db.careerPlan,
+  db.careerMoves,
+  db.careerDeadlines,
+  db.careerOutreach,
+  db.careerLadder,
+  db.careerWins,
+  db.careerLog,
 ]
 
 /** Tables that are NEVER seeded — non-empty here means real user data exists. */
 export async function hasUserData(): Promise<boolean> {
-  const [records, examen, missed, props] = await Promise.all([
+  const [records, examen, missed, props, outreach] = await Promise.all([
     db.dailyRecords.count(),
     db.examenEntries.count(),
     db.missedReasons.count(),
     db.propositos.count(),
+    db.careerOutreach.count(),
   ])
-  return records + examen + missed + props > 0
+  return records + examen + missed + props + outreach > 0
 }
 
 /** Build a SyncState from the current local DB + synced settings. */
@@ -36,6 +44,13 @@ export async function snapshotLocal(): Promise<SyncState> {
     examenEntries,
     guidingQuestions,
     propositos,
+    careerPlan,
+    careerMoves,
+    careerDeadlines,
+    careerOutreach,
+    careerLadder,
+    careerWins,
+    careerLog,
   ] = await Promise.all([
     db.categories.toArray(),
     db.practices.toArray(),
@@ -44,6 +59,13 @@ export async function snapshotLocal(): Promise<SyncState> {
     db.examenEntries.toArray(),
     db.guidingQuestions.toArray(),
     db.propositos.toArray(),
+    db.careerPlan.toArray(),
+    db.careerMoves.toArray(),
+    db.careerDeadlines.toArray(),
+    db.careerOutreach.toArray(),
+    db.careerLadder.toArray(),
+    db.careerWins.toArray(),
+    db.careerLog.toArray(),
   ])
   return {
     schema: SYNC_SCHEMA,
@@ -55,22 +77,46 @@ export async function snapshotLocal(): Promise<SyncState> {
       examenEntries,
       guidingQuestions,
       propositos,
+      careerPlan,
+      careerMoves,
+      careerDeadlines,
+      careerOutreach,
+      careerLadder,
+      careerWins,
+      careerLog,
     },
     settings: collectSettings(),
   }
 }
 
-/** Clear + repopulate all tables from a state. Must run inside an rw transaction. */
+/**
+ * Clear + repopulate all tables from a state. Must run inside an rw transaction.
+ *
+ * A table key MISSING from the snapshot (undefined, not `[]`) means it was
+ * produced by an older app that doesn't know that table — old clients strip
+ * unknown tables on push because snapshotLocal only reads their own list. For
+ * those tables, preserve the local rows instead of clearing: the data survives
+ * on this device and re-enters the cloud on its next push-merge.
+ */
 async function clearAndBulkAdd(state: SyncState): Promise<void> {
-  await Promise.all(ALL_TABLES.map((t) => t.clear()))
+  const d = state.data
+  const replace = <T>(table: { clear(): Promise<void>; bulkAdd(rows: T[]): unknown }, rows: T[] | undefined) =>
+    rows ? table.clear().then(() => table.bulkAdd(rows)) : Promise.resolve()
   await Promise.all([
-    db.categories.bulkAdd(state.data.categories),
-    db.practices.bulkAdd(state.data.practices),
-    db.dailyRecords.bulkAdd(state.data.dailyRecords),
-    db.missedReasons.bulkAdd(state.data.missedReasons),
-    db.examenEntries.bulkAdd(state.data.examenEntries),
-    db.guidingQuestions.bulkAdd(state.data.guidingQuestions),
-    db.propositos.bulkAdd(state.data.propositos),
+    replace(db.categories, d.categories),
+    replace(db.practices, d.practices),
+    replace(db.dailyRecords, d.dailyRecords),
+    replace(db.missedReasons, d.missedReasons),
+    replace(db.examenEntries, d.examenEntries),
+    replace(db.guidingQuestions, d.guidingQuestions),
+    replace(db.propositos, d.propositos),
+    replace(db.careerPlan, d.careerPlan),
+    replace(db.careerMoves, d.careerMoves),
+    replace(db.careerDeadlines, d.careerDeadlines),
+    replace(db.careerOutreach, d.careerOutreach),
+    replace(db.careerLadder, d.careerLadder),
+    replace(db.careerWins, d.careerWins),
+    replace(db.careerLog, d.careerLog),
   ])
 }
 

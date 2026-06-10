@@ -6,9 +6,17 @@ import type {
   ExamenEntry,
   GuidingQuestion,
   Proposito,
+  CareerPlan,
+  CareerMove,
+  CareerDeadline,
+  CareerOutreachAttempt,
+  CareerLadderRung,
+  CareerWin,
+  CareerLogEntry,
 } from '../types'
 
-export const SYNC_SCHEMA = 1
+// Bump whenever SyncState gains tables. v2 = career tables (Dexie v7).
+export const SYNC_SCHEMA = 2
 
 /** The decrypted payload that travels to/from the Worker (mirrors scripts/sync-core.mjs). */
 export interface SyncState {
@@ -21,6 +29,16 @@ export interface SyncState {
     examenEntries: ExamenEntry[]
     guidingQuestions: GuidingQuestion[]
     propositos: Proposito[]
+    // Career tables (schema 2). Snapshots produced by schema-1 clients lack these
+    // keys entirely — consumers must treat a MISSING array as "older client, no
+    // opinion" (preserve local rows), never as an empty table. See applyState.ts.
+    careerPlan: CareerPlan[]
+    careerMoves: CareerMove[]
+    careerDeadlines: CareerDeadline[]
+    careerOutreach: CareerOutreachAttempt[]
+    careerLadder: CareerLadderRung[]
+    careerWins: CareerWin[]
+    careerLog: CareerLogEntry[]
   }
   settings: Record<string, string>
 }
@@ -48,4 +66,33 @@ export const SYNC_TABLES = [
   'examenEntries',
   'guidingQuestions',
   'propositos',
+  'careerPlan',
+  'careerMoves',
+  'careerDeadlines',
+  'careerOutreach',
+  'careerLadder',
+  'careerWins',
+  'careerLog',
 ] as const
+
+/** Cloud snapshot was produced by a NEWER app than this one. */
+export class SyncSchemaError extends Error {
+  constructor(remoteSchema: number) {
+    super(`Snapshot schema v${remoteSchema} is newer than this app (v${SYNC_SCHEMA}).`)
+    this.name = 'SyncSchemaError'
+  }
+}
+
+/**
+ * Guard every decrypted remote snapshot before it is applied or merged. A client
+ * older than the snapshot would silently strip the tables it doesn't know on its
+ * next push (snapshotLocal only reads its own table list) — refusing to sync
+ * until the app updates is the only safe answer. Pre-guard clients (≤ schema 1)
+ * can't be protected retroactively; see the deploy runbook.
+ */
+export function assertKnownSchema(state: SyncState): SyncState {
+  if (typeof state.schema === 'number' && state.schema > SYNC_SCHEMA) {
+    throw new SyncSchemaError(state.schema)
+  }
+  return state
+}

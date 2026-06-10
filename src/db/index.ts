@@ -7,6 +7,13 @@ import type {
   ExamenEntry,
   GuidingQuestion,
   Proposito,
+  CareerPlan,
+  CareerMove,
+  CareerDeadline,
+  CareerOutreachAttempt,
+  CareerLadderRung,
+  CareerWin,
+  CareerLogEntry,
 } from '../types'
 import { generateId } from '../utils/id'
 
@@ -35,6 +42,13 @@ export class PlanOfLifeDB extends Dexie {
   examenEntries!: EntityTable<ExamenEntry, 'id'>
   guidingQuestions!: EntityTable<GuidingQuestion, 'id'>
   propositos!: EntityTable<Proposito, 'id'>
+  careerPlan!: EntityTable<CareerPlan, 'id'>
+  careerMoves!: EntityTable<CareerMove, 'id'>
+  careerDeadlines!: EntityTable<CareerDeadline, 'id'>
+  careerOutreach!: EntityTable<CareerOutreachAttempt, 'id'>
+  careerLadder!: EntityTable<CareerLadderRung, 'id'>
+  careerWins!: EntityTable<CareerWin, 'id'>
+  careerLog!: EntityTable<CareerLogEntry, 'id'>
 
   constructor() {
     super('PlanOfLifeDB')
@@ -159,6 +173,20 @@ export class PlanOfLifeDB extends Dexie {
         if (p.domain) continue
         await practices.update(p.id, { domain: 'spiritual' })
       }
+    })
+
+    // Career section tables (see src/types — "Career section"). New, empty stores
+    // only — no upgrade function needed, and existing rows are untouched, so the
+    // migration is trivially idempotent. They stay empty on every install until a
+    // synced snapshot carries career data (Gabriel's devices only).
+    this.version(7).stores({
+      careerPlan: 'id',
+      careerMoves: 'id, sortOrder',
+      careerDeadlines: 'id, date',
+      careerOutreach: 'id, date',
+      careerLadder: 'id, rung',
+      careerWins: 'id, date',
+      careerLog: 'id, date',
     })
   }
 }

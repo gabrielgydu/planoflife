@@ -21,7 +21,8 @@ export const ENC_SALT_BYTES = 16
 const IV_BYTES = 12
 // ----------------------------------------------------------------------
 
-export const TABLES = [
+// Tables present since sync schema 1. Every snapshot must carry all of these.
+const LEGACY_TABLES = [
   'categories',
   'practices',
   'dailyRecords',
@@ -31,7 +32,21 @@ export const TABLES = [
   'propositos',
 ]
 
-export const SYNC_SCHEMA = 1
+// Added in sync schema 2 (career section). Snapshots from schema-1 clients lack
+// these keys entirely — normalizeSyncState() fills them in on pull.
+export const CAREER_TABLES = [
+  'careerPlan',
+  'careerMoves',
+  'careerDeadlines',
+  'careerOutreach',
+  'careerLadder',
+  'careerWins',
+  'careerLog',
+]
+
+export const TABLES = [...LEGACY_TABLES, ...CAREER_TABLES]
+
+export const SYNC_SCHEMA = 2
 
 export function b64(bytes) {
   return Buffer.from(bytes).toString('base64')
@@ -118,10 +133,32 @@ export function validateSyncState(state) {
   return true
 }
 
+/**
+ * Upgrade a snapshot produced by an older client to the current shape: fill the
+ * table arrays its schema didn't have yet and stamp the current schema. Refuses
+ * snapshots NEWER than this code — pushing one back would strip the tables this
+ * version doesn't know about.
+ */
+export function normalizeSyncState(state) {
+  if (!state || typeof state !== 'object' || !state.data) {
+    throw new Error('not a SyncState (missing .data)')
+  }
+  if (typeof state.schema === 'number' && state.schema > SYNC_SCHEMA) {
+    throw new Error(
+      `snapshot schema v${state.schema} is newer than this CLI (v${SYNC_SCHEMA}) — update the repo first`
+    )
+  }
+  const data = { ...state.data }
+  for (const t of CAREER_TABLES) {
+    if (data[t] === undefined) data[t] = []
+  }
+  return { ...state, schema: SYNC_SCHEMA, data }
+}
+
 /** Build a SyncState from an app BackupData file ({version, exportedAt, data}). */
 export function syncStateFromBackup(backup) {
   if (!backup?.data) throw new Error('Not a Plano de Vida backup (missing .data)')
-  return { schema: SYNC_SCHEMA, data: backup.data, settings: backup.settings ?? {} }
+  return normalizeSyncState({ schema: SYNC_SCHEMA, data: backup.data, settings: backup.settings ?? {} })
 }
 
 export function summarize(state) {

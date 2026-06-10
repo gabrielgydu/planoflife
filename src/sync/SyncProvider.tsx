@@ -49,7 +49,16 @@ import {
   clearLocallyChangedSettings,
 } from './settingsBus'
 import { clearEncKey, loadEncKey, saveEncKey } from './keyStore'
-import { SYNC_TABLES, type SyncState, type SyncStatus } from './types'
+import {
+  SYNC_TABLES,
+  SyncSchemaError,
+  assertKnownSchema,
+  type SyncState,
+  type SyncStatus,
+} from './types'
+
+const SCHEMA_ERROR_MSG =
+  'Os dados na nuvem vêm de uma versão mais nova do app. Recarregue para atualizar.'
 
 type Counts = Record<string, number>
 
@@ -155,7 +164,9 @@ export function SyncProvider({ children }: { children: ReactNode }) {
       if (meta.version > getSyncVersion()) {
         const remote = await fetchRemote(url, tokenRef.current)
         if (remote.blob && remote.version > getSyncVersion()) {
-          const remoteState = await decryptState(remote.blob, keyRef.current)
+          const remoteState = assertKnownSchema(
+            await decryptState(remote.blob, keyRef.current)
+          )
           if (dirtyRef.current) {
             // An edit landed mid-fetch — merge it in atomically rather than
             // overwrite, then push the merged result so the cloud converges too.
@@ -172,6 +183,9 @@ export function SyncProvider({ children }: { children: ReactNode }) {
     } catch (e) {
       if (e instanceof SyncAuthError) {
         setError('Sessão inválida. Reconecte.')
+        setStatus('error')
+      } else if (e instanceof SyncSchemaError) {
+        setError(SCHEMA_ERROR_MSG)
         setStatus('error')
       } else {
         setStatus('offline')
@@ -239,7 +253,7 @@ export function SyncProvider({ children }: { children: ReactNode }) {
               // Cloud was emptied/reset mid-conflict — don't silently overwrite.
               throw new Error('Conflito: a nuvem foi esvaziada durante o envio.')
             }
-            const remoteState = await decryptState(remote.blob, key)
+            const remoteState = assertKnownSchema(await decryptState(remote.blob, key))
             await mergeRemoteIntoLocal(remoteState, getLocallyChangedSettingKeys())
             setSyncVersion(remote.version) // base for the retry push
             continue
@@ -251,6 +265,11 @@ export function SyncProvider({ children }: { children: ReactNode }) {
     } catch (e) {
       if (e instanceof SyncAuthError) {
         setError('Sessão inválida. Reconecte.')
+        setStatus('error')
+      } else if (e instanceof SyncSchemaError) {
+        // Pushing now would strip tables this app doesn't know. Keep the edits
+        // local (dirty) until the app is updated.
+        setError(SCHEMA_ERROR_MSG)
         setStatus('error')
       } else {
         setStatus('offline')
@@ -378,7 +397,8 @@ export function SyncProvider({ children }: { children: ReactNode }) {
         setWorkerUrl(cleanUrl)
 
         const key = await deriveEncKey(passphrase, base64ToBytes(remote.salt))
-        const state = await decryptState(remote.blob, key) // wrong passphrase => throws
+        // wrong passphrase => decrypt throws; newer-app snapshot => schema error
+        const state = assertKnownSchema(await decryptState(remote.blob, key))
 
         if (await hasUserData()) {
           pending.current = { key, token, salt: remote.salt, state, version: remote.version }
@@ -397,6 +417,7 @@ export function SyncProvider({ children }: { children: ReactNode }) {
         return { ok: true }
       } catch (e) {
         if (e instanceof SyncAuthError) setError('Não autorizado — verifique a senha e a URL.')
+        else if (e instanceof SyncSchemaError) setError(SCHEMA_ERROR_MSG)
         else setError(e instanceof Error ? e.message : 'Erro ao conectar.')
         setStatus(getAuthToken() ? 'idle' : 'locked')
         throw e
