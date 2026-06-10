@@ -44,6 +44,10 @@ const WORKER_URL = `http://127.0.0.1:${WORKER_PORT}`
 const DEV_VARS = 'worker/.dev.vars'
 const DEV_VARS_BAK = 'worker/.dev.vars.e2ecareerbak'
 const OLD_TREE = '/tmp/plife-e2e-master'
+// The last pre-career commit (Dexie v6, sync schema 1) — the build the real
+// devices ran before the career deploy. Checked out detached so it works
+// regardless of which branch this repo currently has checked out.
+const OLD_REF = process.env.E2E_OLD_REF ?? '878c25b'
 const STATE_FILE = '.sync/state.json'
 
 const CAREER_STORES = [
@@ -176,8 +180,20 @@ async function main() {
   const seedState = {
     schema: 1,
     data: Object.fromEntries(LEGACY_STORES.map((t) => [t, realState.data[t] ?? []])),
-    settings: realState.settings ?? {},
+    settings: { ...(realState.settings ?? {}) },
   }
+  // Post-deploy pulls also carry career rows INSIDE legacy tables (habits +
+  // category) — remove them so the seed is genuinely pre-career, and drop the
+  // hide-completed pref so the daily list the harness drives is fully visible.
+  const careerPracIds = new Set(
+    seedState.data.practices.filter((p) => p.domain === 'career').map((p) => p.id)
+  )
+  seedState.data.practices = seedState.data.practices.filter((p) => !careerPracIds.has(p.id))
+  seedState.data.categories = seedState.data.categories.filter((c) => c.id !== 'career-cat')
+  seedState.data.dailyRecords = seedState.data.dailyRecords.filter(
+    (r) => !careerPracIds.has(r.practiceId)
+  )
+  delete seedState.settings['settings-hide-completed']
   const expected = Object.fromEntries(LEGACY_STORES.map((t) => [t, seedState.data[t].length]))
   console.log('• real-data seed:', JSON.stringify(expected))
 
@@ -185,10 +201,10 @@ async function main() {
   if (existsSync(DEV_VARS)) copyFileSync(DEV_VARS, DEV_VARS_BAK)
   writeFileSync(DEV_VARS, `SYNC_TOKEN=${token}\nALLOWED_ORIGINS=${APP_ORIGIN},${WORKER_URL}\n`)
 
-  // --- build OLD (master) in a worktree + NEW (working tree) here ---
-  console.log('• building OLD app (git master)…')
+  // --- build OLD (pre-career) in a worktree + NEW (working tree) here ---
+  console.log(`• building OLD app (${OLD_REF})…`)
   if (existsSync(OLD_TREE)) execSync(`git worktree remove --force ${OLD_TREE}`, { stdio: 'ignore' })
-  execSync(`git worktree add ${OLD_TREE} master`, { stdio: 'inherit' })
+  execSync(`git worktree add --detach ${OLD_TREE} ${OLD_REF}`, { stdio: 'inherit' })
   execSync(`ln -sfn ${process.cwd()}/node_modules ${OLD_TREE}/node_modules`)
   execSync('npm run build', { cwd: OLD_TREE, stdio: 'inherit' })
   console.log('• building NEW app (working tree)…')
@@ -452,11 +468,10 @@ async function main() {
     { tries: 20, label: 'career category in daily view' }
   )
   check('HABITS: career category in daily list', true)
-  // Check off the habit scheduled TODAY (win log Mon–Fri, ship Sat) so the chain
-  // counts it; on a Sunday nothing is scheduled and the chain must stay 0.
+  // Check off the habit scheduled TODAY (win log Mon–Fri, ship Sat) — realistic
+  // usage, and the schedule pick keeps the History stats meaningful.
   const todayDow = new Date().getDay()
   const habitName = todayDow === 6 ? 'Saturday ship fixture' : 'Win log fixture'
-  const expectChain = todayDow === 0 ? 0 : 1
   const habitBtn = page.getByRole('button', { name: habitName }).first()
   await habitBtn.waitFor({ timeout: 10000 })
   const vBeforeHabit = (await getCloud()).version
@@ -471,17 +486,8 @@ async function main() {
     'HABITS: dailyRecord synced for the checked habit',
     habitCloud.state.data.dailyRecords.some((r) => r.practiceId === habitPracId && r.isCompleted)
   )
-  await page.goto(`${APP_ORIGIN}${BASE}career`, { waitUntil: 'networkidle' })
-  await page.getByText('Cadeia').waitFor({ timeout: 10000 })
-  const chainText = await page
-    .locator('section', { has: page.getByText('Cadeia') })
-    .first()
-    .innerText()
-  check(
-    `CHAIN: shows ${expectChain} day(s) after first check`,
-    chainText.includes(`${expectChain} dia`),
-    chainText.split('\n').slice(0, 3).join(' | ')
-  )
+  // (No streak/heatmap in the career tab by design — Gabriel removed the Cadeia
+  // section 2026-06-10; habit visibility lives in History's Carreira toggle.)
   await page.goto(`${APP_ORIGIN}${BASE}history`, { waitUntil: 'networkidle' })
   check(
     'HISTORY: three-way domain toggle',

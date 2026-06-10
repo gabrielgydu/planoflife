@@ -3,7 +3,6 @@ import { Briefcase } from 'lucide-react'
 import { useCareerEnabled } from '../../hooks/useCareerEnabled'
 import { EmptyState } from '../shared/EmptyState'
 import { NowPanel } from './NowPanel'
-import { CareerChain } from './CareerChain'
 import { OutreachTracker } from './OutreachTracker'
 import { LadderTracker } from './LadderTracker'
 import { RoadmapFeed } from './RoadmapFeed'
@@ -14,8 +13,10 @@ import { RoadmapFeed } from './RoadmapFeed'
  * of the app; the career content itself renders in whatever language the
  * published data carries (mostly EN).
  *
- * One glanceable scroll: Now panel (phase 1), habit chain (2), outreach + ladder
- * trackers (3), roadmap + wins/log feed (4).
+ * One glanceable scroll: Now panel, outreach + ladder trackers, roadmap +
+ * wins/log feed. Deliberately NO streak/heatmap visualizations (Gabriel,
+ * 2026-06-10): career habits are tracked in the daily checklist and visible
+ * under History's Carreira toggle — this tab stays operational, not motivational.
  */
 export function CareerView() {
   const enabled = useCareerEnabled()
@@ -38,7 +39,6 @@ export function CareerView() {
           transition={{ duration: 0.2 }}
         >
           <NowPanel />
-          <CareerChain />
           <OutreachTracker />
           <LadderTracker />
           <RoadmapFeed />
