@@ -48,6 +48,14 @@ export function useCareerLadder() {
   return useLiveQuery(() => db.careerLadder.orderBy('rung').toArray(), []) ?? []
 }
 
+export function useCareerWins() {
+  return useLiveQuery(() => db.careerWins.orderBy('date').reverse().toArray(), []) ?? []
+}
+
+export function useCareerLog() {
+  return useLiveQuery(() => db.careerLog.orderBy('date').reverse().toArray(), []) ?? []
+}
+
 export async function updateRung(
   id: string,
   changes: { status: CareerLadderStatus; notes: string }

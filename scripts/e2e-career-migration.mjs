@@ -514,6 +514,22 @@ async function main() {
       afterFourth.state.data.careerLadder.find((r) => r.id === 'rung-1')?.status === 'done'
   )
 
+  // --- Phase 4: roadmap + wins + log feed render ---
+  console.log('• roadmap + feed…')
+  await page.goto(`${APP_ORIGIN}${BASE}career`, { waitUntil: 'networkidle' })
+  check(
+    'FEED: roadmap timeline renders the phases',
+    (await page.getByText('Roteiro').count()) === 1 &&
+      (await page.getByText('first phase').count()) === 1 &&
+      (await page.getByText('second phase').count()) === 1
+  )
+  check('FEED: wins feed renders', (await page.getByText('Test win').count()) === 1)
+  check(
+    'FEED: log timeline renders',
+    (await page.getByText('Diário do plano').count()) === 1 &&
+      (await page.getByText('Log A').count()) === 1
+  )
+
   await browser.close()
 }
 

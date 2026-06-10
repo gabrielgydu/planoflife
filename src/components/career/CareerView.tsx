@@ -6,6 +6,7 @@ import { NowPanel } from './NowPanel'
 import { CareerChain } from './CareerChain'
 import { OutreachTracker } from './OutreachTracker'
 import { LadderTracker } from './LadderTracker'
+import { RoadmapFeed } from './RoadmapFeed'
 
 /**
  * Career section ("Carreira" tab). Only reachable on installs whose synced data
@@ -40,6 +41,7 @@ export function CareerView() {
           <CareerChain />
           <OutreachTracker />
           <LadderTracker />
+          <RoadmapFeed />
         </motion.div>
       ) : (
         <EmptyState icon={Briefcase} message="Nenhum dado de carreira" />
