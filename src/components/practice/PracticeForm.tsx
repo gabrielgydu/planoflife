@@ -9,7 +9,16 @@ import { Spinner } from '../shared/Spinner'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
 import { compressImage } from '../../utils/imageCompression'
 import { getPracticeDomain } from '../../utils/domain'
+import { normalizeScheduleDays } from '../../utils/schedule'
+import { useCareerEnabled } from '../../hooks/useCareerEnabled'
 import type { PracticeDomain } from '../../types'
+
+const WEEKDAY_CHIPS = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'] // Dom … Sáb
+const DOMAIN_OPTIONS: { key: PracticeDomain; label: string }[] = [
+  { key: 'spiritual', label: 'Espiritual' },
+  { key: 'lifestyle', label: 'Hábito' },
+  { key: 'career', label: 'Carreira' },
+]
 
 const RichTextEditor = lazy(() =>
   import('../shared/RichTextEditor').then((m) => ({ default: m.RichTextEditor }))
@@ -26,16 +35,22 @@ export function PracticeForm() {
     usePractices()
 
   const existingPractice = useLiveQuery(() => (id ? db.practices.get(id) : undefined), [id])
+  // "Carreira" is only offered where the career section exists (or the practice
+  // already is one) — on every other install the form keeps the binary toggle.
+  const careerEnabled = useCareerEnabled()
 
   const [name, setName] = useState('')
   const [categoryId, setCategoryId] = useState('')
   const [isRequired, setIsRequired] = useState(false)
   const [domain, setDomain] = useState<PracticeDomain>('spiritual')
+  const [scheduleDays, setScheduleDays] = useState<number[]>([])
   const [content, setContent] = useState('')
   const [imageData, setImageData] = useState<string | null>(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [isCompressing, setIsCompressing] = useState(false)
+
+  const showCareerOption = careerEnabled || domain === 'career'
 
   useEffect(() => {
     if (existingPractice) {
@@ -43,6 +58,7 @@ export function PracticeForm() {
       setCategoryId(existingPractice.categoryId)
       setIsRequired(existingPractice.isRequired)
       setDomain(getPracticeDomain(existingPractice))
+      setScheduleDays(existingPractice.scheduleDays ?? [])
       setContent(existingPractice.content)
       setImageData(existingPractice.imageData)
     } else if (categories.length > 0 && !categoryId) {
@@ -71,12 +87,17 @@ export function PracticeForm() {
 
     setIsSaving(true)
     try {
+      // Schedules only make sense for habit-like practices; a daily schedule
+      // (none/all selected) is stored as undefined — the legacy "every day".
+      const schedule =
+        domain === 'spiritual' ? undefined : normalizeScheduleDays(scheduleDays)
       if (isEditing && id) {
         await updatePractice(id, {
           name: name.trim(),
           categoryId,
           isRequired,
           domain,
+          scheduleDays: schedule,
           content,
           imageData,
         })
@@ -86,6 +107,7 @@ export function PracticeForm() {
           categoryId,
           isRequired,
           domain,
+          scheduleDays: schedule,
           content,
           imageData,
         })
@@ -171,27 +193,90 @@ export function PracticeForm() {
           </select>
         </div>
 
-        <div className="flex items-center justify-between py-2">
-          <div>
-            <span className="text-sm font-medium text-text-secondary dark:text-text-secondary-dark">Hábito</span>
-            <p className="text-xs text-text-muted dark:text-text-muted-dark">
-              Hábito de estilo de vida, separado das devoções espirituais
+        {showCareerOption ? (
+          <div className="py-2">
+            <span className="text-sm font-medium text-text-secondary dark:text-text-secondary-dark">Tipo</span>
+            <p className="text-xs text-text-muted dark:text-text-muted-dark mb-2">
+              Devoção espiritual, hábito de estilo de vida ou hábito de carreira
             </p>
+            <div className="flex gap-2">
+              {DOMAIN_OPTIONS.map((opt) => (
+                <button
+                  key={opt.key}
+                  type="button"
+                  onClick={() => setDomain(opt.key)}
+                  aria-pressed={domain === opt.key}
+                  className={`flex-1 py-2 px-3 text-sm rounded-lg transition-colors ${
+                    domain === opt.key
+                      ? 'bg-btn dark:bg-btn-dark text-btn-text dark:text-btn-dark-text'
+                      : 'bg-surface-secondary dark:bg-surface-secondary-dark text-text-secondary dark:text-text-secondary-dark hover:bg-border dark:hover:bg-border-dark'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
-          <button
-            type="button"
-            onClick={() => setDomain((d) => (d === 'lifestyle' ? 'spiritual' : 'lifestyle'))}
-            className={`relative w-12 h-7 rounded-full transition-colors ${
-              domain === 'lifestyle' ? 'bg-btn dark:bg-btn-dark' : 'bg-border dark:bg-border-dark'
-            }`}
-          >
-            <span
-              className={`absolute top-1 w-5 h-5 bg-btn-text dark:bg-btn-dark-text rounded-full shadow transition-transform ${
-                domain === 'lifestyle' ? 'translate-x-6' : 'translate-x-1'
+        ) : (
+          <div className="flex items-center justify-between py-2">
+            <div>
+              <span className="text-sm font-medium text-text-secondary dark:text-text-secondary-dark">Hábito</span>
+              <p className="text-xs text-text-muted dark:text-text-muted-dark">
+                Hábito de estilo de vida, separado das devoções espirituais
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setDomain((d) => (d === 'lifestyle' ? 'spiritual' : 'lifestyle'))}
+              className={`relative w-12 h-7 rounded-full transition-colors ${
+                domain === 'lifestyle' ? 'bg-btn dark:bg-btn-dark' : 'bg-border dark:bg-border-dark'
               }`}
-            />
-          </button>
-        </div>
+            >
+              <span
+                className={`absolute top-1 w-5 h-5 bg-btn-text dark:bg-btn-dark-text rounded-full shadow transition-transform ${
+                  domain === 'lifestyle' ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+          </div>
+        )}
+
+        {domain !== 'spiritual' && (
+          <div className="py-2">
+            <span className="text-sm font-medium text-text-secondary dark:text-text-secondary-dark">
+              Dias da semana
+            </span>
+            <p className="text-xs text-text-muted dark:text-text-muted-dark mb-2">
+              Dias fora da agenda são neutros nas estatísticas (nunca quebram a sequência).
+              Nenhum selecionado = todos os dias.
+            </p>
+            <div className="flex gap-1.5">
+              {WEEKDAY_CHIPS.map((label, day) => {
+                const active = scheduleDays.includes(day)
+                return (
+                  <button
+                    key={day}
+                    type="button"
+                    aria-pressed={active}
+                    aria-label={`Agendar ${['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'][day]}`}
+                    onClick={() =>
+                      setScheduleDays((prev) =>
+                        prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
+                      )
+                    }
+                    className={`flex-1 aspect-square max-w-10 rounded-full text-sm font-medium transition-colors ${
+                      active
+                        ? 'bg-btn dark:bg-btn-dark text-btn-text dark:text-btn-dark-text'
+                        : 'bg-surface-secondary dark:bg-surface-secondary-dark text-text-muted dark:text-text-muted-dark hover:bg-border dark:hover:bg-border-dark'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
 
         <div className="flex items-center justify-between py-2">
           <div>

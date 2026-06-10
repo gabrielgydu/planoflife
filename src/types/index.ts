@@ -20,6 +20,12 @@ export interface Practice {
   // (and whole-DB snapshots imported before the v6 migration) are treated as
   // 'spiritual' — read via getPracticeDomain(), never `.domain` directly.
   domain?: PracticeDomain
+  // Weekdays this practice is scheduled (0=Sun … 6=Sat, date-fns getDay
+  // convention). Absent/empty = every day (all legacy rows). Stats and streaks
+  // treat unscheduled days as NEUTRAL — never a break (e.g. the career habits'
+  // Sunday-off rule). The daily checklist still shows the practice every day.
+  // Read via isScheduledOn() in utils/schedule.ts.
+  scheduleDays?: number[]
   isRequired: boolean
   sortOrder: number
   isArchived: boolean

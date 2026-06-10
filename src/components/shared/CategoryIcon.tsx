@@ -11,6 +11,7 @@ import {
   Star,
   Flame,
   HandHeart,
+  Briefcase,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -27,6 +28,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   Star,
   Flame,
   HandHeart,
+  Briefcase,
 }
 
 export const ICON_OPTIONS = Object.keys(ICON_MAP)

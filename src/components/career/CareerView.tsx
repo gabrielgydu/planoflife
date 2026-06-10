@@ -3,6 +3,7 @@ import { Briefcase } from 'lucide-react'
 import { useCareerEnabled } from '../../hooks/useCareerEnabled'
 import { EmptyState } from '../shared/EmptyState'
 import { NowPanel } from './NowPanel'
+import { CareerChain } from './CareerChain'
 
 /**
  * Career section ("Carreira" tab). Only reachable on installs whose synced data
@@ -34,6 +35,7 @@ export function CareerView() {
           transition={{ duration: 0.2 }}
         >
           <NowPanel />
+          <CareerChain />
         </motion.div>
       ) : (
         <EmptyState icon={Briefcase} message="Nenhum dado de carreira" />

@@ -23,5 +23,13 @@
   "ladder": [
     { "id": "rung-1", "rung": 1, "title": "Rung One", "description": "first rung", "status": "in-progress" },
     { "id": "rung-2", "rung": 2, "title": "Rung Two", "description": "second rung" }
-  ]
+  ],
+  "habits": {
+    "categoryName": "Carreira",
+    "categoryIcon": "Briefcase",
+    "practices": [
+      { "id": "career-prac-winlog", "name": "Win log fixture", "scheduleDays": [1, 2, 3, 4, 5] },
+      { "id": "career-prac-ship", "name": "Saturday ship fixture", "scheduleDays": [6] }
+    ]
+  }
 }

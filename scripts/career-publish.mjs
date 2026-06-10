@@ -17,7 +17,11 @@
  *        careerLadder — content (rung/title/description) comes from the input;
  *                      status + notes belong to the app and are preserved;
  *                      rows the input doesn't know are left alone
- *      careerOutreach, all legacy tables and settings are never touched.
+ *        habits (optional) — SEED-ONLY: inserts the career category + practices
+ *                      (domain 'career') once by fixed id; after that the app
+ *                      owns them (never updated or deleted by a publish)
+ *      careerOutreach, dailyRecords, all other legacy tables and settings are
+ *      never touched.
  *      Rows identical to the cloud keep their updatedAt (no merge churn).
  *   3. PUT back with the pulled baseVersion; on a 409 (a device pushed during
  *      the cycle) pull + retry once.
@@ -128,6 +132,24 @@ function validateInput(input) {
     }
     if (!optStr(r.notes)) fail('ladder[].notes', 'must be a string when present')
   }
+
+  if (input.habits !== undefined) {
+    const h = input.habits
+    if (!h || typeof h !== 'object') fail('habits', 'must be an object')
+    if (!isStr(h.categoryName)) fail('habits.categoryName', 'must be a non-empty string')
+    if (!Array.isArray(h.practices) || h.practices.length === 0) fail('habits.practices', 'must be a non-empty array')
+    checkIds(h.practices, 'habits.practices')
+    for (const p of h.practices) {
+      if (!isStr(p.name)) fail('habits.practices[].name', 'must be a non-empty string')
+      if (!optStr(p.content)) fail('habits.practices[].content', 'must be a string when present')
+      if (
+        p.scheduleDays !== undefined &&
+        (!Array.isArray(p.scheduleDays) || p.scheduleDays.some((d) => !Number.isInteger(d) || d < 0 || d > 6))
+      ) {
+        fail('habits.practices[].scheduleDays', 'must be an array of weekdays 0–6')
+      }
+    }
+  }
 }
 
 // --- transform ------------------------------------------------------------------
@@ -196,6 +218,51 @@ function transform(state, input, now) {
   data.careerLog = input.log.map((l) =>
     stamped({ id: l.id, date: l.date, title: l.title, summary: l.summary }, prevLog.get(l.id), now)
   )
+
+  // Habits: SEED-ONLY into the regular categories/practices tables. A category /
+  // practice is inserted once (by fixed id) with domain 'career'; after that the
+  // app owns the rows — renames, schedule edits, archives are never overwritten,
+  // and rows are never deleted by a publish. dailyRecords are untouched.
+  if (input.habits) {
+    const h = input.habits
+    const CAT_ID = 'career-cat'
+    if (!data.categories.some((c) => c.id === CAT_ID)) {
+      const maxSort = Math.max(-1, ...data.categories.map((c) => c.sortOrder))
+      data.categories = [
+        ...data.categories,
+        {
+          id: CAT_ID,
+          name: h.categoryName,
+          sortOrder: maxSort + 1,
+          emoji: h.categoryIcon ?? 'Briefcase',
+          createdAt: now,
+          updatedAt: now,
+        },
+      ]
+    }
+    const existingPracticeIds = new Set(data.practices.map((p) => p.id))
+    let nextSort =
+      Math.max(-1, ...data.practices.filter((p) => p.categoryId === CAT_ID).map((p) => p.sortOrder)) + 1
+    const seeded = []
+    for (const p of h.practices) {
+      if (existingPracticeIds.has(p.id)) continue
+      seeded.push({
+        id: p.id,
+        name: p.name,
+        categoryId: CAT_ID,
+        content: p.content ?? '',
+        imageData: null,
+        domain: 'career',
+        ...(p.scheduleDays?.length ? { scheduleDays: [...p.scheduleDays].sort((a, b) => a - b) } : {}),
+        isRequired: false,
+        sortOrder: nextSort++,
+        isArchived: false,
+        createdAt: now,
+        updatedAt: now,
+      })
+    }
+    if (seeded.length) data.practices = [...data.practices, ...seeded]
+  }
 
   // Ladder: input owns rung/title/description; the app owns status/notes.
   const ladderById = prevById(data.careerLadder)

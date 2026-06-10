@@ -10,9 +10,10 @@ const HISTORY_DOMAIN_KEY = 'history-domain'
 // through the sync settings bus, because which stats tab you last looked at is a
 // transient view filter, not a preference worth syncing across devices.
 export function useHistoryDomain(): [PracticeDomain, (domain: PracticeDomain) => void] {
-  const [domain, setDomainState] = useState<PracticeDomain>(() =>
-    localStorage.getItem(HISTORY_DOMAIN_KEY) === 'lifestyle' ? 'lifestyle' : 'spiritual'
-  )
+  const [domain, setDomainState] = useState<PracticeDomain>(() => {
+    const stored = localStorage.getItem(HISTORY_DOMAIN_KEY)
+    return stored === 'lifestyle' || stored === 'career' ? stored : 'spiritual'
+  })
 
   const setDomain = (value: PracticeDomain) => {
     localStorage.setItem(HISTORY_DOMAIN_KEY, value)

@@ -16,6 +16,7 @@ import {
 import { formatDate } from '../../utils/dates'
 import { useTheme } from '../../hooks/useTheme'
 import { getPracticeDomain } from '../../utils/domain'
+import { isScheduledOn } from '../../utils/schedule'
 import type { PracticeDomain } from '../../types'
 
 interface MonthGridProps {
@@ -83,12 +84,22 @@ export function MonthGrid({ month, domain }: MonthGridProps) {
     // spiritual and lifestyle stats never mix. dailyRecords carry no domain, so a
     // completed record only counts when its practice is in the domain set — this
     // also guarantees completed <= total.
-    const domainIds = new Set(
-      practices.filter((p) => getPracticeDomain(p) === domain).map((p) => p.id)
-    )
-    const totalPractices = domainIds.size
+    const domainPractices = practices.filter((p) => getPracticeDomain(p) === domain)
+    const domainIds = new Set(domainPractices.map((p) => p.id))
 
-    // Group records by date
+    // The day's denominator is the practices SCHEDULED that weekday (absent
+    // scheduleDays = daily, so spiritual/lifestyle stats are unchanged). A day
+    // where nothing is scheduled (career Sundays) gets total 0 → renders neutral.
+    const scheduledIdsByWeekday: Set<string>[] = []
+    for (let wd = 0; wd < 7; wd++) {
+      // a probe date with the right weekday: 2026-02-01 was a Sunday
+      const probe = new Date(2026, 1, 1 + wd)
+      scheduledIdsByWeekday.push(
+        new Set(domainPractices.filter((p) => isScheduledOn(p, probe)).map((p) => p.id))
+      )
+    }
+
+    // Group completed records by date
     const recordsByDate = new Map<string, Set<string>>()
     for (const record of records) {
       if (record.isCompleted && domainIds.has(record.practiceId)) {
@@ -98,9 +109,13 @@ export function MonthGrid({ month, domain }: MonthGridProps) {
       }
     }
 
-    // Calculate stats for each day
+    // Calculate stats for each day with completions
     for (const [date, completedIds] of recordsByDate) {
-      stats.set(date, { completed: completedIds.size, total: totalPractices })
+      const scheduled = scheduledIdsByWeekday[getDay(new Date(`${date}T00:00:00`))]
+      const completed = [...completedIds].filter((id) => scheduled.has(id)).length
+      if (completed > 0) {
+        stats.set(date, { completed, total: scheduled.size })
+      }
     }
 
     return stats

@@ -349,10 +349,16 @@ async function main() {
       afterPublish.state.data.careerLog.length === 1 &&
       afterPublish.state.data.careerLadder.length === 2
   )
-  check(
-    'PUBLISH: legacy tables untouched',
-    LEGACY_STORES.every((t) => afterPublish.state.data[t].length === cloud.state.data[t].length)
-  )
+  // The habit seed legitimately adds 1 category + 2 practices; everything else
+  // in the legacy tables must be untouched by a publish.
+  const legacyAsExpected = (s) =>
+    LEGACY_STORES.every((t) => {
+      const n = s.data[t].length
+      if (t === 'practices') return n === cloud.state.data.practices.length + 2
+      if (t === 'categories') return n === cloud.state.data.categories.length + 1
+      return n === cloud.state.data[t].length
+    })
+  check('PUBLISH: legacy tables untouched (except habit seed)', legacyAsExpected(afterPublish.state))
   check('PUBLISH: marker written', existsSync('/tmp/.last-publish.json'))
 
   // Device pulls on reload → tab appears, Now panel renders the published plan.
@@ -403,9 +409,69 @@ async function main() {
     final2.state.data.careerWins.length === 1 &&
       final2.state.data.careerPlan[0].publishedAt === afterRepublish.state.data.careerPlan[0].publishedAt
   )
+  check('CONFLICT: legacy data intact at the end', legacyAsExpected(final2.state))
+
+  // --- Phase 2: seeded habits, chain, schedule-aware history ---
+  console.log('• habit seed (publish) …')
+  const careerPracs = (s) => s.data.practices.filter((p) => p.domain === 'career')
   check(
-    'CONFLICT: legacy data intact at the end',
-    LEGACY_STORES.every((t) => final2.state.data[t].length === cloud.state.data[t].length)
+    'HABITS: seeded once with schedules',
+    careerPracs(final2.state).length === 2 &&
+      careerPracs(final2.state).every((p) => p.categoryId === 'career-cat' && p.domain === 'career') &&
+      JSON.stringify(careerPracs(final2.state).find((p) => p.id === 'career-prac-ship')?.scheduleDays) === '[6]' &&
+      final2.state.data.categories.some((c) => c.id === 'career-cat' && c.name === 'Carreira')
+  )
+  runPublish()
+  const afterThird = await getCloud()
+  check(
+    'HABITS: re-publish is seed-only (no dupes)',
+    careerPracs(afterThird.state).length === 2 &&
+      afterThird.state.data.categories.filter((c) => c.id === 'career-cat').length === 1
+  )
+
+  // Device pulls → daily list shows the career category; History gets the
+  // three-way toggle; checking a habit today starts the chain.
+  await page.goto(`${APP_ORIGIN}${BASE}`, { waitUntil: 'networkidle' })
+  await waitFor(
+    async () => (await page.getByText('Carreira', { exact: true }).count()) >= 1,
+    { tries: 20, label: 'career category in daily view' }
+  )
+  check('HABITS: career category in daily list', true)
+  // Check off the habit scheduled TODAY (win log Mon–Fri, ship Sat) so the chain
+  // counts it; on a Sunday nothing is scheduled and the chain must stay 0.
+  const todayDow = new Date().getDay()
+  const habitName = todayDow === 6 ? 'Saturday ship fixture' : 'Win log fixture'
+  const expectChain = todayDow === 0 ? 0 : 1
+  const habitBtn = page.getByRole('button', { name: habitName }).first()
+  await habitBtn.waitFor({ timeout: 10000 })
+  const vBeforeHabit = (await getCloud()).version
+  await habitBtn.locator('xpath=preceding-sibling::button[1]').click()
+  // Wait for the record to land in the cloud BEFORE navigating — navigating
+  // immediately can abort the in-flight IndexedDB write, and this doubles as the
+  // habit-record sync assertion.
+  await waitFor(async () => (await getCloud()).version > vBeforeHabit, { tries: 15, label: 'habit check push' })
+  const habitCloud = await getCloud()
+  const habitPracId = habitName === 'Saturday ship fixture' ? 'career-prac-ship' : 'career-prac-winlog'
+  check(
+    'HABITS: dailyRecord synced for the checked habit',
+    habitCloud.state.data.dailyRecords.some((r) => r.practiceId === habitPracId && r.isCompleted)
+  )
+  await page.goto(`${APP_ORIGIN}${BASE}career`, { waitUntil: 'networkidle' })
+  await page.getByText('Cadeia').waitFor({ timeout: 10000 })
+  const chainText = await page
+    .locator('section', { has: page.getByText('Cadeia') })
+    .first()
+    .innerText()
+  check(
+    `CHAIN: shows ${expectChain} day(s) after first check`,
+    chainText.includes(`${expectChain} dia`),
+    chainText.split('\n').slice(0, 3).join(' | ')
+  )
+  await page.goto(`${APP_ORIGIN}${BASE}history`, { waitUntil: 'networkidle' })
+  check(
+    'HISTORY: three-way domain toggle',
+    (await page.getByRole('button', { name: 'Carreira', exact: true }).count()) === 1 &&
+      (await page.getByRole('button', { name: 'Espiritual', exact: true }).count()) === 1
   )
 
   await browser.close()

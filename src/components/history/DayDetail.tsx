@@ -5,10 +5,11 @@ import { useProposito } from '../../hooks/usePropositos'
 import { useCategories } from '../../hooks/useCategories'
 import { usePractices } from '../../hooks/usePractices'
 import { useHistoryDomain } from '../../hooks/useHistoryDomain'
-import { getPracticeDomain, isLifestyle } from '../../utils/domain'
+import { getPracticeDomain, isLifestyle, isCareer } from '../../utils/domain'
 import { DomainToggle } from './DomainToggle'
 import { parseDate, formatDateLong } from '../../utils/dates'
 import { CategoryIcon } from '../shared/CategoryIcon'
+import type { PracticeDomain } from '../../types'
 
 export function DayDetail() {
   const navigate = useNavigate()
@@ -25,10 +26,14 @@ export function DayDetail() {
   const parsedDate = parseDate(date)
   const dateLabel = formatDateLong(parsedDate)
 
-  // Mirror HistoryView: only split when the user has habits, and fall back to
+  // Mirror HistoryView: only split for domains the user has, and fall back to
   // spiritual so the day view matches whatever the month grid is showing.
-  const hasLifestyle = practices.some(isLifestyle)
-  const effectiveDomain = hasLifestyle ? domain : 'spiritual'
+  const domains: PracticeDomain[] = [
+    'spiritual',
+    ...(practices.some(isLifestyle) ? (['lifestyle'] as const) : []),
+    ...(practices.some(isCareer) ? (['career'] as const) : []),
+  ]
+  const effectiveDomain = domains.includes(domain) ? domain : 'spiritual'
 
   // Group the selected domain's practices by category
   const practicesByCategory = new Map<string, typeof practices>()
@@ -56,7 +61,9 @@ export function DayDetail() {
         </div>
       </header>
 
-      {hasLifestyle && <DomainToggle value={effectiveDomain} onChange={setDomain} />}
+      {domains.length > 1 && (
+        <DomainToggle value={effectiveDomain} onChange={setDomain} domains={domains} />
+      )}
 
       <div className="p-4 space-y-6">
         {/* Proposito */}

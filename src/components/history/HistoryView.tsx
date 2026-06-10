@@ -5,7 +5,8 @@ import { MonthGrid } from './MonthGrid'
 import { DomainToggle } from './DomainToggle'
 import { usePractices } from '../../hooks/usePractices'
 import { useHistoryDomain } from '../../hooks/useHistoryDomain'
-import { isLifestyle } from '../../utils/domain'
+import { isLifestyle, isCareer } from '../../utils/domain'
+import type { PracticeDomain } from '../../types'
 import { format, addMonths, subMonths, startOfMonth } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
@@ -14,12 +15,16 @@ export function HistoryView() {
   const { practices } = usePractices()
   const [domain, setDomain] = useHistoryDomain()
 
-  // Only surface the spiritual/habit split once the user actually has a lifestyle
-  // habit — religious-only users see the history exactly as before. effectiveDomain
-  // falls back to spiritual so a stale 'lifestyle' selection (e.g. after archiving
-  // all habits) can't leave the grid stuck on an empty view.
-  const hasLifestyle = practices.some(isLifestyle)
-  const effectiveDomain = hasLifestyle ? domain : 'spiritual'
+  // Only surface the split for domains the user actually has — religious-only
+  // users see the history exactly as before. effectiveDomain falls back to
+  // spiritual so a stale selection (e.g. after archiving all habits) can't leave
+  // the grid stuck on an empty view.
+  const domains: PracticeDomain[] = [
+    'spiritual',
+    ...(practices.some(isLifestyle) ? (['lifestyle'] as const) : []),
+    ...(practices.some(isCareer) ? (['career'] as const) : []),
+  ]
+  const effectiveDomain = domains.includes(domain) ? domain : 'spiritual'
 
   const handlePrevMonth = () => setCurrentMonth((d) => subMonths(d, 1))
   const handleNextMonth = () => setCurrentMonth((d) => addMonths(d, 1))
@@ -52,7 +57,9 @@ export function HistoryView() {
         </div>
       </header>
 
-      {hasLifestyle && <DomainToggle value={effectiveDomain} onChange={setDomain} />}
+      {domains.length > 1 && (
+        <DomainToggle value={effectiveDomain} onChange={setDomain} domains={domains} />
+      )}
 
       <MonthGrid month={currentMonth} domain={effectiveDomain} />
 
