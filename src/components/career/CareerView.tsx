@@ -4,6 +4,8 @@ import { useCareerEnabled } from '../../hooks/useCareerEnabled'
 import { EmptyState } from '../shared/EmptyState'
 import { NowPanel } from './NowPanel'
 import { CareerChain } from './CareerChain'
+import { OutreachTracker } from './OutreachTracker'
+import { LadderTracker } from './LadderTracker'
 
 /**
  * Career section ("Carreira" tab). Only reachable on installs whose synced data
@@ -36,6 +38,8 @@ export function CareerView() {
         >
           <NowPanel />
           <CareerChain />
+          <OutreachTracker />
+          <LadderTracker />
         </motion.div>
       ) : (
         <EmptyState icon={Briefcase} message="Nenhum dado de carreira" />

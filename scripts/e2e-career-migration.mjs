@@ -474,6 +474,46 @@ async function main() {
       (await page.getByRole('button', { name: 'Espiritual', exact: true }).count()) === 1
   )
 
+  // --- Phase 3: outreach + ladder trackers ---
+  console.log('• outreach tracker…')
+  await page.goto(`${APP_ORIGIN}${BASE}career`, { waitUntil: 'networkidle' })
+  const vBeforeOutreach = (await getCloud()).version
+  await page.getByRole('button', { name: 'Registrar' }).click()
+  await page.getByPlaceholder('ex.: empresa — eng lead').fill('Acme Corp — CTO')
+  await page.getByPlaceholder('ex.: $100/h').fill('$100/h')
+  await page.getByRole('button', { name: 'Salvar' }).click()
+  await waitFor(async () => (await getCloud()).version > vBeforeOutreach, { tries: 15, label: 'outreach push' })
+  const afterOutreach = await getCloud()
+  check(
+    'OUTREACH: attempt synced to cloud',
+    afterOutreach.state.data.careerOutreach.length === 1 &&
+      afterOutreach.state.data.careerOutreach[0].target === 'Acme Corp — CTO' &&
+      afterOutreach.state.data.careerOutreach[0].rateQuoted === '$100/h'
+  )
+  check('OUTREACH: row renders', (await page.getByText('Acme Corp — CTO').count()) === 1)
+  check('OUTREACH: progress shows 1/20', (await page.getByText('1/20 tentativas').count()) === 1)
+
+  console.log('• ladder tracker…')
+  const vBeforeRung = (await getCloud()).version
+  await page.getByRole('button', { name: 'Degrau 1: Rung One' }).click()
+  await page.getByRole('button', { name: 'Feito', exact: true }).click()
+  await page.getByRole('button', { name: 'Salvar' }).click()
+  await waitFor(async () => (await getCloud()).version > vBeforeRung, { tries: 15, label: 'rung push' })
+  const afterRung = await getCloud()
+  check(
+    'LADDER: rung-1 done in cloud',
+    afterRung.state.data.careerLadder.find((r) => r.id === 'rung-1')?.status === 'done'
+  )
+
+  // A publish must never clobber app-owned tracker state.
+  runPublish()
+  const afterFourth = await getCloud()
+  check(
+    'TRACKERS: publish preserves outreach + rung status',
+    afterFourth.state.data.careerOutreach.length === 1 &&
+      afterFourth.state.data.careerLadder.find((r) => r.id === 'rung-1')?.status === 'done'
+  )
+
   await browser.close()
 }
 
