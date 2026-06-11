@@ -98,11 +98,24 @@ export interface CareerPhase {
   status: CareerPhaseStatus
 }
 
+export type CareerMilestoneStatus = 'done' | 'active' | 'upcoming'
+
+/** Year-anchored milestone embedded in CareerPlan — published wholesale, never edited in-app. */
+export interface CareerMilestone {
+  id: string
+  date: string // YYYY-MM — month resolution; the timeline renders at year scale
+  label: string
+  detail: string // '' when none
+  status: CareerMilestoneStatus
+  tentative: boolean // US-option milestones: a lean, not a decision — rendered dashed
+}
+
 export interface CareerPlan {
   id: string // singleton row: 'career-plan'
   currentPhase: string // e.g. 'Fase 1 — Upgrade'
   focusLine: string // the one-line "what matters right now"
   phases: CareerPhase[]
+  milestones?: CareerMilestone[] // absent on rows published before the year timeline existed
   publishedAt: string // when career-publish.mjs last ran — drives the drift warning
   updatedAt: string
 }

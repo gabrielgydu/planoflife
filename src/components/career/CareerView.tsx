@@ -6,6 +6,7 @@ import { NowPanel } from './NowPanel'
 import { OutreachTracker } from './OutreachTracker'
 import { LadderTracker } from './LadderTracker'
 import { RoadmapFeed } from './RoadmapFeed'
+import { YearTimeline } from './YearTimeline'
 
 /**
  * Career section ("Carreira" tab). Only reachable on installs whose synced data
@@ -39,6 +40,7 @@ export function CareerView() {
           transition={{ duration: 0.2 }}
         >
           <NowPanel />
+          <YearTimeline />
           <OutreachTracker />
           <LadderTracker />
           <RoadmapFeed />

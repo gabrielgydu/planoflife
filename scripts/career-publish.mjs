@@ -119,6 +119,17 @@ function validateInput(input) {
     if (!isStr(p.name) || !isStr(p.timeframe) || !isStr(p.summary)) fail('plan.phases[]', 'needs name/timeframe/summary')
     if (!['done', 'active', 'upcoming'].includes(p.status)) fail('plan.phases[].status', 'must be done|active|upcoming')
   }
+  if (plan.milestones !== undefined) {
+    if (!Array.isArray(plan.milestones)) fail('plan.milestones', 'must be an array when present')
+    checkIds(plan.milestones, 'plan.milestones')
+    for (const m of plan.milestones) {
+      if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(m.date ?? '')) fail('plan.milestones[].date', 'must be YYYY-MM')
+      if (!isStr(m.label)) fail('plan.milestones[].label', 'must be a non-empty string')
+      if (!optStr(m.detail)) fail('plan.milestones[].detail', 'must be a string when present')
+      if (!['done', 'active', 'upcoming'].includes(m.status)) fail('plan.milestones[].status', 'must be done|active|upcoming')
+      if (m.tentative !== undefined && typeof m.tentative !== 'boolean') fail('plan.milestones[].tentative', 'must be a boolean when present')
+    }
+  }
 
   for (const [key, rows] of [['moves', moves], ['deadlines', deadlines], ['wins', wins], ['log', log], ['ladder', ladder]]) {
     if (!Array.isArray(rows)) fail(key, 'must be an array')
@@ -208,6 +219,14 @@ function transform(state, input, now, alreadySeededIds) {
         timeframe: p.timeframe,
         summary: p.summary,
         status: p.status,
+      })),
+      milestones: (input.plan.milestones ?? []).map((m) => ({
+        id: m.id,
+        date: m.date,
+        label: m.label,
+        detail: m.detail ?? '',
+        status: m.status,
+        tentative: m.tentative ?? false,
       })),
       publishedAt: now,
       updatedAt: now,
