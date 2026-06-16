@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { useNavigate } from 'react-router'
-import { ChevronRight, RotateCcw, ClipboardList, Eye, EyeOff, CheckCircle2 } from 'lucide-react'
+import { useNavigate, Link } from 'react-router'
+import { ChevronRight, RotateCcw, ClipboardList, Eye, EyeOff, CheckCircle2, Swords, Sparkles } from 'lucide-react'
 import { Header } from '../layout/Header'
 import { CategorySection } from './CategorySection'
 import { PracticeReader } from './PracticeReader'
@@ -124,6 +124,24 @@ export function DailyView() {
         {/* Proposito card */}
         <div className="px-4 py-2">
           <PropositoCard proposito={proposito} onSetProposito={setProposito} onClearProposito={clearProposito} />
+        </div>
+
+        {/* Quick access: midday particular examen + Rosary contemplation */}
+        <div className="px-4 pb-2 grid grid-cols-2 gap-2">
+          <Link
+            to="/exame-particular"
+            className="flex items-center justify-center gap-2 p-3 text-sm bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors"
+          >
+            <Swords className="w-4 h-4 shrink-0" />
+            <span>Exame particular</span>
+          </Link>
+          <Link
+            to="/rosario"
+            className="flex items-center justify-center gap-2 p-3 text-sm bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors"
+          >
+            <Sparkles className="w-4 h-4 shrink-0" />
+            <span>Contemplação do Rosário</span>
+          </Link>
         </div>
 
         {/* Hide-completed toggle — only useful once something is done */}

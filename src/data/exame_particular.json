@@ -1,0 +1,46 @@
+{
+  "id": "exame_particular",
+  "title": { "pt": "Exame particular" },
+  "lang": "pt-br",
+  "source": {
+    "primary": "Diccionario de San Josemaría Escrivá de Balaguer — verbete «Exame de consciência» (Juan Ramón Areitio)",
+    "url": "https://opusdei.org/pt-br/article/o-exame-de-consciencia-diario/",
+    "quotesFrom": "Caminho, Forja, Sulco (São Josemaría Escrivá)"
+  },
+  "summary": "O exame particular é a parte «de ataque» do exame de consciência: concentra a luta interior num único ponto concreto — adquirir uma virtude determinada ou arrancar o defeito que domina — bem definido para a alma «hoje e agora» e escolhido com a ajuda de Deus e na direção espiritual.",
+  "distincao": {
+    "geral": "«Defesa» / armadura. Abrange o combate diário no seu conjunto; permite «começar e recomeçar» sem baixar a guarda. Faz-se brevemente, em geral no final do dia.",
+    "particular": "«Ataque» / espada toledana. «Arma de combate» que concentra as forças numa frente concreta, mantendo vivo o espírito de luta ao longo da jornada."
+  },
+  "comoFazer": [
+    "Pedir luz a Deus e procurar, na direção espiritual, qual o ponto mais conveniente para a tua alma agora — «até dares com a raiz» (Caminho 240).",
+    "Definir o ponto: de preferência uma virtude determinada a adquirir; ou então o defeito dominante a arrancar (Caminho 241).",
+    "Escolher meios concretos para alcançar esse objetivo e ir «diretamente» a ele.",
+    "Rever esse mesmo ponto cada dia, mantendo-o até o conseguir; depois, fixar um novo ponto.",
+    "Terminar sempre com um ato de Amor — dor de Amor (Caminho 246). As dívidas pagam-se «com lágrimas… e com obras» (Caminho 242)."
+  ],
+  "pontoTipos": [
+    {
+      "key": "virtude",
+      "label": "Adquirir uma virtude determinada",
+      "hint": "Caminho 241 — em geral mais atraente e eficaz dirigir a atenção à virtude contrária ao defeito do que ao próprio defeito."
+    },
+    {
+      "key": "defeito",
+      "label": "Arrancar o defeito que domina",
+      "hint": "Caminho 241 — o «defeito dominante»."
+    }
+  ],
+  "notaPositiva": "São Josemaria acentua o aspecto positivo da luta: mesmo quando se quer «arrancar um defeito», costuma ser mais eficaz fixar a atenção na virtude contrária e esforçar-se por adquiri-la — «o movimento da alma para o bem é mais forte que o destinado a afastar-se do mal» (Santo Tomás de Aquino, S.Th. 1-2, q. 29, a. 3).",
+  "quotes": [
+    { "ref": "Caminho 238", "text": "O exame geral assemelha-se à defesa. – O particular ao ataque. – O primeiro é a armadura. O segundo, espada toledana." },
+    { "ref": "Caminho 240", "text": "Pede luz. Insiste. – Até dares com a raiz, para lhe aplicares essa arma de combate que é o exame particular." },
+    { "ref": "Caminho 241", "text": "Com o exame particular tens de procurar diretamente adquirir uma virtude determinada ou arrancar o defeito que te domina." },
+    { "ref": "Caminho 239", "text": "Um olhar sobre o passado. – E… lamentar-te? Não, que é estéril. – Aprender, que é fecundo." },
+    { "ref": "Caminho 242", "text": "«Quanto não devo a Deus, como cristão! A minha falta de correspondência, perante essa dívida, tem-me feito chorar de dor: de dor de Amor. Mea culpa!» – Bom é que vás reconhecendo as tuas dívidas. Mas não te esqueças de como se pagam: com lágrimas… e com obras." },
+    { "ref": "Caminho 246", "text": "Acaba sempre o teu exame com um ato de Amor – dor de Amor – por ti, por todos os pecados dos homens… e considera o cuidado paternal de Deus, que afastou de ti os obstáculos para que não tropeçasses." },
+    { "ref": "Forja 481", "text": "Observa a tua conduta com vagar. Verás que estás cheio de erros, que te prejudicam a ti e talvez também aos que te rodeiam. (…) Precisas de um bom exame de consciência diário, que te leve a propósitos concretos de melhora, por sentires verdadeira dor das tuas faltas, das tuas omissões e pecados." },
+    { "ref": "Sulco 142", "text": "Se lutas de verdade, precisas fazer exame de consciência. – Cuida do exame diário: Vê se sentes dor de Amor, porque não tratas Nosso Senhor como deverias." }
+  ],
+  "notaTempo": "As fontes do Opus Dei consultadas (verbete do Dicionário; pontos de São Josemaria) descrevem o exame como prática diária e breve, feita habitualmente ao final do dia. NÃO prescrevem, nesses textos, um horário fixo ao meio-dia para o exame particular nem uma duração fixa (p. ex. duas semanas) por ponto. O costume «exame particular ao meio-dia / exame geral à noite» pertence à tradição ascética mais ampla e não foi verificado nestas fontes."
+}
