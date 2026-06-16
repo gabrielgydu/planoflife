@@ -51,7 +51,7 @@ function createDefaultPractices(categories: Category[]): Practice[] {
       .filter((p) => p.categoryId === categoryId)
       .reduce((m, p) => Math.max(m, p.sortOrder), -1)
     base.push({
-      id: generateId(),
+      id: spec.id ?? generateId(),
       name: spec.name,
       categoryId,
       content: '',

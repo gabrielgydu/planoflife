@@ -1,4 +1,4 @@
-import Dexie, { type EntityTable } from 'dexie'
+import Dexie, { type EntityTable, type Transaction } from 'dexie'
 import type {
   Category,
   Practice,
@@ -24,15 +24,70 @@ export interface AdditionalPracticeSpec {
   categoryName: string
   isRequired: boolean
   bundledTextId?: string
+  // A FIXED practice id. Optional: legacy specs omit it and get a per-device random
+  // UUID. Specs added AFTER sync went live (v5) must set it so the same logical
+  // practice gets the SAME id on every device — otherwise the version-N upgrade
+  // runs independently per device, and the union-merge on a push conflict would
+  // resurrect both copies as a duplicate (no tombstones). See src/sync/merge.ts.
+  id?: string
 }
 
 export const ADDITIONAL_PRACTICES: AdditionalPracticeSpec[] = [
   { name: 'Oferecimento do Trabalho', categoryName: 'Orações da Manhã', isRequired: false, bundledTextId: 'oferecimento_do_trabalho' },
   { name: 'Leitura do Evangelho', categoryName: 'Orações da Manhã', isRequired: true },
+  { id: 'sao-josemaria-prayer', name: 'Oração a São Josemaria', categoryName: 'Meio-dia', isRequired: false, bundledTextId: 'sao_josemaria' },
 ]
 
 const normalizeName = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+
+// Insert any ADDITIONAL_PRACTICES not already present (matched by normalized name),
+// appended to the end of their category. Idempotent \u2014 safe to run from multiple
+// version upgrades; a re-run or a manual addition won't create duplicates. Shared
+// by the version(3) and version(8) upgrades so existing installs pick up practices
+// introduced after their last open. Fresh installs get these via the seed instead.
+async function addMissingAdditionalPractices(tx: Transaction): Promise<void> {
+  const categoriesTable = tx.table('categories')
+  const practicesTable = tx.table('practices')
+
+  const allCategories = (await categoriesTable.toArray()) as Category[]
+  if (allCategories.length === 0) return
+
+  const categoryByName = new Map(allCategories.map((c) => [normalizeName(c.name), c]))
+  const fallbackCategory = [...allCategories].sort((a, b) => a.sortOrder - b.sortOrder)[0]
+
+  const allPractices = (await practicesTable.toArray()) as Practice[]
+  const existingNames = new Set(allPractices.map((p) => normalizeName(p.name)))
+  const maxSortOrderByCategory = new Map<string, number>()
+  for (const p of allPractices) {
+    const prev = maxSortOrderByCategory.get(p.categoryId) ?? -1
+    if (p.sortOrder > prev) maxSortOrderByCategory.set(p.categoryId, p.sortOrder)
+  }
+
+  const now = new Date().toISOString()
+  for (const spec of ADDITIONAL_PRACTICES) {
+    if (existingNames.has(normalizeName(spec.name))) continue
+    const category = categoryByName.get(normalizeName(spec.categoryName)) ?? fallbackCategory
+    const sortOrder = (maxSortOrderByCategory.get(category.id) ?? -1) + 1
+    maxSortOrderByCategory.set(category.id, sortOrder)
+    const practice: Practice = {
+      id: spec.id ?? generateId(),
+      name: spec.name,
+      categoryId: category.id,
+      content: '',
+      imageData: null,
+      domain: 'spiritual',
+      isRequired: spec.isRequired,
+      sortOrder,
+      isArchived: false,
+      createdAt: now,
+      updatedAt: now,
+      ...(spec.bundledTextId ? { bundledTextId: spec.bundledTextId } : {}),
+    }
+    await practicesTable.add(practice)
+    existingNames.add(normalizeName(spec.name))
+  }
+}
 
 export class PlanOfLifeDB extends Dexie {
   categories!: EntityTable<Category, 'id'>
@@ -85,48 +140,7 @@ export class PlanOfLifeDB extends Dexie {
     // Add practices introduced after the initial seed to existing installs.
     // Idempotent: matches on normalized name so re-runs / manual additions
     // don't create duplicates. Fresh installs get these via the seed instead.
-    this.version(3).stores({}).upgrade(async (tx) => {
-      const categoriesTable = tx.table('categories')
-      const practicesTable = tx.table('practices')
-
-      const allCategories = (await categoriesTable.toArray()) as Category[]
-      if (allCategories.length === 0) return
-
-      const categoryByName = new Map(allCategories.map((c) => [normalizeName(c.name), c]))
-      const fallbackCategory = [...allCategories].sort((a, b) => a.sortOrder - b.sortOrder)[0]
-
-      const allPractices = (await practicesTable.toArray()) as Practice[]
-      const existingNames = new Set(allPractices.map((p) => normalizeName(p.name)))
-      const maxSortOrderByCategory = new Map<string, number>()
-      for (const p of allPractices) {
-        const prev = maxSortOrderByCategory.get(p.categoryId) ?? -1
-        if (p.sortOrder > prev) maxSortOrderByCategory.set(p.categoryId, p.sortOrder)
-      }
-
-      const now = new Date().toISOString()
-      for (const spec of ADDITIONAL_PRACTICES) {
-        if (existingNames.has(normalizeName(spec.name))) continue
-        const category = categoryByName.get(normalizeName(spec.categoryName)) ?? fallbackCategory
-        const sortOrder = (maxSortOrderByCategory.get(category.id) ?? -1) + 1
-        maxSortOrderByCategory.set(category.id, sortOrder)
-        const practice: Practice = {
-          id: generateId(),
-          name: spec.name,
-          categoryId: category.id,
-          content: '',
-          imageData: null,
-          domain: 'spiritual',
-          isRequired: spec.isRequired,
-          sortOrder,
-          isArchived: false,
-          createdAt: now,
-          updatedAt: now,
-          ...(spec.bundledTextId ? { bundledTextId: spec.bundledTextId } : {}),
-        }
-        await practicesTable.add(practice)
-        existingNames.add(normalizeName(spec.name))
-      }
-    })
+    this.version(3).stores({}).upgrade(addMissingAdditionalPractices)
 
     // Backfill bundledTextId onto additional practices that were already added
     // by a prior version(3) run before they had bundled text. Idempotent:
@@ -188,6 +202,12 @@ export class PlanOfLifeDB extends Dexie {
       careerWins: 'id, date',
       careerLog: 'id, date',
     })
+
+    // Add "Oração a São Josemaria" to existing installs (v3 already ran on them,
+    // so it won't pick up specs added to ADDITIONAL_PRACTICES since). The new spec
+    // carries a FIXED id, so both of a user's devices insert the identical row and
+    // sync converges instead of duplicating. Idempotent + name-matched (see helper).
+    this.version(8).stores({}).upgrade(addMissingAdditionalPractices)
   }
 }
 
