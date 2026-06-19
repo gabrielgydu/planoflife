@@ -62,6 +62,7 @@ function createDefaultPractices(categories: Category[]): Practice[] {
       createdAt: now,
       updatedAt: now,
       ...(spec.bundledTextId ? { bundledTextId: spec.bundledTextId } : {}),
+      ...(spec.activeWindow ? { activeWindow: spec.activeWindow } : {}),
     })
   }
 

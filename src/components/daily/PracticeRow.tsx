@@ -4,12 +4,14 @@ import type { Practice } from '../../types'
 
 interface PracticeRowProps {
   practice: Practice
+  // Optional second line under the name (e.g. the novena's "Terceiro dia · …").
+  subtitle?: string
   isCompleted: boolean
   onToggle: () => void
   onOpenDetail: () => void
 }
 
-export function PracticeRow({ practice, isCompleted, onToggle, onOpenDetail }: PracticeRowProps) {
+export function PracticeRow({ practice, subtitle, isCompleted, onToggle, onOpenDetail }: PracticeRowProps) {
   const nameClasses = `flex-1 text-sm text-left transition-colors duration-200 rounded hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light ${
     isCompleted
       ? 'text-text-muted dark:text-text-muted-dark'
@@ -33,9 +35,16 @@ export function PracticeRow({ practice, isCompleted, onToggle, onOpenDetail }: P
       </motion.button>
 
       <button onClick={onOpenDetail} className={nameClasses}>
-        {practice.name}
-        {practice.isRequired && (
-          <span className="ml-1 text-xs text-[#A89548]">*</span>
+        <span>
+          {practice.name}
+          {practice.isRequired && (
+            <span className="ml-1 text-xs text-[#A89548]">*</span>
+          )}
+        </span>
+        {subtitle && (
+          <span className="block text-xs text-text-secondary dark:text-text-secondary-dark mt-0.5">
+            {subtitle}
+          </span>
         )}
       </button>
     </div>

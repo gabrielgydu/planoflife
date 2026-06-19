@@ -17,6 +17,7 @@ import { formatDate } from '../../utils/dates'
 import { useTheme } from '../../hooks/useTheme'
 import { getPracticeDomain } from '../../utils/domain'
 import { isScheduledOn } from '../../utils/schedule'
+import { isInActiveWindow } from '../../utils/season'
 import type { PracticeDomain } from '../../types'
 
 interface MonthGridProps {
@@ -86,6 +87,7 @@ export function MonthGrid({ month, domain }: MonthGridProps) {
     // also guarantees completed <= total.
     const domainPractices = practices.filter((p) => getPracticeDomain(p) === domain)
     const domainIds = new Set(domainPractices.map((p) => p.id))
+    const practiceById = new Map(domainPractices.map((p) => [p.id, p]))
 
     // The day's denominator is the practices SCHEDULED that weekday (absent
     // scheduleDays = daily, so spiritual/lifestyle stats are unchanged). A day
@@ -109,12 +111,19 @@ export function MonthGrid({ month, domain }: MonthGridProps) {
       }
     }
 
-    // Calculate stats for each day with completions
+    // Calculate stats for each day with completions. A windowed practice (e.g.
+    // the novena) only belongs to the denominator on its in-window dates — off
+    // those dates it's neutral, exactly like an unscheduled weekday.
     for (const [date, completedIds] of recordsByDate) {
-      const scheduled = scheduledIdsByWeekday[getDay(new Date(`${date}T00:00:00`))]
-      const completed = [...completedIds].filter((id) => scheduled.has(id)).length
+      const parsed = new Date(`${date}T00:00:00`)
+      const scheduled = [...scheduledIdsByWeekday[getDay(parsed)]].filter((id) => {
+        const p = practiceById.get(id)
+        return p ? isInActiveWindow(p, parsed) : false
+      })
+      const scheduledSet = new Set(scheduled)
+      const completed = [...completedIds].filter((id) => scheduledSet.has(id)).length
       if (completed > 0) {
-        stats.set(date, { completed, total: scheduled.size })
+        stats.set(date, { completed, total: scheduledSet.size })
       }
     }
 

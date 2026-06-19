@@ -17,6 +17,7 @@ import { useDailyRecords } from '../../hooks/useDailyRecords'
 import { useMorningFlow } from '../../hooks/useMorningFlow'
 import { useProposito } from '../../hooks/usePropositos'
 import { useHideCompleted } from '../../hooks/useSettings'
+import { isInActiveWindow } from '../../utils/season'
 import { formatDate, getToday, addDay, subDay } from '../../utils/dates'
 import type { Practice, Category } from '../../types'
 
@@ -41,19 +42,27 @@ export function DailyView() {
   // Proposito for today
   const { proposito, setProposito, clearProposito } = useProposito(dateStr)
 
+  // Only practices in their active calendar window for the day being viewed
+  // (ordinary practices have none → always active). A seasonal practice like the
+  // novena appears only on its dates and vanishes the rest of the year.
+  const activePractices = useMemo(
+    () => practices.filter((p) => isInActiveWindow(p, currentDate)),
+    [practices, currentDate]
+  )
+
   const practicesByCategory = useMemo(() => {
     const map = new Map<string, Practice[]>()
     for (const category of categories) {
       map.set(category.id, [])
     }
-    for (const practice of practices) {
+    for (const practice of activePractices) {
       const list = map.get(practice.categoryId)
       if (list) {
         list.push(practice)
       }
     }
     return map
-  }, [categories, practices])
+  }, [categories, activePractices])
 
   // Flat ordered list of all practices, for the reader overlay. Includes
   // text-less practices so the reader can page through every practice.
@@ -81,7 +90,7 @@ export function DailyView() {
     setShowClearDialog(false)
   }
 
-  const hasAnyCompleted = practices.some((p) => isCompleted(p.id))
+  const hasAnyCompleted = activePractices.some((p) => isCompleted(p.id))
 
   if (categoriesLoading || practicesLoading) {
     return <Spinner className="h-64" />
@@ -165,6 +174,7 @@ export function DailyView() {
               key={category.id}
               category={category}
               practices={categoryPractices}
+              viewDate={currentDate}
               isCompleted={isCompleted}
               onTogglePractice={togglePractice}
               onOpenPracticeDetail={handleOpenPracticeDetail}
@@ -174,11 +184,11 @@ export function DailyView() {
         })}
 
         {/* When hiding completed empties the whole list, affirm rather than show a blank gap */}
-        {hideCompleted && practices.length > 0 && practices.every((p) => isCompleted(p.id)) && (
+        {hideCompleted && activePractices.length > 0 && activePractices.every((p) => isCompleted(p.id)) && (
           <EmptyState icon={CheckCircle2} message="Tudo concluído por hoje" />
         )}
 
-        {practices.length === 0 && (
+        {activePractices.length === 0 && (
           <EmptyState
             icon={ClipboardList}
             message="Nenhuma prática cadastrada"
@@ -204,6 +214,7 @@ export function DailyView() {
           <PracticeReader
             items={readerItems}
             initialPracticeId={readerPracticeId}
+            viewDate={currentDate}
             isCompleted={isCompleted}
             onTogglePractice={togglePractice}
             onMarkViewed={markCompleted}

@@ -16,6 +16,13 @@ import type {
   CareerLogEntry,
 } from '../types'
 import { generateId } from '../utils/id'
+import {
+  NOVENA_TRABALHO_PRACTICE_ID,
+  NOVENA_TRABALHO_BUNDLED_ID,
+  NOVENA_TRABALHO_NAME,
+  NOVENA_TRABALHO_CATEGORY,
+  NOVENA_TRABALHO_WINDOW,
+} from '../data/novena'
 
 // Practices added after the initial seed. Used by both the fresh-install seed
 // and the version(3) upgrade, so existing installs pick them up on next load.
@@ -30,12 +37,23 @@ export interface AdditionalPracticeSpec {
   // runs independently per device, and the union-merge on a push conflict would
   // resurrect both copies as a duplicate (no tombstones). See src/sync/merge.ts.
   id?: string
+  // Optional calendar window (month/day, recurs yearly) outside of which the
+  // practice is hidden — e.g. a novena. Copied verbatim onto the practice row.
+  activeWindow?: Practice['activeWindow']
 }
 
 export const ADDITIONAL_PRACTICES: AdditionalPracticeSpec[] = [
   { name: 'Oferecimento do Trabalho', categoryName: 'Orações da Manhã', isRequired: false, bundledTextId: 'oferecimento_do_trabalho' },
   { name: 'Leitura do Evangelho', categoryName: 'Orações da Manhã', isRequired: true },
   { id: 'sao-josemaria-prayer', name: 'Oração a São Josemaria', categoryName: 'Meio-dia', isRequired: false, bundledTextId: 'sao_josemaria' },
+  {
+    id: NOVENA_TRABALHO_PRACTICE_ID,
+    name: NOVENA_TRABALHO_NAME,
+    categoryName: NOVENA_TRABALHO_CATEGORY,
+    isRequired: false,
+    bundledTextId: NOVENA_TRABALHO_BUNDLED_ID,
+    activeWindow: NOVENA_TRABALHO_WINDOW,
+  },
 ]
 
 const normalizeName = (s: string) =>
@@ -83,6 +101,7 @@ async function addMissingAdditionalPractices(tx: Transaction): Promise<void> {
       createdAt: now,
       updatedAt: now,
       ...(spec.bundledTextId ? { bundledTextId: spec.bundledTextId } : {}),
+      ...(spec.activeWindow ? { activeWindow: spec.activeWindow } : {}),
     }
     await practicesTable.add(practice)
     existingNames.add(normalizeName(spec.name))
@@ -208,6 +227,12 @@ export class PlanOfLifeDB extends Dexie {
     // carries a FIXED id, so both of a user's devices insert the identical row and
     // sync converges instead of duplicating. Idempotent + name-matched (see helper).
     this.version(8).stores({}).upgrade(addMissingAdditionalPractices)
+
+    // Add "Novena a São Josemaria" (the 17–25 June novena do trabalho) to
+    // existing installs — same FIXED-id reasoning as v8. It carries an
+    // activeWindow so it only shows during those nine days each year. The helper
+    // copies the window onto the row, so both devices insert an identical row.
+    this.version(9).stores({}).upgrade(addMissingAdditionalPractices)
   }
 }
 

@@ -26,6 +26,12 @@ export interface Practice {
   // Sunday-off rule). The daily checklist still shows the practice every day.
   // Read via isScheduledOn() in utils/schedule.ts.
   scheduleDays?: number[]
+  // Calendar window during which the practice is shown at all. Absent = every
+  // day (all ordinary practices). Compares month/day only, so it recurs yearly
+  // (e.g. a novena that runs 17–25 June). Outside the window the practice is
+  // hidden from the daily list and counts as NEUTRAL in stats — never a miss.
+  // Read via isInActiveWindow() in utils/season.ts.
+  activeWindow?: { startMonth: number; startDay: number; endMonth: number; endDay: number }
   isRequired: boolean
   sortOrder: number
   isArchived: boolean

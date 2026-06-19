@@ -1,9 +1,13 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../db'
+import { isInActiveWindow } from '../utils/season'
 import type { Practice } from '../types'
 
 export function useYesterdayUncompleted(date: string) {
   const result = useLiveQuery(async () => {
+    // The reviewed day, for windowed practices (e.g. a novena only shows on its
+    // dates — mirror the daily list so it isn't flagged as "missed" off-window).
+    const reviewedDate = new Date(`${date}T00:00:00`)
     // Mirror the daily list view ordering: categories by sortOrder, then
     // practices by sortOrder within each category.
     const [categories, allPractices, records] = await Promise.all([
@@ -18,6 +22,7 @@ export function useYesterdayUncompleted(date: string) {
     for (const category of categories) byCategory.set(category.id, [])
     for (const practice of allPractices) {
       if (practice.isArchived) continue
+      if (!isInActiveWindow(practice, reviewedDate)) continue
       byCategory.get(practice.categoryId)?.push(practice)
     }
 

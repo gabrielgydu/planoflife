@@ -4,6 +4,7 @@ import { X, Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import { CategoryIcon } from '../shared/CategoryIcon'
 import { MarkdownRenderer } from '../shared/MarkdownRenderer'
 import { getBundledText } from '../../data/bundledTexts'
+import { resolveNovenaReaderText } from '../../data/novena'
 import { isLifestyle } from '../../utils/domain'
 import type { Practice, Category } from '../../types'
 
@@ -15,6 +16,9 @@ interface PracticeWithCategory {
 interface PracticeReaderProps {
   items: PracticeWithCategory[]
   initialPracticeId: string
+  // The day being viewed in DailyView — drives date-dependent content (e.g. the
+  // novena shows the reflection for whichever of its nine days this date is).
+  viewDate: Date
   isCompleted: (practiceId: string) => boolean
   onTogglePractice: (practiceId: string) => void
   onMarkViewed: (practiceId: string) => void
@@ -35,6 +39,7 @@ const LANG_LABELS: Record<Lang, string> = {
 export function PracticeReader({
   items,
   initialPracticeId,
+  viewDate,
   isCompleted,
   onTogglePractice,
   onMarkViewed,
@@ -74,7 +79,10 @@ export function PracticeReader({
 
   const { practice, category } = current
   const completed = isCompleted(practice.id)
-  const bundledText = getBundledText(practice.bundledTextId)
+  // The novena resolves to the day matching viewDate; everything else is a plain
+  // bundled-text lookup.
+  const bundledText =
+    resolveNovenaReaderText(practice, viewDate) ?? getBundledText(practice.bundledTextId)
   const isBundled = !!bundledText
 
   const hasMultipleLangs = isBundled && Object.keys(bundledText.texts).length > 1

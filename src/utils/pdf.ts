@@ -10,6 +10,7 @@ import {
 import { ptBR } from 'date-fns/locale'
 import { formatDate } from './dates'
 import { isCareer } from './domain'
+import { isInActiveWindow } from './season'
 
 export async function generateMonthPdf(year: number, month: number): Promise<void> {
   const monthDate = new Date(year, month, 1)
@@ -72,7 +73,13 @@ export async function generateMonthPdf(year: number, month: number): Promise<voi
   let y = margin + headerHeight + 5
   const days = eachDayOfInterval({ start: monthStart, end: monthEnd })
 
-  for (const practice of practices) {
+  // Drop windowed practices (e.g. a novena) that never fall inside this month —
+  // otherwise they'd add an all-blank row and skew the summary percentage.
+  const visiblePractices = practices.filter((p) =>
+    days.some((d) => isInActiveWindow(p, d))
+  )
+
+  for (const practice of visiblePractices) {
     // Practice name (truncate if too long)
     doc.setFontSize(8)
     let name = practice.name
@@ -83,6 +90,8 @@ export async function generateMonthPdf(year: number, month: number): Promise<voi
 
     // Draw completion dots
     for (let day = 1; day <= daysInMonth; day++) {
+      // Out-of-window days are left blank — the practice didn't apply that day.
+      if (!isInActiveWindow(practice, days[day - 1])) continue
       const dateStr = formatDate(days[day - 1])
       const daySet = completionMap.get(dateStr)
       const isCompleted = daySet?.has(practice.id) ?? false
@@ -118,13 +127,16 @@ export async function generateMonthPdf(year: number, month: number): Promise<voi
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(8)
 
+  // Scope numerator and denominator to the same in-window practice set per day,
+  // so a windowed practice only counts on its dates (guarantees completed ≤ total).
   let totalCompleted = 0
   let totalPossible = 0
   for (let day = 1; day <= daysInMonth; day++) {
     const dateStr = formatDate(days[day - 1])
     const daySet = completionMap.get(dateStr)
-    totalCompleted += daySet?.size ?? 0
-    totalPossible += practices.length
+    const dayPractices = visiblePractices.filter((p) => isInActiveWindow(p, days[day - 1]))
+    totalPossible += dayPractices.length
+    totalCompleted += dayPractices.filter((p) => daySet?.has(p.id)).length
   }
 
   const percentage = totalPossible > 0 ? Math.round((totalCompleted / totalPossible) * 100) : 0

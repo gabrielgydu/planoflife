@@ -1,5 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../db'
+import { isInActiveWindow } from '../utils/season'
 import type { MissedReason } from '../types'
 import { generateId } from '../utils/id'
 
@@ -54,8 +55,9 @@ export function useMissedReasons(date: string) {
 
 export function useMissedRequiredPractices(date: string) {
   const result = useLiveQuery(async () => {
+    const reviewedDate = new Date(`${date}T00:00:00`)
     const requiredPractices = await db.practices
-      .filter((p) => p.isRequired && !p.isArchived)
+      .filter((p) => p.isRequired && !p.isArchived && isInActiveWindow(p, reviewedDate))
       .toArray()
 
     const records = await db.dailyRecords.where('date').equals(date).toArray()

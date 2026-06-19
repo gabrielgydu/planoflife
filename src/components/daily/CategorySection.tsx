@@ -4,10 +4,12 @@ import { ChevronDown } from 'lucide-react'
 import type { Category, Practice } from '../../types'
 import { PracticeRow } from './PracticeRow'
 import { CategoryIcon } from '../shared/CategoryIcon'
+import { novenaRowSubtitle } from '../../data/novena'
 
 interface CategorySectionProps {
   category: Category
   practices: Practice[]
+  viewDate: Date
   isCompleted: (practiceId: string) => boolean
   onTogglePractice: (practiceId: string) => void
   onOpenPracticeDetail: (practice: Practice) => void
@@ -17,6 +19,7 @@ interface CategorySectionProps {
 export function CategorySection({
   category,
   practices,
+  viewDate,
   isCompleted,
   onTogglePractice,
   onOpenPracticeDetail,
@@ -68,6 +71,7 @@ export function CategorySection({
               <PracticeRow
                 key={practice.id}
                 practice={practice}
+                subtitle={novenaRowSubtitle(practice, viewDate) ?? undefined}
                 isCompleted={isCompleted(practice.id)}
                 onToggle={() => onTogglePractice(practice.id)}
                 onOpenDetail={() => onOpenPracticeDetail(practice)}

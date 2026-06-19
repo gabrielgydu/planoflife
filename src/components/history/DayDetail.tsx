@@ -7,6 +7,7 @@ import { usePractices } from '../../hooks/usePractices'
 import { useHistoryDomain } from '../../hooks/useHistoryDomain'
 import { getPracticeDomain, isLifestyle, isCareer } from '../../utils/domain'
 import { isScheduledOn } from '../../utils/schedule'
+import { isInActiveWindow } from '../../utils/season'
 import { DomainToggle } from './DomainToggle'
 import { parseDate, formatDateLong } from '../../utils/dates'
 import { CategoryIcon } from '../shared/CategoryIcon'
@@ -96,7 +97,9 @@ export function DayDetail() {
               const dayPractices = (practicesByCategory.get(category.id) ?? [])
                 .map((p) => ({
                   practice: p,
-                  scheduled: isScheduledOn(p, parsedDate),
+                  // A windowed practice off its dates is neutral, like an
+                  // unscheduled weekday — not counted, shown only if somehow done.
+                  scheduled: isScheduledOn(p, parsedDate) && isInActiveWindow(p, parsedDate),
                   done: isCompleted(p.id),
                 }))
                 .filter((x) => x.scheduled || x.done)
