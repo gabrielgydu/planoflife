@@ -147,7 +147,7 @@ export function BackupRestore() {
   return (
     <div className="min-h-full">
       <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
-        <div className="flex items-center px-4 h-16">
+        <div className="flex items-center px-4 h-16 mx-auto w-full max-w-2xl">
           <button
             onClick={() => navigate('/settings')}
             className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
@@ -160,7 +160,7 @@ export function BackupRestore() {
         </div>
       </header>
 
-      <div className="p-4 space-y-6">
+      <div className="p-4 space-y-6 mx-auto w-full max-w-2xl">
         {error && (
           <div className="p-4 bg-[#9B6B6B]/10 border border-[#9B6B6B]/30 rounded-lg">
             <p className="text-sm text-[#9B6B6B]">{error}</p>

@@ -89,7 +89,7 @@ export function ExamenView() {
       />
 
       <motion.div
-        className="flex-1 p-4 space-y-8"
+        className="flex-1 p-4 space-y-8 mx-auto w-full max-w-2xl"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}

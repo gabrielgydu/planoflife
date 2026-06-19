@@ -102,7 +102,7 @@ export function LadderTracker() {
               <button
                 onClick={() => setOpen(r)}
                 aria-label={`Degrau ${r.rung}: ${r.title}`}
-                className={`w-full flex items-start gap-3 p-2.5 rounded-lg text-left transition-colors ${
+                className={`w-full flex items-start gap-3 p-2.5 rounded-lg text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light ${
                   isCurrent
                     ? 'bg-primary/5 dark:bg-primary-light/5 ring-1 ring-primary/20 dark:ring-ring-dark/30'
                     : 'hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark'

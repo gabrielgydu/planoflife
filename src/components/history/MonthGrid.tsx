@@ -137,7 +137,7 @@ export function MonthGrid({ month, domain }: MonthGridProps) {
   }
 
   return (
-    <div className="flex-1 p-4">
+    <div className="flex-1 p-4 mx-auto w-full max-w-md">
       {/* Weekday headers */}
       <div className="grid grid-cols-7 gap-1 mb-2">
         {WEEKDAYS.map((day) => (
@@ -195,7 +195,7 @@ export function MonthGrid({ month, domain }: MonthGridProps) {
               key={dateStr}
               to={`/history/${dateStr}`}
               style={bgStyle}
-              className={`aspect-square rounded-lg flex flex-col items-center justify-center text-xs transition-colors ${
+              className={`aspect-square rounded-lg flex flex-col items-center justify-center text-xs transition-colors cursor-pointer hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light ${
                 !isCurrentMonth ? 'opacity-30' : ''
               } ${isTodayDate ? 'ring-2 ring-primary dark:ring-ring-dark ring-offset-2 dark:ring-offset-surface-dark' : ''} ${
                 isFutureDate ? 'pointer-events-none' : ''

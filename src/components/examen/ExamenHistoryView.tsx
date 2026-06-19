@@ -63,7 +63,7 @@ export function ExamenHistoryView() {
   return (
     <div className="flex flex-col min-h-full">
       <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
-        <div className="flex items-center justify-between px-4 h-16">
+        <div className="flex items-center justify-between px-4 h-16 mx-auto w-full max-w-md">
           <button
             onClick={() => navigate(-1)}
             className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
@@ -101,7 +101,7 @@ export function ExamenHistoryView() {
       {!entries ? (
         <Spinner className="h-64" />
       ) : (
-        <div className="flex-1 p-4">
+        <div className="flex-1 p-4 mx-auto w-full max-w-md">
           {/* Weekday headers */}
           <div className="grid grid-cols-7 gap-1 mb-2">
             {WEEKDAYS.map((day) => (
@@ -131,7 +131,7 @@ export function ExamenHistoryView() {
                 <Link
                   key={dateStr}
                   to={`/examen/${dateStr}`}
-                  className={`aspect-square rounded-lg flex flex-col items-center justify-center text-xs transition-colors ${
+                  className={`aspect-square rounded-lg flex flex-col items-center justify-center text-xs transition-colors cursor-pointer hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark hover:ring-1 hover:ring-primary/40 dark:hover:ring-primary-light/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light ${
                     !isCurrentMonth ? 'opacity-30' : ''
                   } ${isTodayDate ? 'ring-2 ring-primary dark:ring-ring-dark ring-offset-2 dark:ring-offset-surface-dark' : ''} ${
                     isFutureDate ? 'pointer-events-none' : ''

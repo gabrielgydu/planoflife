@@ -39,7 +39,7 @@ export function ExamenEntryForm({ isOpen, category, entry, onSave, onClose }: Ex
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center">
+        <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -53,7 +53,7 @@ export function ExamenEntryForm({ isOpen, category, entry, onSave, onClose }: Ex
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="relative w-full max-w-lg bg-surface-card dark:bg-surface-card-dark rounded-t-2xl shadow-lg"
+            className="relative w-full max-w-lg bg-surface-card dark:bg-surface-card-dark rounded-t-2xl sm:rounded-2xl shadow-lg"
           >
             <div className="p-4 border-b border-border dark:border-border-dark">
               <div className="flex items-center justify-between">

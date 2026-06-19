@@ -115,7 +115,7 @@ export function DailyView() {
       />
 
       <motion.div
-        className="flex-1"
+        className="flex-1 mx-auto w-full max-w-2xl"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}
@@ -130,14 +130,14 @@ export function DailyView() {
         <div className="px-4 pb-2 grid grid-cols-2 gap-2">
           <Link
             to="/exame-particular"
-            className="flex items-center justify-center gap-2 p-3 text-sm bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors"
+            className="flex items-center justify-center gap-2 p-3 text-sm bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
           >
             <Swords className="w-4 h-4 shrink-0" />
             <span>Exame particular</span>
           </Link>
           <Link
             to="/rosario"
-            className="flex items-center justify-center gap-2 p-3 text-sm bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors"
+            className="flex items-center justify-center gap-2 p-3 text-sm bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
           >
             <Sparkles className="w-4 h-4 shrink-0" />
             <span>Contemplação do Rosário</span>

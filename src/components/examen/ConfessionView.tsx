@@ -28,7 +28,7 @@ export function ConfessionView() {
   return (
     <div className="min-h-full">
       <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
-        <div className="flex items-center px-4 h-16">
+        <div className="flex items-center px-4 h-16 mx-auto w-full max-w-2xl">
           <button
             onClick={() => navigate(-1)}
             className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
@@ -46,7 +46,7 @@ export function ConfessionView() {
         <EmptyState icon={Sparkles} message="Nenhum item pendente para confissão" />
       ) : (
         <>
-          <div className="p-4 space-y-8">
+          <div className="p-4 space-y-8 mx-auto w-full max-w-2xl">
             {sortedDates.map((date) => {
               const dateEntries = entriesByDate.get(date) ?? []
               return (
@@ -72,13 +72,15 @@ export function ConfessionView() {
           </div>
 
           <div className="sticky bottom-0 p-4 bg-surface-card/95 dark:bg-surface-card-dark/95 backdrop-blur-sm border-t border-border dark:border-border-dark">
-            <button
-              onClick={() => setShowConfirmDialog(true)}
-              className="w-full py-3 bg-success hover:bg-success-dark text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
-            >
-              <Check className="w-5 h-5" />
-              Marcar tudo como confessado
-            </button>
+            <div className="mx-auto w-full max-w-2xl">
+              <button
+                onClick={() => setShowConfirmDialog(true)}
+                className="w-full py-3 bg-success hover:bg-success-dark text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+              >
+                <Check className="w-5 h-5" />
+                Marcar tudo como confessado
+              </button>
+            </div>
           </div>
 
           <ConfirmDialog

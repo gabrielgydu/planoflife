@@ -23,7 +23,7 @@ function MoveRow({ move, prominent }: { move: CareerMove; prominent: boolean }) 
       <button
         onClick={() => void setMoveStatus(move.id, !done)}
         aria-label={done ? `Desmarcar ${move.title}` : `Concluir ${move.title}`}
-        className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+        className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light ${
           done
             ? 'bg-success border-success text-white'
             : 'border-border dark:border-border-dark hover:border-text-muted'

@@ -38,7 +38,11 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        // Include raster image formats (jpg/jpeg/webp) so bundled images under
+        // public/ (practice-images, rosary-images) are precached and work offline.
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,jpg,jpeg,webp}'],
+        // Some sacred-art images exceed the 2 MiB default; allow up to 5 MiB.
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

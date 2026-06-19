@@ -35,14 +35,14 @@ export function BottomNav() {
     ? [...baseTabs.slice(0, 3), careerTab, ...baseTabs.slice(3)]
     : baseTabs
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-surface-card dark:bg-surface-card-dark border-t border-border dark:border-border-dark pb-[var(--safe-area-bottom)]">
-      <div className="flex justify-around items-center h-16">
+    <nav className="fixed bottom-0 left-0 right-0 bg-surface-card dark:bg-surface-card-dark border-t border-border dark:border-border-dark pb-[var(--safe-area-bottom)] sm:left-1/2 sm:right-auto sm:bottom-6 sm:-translate-x-1/2 sm:w-auto sm:border sm:rounded-2xl sm:shadow-lg sm:pb-0">
+      <div className="flex justify-around items-center h-16 sm:justify-center sm:gap-2 sm:px-2">
         {tabs.map((tab) => (
           <NavLink
             key={tab.to}
             to={tab.to}
             className={({ isActive }) =>
-              `flex items-center justify-center w-12 h-12 transition-colors ${
+              `flex items-center justify-center w-12 h-12 rounded-xl transition-colors hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light ${
                 isActive
                   ? 'text-primary dark:text-primary-light'
                   : 'text-text-muted dark:text-text-muted-dark'

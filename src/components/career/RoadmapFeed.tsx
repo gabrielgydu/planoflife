@@ -119,7 +119,7 @@ export function RoadmapFeed() {
           {log.length > LOG_PREVIEW_COUNT && (
             <button
               onClick={() => setShowAllLog((v) => !v)}
-              className="text-xs font-medium text-primary dark:text-primary-light"
+              className="text-xs font-medium text-primary dark:text-primary-light rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
             >
               {showAllLog ? 'Mostrar menos' : `Mostrar todas (${log.length})`}
             </button>

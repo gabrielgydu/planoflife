@@ -211,7 +211,7 @@ export function OutreachTracker() {
             setEditing(null)
             setFormOpen(true)
           }}
-          className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium bg-btn dark:bg-btn-dark text-btn-text dark:text-btn-dark-text rounded-lg"
+          className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium bg-btn dark:bg-btn-dark text-btn-text dark:text-btn-dark-text rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
         >
           <Plus className="w-3.5 h-3.5" />
           Registrar
@@ -257,7 +257,7 @@ export function OutreachTracker() {
                   setEditing(a)
                   setFormOpen(true)
                 }}
-                className="w-full py-2.5 text-left"
+                className="w-full py-2.5 text-left rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
               >
                 <div className="flex items-baseline gap-2">
                   <span className="text-sm font-medium text-text-primary dark:text-text-primary-dark flex-1 min-w-0 truncate">

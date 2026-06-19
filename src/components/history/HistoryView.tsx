@@ -34,7 +34,7 @@ export function HistoryView() {
   return (
     <div className="flex flex-col min-h-full">
       <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
-        <div className="flex items-center justify-between px-4 h-16">
+        <div className="flex items-center justify-between px-4 h-16 mx-auto w-full max-w-md">
           <button
             onClick={handlePrevMonth}
             className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
@@ -64,13 +64,15 @@ export function HistoryView() {
       <MonthGrid month={currentMonth} domain={effectiveDomain} />
 
       <div className="p-4 border-t border-border dark:border-border-dark">
-        <Link
-          to="/settings/pdf"
-          className="flex items-center justify-center gap-2 py-3 text-sm font-medium text-primary dark:text-primary-light bg-primary/5 rounded-lg hover:bg-primary/10 transition-colors"
-        >
-          <FileText className="w-5 h-5" />
-          Exportar PDF do mês
-        </Link>
+        <div className="mx-auto w-full max-w-md">
+          <Link
+            to="/settings/pdf"
+            className="flex items-center justify-center gap-2 py-3 text-sm font-medium text-primary dark:text-primary-light bg-primary/5 rounded-lg hover:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
+          >
+            <FileText className="w-5 h-5" />
+            Exportar PDF do mês
+          </Link>
+        </div>
       </div>
     </div>
   )

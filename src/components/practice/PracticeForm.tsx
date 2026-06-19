@@ -141,7 +141,7 @@ export function PracticeForm() {
   return (
     <div className="min-h-full">
       <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
-        <div className="flex items-center px-4 h-16">
+        <div className="flex items-center px-4 h-16 mx-auto w-full max-w-2xl">
           <button
             onClick={() => navigate(-1)}
             className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-lg transition-colors"
@@ -161,7 +161,7 @@ export function PracticeForm() {
         </div>
       </header>
 
-      <form onSubmit={handleSubmit} className="p-4 space-y-6">
+      <form onSubmit={handleSubmit} className="p-4 space-y-6 mx-auto w-full max-w-2xl">
         <div>
           <label className="block text-sm font-medium text-text-secondary dark:text-text-secondary-dark mb-2">
             Nome

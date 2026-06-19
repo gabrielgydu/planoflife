@@ -57,7 +57,7 @@ export function ExameParticularView() {
   return (
     <div className="flex flex-col min-h-full">
       <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
-        <div className="flex items-center justify-between px-4 h-16">
+        <div className="flex items-center justify-between px-4 h-16 mx-auto w-full max-w-2xl">
           <button
             onClick={() => navigate(-1)}
             className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
@@ -73,7 +73,7 @@ export function ExameParticularView() {
       </header>
 
       <motion.div
-        className="flex-1 p-4 space-y-6"
+        className="flex-1 p-4 space-y-6 mx-auto w-full max-w-2xl"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}

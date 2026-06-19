@@ -67,7 +67,7 @@ export function GuidingQuestionsList() {
   return (
     <div className="min-h-full">
       <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
-        <div className="flex items-center px-4 h-16">
+        <div className="flex items-center px-4 h-16 mx-auto w-full max-w-2xl">
           <button
             onClick={() => navigate(-1)}
             className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
@@ -87,13 +87,15 @@ export function GuidingQuestionsList() {
       </header>
 
       {questions.length === 0 ? (
-        <EmptyState
-          icon={HelpCircle}
-          message="Nenhuma pergunta orientadora cadastrada"
-          action={{ label: 'Adicionar pergunta', onClick: () => handleOpenForm() }}
-        />
+        <div className="mx-auto w-full max-w-2xl">
+          <EmptyState
+            icon={HelpCircle}
+            message="Nenhuma pergunta orientadora cadastrada"
+            action={{ label: 'Adicionar pergunta', onClick: () => handleOpenForm() }}
+          />
+        </div>
       ) : (
-        <div className="divide-y divide-border/30 dark:divide-border-dark">
+        <div className="divide-y divide-border/30 dark:divide-border-dark mx-auto w-full max-w-2xl">
           <SortableList
             items={questions}
             onReorder={handleReorder}
@@ -130,7 +132,7 @@ export function GuidingQuestionsList() {
       {/* Form Modal */}
       <AnimatePresence>
         {showForm && (
-          <div className="fixed inset-0 z-50 flex items-end justify-center">
+          <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -144,7 +146,7 @@ export function GuidingQuestionsList() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="relative w-full max-w-lg bg-surface-card dark:bg-surface-card-dark rounded-t-2xl shadow-lg"
+              className="relative w-full max-w-lg bg-surface-card dark:bg-surface-card-dark rounded-t-2xl sm:rounded-2xl shadow-lg"
             >
             <div className="p-4 border-b border-border dark:border-border-dark">
               <h2 className="font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark">

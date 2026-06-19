@@ -10,7 +10,7 @@ interface PracticeRowProps {
 }
 
 export function PracticeRow({ practice, isCompleted, onToggle, onOpenDetail }: PracticeRowProps) {
-  const nameClasses = `flex-1 text-sm text-left transition-colors duration-200 ${
+  const nameClasses = `flex-1 text-sm text-left transition-colors duration-200 rounded hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light ${
     isCompleted
       ? 'text-text-muted dark:text-text-muted-dark'
       : 'text-text-primary dark:text-text-primary-dark'

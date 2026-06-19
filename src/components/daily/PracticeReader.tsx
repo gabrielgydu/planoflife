@@ -126,32 +126,34 @@ export function PracticeReader({
       className="fixed inset-0 z-50 flex flex-col bg-surface dark:bg-surface-dark"
     >
       {/* Header */}
-      <header className="flex items-center px-4 h-14 shrink-0 border-b border-border/30 dark:border-border-dark/30">
-        <button
-          onClick={onClose}
-          className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
-          aria-label="Fechar"
-        >
-          <X className="w-5 h-5" />
-        </button>
+      <header className="shrink-0 border-b border-border/30 dark:border-border-dark/30">
+        <div className="flex items-center px-4 h-14 mx-auto w-full max-w-2xl">
+          <button
+            onClick={onClose}
+            className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
+            aria-label="Fechar"
+          >
+            <X className="w-5 h-5" />
+          </button>
 
-        <h1 className="flex-1 text-center font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark truncate px-2">
-          {headerTitle}
-        </h1>
+          <h1 className="flex-1 text-center font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark truncate px-2">
+            {headerTitle}
+          </h1>
 
-        <motion.button
-          onClick={() => onTogglePractice(practice.id)}
-          whileTap={{ scale: 1.15 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-          className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 ${
-            completed
-              ? 'bg-btn border-[1.5px] border-btn dark:bg-btn-dark dark:border-btn-dark'
-              : 'border-[1.5px] border-border dark:border-border-dark'
-          }`}
-          aria-label={completed ? 'Desmarcar' : 'Marcar como feito'}
-        >
-          {completed && <Check className="w-4 h-4 text-btn-text dark:text-btn-dark-text" strokeWidth={3} />}
-        </motion.button>
+          <motion.button
+            onClick={() => onTogglePractice(practice.id)}
+            whileTap={{ scale: 1.15 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+            className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 ${
+              completed
+                ? 'bg-btn border-[1.5px] border-btn dark:bg-btn-dark dark:border-btn-dark'
+                : 'border-[1.5px] border-border dark:border-border-dark'
+            }`}
+            aria-label={completed ? 'Desmarcar' : 'Marcar como feito'}
+          >
+            {completed && <Check className="w-4 h-4 text-btn-text dark:text-btn-dark-text" strokeWidth={3} />}
+          </motion.button>
+        </div>
       </header>
 
       {/* Swipeable content */}
@@ -172,36 +174,38 @@ export function PracticeReader({
             onDragEnd={handleDragEnd}
             className="absolute inset-0 overflow-y-auto touch-pan-y"
           >
-            {imageSrc && (
-              <div className="w-full max-h-[40vh] overflow-hidden bg-surface-secondary dark:bg-surface-secondary-dark">
-                <img
-                  src={imageSrc}
-                  alt={practice.name}
-                  className="w-full h-full object-contain"
-                  draggable={false}
-                />
-              </div>
-            )}
+            <div className="mx-auto w-full max-w-2xl">
+              {imageSrc && (
+                <div className="w-full flex justify-center bg-surface-secondary dark:bg-surface-secondary-dark">
+                  <img
+                    src={imageSrc}
+                    alt={practice.name}
+                    className="max-h-[40vh] w-auto max-w-full object-contain"
+                    draggable={false}
+                  />
+                </div>
+              )}
 
-            {isBundled ? (
-              <div className="p-5 pb-20">
-                <MarkdownRenderer
-                  markdown={bundledText.texts[activeLang] ?? ''}
-                  className="prose-prayer"
+              {isBundled ? (
+                <div className="p-5 pb-20">
+                  <MarkdownRenderer
+                    markdown={bundledText.texts[activeLang] ?? ''}
+                    className="prose-prayer"
+                  />
+                </div>
+              ) : practice.content ? (
+                <div
+                  className="prose prose-slate dark:prose-invert max-w-full p-4"
+                  dangerouslySetInnerHTML={{ __html: practice.content }}
                 />
-              </div>
-            ) : practice.content ? (
-              <div
-                className="prose prose-slate dark:prose-invert max-w-none p-4"
-                dangerouslySetInnerHTML={{ __html: practice.content }}
-              />
-            ) : !imageSrc ? (
-              <div className="flex items-center justify-center min-h-[50vh] px-8 text-center">
-                <p className="font-heading text-2xl font-medium text-text-secondary dark:text-text-secondary-dark">
-                  {practice.name}
-                </p>
-              </div>
-            ) : null}
+              ) : !imageSrc ? (
+                <div className="flex items-center justify-center min-h-[50vh] px-8 text-center">
+                  <p className="font-heading text-2xl font-medium text-text-secondary dark:text-text-secondary-dark">
+                    {practice.name}
+                  </p>
+                </div>
+              ) : null}
+            </div>
           </motion.div>
         </AnimatePresence>
 
@@ -209,7 +213,7 @@ export function PracticeReader({
         {hasMultipleLangs && (
           <button
             onClick={toggleLang}
-            className="absolute bottom-4 right-4 px-4 py-2 rounded-full text-sm font-medium bg-surface-secondary text-text-primary dark:bg-surface-secondary-dark dark:text-text-primary-dark shadow-lg transition-transform active:scale-95"
+            className="absolute bottom-4 right-4 px-4 py-2 rounded-full text-sm font-medium bg-surface-secondary text-text-primary dark:bg-surface-secondary-dark dark:text-text-primary-dark shadow-lg transition-transform active:scale-95 hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
           >
             {toggleLabel}
           </button>
@@ -217,35 +221,37 @@ export function PracticeReader({
       </div>
 
       {/* Footer */}
-      <footer className="flex items-center px-4 h-12 shrink-0 border-t border-border/30 dark:border-border-dark/30">
-        <div className="flex items-center gap-1.5 min-w-0 flex-1">
-          <CategoryIcon name={category.emoji} className="w-4 h-4 text-text-secondary dark:text-text-secondary-dark shrink-0" />
-          <span className="text-xs text-text-secondary dark:text-text-secondary-dark truncate">
-            {category.name}
+      <footer className="shrink-0 border-t border-border/30 dark:border-border-dark/30">
+        <div className="flex items-center px-4 h-12 mx-auto w-full max-w-2xl">
+          <div className="flex items-center gap-1.5 min-w-0 flex-1">
+            <CategoryIcon name={category.emoji} className="w-4 h-4 text-text-secondary dark:text-text-secondary-dark shrink-0" />
+            <span className="text-xs text-text-secondary dark:text-text-secondary-dark truncate">
+              {category.name}
+            </span>
+          </div>
+
+          <span className="text-xs text-text-muted dark:text-text-muted-dark tabular-nums">
+            {currentIndex + 1}/{items.length}
           </span>
-        </div>
 
-        <span className="text-xs text-text-muted dark:text-text-muted-dark tabular-nums">
-          {currentIndex + 1}/{items.length}
-        </span>
-
-        <div className="flex items-center gap-1 flex-1 justify-end">
-          <button
-            onClick={goPrev}
-            disabled={currentIndex === 0}
-            className="p-1.5 text-text-secondary dark:text-text-secondary-dark disabled:opacity-30 hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
-            aria-label="Anterior"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            onClick={goNext}
-            disabled={currentIndex === items.length - 1}
-            className="p-1.5 text-text-secondary dark:text-text-secondary-dark disabled:opacity-30 hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
-            aria-label="Próximo"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-1 flex-1 justify-end">
+            <button
+              onClick={goPrev}
+              disabled={currentIndex === 0}
+              className="p-1.5 text-text-secondary dark:text-text-secondary-dark disabled:opacity-30 hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
+              aria-label="Anterior"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={goNext}
+              disabled={currentIndex === items.length - 1}
+              className="p-1.5 text-text-secondary dark:text-text-secondary-dark disabled:opacity-30 hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
+              aria-label="Próximo"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </footer>
     </motion.div>

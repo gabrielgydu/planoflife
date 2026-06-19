@@ -18,7 +18,7 @@ export function PracticeDetail() {
   return (
     <div className="min-h-full flex flex-col">
       <header className="sticky top-0 bg-surface-card/95 dark:bg-surface-card-dark/95 backdrop-blur-sm shadow-[0_1px_3px_rgba(26,32,48,0.04)] z-10">
-        <div className="flex items-center px-4 h-16">
+        <div className="flex items-center px-4 h-16 mx-auto w-full max-w-2xl">
           <button
             onClick={() => navigate(-1)}
             className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
@@ -31,26 +31,28 @@ export function PracticeDetail() {
         </div>
       </header>
 
-      {practice.imageData && (
-        <div className="w-full max-h-[40vh] overflow-hidden bg-surface-secondary dark:bg-surface-secondary-dark">
-          <img
-            src={practice.imageData}
-            alt={practice.name}
-            className="w-full h-full object-contain"
+      <div className="mx-auto w-full max-w-2xl">
+        {practice.imageData && (
+          <div className="w-full flex justify-center bg-surface-secondary dark:bg-surface-secondary-dark">
+            <img
+              src={practice.imageData}
+              alt={practice.name}
+              className="max-h-[40vh] w-auto max-w-full object-contain"
+            />
+          </div>
+        )}
+
+        {practice.content && (
+          <div
+            className="prose prose-slate dark:prose-invert max-w-full p-4"
+            dangerouslySetInnerHTML={{ __html: practice.content }}
           />
-        </div>
-      )}
+        )}
 
-      {practice.content && (
-        <div
-          className="prose prose-slate dark:prose-invert max-w-none p-4"
-          dangerouslySetInnerHTML={{ __html: practice.content }}
-        />
-      )}
-
-      {!practice.content && !practice.imageData && (
-        <EmptyState icon={FileText} message="Nenhum conteúdo adicionado" />
-      )}
+        {!practice.content && !practice.imageData && (
+          <EmptyState icon={FileText} message="Nenhum conteúdo adicionado" />
+        )}
+      </div>
     </div>
   )
 }

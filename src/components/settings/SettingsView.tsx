@@ -38,12 +38,12 @@ export function SettingsView() {
   return (
     <div className="min-h-full">
       <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
-        <div className="flex items-center justify-center px-4 h-16">
+        <div className="flex items-center justify-center px-4 h-16 mx-auto w-full max-w-2xl">
           <h1 className="font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark">Configurações</h1>
         </div>
       </header>
 
-      <div className="p-4 space-y-4">
+      <div className="p-4 space-y-4 mx-auto w-full max-w-2xl">
         <SyncSettingsSection />
 
         {/* Theme Picker */}

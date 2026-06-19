@@ -161,7 +161,7 @@ export function PracticeList() {
   return (
     <div className="min-h-full">
       <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
-        <div className="flex items-center px-4 h-16">
+        <div className="flex items-center px-4 h-16 mx-auto w-full max-w-2xl">
           <button
             onClick={() => navigate('/settings')}
             className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
@@ -185,7 +185,7 @@ export function PracticeList() {
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
       >
-        <div className="divide-y divide-border/30 dark:divide-border-dark">
+        <div className="divide-y divide-border/30 dark:divide-border-dark mx-auto w-full max-w-2xl">
           {groupedPractices.map(({ category, practices: catPractices }) => (
             <DroppableCategory key={category.id} categoryId={category.id}>
               <div className="px-4 py-2 bg-surface-secondary dark:bg-surface-secondary-dark">

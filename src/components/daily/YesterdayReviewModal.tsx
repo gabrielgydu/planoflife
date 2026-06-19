@@ -81,7 +81,7 @@ export function YesterdayReviewModal({ isOpen, yesterdayStr, onComplete }: Yeste
               <button
                 key={practice.id}
                 onClick={() => toggleChecked(practice.id)}
-                className="flex items-center gap-3 w-full py-3 px-1 text-left"
+                className="flex items-center gap-3 w-full py-3 px-1 text-left rounded-lg transition-colors hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
               >
                 <motion.div
                   whileTap={{ scale: 1.15 }}

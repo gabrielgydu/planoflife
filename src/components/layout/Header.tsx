@@ -15,10 +15,10 @@ export function Header({ date, onPrevDay, onNextDay, title, rightAction }: Heade
 
   return (
     <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
-      <div className="flex items-center justify-between px-4 h-16">
+      <div className="flex items-center justify-between px-4 h-16 mx-auto w-full max-w-2xl">
         <button
           onClick={onPrevDay}
-          className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
+          className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
           aria-label="Dia anterior"
         >
           <ChevronLeft className="w-5 h-5" />
@@ -40,7 +40,7 @@ export function Header({ date, onPrevDay, onNextDay, title, rightAction }: Heade
         ) : (
           <button
             onClick={onNextDay}
-            className="p-2 -mr-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
+            className="p-2 -mr-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
             aria-label="Próximo dia"
           >
             <ChevronRight className="w-5 h-5" />
