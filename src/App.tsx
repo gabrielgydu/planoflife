@@ -36,11 +36,12 @@ export function App() {
           <Route path="/" element={<DailyView />} />
           <Route path="/examen" element={<ExamenView />} />
           <Route path="/exame-particular" element={<ExameParticularView />} />
-          <Route path="/rosario" element={<RosaryContemplationView />} />
           <Route path="/history" element={<HistoryView />} />
           <Route path="/career" element={<CareerView />} />
           <Route path="/settings" element={<SettingsView />} />
         </Route>
+        {/* Full-screen immersive reader: no bottom nav, swipeable carousel */}
+        <Route path="/rosario" element={<RosaryContemplationView />} />
         <Route path="/history/:date" element={<DayDetail />} />
         <Route path="/examen/history" element={<ExamenHistoryView />} />
         <Route path="/examen/confession" element={<ConfessionView />} />

@@ -12,3 +12,6 @@ practice_texts/
 # Sync: local secrets and decrypted working copy (PLAINTEXT — never commit)
 .env.local
 .sync/
+
+# Rosary image review staging (local only; downsized copies live in public/rosary-images)
+rosary-images-review/

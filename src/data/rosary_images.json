@@ -1,0 +1,210 @@
+{
+  "gozosos": [
+    [
+      {
+        "f": "gozosos/1-a-anunciacao-1.jpg",
+        "a": "Fra Angelico"
+      },
+      {
+        "f": "gozosos/1-a-anunciacao-2.jpg",
+        "a": "Henry Ossawa Tanner"
+      }
+    ],
+    [
+      {
+        "f": "gozosos/2-visitacao-1.jpg",
+        "a": "Domenico Ghirlandaio"
+      },
+      {
+        "f": "gozosos/2-visitacao-2.jpg",
+        "a": "Mariotto Albertinelli"
+      }
+    ],
+    [
+      {
+        "f": "gozosos/3-nascimento-de-jesus-1.jpg",
+        "a": "Geertgen tot Sint Jans"
+      },
+      {
+        "f": "gozosos/3-nascimento-de-jesus-2.jpg",
+        "a": "Correggio"
+      }
+    ],
+    [
+      {
+        "f": "gozosos/4-purificacao-1.jpg",
+        "a": "Rembrandt"
+      },
+      {
+        "f": "gozosos/4-purificacao-2.jpg",
+        "a": "Atrib. a Hans Memling"
+      }
+    ],
+    [
+      {
+        "f": "gozosos/5-o-menino-perdido-1.jpg",
+        "a": "Albrecht Dürer"
+      },
+      {
+        "f": "gozosos/5-o-menino-perdido-2.jpg",
+        "a": "Albrecht Dürer"
+      }
+    ]
+  ],
+  "dolorosos": [
+    [
+      {
+        "f": "dolorosos/1-oracao-no-horto-1.jpg",
+        "a": "Andrea Mantegna"
+      },
+      {
+        "f": "dolorosos/1-oracao-no-horto-2.jpg",
+        "a": "Giovanni Bellini"
+      }
+    ],
+    [
+      {
+        "f": "dolorosos/2-flagelacao-1.jpg",
+        "a": "Caravaggio"
+      },
+      {
+        "f": "dolorosos/2-flagelacao-2.jpg",
+        "a": "William-Adolphe Bouguereau"
+      }
+    ],
+    [
+      {
+        "f": "dolorosos/3-coroacao-de-espinhos-1.jpg",
+        "a": "Caravaggio"
+      },
+      {
+        "f": "dolorosos/3-coroacao-de-espinhos-2.jpg",
+        "a": "Caravaggio"
+      }
+    ],
+    [
+      {
+        "f": "dolorosos/4-a-cruz-as-costas-1.jpg",
+        "a": "El Greco"
+      },
+      {
+        "f": "dolorosos/4-a-cruz-as-costas-2.jpg",
+        "a": "El Greco"
+      }
+    ],
+    [
+      {
+        "f": "dolorosos/5-morte-de-jesus-1.jpg",
+        "a": "Diego Velázquez"
+      },
+      {
+        "f": "dolorosos/5-morte-de-jesus-2.jpg",
+        "a": "Andrea Mantegna"
+      }
+    ]
+  ],
+  "gloriosos": [
+    [
+      {
+        "f": "gloriosos/1-ressurreicao-1.jpg",
+        "a": "Piero della Francesca"
+      },
+      {
+        "f": "gloriosos/1-ressurreicao-2.jpg",
+        "a": "Carl Heinrich Bloch"
+      }
+    ],
+    [
+      {
+        "f": "gloriosos/2-a-ascensao-1.jpg",
+        "a": "Garofalo"
+      },
+      {
+        "f": "gloriosos/2-a-ascensao-2.jpg",
+        "a": "Rembrandt"
+      }
+    ],
+    [
+      {
+        "f": "gloriosos/3-pentecostes-1.jpg",
+        "a": "El Greco"
+      },
+      {
+        "f": "gloriosos/3-pentecostes-2.jpg",
+        "a": "Jean II Restout"
+      }
+    ],
+    [
+      {
+        "f": "gloriosos/4-assuncao-1.jpg",
+        "a": "Ticiano"
+      },
+      {
+        "f": "gloriosos/4-assuncao-2.jpg",
+        "a": "Bartolomé Esteban Murillo"
+      }
+    ],
+    [
+      {
+        "f": "gloriosos/5-coroacao-de-nossa-senhora-1.jpg",
+        "a": "Fra Angelico"
+      },
+      {
+        "f": "gloriosos/5-coroacao-de-nossa-senhora-2.jpg",
+        "a": "Diego Velázquez"
+      }
+    ]
+  ],
+  "luminosos": [
+    [
+      {
+        "f": "luminosos/1-batismo-do-senhor-1.jpg",
+        "a": "Piero della Francesca"
+      },
+      {
+        "f": "luminosos/1-batismo-do-senhor-2.jpg",
+        "a": "Verrocchio e Leonardo"
+      }
+    ],
+    [
+      {
+        "f": "luminosos/2-as-bodas-de-cana-1.jpg",
+        "a": "Paolo Veronese"
+      },
+      {
+        "f": "luminosos/2-as-bodas-de-cana-2.jpg",
+        "a": "Gerard David"
+      }
+    ],
+    [
+      {
+        "f": "luminosos/3-o-anuncio-do-reino-1.jpg",
+        "a": "Carl Heinrich Bloch"
+      },
+      {
+        "f": "luminosos/3-o-anuncio-do-reino-2.jpg",
+        "a": "Cosimo Rosselli"
+      }
+    ],
+    [
+      {
+        "f": "luminosos/4-a-transfiguracao-1.jpg",
+        "a": "Rafael"
+      },
+      {
+        "f": "luminosos/4-a-transfiguracao-2.jpg",
+        "a": "Rafael"
+      }
+    ],
+    [
+      {
+        "f": "luminosos/5-a-instituicao-da-eucaristia-1.jpg",
+        "a": "Leonardo da Vinci"
+      },
+      {
+        "f": "luminosos/5-a-instituicao-da-eucaristia-2.jpg",
+        "a": "Juan de Juanes"
+      }
+    ]
+  ]
+}
