@@ -30,6 +30,17 @@ const data = rosaryRaw as unknown as RosaryData
 // Per set: one array of candidate images per mystery (index-aligned to sets.mysteries).
 const images = rosaryImagesRaw as unknown as Record<SetKey, ImageCandidate[][]>
 
+// Today's mysteries follow the traditional weekday schedule, derived from each
+// set's vocalDays: Mon/Sat → Gozosos, Tue/Fri → Dolorosos, Wed/Sun → Gloriosos,
+// Thu → Luminosos.
+const setByWeekday = (Object.keys(data.sets) as SetKey[]).reduce<Record<number, SetKey>>(
+  (acc, key) => {
+    for (const day of data.sets[key].vocalDays) acc[day] = key
+    return acc
+  },
+  {},
+)
+
 const SWIPE_THRESHOLD = 50
 const VELOCITY_THRESHOLD = 500
 
@@ -47,7 +58,7 @@ export function RosaryContemplationView() {
   const navigate = useNavigate()
 
   const weekday = getToday().getDay() // 0=Sun … 6=Sat
-  const setKey = data.nonDaySetByWeekday[String(weekday)]
+  const setKey = setByWeekday[weekday]
   const set = data.sets[setKey]
   const imageSet = images[setKey] ?? []
 
