@@ -18,3 +18,7 @@ id = "79fdd0c03e6c4fada9025c2ce67a3991"
 # SYNC_TOKEN is a SECRET, not a var. Set it with:
 #   node derive-token.mjs            (prints the token for your passphrase)
 #   npx wrangler secret put SYNC_TOKEN
+
+# RANDOM_ORG_API_KEY is a SECRET, not a var. Powers the auth-gated GET /random
+# (random.org) used by the Meditação practice. Set it with:
+#   npx wrangler secret put RANDOM_ORG_API_KEY

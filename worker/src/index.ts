@@ -22,6 +22,8 @@ export interface Env {
   SYNC_KV: KVNamespace
   /** Secret: expected bearer token (base64url). Set via `wrangler secret put SYNC_TOKEN`. */
   SYNC_TOKEN: string
+  /** Secret: random.org API key for GET /random. Set via `wrangler secret put RANDOM_ORG_API_KEY`. */
+  RANDOM_ORG_API_KEY: string
   /** Comma-separated allowed CORS origins, e.g. "https://gabrielschutz.de,http://localhost:5173". */
   ALLOWED_ORIGINS: string
 }
@@ -91,6 +93,48 @@ export default {
 
     if (!isAuthorized(req, env)) {
       return json({ error: 'unauthorized' }, 401, cors)
+    }
+
+    // Draw a true-random integer in [1, max] from random.org. Auth-gated above, so
+    // only the owner (who holds the sync bearer token) gets random.org numbers;
+    // everyone else got a 401 and the client falls back to crypto. Any failure
+    // here returns 502 so the client also falls back to crypto. Used by the
+    // Meditação practice (max=1055, the longest Escrivá book).
+    if (url.pathname === '/random' && req.method === 'GET') {
+      const maxRaw = Number(url.searchParams.get('max') ?? '1055')
+      const max = Number.isFinite(maxRaw) ? Math.floor(maxRaw) : 1055
+      if (max < 1 || max > 1_000_000) {
+        return json({ error: 'max out of range' }, 400, cors)
+      }
+      try {
+        const rpc = await fetch('https://api.random.org/json-rpc/4/invoke', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            method: 'generateIntegers',
+            params: { apiKey: env.RANDOM_ORG_API_KEY, n: 1, min: 1, max },
+            id: 1,
+          }),
+          // Don't hold the client request open on a hung random.org — abort and
+          // return 502 so the client falls back to crypto.
+          signal: AbortSignal.timeout(5000),
+        })
+        // random.org returns HTTP 200 even on app-level errors (failure lands in a
+        // top-level `error` field with no `result`), so checking rpc.ok is not
+        // enough — also require a valid integer in result.random.data[0].
+        if (!rpc.ok) return json({ error: 'random.org failed' }, 502, cors)
+        const data = (await rpc.json()) as {
+          result?: { random?: { data?: number[] } }
+        }
+        const n = data.result?.random?.data?.[0]
+        if (typeof n !== 'number' || !Number.isInteger(n) || n < 1 || n > max) {
+          return json({ error: 'random.org failed' }, 502, cors)
+        }
+        return json({ n, source: 'random.org' }, 200, cors)
+      } catch {
+        return json({ error: 'random.org failed' }, 502, cors)
+      }
     }
 
     if (url.pathname === '/state') {

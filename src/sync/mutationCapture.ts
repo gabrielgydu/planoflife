@@ -63,6 +63,7 @@ export function installMutationCapture(): void {
     db.careerLadder,
     db.careerWins,
     db.careerLog,
+    db.meditationDays,
   ]
   for (const t of tables) {
     t.hook('creating', () => {

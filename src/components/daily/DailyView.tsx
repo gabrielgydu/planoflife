@@ -5,6 +5,7 @@ import { ChevronRight, RotateCcw, ClipboardList, Eye, EyeOff, CheckCircle2, Swor
 import { Header } from '../layout/Header'
 import { CategorySection } from './CategorySection'
 import { PracticeReader } from './PracticeReader'
+import { MeditationView } from './MeditationView'
 import { YesterdayReviewModal } from './YesterdayReviewModal'
 import { MissedReasonsModal } from './MissedReasonsModal'
 import { PropositoCard } from './PropositoCard'
@@ -18,6 +19,7 @@ import { useMorningFlow } from '../../hooks/useMorningFlow'
 import { useProposito } from '../../hooks/usePropositos'
 import { useHideCompleted } from '../../hooks/useSettings'
 import { isInActiveWindow } from '../../utils/season'
+import { isMeditacaoPractice } from '../../data/meditation'
 import { formatDate, getToday, addDay, subDay } from '../../utils/dates'
 import type { Practice, Category } from '../../types'
 
@@ -72,11 +74,21 @@ export function DailyView() {
     for (const category of categories) {
       const categoryPractices = practicesByCategory.get(category.id) ?? []
       for (const practice of categoryPractices) {
+        // Meditação has its own dedicated reader (see meditacaoId below); keep it
+        // out of the text pager so swiping never lands on an empty placeholder.
+        if (isMeditacaoPractice(practice)) continue
         items.push({ practice, category: categoryMap.get(practice.categoryId)! })
       }
     }
     return items
   }, [categories, practicesByCategory])
+
+  // The seeded "Meditação" practice opens a dedicated 3-card Escrivá reader
+  // instead of the text pager. Matched by normalized name (its id is per-device).
+  const meditacaoId = useMemo(
+    () => activePractices.find(isMeditacaoPractice)?.id ?? null,
+    [activePractices],
+  )
 
   const handlePrevDay = () => setCurrentDate((d) => subDay(d, 1))
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
@@ -210,16 +222,27 @@ export function DailyView() {
       />
 
       <AnimatePresence>
-        {readerPracticeId && readerItems.length > 0 && (
-          <PracticeReader
-            items={readerItems}
-            initialPracticeId={readerPracticeId}
+        {meditacaoId && readerPracticeId === meditacaoId ? (
+          <MeditationView
+            practiceId={meditacaoId}
             viewDate={currentDate}
             isCompleted={isCompleted}
             onTogglePractice={togglePractice}
-            onMarkViewed={markCompleted}
             onClose={() => setReaderPracticeId(null)}
           />
+        ) : (
+          readerPracticeId &&
+          readerItems.length > 0 && (
+            <PracticeReader
+              items={readerItems}
+              initialPracticeId={readerPracticeId}
+              viewDate={currentDate}
+              isCompleted={isCompleted}
+              onTogglePractice={togglePractice}
+              onMarkViewed={markCompleted}
+              onClose={() => setReaderPracticeId(null)}
+            />
+          )
         )}
       </AnimatePresence>
     </div>

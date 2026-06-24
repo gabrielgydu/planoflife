@@ -44,9 +44,13 @@ export const CAREER_TABLES = [
   'careerLog',
 ]
 
-export const TABLES = [...LEGACY_TABLES, ...CAREER_TABLES]
+// Added in sync schema 3 (Meditação daily point). Like the career tables,
+// schema-≤2 snapshots lack this key entirely; validateSyncState allows it missing.
+export const MEDITATION_TABLES = ['meditationDays']
 
-export const SYNC_SCHEMA = 2
+export const TABLES = [...LEGACY_TABLES, ...CAREER_TABLES, ...MEDITATION_TABLES]
+
+export const SYNC_SCHEMA = 3
 
 export function b64(bytes) {
   return Buffer.from(bytes).toString('base64')
@@ -135,7 +139,7 @@ export function validateSyncState(state) {
   for (const t of LEGACY_TABLES) {
     if (!Array.isArray(state.data[t])) throw new Error(`state.data.${t} must be an array`)
   }
-  for (const t of CAREER_TABLES) {
+  for (const t of [...CAREER_TABLES, ...MEDITATION_TABLES]) {
     if (state.data[t] !== undefined && !Array.isArray(state.data[t])) {
       throw new Error(`state.data.${t} must be an array when present`)
     }

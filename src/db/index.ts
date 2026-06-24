@@ -14,6 +14,7 @@ import type {
   CareerLadderRung,
   CareerWin,
   CareerLogEntry,
+  MeditationDay,
 } from '../types'
 import { generateId } from '../utils/id'
 import {
@@ -123,6 +124,7 @@ export class PlanOfLifeDB extends Dexie {
   careerLadder!: EntityTable<CareerLadderRung, 'id'>
   careerWins!: EntityTable<CareerWin, 'id'>
   careerLog!: EntityTable<CareerLogEntry, 'id'>
+  meditationDays!: EntityTable<MeditationDay, 'id'>
 
   constructor() {
     super('PlanOfLifeDB')
@@ -233,6 +235,12 @@ export class PlanOfLifeDB extends Dexie {
     // activeWindow so it only shows during those nine days each year. The helper
     // copies the window onto the row, so both devices insert an identical row.
     this.version(9).stores({}).upgrade(addMissingAdditionalPractices)
+
+    // Meditação — one drawn Escrivá point per day (see src/data/meditation.ts).
+    // New empty store keyed by the date string (one row per day); no upgrade fn,
+    // trivially idempotent, like the career tables in v7. The drawn number syncs,
+    // so the sync schema bumps to 3 — see src/sync/types.ts and sync-core.mjs.
+    this.version(10).stores({ meditationDays: 'id' })
   }
 }
 

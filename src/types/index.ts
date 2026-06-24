@@ -186,3 +186,16 @@ export interface CareerLogEntry {
   summary: string
   updatedAt: string
 }
+
+// --- Meditação ----------------------------------------------------------------
+//
+// One drawn Escrivá point per day for the seeded "Meditação" practice (see
+// src/data/meditation.ts). The `id` IS the date (YYYY-MM-DD) so there is exactly
+// one row per day and it merges by id like every other synced table. The same
+// number is shown across all three books (Caminho/Sulco/Forja). Synced (schema 3).
+export interface MeditationDay {
+  id: string // date 'YYYY-MM-DD' — primary key, one row per day
+  pointNumber: number // 1–1055, the drawn Escrivá point number
+  source: 'random.org' | 'crypto' // where the number came from
+  updatedAt: string // bumped on draw + reroll; drives the sync conflict merge
+}

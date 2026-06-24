@@ -98,6 +98,14 @@ export function mergeStates(
       ),
       careerWins: mergeById(base.data.careerWins ?? [], ours.data.careerWins ?? [], newerUpdatedAt),
       careerLog: mergeById(base.data.careerLog ?? [], ours.data.careerLog ?? [], newerUpdatedAt),
+      // Meditação: keyed by date (= id), updatedAt bumped on draw + reroll, so a
+      // concurrent reroll on two devices resolves deterministically (newer wins).
+      // `?? []` tolerates a schema-≤2 snapshot that lacks the key (preserve ours).
+      meditationDays: mergeById(
+        base.data.meditationDays ?? [],
+        ours.data.meditationDays ?? [],
+        newerUpdatedAt,
+      ),
     },
     settings,
   }

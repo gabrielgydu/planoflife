@@ -13,10 +13,12 @@ import type {
   CareerLadderRung,
   CareerWin,
   CareerLogEntry,
+  MeditationDay,
 } from '../types'
 
 // Bump whenever SyncState gains tables. v2 = career tables (Dexie v7).
-export const SYNC_SCHEMA = 2
+// v3 = meditationDays (Dexie v10).
+export const SYNC_SCHEMA = 3
 
 /** The decrypted payload that travels to/from the Worker (mirrors scripts/sync-core.mjs). */
 export interface SyncState {
@@ -39,6 +41,11 @@ export interface SyncState {
     careerLadder: CareerLadderRung[]
     careerWins: CareerWin[]
     careerLog: CareerLogEntry[]
+    // Meditação (schema 3). Like the career tables above, a snapshot pushed by a
+    // schema-≤2 client lacks this key entirely — consumers must treat a MISSING
+    // array as "older client, no opinion" (preserve local rows), never as an
+    // empty table. See applyState.ts and merge.ts (`?? []`).
+    meditationDays: MeditationDay[]
   }
   settings: Record<string, string>
 }
@@ -73,6 +80,7 @@ export const SYNC_TABLES = [
   'careerLadder',
   'careerWins',
   'careerLog',
+  'meditationDays',
 ] as const
 
 /** Cloud snapshot was produced by a NEWER app than this one. */
