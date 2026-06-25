@@ -3,8 +3,10 @@
 // `om` CLI. The point text is bundled offline in escriva_points.json (built from
 // the om cache by scripts/build-escriva-points.mjs); the number is drawn once per
 // day via the Worker's /random (random.org) with a crypto fallback, then stored
-// and synced (db.meditationDays, keyed by date) so it's stable and identical
-// across devices. Reroll redraws and overwrites the day's number.
+// and synced (db.meditationDays, keyed by date + slot — see meditationDayKey) so
+// it's stable and identical across devices. There are two daily slots — morning
+// "Meditação" and afternoon "Meditação da Tarde" — each with its own draw. Reroll
+// redraws and overwrites that slot's number for the day.
 
 import { getSyncUrl, getAuthToken } from '../sync/config'
 import type { Practice } from '../types'
@@ -59,14 +61,42 @@ export function getEscrivaPoint(points: EscrivaPoints, book: BookKey, n: number)
 const normalizeName = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim()
 
+// Two daily mental-prayer slots: the morning "Meditação" (seeded since v1) and the
+// afternoon "Meditação da Tarde". Each draws its OWN Escrivá point, stored as a
+// separate meditationDays row (see meditationDayKey).
+export type MeditacaoSlot = 'manha' | 'tarde'
+
+const MEDITACAO_NAME_TO_SLOT: Record<string, MeditacaoSlot> = {
+  meditacao: 'manha',
+  'meditacao da tarde': 'tarde',
+}
+
 /**
- * The seeded "Meditação" practice opens the 3-card reader. Matched by normalized
- * name: its id is a per-device random UUID (so not a stable cross-device key), and
- * re-keying it to a fixed id would risk a sync duplicate (the merge has no
- * tombstones). Name-matching needs no migration and converges everywhere.
+ * The slot a meditation practice maps to, or null if it isn't a meditation. Matched
+ * by normalized name: the morning practice's id is a per-device random UUID (so not
+ * a stable cross-device key), and re-keying it to a fixed id would risk a sync
+ * duplicate (the merge has no tombstones). Name-matching needs no migration and
+ * converges everywhere. The afternoon practice carries a fixed id but is matched the
+ * same way for symmetry.
  */
+export function getMeditacaoSlot(practice: Practice): MeditacaoSlot | null {
+  return MEDITACAO_NAME_TO_SLOT[normalizeName(practice.name)] ?? null
+}
+
+/** True for either meditation slot — used to route to the dedicated reader. */
 export function isMeditacaoPractice(practice: Practice): boolean {
-  return normalizeName(practice.name) === 'meditacao'
+  return getMeditacaoSlot(practice) !== null
+}
+
+/**
+ * The meditationDays row key for a day + slot. The morning slot keeps the BARE date
+ * (backward-compatible with every row drawn before the afternoon slot existed — no
+ * migration); the afternoon slot is suffixed so the two draws are independent rows
+ * that sync side by side. Ids are opaque strings everywhere downstream (merge,
+ * backup), so a composite key is safe.
+ */
+export function meditationDayKey(dateStr: string, slot: MeditacaoSlot): string {
+  return slot === 'tarde' ? `${dateStr}:tarde` : dateStr
 }
 
 export type DrawSource = 'random.org' | 'crypto'

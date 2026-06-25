@@ -8,13 +8,18 @@ import {
   loadEscrivaPoints,
   getEscrivaPoint,
   type EscrivaPoints,
+  type MeditacaoSlot,
 } from '../../data/meditation'
 import { useMeditationDay } from '../../hooks/useMeditationDay'
 import { formatDate } from '../../utils/dates'
 
 interface MeditationViewProps {
-  // The seeded "Meditação" practice id — drives the complete-toggle / streaks.
+  // The meditation practice id — drives the complete-toggle / streaks.
   practiceId: string
+  // Which daily slot this reader is for; the point is drawn/stored per slot.
+  slot: MeditacaoSlot
+  // Header title — the practice's name ("Meditação" / "Meditação da Tarde").
+  title: string
   // The day being viewed in DailyView; the drawn point is stored per this date.
   viewDate: Date
   isCompleted: (practiceId: string) => boolean
@@ -25,17 +30,19 @@ interface MeditationViewProps {
 /**
  * The Meditação reader: the day's single point number shown across all three
  * books — Caminho, Sulco, Forja — stacked on one scrollable page (like the `om`
- * CLI's three boxes). A "Sortear" button redraws the day's number.
+ * CLI's three boxes). A "Sortear" button redraws the slot's number for the day.
  */
 export function MeditationView({
   practiceId,
+  slot,
+  title,
   viewDate,
   isCompleted,
   onTogglePractice,
   onClose,
 }: MeditationViewProps) {
   const dateStr = formatDate(viewDate)
-  const { pointNumber, loading, drawing, reroll } = useMeditationDay(dateStr)
+  const { pointNumber, loading, drawing, reroll } = useMeditationDay(dateStr, slot)
   const [points, setPoints] = useState<EscrivaPoints | null>(null)
   const [loadError, setLoadError] = useState(false)
 
@@ -86,7 +93,7 @@ export function MeditationView({
           </button>
 
           <h1 className="flex-1 text-center font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark truncate px-2">
-            Meditação
+            {title}
           </h1>
 
           <motion.button

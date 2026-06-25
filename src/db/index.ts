@@ -47,6 +47,10 @@ export const ADDITIONAL_PRACTICES: AdditionalPracticeSpec[] = [
   { name: 'Oferecimento do Trabalho', categoryName: 'Orações da Manhã', isRequired: false, bundledTextId: 'oferecimento_do_trabalho' },
   { name: 'Leitura do Evangelho', categoryName: 'Orações da Manhã', isRequired: true },
   { id: 'sao-josemaria-prayer', name: 'Oração a São Josemaria', categoryName: 'Meio-dia', isRequired: false, bundledTextId: 'sao_josemaria' },
+  // Second daily mental prayer. No bundledTextId: like the morning "Meditação" it
+  // opens the dedicated Escrivá reader (routed by name → slot, see meditation.ts),
+  // which draws its own independent point.
+  { id: 'meditacao-tarde', name: 'Meditação da Tarde', categoryName: 'Tarde', isRequired: true },
   {
     id: NOVENA_TRABALHO_PRACTICE_ID,
     name: NOVENA_TRABALHO_NAME,
@@ -241,6 +245,14 @@ export class PlanOfLifeDB extends Dexie {
     // trivially idempotent, like the career tables in v7. The drawn number syncs,
     // so the sync schema bumps to 3 — see src/sync/types.ts and sync-core.mjs.
     this.version(10).stores({ meditationDays: 'id' })
+
+    // Add "Meditação da Tarde" (the afternoon mental prayer — a second meditation
+    // slot, see src/data/meditation.ts) to existing installs. Same FIXED-id
+    // reasoning as v8/v9: both of a user's devices insert the identical row so sync
+    // converges instead of duplicating. Idempotent + name-matched (see helper). Its
+    // draws are stored as separate meditationDays rows (id `date:tarde`), so no sync
+    // schema bump — the existing meditationDays table already covers them.
+    this.version(11).stores({}).upgrade(addMissingAdditionalPractices)
   }
 }
 

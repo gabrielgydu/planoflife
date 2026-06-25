@@ -19,7 +19,7 @@ import { useMorningFlow } from '../../hooks/useMorningFlow'
 import { useProposito } from '../../hooks/usePropositos'
 import { useHideCompleted } from '../../hooks/useSettings'
 import { isInActiveWindow } from '../../utils/season'
-import { isMeditacaoPractice } from '../../data/meditation'
+import { isMeditacaoPractice, getMeditacaoSlot } from '../../data/meditation'
 import { formatDate, getToday, addDay, subDay } from '../../utils/dates'
 import type { Practice, Category } from '../../types'
 
@@ -74,7 +74,7 @@ export function DailyView() {
     for (const category of categories) {
       const categoryPractices = practicesByCategory.get(category.id) ?? []
       for (const practice of categoryPractices) {
-        // Meditação has its own dedicated reader (see meditacaoId below); keep it
+        // Either meditation slot has its own dedicated reader (see below); keep them
         // out of the text pager so swiping never lands on an empty placeholder.
         if (isMeditacaoPractice(practice)) continue
         items.push({ practice, category: categoryMap.get(practice.categoryId)! })
@@ -83,12 +83,14 @@ export function DailyView() {
     return items
   }, [categories, practicesByCategory])
 
-  // The seeded "Meditação" practice opens a dedicated 3-card Escrivá reader
-  // instead of the text pager. Matched by normalized name (its id is per-device).
-  const meditacaoId = useMemo(
-    () => activePractices.find(isMeditacaoPractice)?.id ?? null,
-    [activePractices],
+  // A meditation practice (morning "Meditação" or afternoon "Meditação da Tarde")
+  // opens a dedicated 3-card Escrivá reader instead of the text pager. Resolve the
+  // currently-opened practice → its slot; null when the open reader isn't a meditation.
+  const openedPractice = useMemo(
+    () => activePractices.find((p) => p.id === readerPracticeId) ?? null,
+    [activePractices, readerPracticeId],
   )
+  const openedMeditacaoSlot = openedPractice ? getMeditacaoSlot(openedPractice) : null
 
   const handlePrevDay = () => setCurrentDate((d) => subDay(d, 1))
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
@@ -222,9 +224,11 @@ export function DailyView() {
       />
 
       <AnimatePresence>
-        {meditacaoId && readerPracticeId === meditacaoId ? (
+        {openedPractice && openedMeditacaoSlot ? (
           <MeditationView
-            practiceId={meditacaoId}
+            practiceId={openedPractice.id}
+            slot={openedMeditacaoSlot}
+            title={openedPractice.name}
             viewDate={currentDate}
             isCompleted={isCompleted}
             onTogglePractice={togglePractice}

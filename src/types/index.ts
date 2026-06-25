@@ -189,12 +189,16 @@ export interface CareerLogEntry {
 
 // --- Meditação ----------------------------------------------------------------
 //
-// One drawn Escrivá point per day for the seeded "Meditação" practice (see
-// src/data/meditation.ts). The `id` IS the date (YYYY-MM-DD) so there is exactly
-// one row per day and it merges by id like every other synced table. The same
-// number is shown across all three books (Caminho/Sulco/Forja). Synced (schema 3).
+// One drawn Escrivá point per day PER SLOT — there are two daily meditations
+// (morning "Meditação" and afternoon "Meditação da Tarde"), each drawing its own
+// point (see src/data/meditation.ts). The `id` is meditationDayKey(date, slot):
+// the BARE date (YYYY-MM-DD) for the morning slot (backward-compatible with rows
+// drawn before the afternoon slot existed) and `date:tarde` for the afternoon —
+// so up to two rows per day. Never parse the id back into a Date; it's an opaque
+// key. Merges by id like every other synced table. The drawn number is shown
+// across all three books (Caminho/Sulco/Forja). Synced (schema 3).
 export interface MeditationDay {
-  id: string // date 'YYYY-MM-DD' — primary key, one row per day
+  id: string // meditationDayKey(date, slot): bare 'YYYY-MM-DD' (morning) or 'YYYY-MM-DD:tarde'
   pointNumber: number // 1–1055, the drawn Escrivá point number
   source: 'random.org' | 'crypto' // where the number came from
   updatedAt: string // bumped on draw + reroll; drives the sync conflict merge
