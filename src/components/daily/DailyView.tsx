@@ -1,11 +1,12 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useNavigate, Link } from 'react-router'
-import { ChevronRight, RotateCcw, ClipboardList, Eye, EyeOff, CheckCircle2, Swords, Sparkles } from 'lucide-react'
+import { ChevronRight, RotateCcw, ClipboardList, Eye, EyeOff, CheckCircle2, Swords } from 'lucide-react'
 import { Header } from '../layout/Header'
 import { CategorySection } from './CategorySection'
 import { PracticeReader } from './PracticeReader'
 import { MeditationView } from './MeditationView'
+import { RosaryContemplationView } from '../rosary/RosaryContemplationView'
 import { YesterdayReviewModal } from './YesterdayReviewModal'
 import { MissedReasonsModal } from './MissedReasonsModal'
 import { PropositoCard } from './PropositoCard'
@@ -20,6 +21,7 @@ import { useProposito } from '../../hooks/usePropositos'
 import { useHideCompleted } from '../../hooks/useSettings'
 import { isInActiveWindow } from '../../utils/season'
 import { isMeditacaoPractice, getMeditacaoSlot } from '../../data/meditation'
+import { isRosaryContemplationPractice } from '../../data/rosary'
 import { formatDate, getToday, addDay, subDay } from '../../utils/dates'
 import type { Practice, Category } from '../../types'
 
@@ -74,9 +76,10 @@ export function DailyView() {
     for (const category of categories) {
       const categoryPractices = practicesByCategory.get(category.id) ?? []
       for (const practice of categoryPractices) {
-        // Either meditation slot has its own dedicated reader (see below); keep them
-        // out of the text pager so swiping never lands on an empty placeholder.
-        if (isMeditacaoPractice(practice)) continue
+        // Practices with a dedicated reader (either meditation slot, the rosary
+        // contemplation) have their own overlay (see below); keep them out of the
+        // text pager so swiping never lands on an empty placeholder.
+        if (isMeditacaoPractice(practice) || isRosaryContemplationPractice(practice)) continue
         items.push({ practice, category: categoryMap.get(practice.categoryId)! })
       }
     }
@@ -91,6 +94,9 @@ export function DailyView() {
     [activePractices, readerPracticeId],
   )
   const openedMeditacaoSlot = openedPractice ? getMeditacaoSlot(openedPractice) : null
+  const openedIsRosaryContemplation = openedPractice
+    ? isRosaryContemplationPractice(openedPractice)
+    : false
 
   const handlePrevDay = () => setCurrentDate((d) => subDay(d, 1))
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
@@ -149,21 +155,15 @@ export function DailyView() {
           <PropositoCard proposito={proposito} onSetProposito={setProposito} onClearProposito={clearProposito} />
         </div>
 
-        {/* Quick access: midday particular examen + Rosary contemplation */}
-        <div className="px-4 pb-2 grid grid-cols-2 gap-2">
+        {/* Quick access: midday particular examen. (The rosary contemplation is now
+            a tracked practice — tap "Contemplação do Rosário" in the list.) */}
+        <div className="px-4 pb-2">
           <Link
             to="/exame-particular"
             className="flex items-center justify-center gap-2 p-3 text-sm bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
           >
             <Swords className="w-4 h-4 shrink-0" />
             <span>Exame particular</span>
-          </Link>
-          <Link
-            to="/rosario"
-            className="flex items-center justify-center gap-2 p-3 text-sm bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
-          >
-            <Sparkles className="w-4 h-4 shrink-0" />
-            <span>Contemplação do Rosário</span>
           </Link>
         </div>
 
@@ -224,7 +224,15 @@ export function DailyView() {
       />
 
       <AnimatePresence>
-        {openedPractice && openedMeditacaoSlot ? (
+        {openedPractice && openedIsRosaryContemplation ? (
+          <RosaryContemplationView
+            practiceId={openedPractice.id}
+            viewDate={currentDate}
+            isCompleted={isCompleted}
+            onTogglePractice={togglePractice}
+            onClose={() => setReaderPracticeId(null)}
+          />
+        ) : openedPractice && openedMeditacaoSlot ? (
           <MeditationView
             practiceId={openedPractice.id}
             slot={openedMeditacaoSlot}

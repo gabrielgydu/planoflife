@@ -24,6 +24,11 @@ import {
   NOVENA_TRABALHO_CATEGORY,
   NOVENA_TRABALHO_WINDOW,
 } from '../data/novena'
+import {
+  ROSARY_CONTEMPLATION_PRACTICE_ID,
+  ROSARY_CONTEMPLATION_NAME,
+  ROSARY_CONTEMPLATION_CATEGORY,
+} from '../data/rosary'
 
 // Practices added after the initial seed. Used by both the fresh-install seed
 // and the version(3) upgrade, so existing installs pick them up on next load.
@@ -58,6 +63,16 @@ export const ADDITIONAL_PRACTICES: AdditionalPracticeSpec[] = [
     isRequired: false,
     bundledTextId: NOVENA_TRABALHO_BUNDLED_ID,
     activeWindow: NOVENA_TRABALHO_WINDOW,
+  },
+  // Contemplation of the rosary mysteries NOT prayed today. No bundledTextId: like
+  // "Meditação" it opens a dedicated overlay reader (routed by name, see
+  // src/data/rosary.ts) rather than the text pager. isRequired false — it's a
+  // contemplative aid alongside the obligatory "Rosário", not a separate duty.
+  {
+    id: ROSARY_CONTEMPLATION_PRACTICE_ID,
+    name: ROSARY_CONTEMPLATION_NAME,
+    categoryName: ROSARY_CONTEMPLATION_CATEGORY,
+    isRequired: false,
   },
 ]
 
@@ -253,6 +268,14 @@ export class PlanOfLifeDB extends Dexie {
     // draws are stored as separate meditationDays rows (id `date:tarde`), so no sync
     // schema bump — the existing meditationDays table already covers them.
     this.version(11).stores({}).upgrade(addMissingAdditionalPractices)
+
+    // Add "Contemplação do Rosário" (the mysteries-not-prayed-today reader) to
+    // existing installs. Same FIXED-id reasoning as v8/v9/v11: both of a user's
+    // devices insert the identical row so sync converges instead of duplicating.
+    // Idempotent + name-matched (see helper). No bundledTextId; it routes to its
+    // own overlay reader (src/data/rosary.ts). practices is already a synced table,
+    // so no sync-schema bump.
+    this.version(12).stores({}).upgrade(addMissingAdditionalPractices)
   }
 }
 
