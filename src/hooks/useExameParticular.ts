@@ -3,9 +3,11 @@ import { onSettingsChanged, setSyncedSetting } from '../sync/settingsBus'
 import { getTodayStr } from '../utils/dates'
 
 // The "exame particular" keeps ONE concrete point at a time (a virtue to acquire
-// or a dominant defect to uproot). It's a single low-churn value + a "done today"
-// marker, so it lives as a synced setting (localStorage + cross-device) rather
-// than its own Dexie table — see SYNCED_SETTING_KEYS in src/sync/settingsBus.ts.
+// or a dominant defect to uproot). It's a single low-churn value, so it lives as a
+// synced setting (localStorage + cross-device) rather than its own Dexie table —
+// see SYNCED_SETTING_KEYS in src/sync/settingsBus.ts. The day's completion is NOT
+// here: it's the "Exame particular" practice's own dailyRecord (see
+// src/data/exame.ts), so it has per-day history like every other practice.
 
 export type ExameParticularType = 'virtude' | 'defeito'
 
@@ -16,7 +18,6 @@ export interface ExameParticularPoint {
 }
 
 const POINT_KEY = 'settings-exame-particular-point'
-const DONE_KEY = 'settings-exame-particular-done'
 
 function readPoint(): ExameParticularPoint | null {
   const raw = localStorage.getItem(POINT_KEY)
@@ -38,17 +39,9 @@ function readPoint(): ExameParticularPoint | null {
 
 export function useExameParticular() {
   const [point, setPointState] = useState<ExameParticularPoint | null>(readPoint)
-  const [doneDate, setDoneDateState] = useState<string>(() => localStorage.getItem(DONE_KEY) || '')
 
-  // A pulled snapshot can change either key on another device → refresh live.
-  useEffect(
-    () =>
-      onSettingsChanged(() => {
-        setPointState(readPoint())
-        setDoneDateState(localStorage.getItem(DONE_KEY) || '')
-      }),
-    []
-  )
+  // A pulled snapshot can change the point on another device → refresh live.
+  useEffect(() => onSettingsChanged(() => setPointState(readPoint())), [])
 
   // Fixing a typo on the current point keeps its startDate; a genuinely new point
   // (different text) restarts the clock.
@@ -68,14 +61,5 @@ export function useExameParticular() {
     setPointState(null)
   }
 
-  const today = getTodayStr()
-  const doneToday = doneDate === today
-
-  function setDoneToday(done: boolean) {
-    const value = done ? today : ''
-    setSyncedSetting(DONE_KEY, value)
-    setDoneDateState(value)
-  }
-
-  return { point, setPoint, clearPoint, doneToday, setDoneToday }
+  return { point, setPoint, clearPoint }
 }

@@ -29,6 +29,11 @@ import {
   ROSARY_CONTEMPLATION_NAME,
   ROSARY_CONTEMPLATION_CATEGORY,
 } from '../data/rosary'
+import {
+  EXAME_PARTICULAR_PRACTICE_ID,
+  EXAME_PARTICULAR_NAME,
+  EXAME_PARTICULAR_CATEGORY,
+} from '../data/exame'
 
 // Practices added after the initial seed. Used by both the fresh-install seed
 // and the version(3) upgrade, so existing installs pick them up on next load.
@@ -72,6 +77,15 @@ export const ADDITIONAL_PRACTICES: AdditionalPracticeSpec[] = [
     id: ROSARY_CONTEMPLATION_PRACTICE_ID,
     name: ROSARY_CONTEMPLATION_NAME,
     categoryName: ROSARY_CONTEMPLATION_CATEGORY,
+    isRequired: false,
+  },
+  // Midday particular examen. No bundledTextId; like the rosary contemplation it
+  // opens a dedicated overlay reader (routed by name, see src/data/exame.ts). The
+  // active point lives as a synced setting; completion is a normal dailyRecord.
+  {
+    id: EXAME_PARTICULAR_PRACTICE_ID,
+    name: EXAME_PARTICULAR_NAME,
+    categoryName: EXAME_PARTICULAR_CATEGORY,
     isRequired: false,
   },
 ]
@@ -276,6 +290,12 @@ export class PlanOfLifeDB extends Dexie {
     // own overlay reader (src/data/rosary.ts). practices is already a synced table,
     // so no sync-schema bump.
     this.version(12).stores({}).upgrade(addMissingAdditionalPractices)
+
+    // Add "Exame particular" (the midday particular examen) to existing installs.
+    // Same FIXED-id reasoning as v8/v9/v11/v12. No bundledTextId; it routes to its
+    // own overlay reader (src/data/exame.ts). practices is already synced, so no
+    // sync-schema bump.
+    this.version(13).stores({}).upgrade(addMissingAdditionalPractices)
   }
 }
 

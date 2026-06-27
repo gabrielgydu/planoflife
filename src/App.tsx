@@ -3,7 +3,6 @@ import { usePracticeFontSize, useUIFontSize } from './hooks/useSettings'
 import { AppShell } from './components/layout/AppShell'
 import { DailyView } from './components/daily/DailyView'
 import { ExamenView } from './components/examen/ExamenView'
-import { ExameParticularView } from './components/examen/ExameParticularView'
 import { ExamenHistoryView } from './components/examen/ExamenHistoryView'
 import { ConfessionView } from './components/examen/ConfessionView'
 import { GuidingQuestionsList } from './components/examen/GuidingQuestionsList'
@@ -34,7 +33,6 @@ export function App() {
         <Route element={<AppShell />}>
           <Route path="/" element={<DailyView />} />
           <Route path="/examen" element={<ExamenView />} />
-          <Route path="/exame-particular" element={<ExameParticularView />} />
           <Route path="/history" element={<HistoryView />} />
           <Route path="/career" element={<CareerView />} />
           <Route path="/settings" element={<SettingsView />} />

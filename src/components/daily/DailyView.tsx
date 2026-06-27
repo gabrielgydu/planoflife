@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { useNavigate, Link } from 'react-router'
-import { ChevronRight, RotateCcw, ClipboardList, Eye, EyeOff, CheckCircle2, Swords } from 'lucide-react'
+import { useNavigate } from 'react-router'
+import { ChevronRight, RotateCcw, ClipboardList, Eye, EyeOff, CheckCircle2 } from 'lucide-react'
 import { Header } from '../layout/Header'
 import { CategorySection } from './CategorySection'
 import { PracticeReader } from './PracticeReader'
 import { MeditationView } from './MeditationView'
 import { RosaryContemplationView } from '../rosary/RosaryContemplationView'
+import { ExameParticularView } from '../examen/ExameParticularView'
 import { YesterdayReviewModal } from './YesterdayReviewModal'
 import { MissedReasonsModal } from './MissedReasonsModal'
 import { PropositoCard } from './PropositoCard'
@@ -22,6 +23,7 @@ import { useHideCompleted } from '../../hooks/useSettings'
 import { isInActiveWindow } from '../../utils/season'
 import { isMeditacaoPractice, getMeditacaoSlot } from '../../data/meditation'
 import { isRosaryContemplationPractice } from '../../data/rosary'
+import { isExameParticularPractice } from '../../data/exame'
 import { formatDate, getToday, addDay, subDay } from '../../utils/dates'
 import type { Practice, Category } from '../../types'
 
@@ -79,7 +81,12 @@ export function DailyView() {
         // Practices with a dedicated reader (either meditation slot, the rosary
         // contemplation) have their own overlay (see below); keep them out of the
         // text pager so swiping never lands on an empty placeholder.
-        if (isMeditacaoPractice(practice) || isRosaryContemplationPractice(practice)) continue
+        if (
+          isMeditacaoPractice(practice) ||
+          isRosaryContemplationPractice(practice) ||
+          isExameParticularPractice(practice)
+        )
+          continue
         items.push({ practice, category: categoryMap.get(practice.categoryId)! })
       }
     }
@@ -96,6 +103,9 @@ export function DailyView() {
   const openedMeditacaoSlot = openedPractice ? getMeditacaoSlot(openedPractice) : null
   const openedIsRosaryContemplation = openedPractice
     ? isRosaryContemplationPractice(openedPractice)
+    : false
+  const openedIsExameParticular = openedPractice
+    ? isExameParticularPractice(openedPractice)
     : false
 
   const handlePrevDay = () => setCurrentDate((d) => subDay(d, 1))
@@ -155,17 +165,8 @@ export function DailyView() {
           <PropositoCard proposito={proposito} onSetProposito={setProposito} onClearProposito={clearProposito} />
         </div>
 
-        {/* Quick access: midday particular examen. (The rosary contemplation is now
-            a tracked practice — tap "Contemplação do Rosário" in the list.) */}
-        <div className="px-4 pb-2">
-          <Link
-            to="/exame-particular"
-            className="flex items-center justify-center gap-2 p-3 text-sm bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
-          >
-            <Swords className="w-4 h-4 shrink-0" />
-            <span>Exame particular</span>
-          </Link>
-        </div>
+        {/* The midday particular examen and the rosary contemplation are now tracked
+            practices (tap them in the list) — no more quick-access buttons here. */}
 
         {/* Hide-completed toggle — only useful once something is done */}
         {hasAnyCompleted && (
@@ -224,7 +225,14 @@ export function DailyView() {
       />
 
       <AnimatePresence>
-        {openedPractice && openedIsRosaryContemplation ? (
+        {openedPractice && openedIsExameParticular ? (
+          <ExameParticularView
+            practiceId={openedPractice.id}
+            isCompleted={isCompleted}
+            onTogglePractice={togglePractice}
+            onClose={() => setReaderPracticeId(null)}
+          />
+        ) : openedPractice && openedIsRosaryContemplation ? (
           <RosaryContemplationView
             practiceId={openedPractice.id}
             viewDate={currentDate}
