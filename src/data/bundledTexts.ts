@@ -8,6 +8,10 @@ export interface BundledText {
   texts: Record<string, string>
 }
 
+// Device-local reader language preference (pt/la), shared by PracticeReader and
+// the antiphon overlay. Deliberately NOT synced (see settingsBus).
+export const PRACTICE_TEXT_LANG_KEY = 'practiceTextLang'
+
 export const bundledTextsMap = new Map<string, BundledText>(
   (practiceTexts as BundledText[]).map((t) => [t.id, t])
 )

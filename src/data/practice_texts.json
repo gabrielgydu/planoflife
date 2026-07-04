@@ -76,5 +76,53 @@
     "texts": {
       "pt": "**São Josemaria Escrivá**\n*Fundador do Opus Dei · Festa litúrgica: 26 de junho*\n\nÓ Deus, que, por mediação da Santíssima Virgem Maria, concedestes inumeráveis graças a São Josemaria, sacerdote, escolhendo-o como instrumento fidelíssimo para fundar o Opus Dei, caminho de santificação no trabalho profissional e no cumprimento dos deveres cotidianos do cristão, fazei que eu saiba também converter todos os momentos e circunstâncias da minha vida em ocasião de vos amar, e de servir com alegria e com simplicidade a Igreja, o Romano Pontífice e as almas, iluminando os caminhos da terra com o resplendor da fé e do amor. Concedei-me por intercessão de São Josemaria o favor que vos peço… *(peça-se)*. Amém.\n\n*Pai-nosso, Ave-Maria, Glória.*"
     }
+  },
+  {
+    "id": "regina_coeli",
+    "title": {
+      "pt": "Regina Coeli",
+      "la": "Regina Cæli"
+    },
+    "hasImage": false,
+    "texts": {
+      "pt": "## REGINA COELI\n\n**V.** Rainha do Céu, alegrai-vos, aleluia!\n**R.** Porque Aquele que merecestes trazer em vosso ventre, aleluia,\n\n**V.** ressuscitou como disse, aleluia!\n**R.** Rogai a Deus por nós, aleluia!\n\n**V.** Exultai e alegrai-vos, ó Virgem Maria, aleluia,\n**R.** porque o Senhor ressuscitou verdadeiramente, aleluia!\n\nOREMOS:\nÓ Deus, que Vos dignastes alegrar o mundo com a Ressurreição do Vosso Filho, Nosso Senhor Jesus Cristo, concedei-nos, Vos pedimos, que por sua Mãe, a Virgem Maria, alcancemos as alegrias da vida eterna. Por Cristo, Senhor nosso.\nAmen.",
+      "la": "## REGINA CÆLI\n\n**V.** Regina cæli, lætáre, allelúia.\n**R.** Quia quem meruísti portáre, allelúia.\n\n**V.** Resurréxit, sicut dixit, allelúia.\n**R.** Ora pro nobis Deum, allelúia.\n\n**V.** Gaude et lætáre, Virgo María, allelúia.\n**R.** Quia surréxit Dóminus vere, allelúia.\n\nORÉMUS:\nDeus, qui per resurrectiónem Fílii tui Dómini nostri Iesu Christi mundum lætificáre dignátus es: præsta, quǽsumus, ut per eius Genetrícem Vírginem Maríam perpétuæ capiámus gáudia vitæ. Per eúndem Christum Dóminum nostrum.\nAmen."
+    }
+  },
+  {
+    "id": "alma_redemptoris_mater",
+    "title": {
+      "pt": "Mãe do Redentor",
+      "la": "Alma Redemptóris Mater"
+    },
+    "hasImage": false,
+    "texts": {
+      "pt": "## MÃE DO REDENTOR\n\n*Do primeiro domingo do Advento até 1 de fevereiro.*\n\nÓ Mãe do Redentor, porta do Céu sempre aberta, estrela do mar, socorrei este povo que caiu e procura levantar-se. Vós que gerastes, com admiração da natureza, o vosso santo Criador, Virgem antes e depois do parto, que de Gabriel recebestes aquela saudação — Ave! —, tende compaixão de nós, pecadores.",
+      "la": "## ALMA REDEMPTÓRIS MATER\n\n*A prima dominica Adventus usque ad diem 1 februarii.*\n\nAlma Redemptóris Mater, quæ pérvia cæli porta manes, et stella maris, succúrre cadénti, súrgere qui curat, pópulo: tu quæ genuísti, natúra miránte, tuum sanctum Genitórem, Virgo prius ac postérius, Gabriélis ab ore sumens illud Ave, peccatórum miserére."
+    }
+  },
+  {
+    "id": "ave_regina_caelorum",
+    "title": {
+      "pt": "Ave, Rainha dos Céus",
+      "la": "Ave Regína Cælórum"
+    },
+    "hasImage": false,
+    "texts": {
+      "pt": "## AVE, RAINHA DOS CÉUS\n\n*De 2 de fevereiro até à Semana Santa.*\n\nAve, Rainha dos Céus!\nAve, Senhora dos Anjos!\nSalve, ó raiz, salve, ó porta\nda qual nasceu a Luz para o mundo!\n\nAlegrai-vos, ó Virgem gloriosa,\nentre todas a mais formosa!\nAdeus, ó toda santa,\ne rogai a Cristo por nós!",
+      "la": "## AVE REGÍNA CÆLÓRUM\n\n*A die 2 februarii usque ad Hebdomadam Sanctam.*\n\nAve, Regína cælórum,\nave, Dómina Angelórum:\nsalve, radix, salve, porta,\nex qua mundo lux est orta.\n\nGaude, Virgo gloriósa,\nsuper omnes speciósa;\nvale, o valde decóra,\net pro nobis Christum exóra."
+    }
+  },
+  {
+    "id": "salve_regina",
+    "title": {
+      "pt": "Salve-Rainha",
+      "la": "Salve Regína"
+    },
+    "hasImage": false,
+    "texts": {
+      "pt": "## SALVE-RAINHA\n\n*Do fim do tempo pascal até ao Advento.*\n\nSalve, Rainha, Mãe de misericórdia, vida, doçura e esperança nossa, salve! A vós bradamos, os degredados filhos de Eva; a vós suspiramos, gemendo e chorando neste vale de lágrimas. Eia, pois, advogada nossa, esses vossos olhos misericordiosos a nós volvei; e depois deste desterro, mostrai-nos Jesus, bendito fruto do vosso ventre, ó clemente, ó piedosa, ó doce sempre Virgem Maria!\n\n**V.** Rogai por nós, Santa Mãe de Deus.\n**R.** Para que sejamos dignos das promessas de Cristo.",
+      "la": "## SALVE REGÍNA\n\n*A fine temporis paschalis usque ad Adventum.*\n\nSalve, Regína, mater misericórdiæ; vita, dulcédo et spes nostra, salve. Ad te clamámus éxsules fílii Hevæ. Ad te suspirámus geméntes et flentes in hac lacrimárum valle. Eia ergo, advocáta nostra, illos tuos misericórdes óculos ad nos convérte. Et Iesum, benedíctum fructum ventris tui, nobis post hoc exsílium osténde. O clemens, o pia, o dulcis Virgo María.\n\n**V.** Ora pro nobis, sancta Dei Génetrix.\n**R.** Ut digni efficiámur promissiónibus Christi."
+    }
   }
 ]

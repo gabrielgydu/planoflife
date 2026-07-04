@@ -11,6 +11,15 @@ import { ptBR } from 'date-fns/locale'
 import { formatDate } from './dates'
 import { isCareer } from './domain'
 import { isInActiveWindow } from './season'
+import { isScheduledOn, isWeekly } from './schedule'
+import type { Practice } from '../types'
+
+// A practice "applies" on a day when the day is inside its calendar window AND
+// on its weekday schedule. Weekly practices never apply to a single day — they
+// draw completed dots but stay out of every denominator.
+function appliesOn(practice: Pick<Practice, 'activeWindow' | 'scheduleDays'>, day: Date): boolean {
+  return isInActiveWindow(practice, day) && isScheduledOn(practice, day)
+}
 
 export async function generateMonthPdf(year: number, month: number): Promise<void> {
   const monthDate = new Date(year, month, 1)
@@ -76,7 +85,7 @@ export async function generateMonthPdf(year: number, month: number): Promise<voi
   // Drop windowed practices (e.g. a novena) that never fall inside this month —
   // otherwise they'd add an all-blank row and skew the summary percentage.
   const visiblePractices = practices.filter((p) =>
-    days.some((d) => isInActiveWindow(p, d))
+    days.some((d) => appliesOn(p, d))
   )
 
   for (const practice of visiblePractices) {
@@ -90,11 +99,17 @@ export async function generateMonthPdf(year: number, month: number): Promise<voi
 
     // Draw completion dots
     for (let day = 1; day <= daysInMonth; day++) {
-      // Out-of-window days are left blank — the practice didn't apply that day.
-      if (!isInActiveWindow(practice, days[day - 1])) continue
       const dateStr = formatDate(days[day - 1])
       const daySet = completionMap.get(dateStr)
       const isCompleted = daySet?.has(practice.id) ?? false
+
+      // Days the practice doesn't apply to are left blank. A weekly practice
+      // (e.g. Confissão) applies to no single day: only its completions show.
+      if (isWeekly(practice)) {
+        if (!isCompleted) continue
+      } else if (!appliesOn(practice, days[day - 1])) {
+        continue
+      }
 
       const x = margin + 80 + (day - 1) * colWidth + colWidth / 2
       const dotY = y + 3
@@ -127,14 +142,16 @@ export async function generateMonthPdf(year: number, month: number): Promise<voi
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(8)
 
-  // Scope numerator and denominator to the same in-window practice set per day,
-  // so a windowed practice only counts on its dates (guarantees completed ≤ total).
+  // Scope numerator and denominator to the same applies-that-day practice set,
+  // so a windowed or weekday-scheduled practice only counts on its dates
+  // (guarantees completed ≤ total). Weekly practices are excluded entirely —
+  // per-day percentages can't represent a per-week duty.
   let totalCompleted = 0
   let totalPossible = 0
   for (let day = 1; day <= daysInMonth; day++) {
     const dateStr = formatDate(days[day - 1])
     const daySet = completionMap.get(dateStr)
-    const dayPractices = visiblePractices.filter((p) => isInActiveWindow(p, days[day - 1]))
+    const dayPractices = visiblePractices.filter((p) => !isWeekly(p) && appliesOn(p, days[day - 1]))
     totalPossible += dayPractices.length
     totalCompleted += dayPractices.filter((p) => daySet?.has(p.id)).length
   }

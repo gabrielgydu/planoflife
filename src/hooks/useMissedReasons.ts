@@ -1,6 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../db'
 import { isInActiveWindow } from '../utils/season'
+import { isScheduledOn, isWeekly } from '../utils/schedule'
 import type { MissedReason } from '../types'
 import { generateId } from '../utils/id'
 
@@ -56,8 +57,17 @@ export function useMissedReasons(date: string) {
 export function useMissedRequiredPractices(date: string) {
   const result = useLiveQuery(async () => {
     const reviewedDate = new Date(`${date}T00:00:00`)
+    // Off-schedule days (e.g. a Saturday-only practice on a Tuesday) and weekly
+    // practices are never "missed" on a given day — mirror the daily list.
     const requiredPractices = await db.practices
-      .filter((p) => p.isRequired && !p.isArchived && isInActiveWindow(p, reviewedDate))
+      .filter(
+        (p) =>
+          p.isRequired &&
+          !p.isArchived &&
+          isInActiveWindow(p, reviewedDate) &&
+          isScheduledOn(p, reviewedDate) &&
+          !isWeekly(p)
+      )
       .toArray()
 
     const records = await db.dailyRecords.where('date').equals(date).toArray()

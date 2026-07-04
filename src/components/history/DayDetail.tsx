@@ -6,7 +6,7 @@ import { useCategories } from '../../hooks/useCategories'
 import { usePractices } from '../../hooks/usePractices'
 import { useHistoryDomain } from '../../hooks/useHistoryDomain'
 import { getPracticeDomain, isLifestyle, isCareer } from '../../utils/domain'
-import { isScheduledOn } from '../../utils/schedule'
+import { isScheduledOn, isWeekly } from '../../utils/schedule'
 import { isInActiveWindow } from '../../utils/season'
 import { DomainToggle } from './DomainToggle'
 import { parseDate, formatDateLong } from '../../utils/dates'
@@ -99,7 +99,10 @@ export function DayDetail() {
                   practice: p,
                   // A windowed practice off its dates is neutral, like an
                   // unscheduled weekday — not counted, shown only if somehow done.
-                  scheduled: isScheduledOn(p, parsedDate) && isInActiveWindow(p, parsedDate),
+                  // Weekly practices (Confissão) never count against a single
+                  // day; a completion surfaces via the bonus path below.
+                  scheduled:
+                    !isWeekly(p) && isScheduledOn(p, parsedDate) && isInActiveWindow(p, parsedDate),
                   done: isCompleted(p.id),
                 }))
                 .filter((x) => x.scheduled || x.done)

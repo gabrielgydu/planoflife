@@ -87,10 +87,10 @@ export function PracticeForm() {
 
     setIsSaving(true)
     try {
-      // Schedules only make sense for habit-like practices; a daily schedule
-      // (none/all selected) is stored as undefined — the legacy "every day".
-      const schedule =
-        domain === 'spiritual' ? undefined : normalizeScheduleDays(scheduleDays)
+      // A daily schedule (none/all selected) is stored as undefined — the legacy
+      // "every day". Spiritual practices carry schedules too since the Saturday
+      // plan-of-life practices; forcing undefined here would silently strip them.
+      const schedule = normalizeScheduleDays(scheduleDays)
       if (isEditing && id) {
         await updatePractice(id, {
           name: name.trim(),
@@ -241,16 +241,15 @@ export function PracticeForm() {
           </div>
         )}
 
-        {/* Gated like the Tipo control: public installs (no career data) keep the
-            exact pre-career form — zero visible change for them. */}
-        {showCareerOption && domain !== 'spiritual' && (
-          <div className="py-2">
+        {/* Available for every domain: spiritual practices schedule weekdays too
+            (e.g. the Saturday plan-of-life practices). */}
+        <div className="py-2">
             <span className="text-sm font-medium text-text-secondary dark:text-text-secondary-dark">
               Dias da semana
             </span>
             <p className="text-xs text-text-muted dark:text-text-muted-dark mb-2">
-              Dias fora da agenda são neutros nas estatísticas (nunca quebram a sequência).
-              Nenhum selecionado = todos os dias.
+              Dias fora da agenda ficam ocultos na lista diária e são neutros nas
+              estatísticas. Nenhum selecionado = todos os dias.
             </p>
             <div className="flex gap-1.5">
               {WEEKDAY_CHIPS.map((label, day) => {
@@ -277,8 +276,7 @@ export function PracticeForm() {
                 )
               })}
             </div>
-          </div>
-        )}
+        </div>
 
         <div className="flex items-center justify-between py-2">
           <div>

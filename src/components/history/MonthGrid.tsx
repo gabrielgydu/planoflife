@@ -16,7 +16,7 @@ import {
 import { formatDate } from '../../utils/dates'
 import { useTheme } from '../../hooks/useTheme'
 import { getPracticeDomain } from '../../utils/domain'
-import { isScheduledOn } from '../../utils/schedule'
+import { isScheduledOn, isWeekly } from '../../utils/schedule'
 import { isInActiveWindow } from '../../utils/season'
 import type { PracticeDomain } from '../../types'
 
@@ -92,12 +92,16 @@ export function MonthGrid({ month, domain }: MonthGridProps) {
     // The day's denominator is the practices SCHEDULED that weekday (absent
     // scheduleDays = daily, so spiritual/lifestyle stats are unchanged). A day
     // where nothing is scheduled (career Sundays) gets total 0 → renders neutral.
+    // Weekly-cadence practices (Confissão) are excluded outright: a per-week duty
+    // has no per-day denominator — they're neutral here, like off-schedule days.
     const scheduledIdsByWeekday: Set<string>[] = []
     for (let wd = 0; wd < 7; wd++) {
       // a probe date with the right weekday: 2026-02-01 was a Sunday
       const probe = new Date(2026, 1, 1 + wd)
       scheduledIdsByWeekday.push(
-        new Set(domainPractices.filter((p) => isScheduledOn(p, probe)).map((p) => p.id))
+        new Set(
+          domainPractices.filter((p) => !isWeekly(p) && isScheduledOn(p, probe)).map((p) => p.id)
+        )
       )
     }
 

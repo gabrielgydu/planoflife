@@ -16,6 +16,14 @@ export function isScheduledOn(
   return days.includes(getDay(date))
 }
 
+/**
+ * Weekly-cadence practice: shown every day, satisfied by any completed record
+ * in the Monday-start week of the viewed date, neutral in per-day stats.
+ */
+export function isWeekly(practice: Pick<Practice, 'cadence'>): boolean {
+  return practice.cadence === 'weekly'
+}
+
 /** Normalize a weekday selection for storage: daily (none/all picked) → undefined. */
 export function normalizeScheduleDays(days: number[]): number[] | undefined {
   if (days.length === 0 || days.length === 7) return undefined

@@ -4,6 +4,9 @@ import type { Practice } from '../../types'
 
 interface PracticeRowProps {
   practice: Practice
+  // Optional replacement for the practice name (e.g. the Angelus row shows
+  // "Regina Coeli" during Eastertide).
+  nameOverride?: string
   // Optional second line under the name (e.g. the novena's "Terceiro dia · …").
   subtitle?: string
   isCompleted: boolean
@@ -11,7 +14,7 @@ interface PracticeRowProps {
   onOpenDetail: () => void
 }
 
-export function PracticeRow({ practice, subtitle, isCompleted, onToggle, onOpenDetail }: PracticeRowProps) {
+export function PracticeRow({ practice, nameOverride, subtitle, isCompleted, onToggle, onOpenDetail }: PracticeRowProps) {
   const nameClasses = `flex-1 text-sm text-left transition-colors duration-200 rounded hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light ${
     isCompleted
       ? 'text-text-muted dark:text-text-muted-dark'
@@ -36,7 +39,7 @@ export function PracticeRow({ practice, subtitle, isCompleted, onToggle, onOpenD
 
       <button onClick={onOpenDetail} className={nameClasses}>
         <span>
-          {practice.name}
+          {nameOverride ?? practice.name}
           {practice.isRequired && (
             <span className="ml-1 text-xs text-[#A89548]">*</span>
           )}

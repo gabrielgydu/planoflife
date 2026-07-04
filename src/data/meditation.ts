@@ -66,9 +66,14 @@ const normalizeName = (s: string) =>
 // separate meditationDays row (see meditationDayKey).
 export type MeditacaoSlot = 'manha' | 'tarde'
 
+// The old "Meditação"/"Meditação da Tarde" keys stay as aliases: history rows,
+// devices that haven't run the v14 rename yet, and any stale synced snapshot
+// keep routing to the reader during the transition.
 const MEDITACAO_NAME_TO_SLOT: Record<string, MeditacaoSlot> = {
   meditacao: 'manha',
+  'oracao mental da manha': 'manha',
   'meditacao da tarde': 'tarde',
+  'oracao mental da tarde': 'tarde',
 }
 
 /**

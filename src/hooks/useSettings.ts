@@ -66,6 +66,32 @@ export function useHideCompleted(): [boolean, (value: boolean) => void] {
   return [enabled, setEnabled]
 }
 
+const DAILY_VIEW_MODE_KEY = 'settings-daily-view-mode'
+
+// The FAB-cycled daily checklist filter: the plan-of-life core (+ any required
+// practice), only the extras, or everything. See DailyView/ViewModeFab.
+export type DailyViewMode = 'plano' | 'extras' | 'all'
+
+export const DAILY_VIEW_MODES: DailyViewMode[] = ['plano', 'extras', 'all']
+
+function readDailyViewMode(): DailyViewMode {
+  const stored = localStorage.getItem(DAILY_VIEW_MODE_KEY)
+  return DAILY_VIEW_MODES.includes(stored as DailyViewMode) ? (stored as DailyViewMode) : 'plano'
+}
+
+export function useDailyViewMode(): [DailyViewMode, (value: DailyViewMode) => void] {
+  const [mode, setModeState] = useState<DailyViewMode>(readDailyViewMode)
+
+  useEffect(() => onSettingsChanged(() => setModeState(readDailyViewMode())), [])
+
+  const setMode = (value: DailyViewMode) => {
+    setSyncedSetting(DAILY_VIEW_MODE_KEY, value)
+    setModeState(value)
+  }
+
+  return [mode, setMode]
+}
+
 const PRACTICE_FONT_SIZE_KEY = 'settings-practice-font-size'
 const UI_FONT_SIZE_KEY = 'settings-ui-font-size'
 

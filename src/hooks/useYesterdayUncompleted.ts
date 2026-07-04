@@ -1,6 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../db'
 import { isInActiveWindow } from '../utils/season'
+import { isScheduledOn, isWeekly } from '../utils/schedule'
 import type { Practice } from '../types'
 
 export function useYesterdayUncompleted(date: string) {
@@ -23,6 +24,10 @@ export function useYesterdayUncompleted(date: string) {
     for (const practice of allPractices) {
       if (practice.isArchived) continue
       if (!isInActiveWindow(practice, reviewedDate)) continue
+      // Off-schedule days and weekly practices aren't "uncompleted" for a single
+      // day — mirror the daily list and the missed-reasons filter.
+      if (!isScheduledOn(practice, reviewedDate)) continue
+      if (isWeekly(practice)) continue
       byCategory.get(practice.categoryId)?.push(practice)
     }
 

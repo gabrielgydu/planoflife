@@ -21,11 +21,16 @@ export interface Practice {
   // 'spiritual' — read via getPracticeDomain(), never `.domain` directly.
   domain?: PracticeDomain
   // Weekdays this practice is scheduled (0=Sun … 6=Sat, date-fns getDay
-  // convention). Absent/empty = every day (all legacy rows). Stats and streaks
-  // treat unscheduled days as NEUTRAL — never a break (e.g. the career habits'
-  // Sunday-off rule). The daily checklist still shows the practice every day.
-  // Read via isScheduledOn() in utils/schedule.ts.
+  // convention). Absent/empty = every day (all legacy rows). Off-schedule days
+  // are hidden from the daily checklist and NEUTRAL in stats/streaks — never a
+  // break (e.g. the Saturday-only plan-of-life practices, or the career habits'
+  // Sunday-off rule). Read via isScheduledOn() in utils/schedule.ts.
   scheduleDays?: number[]
+  // Completion cadence. Absent/'daily' = one check per calendar day. 'weekly' =
+  // shown every day but satisfied by ANY completed record within the Monday-start
+  // week of the viewed date (e.g. Confissão sacramental); neutral in per-day
+  // stats. Read via isWeekly() in utils/schedule.ts.
+  cadence?: 'daily' | 'weekly'
   // Calendar window during which the practice is shown at all. Absent = every
   // day (all ordinary practices). Compares month/day only, so it recurs yearly
   // (e.g. a novena that runs 17–25 June). Outside the window the practice is

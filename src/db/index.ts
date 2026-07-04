@@ -34,6 +34,17 @@ import {
   EXAME_PARTICULAR_NAME,
   EXAME_PARTICULAR_CATEGORY,
 } from '../data/exame'
+import {
+  PLANO_DE_VIDA_CATEGORY_ID,
+  PLANO_DE_VIDA_CATEGORY_NAME,
+  PLANO_DE_VIDA_ICON,
+  PLANO_DE_VIDA_MOVES,
+  MORTIFICACAO_PRACTICE_ID,
+  MORTIFICACAO_NAME,
+  CONFISSAO_PRACTICE_ID,
+  CONFISSAO_NAME,
+} from '../data/planoDeVida'
+import { ANTIPHON_PRACTICE_ID, ANTIPHON_NAME } from '../data/antiphon'
 
 // Practices added after the initial seed. Used by both the fresh-install seed
 // and the version(3) upgrade, so existing installs pick them up on next load.
@@ -51,16 +62,30 @@ export interface AdditionalPracticeSpec {
   // Optional calendar window (month/day, recurs yearly) outside of which the
   // practice is hidden — e.g. a novena. Copied verbatim onto the practice row.
   activeWindow?: Practice['activeWindow']
+  // Weekdays (0=Sun … 6=Sat) the practice is scheduled; off-days are hidden
+  // from the daily list and neutral in stats. Copied verbatim onto the row.
+  scheduleDays?: number[]
+  // 'weekly' = satisfied by any completed record in the Monday-start week
+  // (e.g. Confissão sacramental). Copied verbatim onto the row.
+  cadence?: Practice['cadence']
+  // Explicit position within the category. Absent = append after the current
+  // max (the pre-v14 behavior). Needed by the Plano de Vida specs, whose slots
+  // (4, 9, 11–13) are interleaved with rows the v14 migration moves there.
+  sortOrder?: number
 }
 
 export const ADDITIONAL_PRACTICES: AdditionalPracticeSpec[] = [
   { name: 'Oferecimento do Trabalho', categoryName: 'Orações da Manhã', isRequired: false, bundledTextId: 'oferecimento_do_trabalho' },
-  { name: 'Leitura do Evangelho', categoryName: 'Orações da Manhã', isRequired: true },
+  // Renamed from "Leitura do Evangelho" and moved into Plano de Vida by v14. The
+  // spec carries the FINAL name/category: the by-name idempotency check below must
+  // match the post-rename row, or a re-run would insert a duplicate.
+  { name: 'Leitura do Novo Testamento', categoryName: PLANO_DE_VIDA_CATEGORY_NAME, isRequired: true, sortOrder: 4 },
   { id: 'sao-josemaria-prayer', name: 'Oração a São Josemaria', categoryName: 'Meio-dia', isRequired: false, bundledTextId: 'sao_josemaria' },
-  // Second daily mental prayer. No bundledTextId: like the morning "Meditação" it
+  // Second daily mental prayer (renamed from "Meditação da Tarde" by v14 — final
+  // name here, same reasoning as above). No bundledTextId: like the morning slot it
   // opens the dedicated Escrivá reader (routed by name → slot, see meditation.ts),
   // which draws its own independent point.
-  { id: 'meditacao-tarde', name: 'Meditação da Tarde', categoryName: 'Tarde', isRequired: true },
+  { id: 'meditacao-tarde', name: 'Oração mental da tarde', categoryName: PLANO_DE_VIDA_CATEGORY_NAME, isRequired: true, sortOrder: 9 },
   {
     id: NOVENA_TRABALHO_PRACTICE_ID,
     name: NOVENA_TRABALHO_NAME,
@@ -88,17 +113,56 @@ export const ADDITIONAL_PRACTICES: AdditionalPracticeSpec[] = [
     categoryName: EXAME_PARTICULAR_CATEGORY,
     isRequired: false,
   },
+  // Saturday plan-of-life practices (v14). scheduleDays hides them Mon–Fri and
+  // keeps those days neutral in stats. Plain checkbox — no reader text.
+  {
+    id: MORTIFICACAO_PRACTICE_ID,
+    name: MORTIFICACAO_NAME,
+    categoryName: PLANO_DE_VIDA_CATEGORY_NAME,
+    isRequired: true,
+    scheduleDays: [6],
+    sortOrder: 11,
+  },
+  // The seasonal Marian antiphon. No bundledTextId; routes to its own swipeable
+  // overlay reader (src/data/antiphon.ts) that opens on the season-proper text.
+  {
+    id: ANTIPHON_PRACTICE_ID,
+    name: ANTIPHON_NAME,
+    categoryName: PLANO_DE_VIDA_CATEGORY_NAME,
+    isRequired: true,
+    scheduleDays: [6],
+    sortOrder: 12,
+  },
+  // Weekly confession (v14): shown every day, satisfied by any completed record
+  // in the Monday-start week, resets the following Monday. Deliberately NOT
+  // required — no missed-reason nagging about confession.
+  {
+    id: CONFISSAO_PRACTICE_ID,
+    name: CONFISSAO_NAME,
+    categoryName: PLANO_DE_VIDA_CATEGORY_NAME,
+    isRequired: false,
+    cadence: 'weekly',
+    sortOrder: 13,
+  },
 ]
 
 const normalizeName = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
 
+// Both a Dexie instance and an upgrade Transaction expose table() \u2014 the shared
+// migration bodies accept either, so the post-sync reconciliation can re-run
+// them through the live (hook-captured) db. See ensurePlanoDeVidaState.
+type TableSource = Pick<Transaction, 'table'>
+
 // Insert any ADDITIONAL_PRACTICES not already present (matched by normalized name),
-// appended to the end of their category. Idempotent \u2014 safe to run from multiple
-// version upgrades; a re-run or a manual addition won't create duplicates. Shared
-// by the version(3) and version(8) upgrades so existing installs pick up practices
-// introduced after their last open. Fresh installs get these via the seed instead.
-async function addMissingAdditionalPractices(tx: Transaction): Promise<void> {
+// appended to the end of their category unless the spec pins a sortOrder. Idempotent
+// \u2014 safe to run from multiple version upgrades; a re-run or a manual addition won't
+// create duplicates: a spec is skipped when its normalized name OR its fixed id
+// already exists (the id check matters when the user renamed a fixed-id practice \u2014
+// a bare add() would ConstraintError and abort the whole upgrade transaction).
+// Shared by the version(3/8/9/11/12/13/14) upgrades so existing installs pick up
+// practices introduced after their last open. Fresh installs get these via the seed.
+async function addMissingAdditionalPractices(tx: TableSource): Promise<void> {
   const categoriesTable = tx.table('categories')
   const practicesTable = tx.table('practices')
 
@@ -110,6 +174,7 @@ async function addMissingAdditionalPractices(tx: Transaction): Promise<void> {
 
   const allPractices = (await practicesTable.toArray()) as Practice[]
   const existingNames = new Set(allPractices.map((p) => normalizeName(p.name)))
+  const existingIds = new Set(allPractices.map((p) => p.id))
   const maxSortOrderByCategory = new Map<string, number>()
   for (const p of allPractices) {
     const prev = maxSortOrderByCategory.get(p.categoryId) ?? -1
@@ -119,9 +184,15 @@ async function addMissingAdditionalPractices(tx: Transaction): Promise<void> {
   const now = new Date().toISOString()
   for (const spec of ADDITIONAL_PRACTICES) {
     if (existingNames.has(normalizeName(spec.name))) continue
+    if (spec.id && existingIds.has(spec.id)) continue
     const category = categoryByName.get(normalizeName(spec.categoryName)) ?? fallbackCategory
-    const sortOrder = (maxSortOrderByCategory.get(category.id) ?? -1) + 1
-    maxSortOrderByCategory.set(category.id, sortOrder)
+    let sortOrder: number
+    if (spec.sortOrder !== undefined) {
+      sortOrder = spec.sortOrder
+    } else {
+      sortOrder = (maxSortOrderByCategory.get(category.id) ?? -1) + 1
+      maxSortOrderByCategory.set(category.id, sortOrder)
+    }
     const practice: Practice = {
       id: spec.id ?? generateId(),
       name: spec.name,
@@ -136,10 +207,134 @@ async function addMissingAdditionalPractices(tx: Transaction): Promise<void> {
       updatedAt: now,
       ...(spec.bundledTextId ? { bundledTextId: spec.bundledTextId } : {}),
       ...(spec.activeWindow ? { activeWindow: spec.activeWindow } : {}),
+      ...(spec.scheduleDays ? { scheduleDays: spec.scheduleDays } : {}),
+      ...(spec.cadence ? { cadence: spec.cadence } : {}),
     }
     await practicesTable.add(practice)
     existingNames.add(normalizeName(spec.name))
+    existingIds.add(practice.id)
   }
+}
+
+// One-time "the v14 migration still needs to reach the cloud" marker. Upgrade
+// writes run before mutationCapture installs its hooks, so they are never marked
+// dirty \u2014 without this, a later pull of an older snapshot would silently revert
+// the whole migration (and version(14) never re-runs). SyncProvider re-runs
+// ensurePlanoDeVidaState through the live db after the initial pull settles,
+// which captures any re-applied writes as dirty and pushes them, then clears
+// the flag. Harmless on unsynced installs (the re-run is a no-op, flag cleared).
+export const PLANO_V14_PENDING_PUSH_KEY = 'plano-v14-pending-push'
+
+/**
+ * The v14 "Plano de Vida" restructure, idempotent so it can run twice: once from
+ * the version(14) upgrade transaction and once from the post-sync reconciliation
+ * (see PLANO_V14_PENDING_PUSH_KEY). Every row it actually changes gets a bumped
+ * updatedAt \u2014 unlike the v6 backfill, these rows must WIN the LWW merge against
+ * stale pre-migration devices, or an unrelated edit there would resurrect the old
+ * names (merge ties go to `ours`). Rows already in the desired state are not
+ * touched, so the reconciliation re-run after pulling a migrated snapshot writes
+ * nothing.
+ */
+export async function ensurePlanoDeVidaState(tx: TableSource): Promise<void> {
+  const categoriesTable = tx.table('categories')
+  const practicesTable = tx.table('practices')
+
+  const allCategories = (await categoriesTable.toArray()) as Category[]
+  if (allCategories.length === 0) return
+  const now = new Date().toISOString()
+
+  // 1. Ensure the category. By fixed id first; by normalized name as a fallback
+  // (covers a hand-created category of the same name \u2014 reuse it rather than
+  // duplicating). Sorted before everything (min \u2212 1) so no existing category row
+  // needs rewriting. Note this makes it the helper's fallbackCategory from now on.
+  let plano =
+    allCategories.find((c) => c.id === PLANO_DE_VIDA_CATEGORY_ID) ??
+    allCategories.find((c) => normalizeName(c.name) === normalizeName(PLANO_DE_VIDA_CATEGORY_NAME))
+  if (!plano) {
+    plano = {
+      id: PLANO_DE_VIDA_CATEGORY_ID,
+      name: PLANO_DE_VIDA_CATEGORY_NAME,
+      sortOrder: Math.min(...allCategories.map((c) => c.sortOrder)) - 1,
+      emoji: PLANO_DE_VIDA_ICON,
+      createdAt: now,
+      updatedAt: now,
+    }
+    await categoriesTable.add(plano)
+  }
+
+  const categoryIdByName = new Map(allCategories.map((c) => [normalizeName(c.name), c.id]))
+  const allPractices = (await practicesTable.toArray()) as Practice[]
+  const byName = new Map<string, Practice[]>()
+  for (const p of allPractices) {
+    const key = normalizeName(p.name)
+    const list = byName.get(key)
+    if (list) list.push(p)
+    else byName.set(key, [p])
+  }
+
+  // 2. Move/rename/require the 11 core practices. Matched by normalized old OR
+  // new name \u2014 the original seed rows have per-device random ids, so the name is
+  // the only stable key (the devices themselves converged on one snapshot long
+  // ago). On multiple matches the row in the expected source category wins, so a
+  // user-created practice with the same name elsewhere is left alone. A missing
+  // row (user deleted/renamed it) is skipped.
+  for (const move of PLANO_DE_VIDA_MOVES) {
+    const candidates = [
+      ...(byName.get(normalizeName(move.oldName)) ?? []),
+      ...(byName.get(normalizeName(move.newName)) ?? []),
+    ]
+    if (candidates.length === 0) continue
+    const oldCategoryId = categoryIdByName.get(normalizeName(move.oldCategoryName))
+    const target =
+      candidates.find((p) => p.categoryId === oldCategoryId) ??
+      candidates.find((p) => p.categoryId === plano.id) ??
+      candidates[0]
+    if (
+      target.name === move.newName &&
+      target.categoryId === plano.id &&
+      target.sortOrder === move.sortOrder &&
+      target.isRequired
+    ) {
+      continue
+    }
+    await practicesTable.update(target.id, {
+      name: move.newName,
+      categoryId: plano.id,
+      sortOrder: move.sortOrder,
+      isRequired: true,
+      updatedAt: now,
+    })
+  }
+
+  // 3. Normalize the spec-inserted Plano de Vida practices (11\u201313 and the two
+  // renamed specs). Usually a no-op \u2014 the helper below inserts them correctly \u2014
+  // but a device that upgraded straight from v2 ran the version(3) helper BEFORE
+  // this category existed, dropping them into the fallback category; this pulls
+  // them into place. scheduleDays/cadence never need repair: only the spec insert
+  // ever writes them, so any pre-existing row already carries them.
+  for (const spec of ADDITIONAL_PRACTICES) {
+    if (spec.categoryName !== PLANO_DE_VIDA_CATEGORY_NAME || spec.sortOrder === undefined) continue
+    const rows = byName.get(normalizeName(spec.name)) ?? []
+    const target = rows.find((p) => (spec.id ? p.id === spec.id : true))
+    if (!target) continue
+    if (
+      target.categoryId === plano.id &&
+      target.sortOrder === spec.sortOrder &&
+      target.isRequired === spec.isRequired
+    ) {
+      continue
+    }
+    await practicesTable.update(target.id, {
+      categoryId: plano.id,
+      sortOrder: spec.sortOrder,
+      isRequired: spec.isRequired,
+      updatedAt: now,
+    })
+  }
+
+  // 4. Insert whatever is still missing (the three new practices on the normal
+  // v13 \u2192 v14 path).
+  await addMissingAdditionalPractices(tx)
 }
 
 export class PlanOfLifeDB extends Dexie {
@@ -296,6 +491,23 @@ export class PlanOfLifeDB extends Dexie {
     // own overlay reader (src/data/exame.ts). practices is already synced, so no
     // sync-schema bump.
     this.version(13).stores({}).upgrade(addMissingAdditionalPractices)
+
+    // The Plano de Vida restructure: create the fixed-id category, move/rename
+    // the 11 core practices into it (required, ordered 0–10), insert Mortificação
+    // corporal + Antífona (Saturdays) and Confissão sacramental (weekly). All
+    // writes are idempotent and tolerate rows that already arrived via a pulled
+    // v14 snapshot (sync schema is NOT bumped, so a v13 device can hold one).
+    // The flag makes SyncProvider re-run the body through the live db and push —
+    // see PLANO_V14_PENDING_PUSH_KEY for why the upgrade alone isn't enough.
+    this.version(14).stores({}).upgrade(async (tx) => {
+      await ensurePlanoDeVidaState(tx)
+      try {
+        localStorage.setItem(PLANO_V14_PENDING_PUSH_KEY, 'true')
+      } catch {
+        // localStorage unavailable (private mode edge) — sync reconciliation is
+        // skipped, which only matters on synced installs that also hit this.
+      }
+    })
   }
 }
 

@@ -13,6 +13,7 @@ export const SYNCED_SETTING_KEYS = [
   'settings-individual-reasons',
   'settings-hide-completed',
   'settings-exame-particular-point',
+  'settings-daily-view-mode',
 ] as const
 
 // Two distinct events, on purpose:

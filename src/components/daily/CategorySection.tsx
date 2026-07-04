@@ -5,6 +5,7 @@ import type { Category, Practice } from '../../types'
 import { PracticeRow } from './PracticeRow'
 import { CategoryIcon } from '../shared/CategoryIcon'
 import { novenaRowSubtitle } from '../../data/novena'
+import { angelusDisplayName } from '../../data/angelus'
 
 interface CategorySectionProps {
   category: Category
@@ -71,6 +72,7 @@ export function CategorySection({
               <PracticeRow
                 key={practice.id}
                 practice={practice}
+                nameOverride={angelusDisplayName(practice, viewDate) ?? undefined}
                 subtitle={novenaRowSubtitle(practice, viewDate) ?? undefined}
                 isCompleted={isCompleted(practice.id)}
                 onToggle={() => onTogglePractice(practice.id)}

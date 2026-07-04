@@ -42,6 +42,7 @@ import {
   snapshotLocal,
 } from './applyState'
 import { setDirtyHandler } from './mutationCapture'
+import { db, ensurePlanoDeVidaState, PLANO_V14_PENDING_PUSH_KEY } from '../db'
 import {
   onLocalSettingChanged,
   getLocallyChangedSettingKeys,
@@ -260,6 +261,12 @@ export function SyncProvider({ children }: { children: ReactNode }) {
           })
           markSynced(res.version)
           markSettingsPushed(pushedSettingKeys) // these settings are now in the cloud
+          // The migrated rows are now in the cloud — the v14 reconciliation is done.
+          try {
+            localStorage.removeItem(PLANO_V14_PENDING_PUSH_KEY)
+          } catch {
+            /* ignore */
+          }
           break
         } catch (e) {
           if (e instanceof SyncConflictError && attempt < MAX_PUSH_CONFLICT_RETRIES) {
@@ -306,6 +313,25 @@ export function SyncProvider({ children }: { children: ReactNode }) {
     schedulePush(PUSH_DEBOUNCE_MS)
   }, [schedulePush])
 
+  // The v14 upgrade ran inside Dexie's open(), before any dirty handler exists, so
+  // its writes were never scheduled for a push — and a plain pull of an OLDER cloud
+  // snapshot would silently revert them (version(14) never re-runs). After the
+  // initial pull settles, re-apply the migration through the live db (idempotent —
+  // writes nothing when the pulled snapshot is already migrated) and force a push.
+  // The flag is cleared by pushNow only on a successful push, so an offline or
+  // killed session retries on the next launch.
+  const reconcilePlanoMigration = useCallback(async () => {
+    try {
+      if (localStorage.getItem(PLANO_V14_PENDING_PUSH_KEY) !== 'true') return
+      await db.transaction('rw', db.categories, db.practices, () =>
+        ensurePlanoDeVidaState(db)
+      )
+      onDirty()
+    } catch (e) {
+      console.error('sync: plano v14 reconciliation failed', e)
+    }
+  }, [onDirty])
+
   // Keep the debounce timer pointed at the latest pushNow.
   useEffect(() => {
     pushNowRef.current = pushNow
@@ -331,6 +357,7 @@ export function SyncProvider({ children }: { children: ReactNode }) {
         setStatus('idle')
         await syncNow()
         initialPullDoneRef.current = true
+        await reconcilePlanoMigration()
       } else {
         setStatus('locked')
       }
@@ -338,7 +365,7 @@ export function SyncProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true
     }
-  }, [syncNow])
+  }, [syncNow, reconcilePlanoMigration])
 
   // Pull on focus / when the tab becomes visible.
   useEffect(() => {
@@ -431,6 +458,7 @@ export function SyncProvider({ children }: { children: ReactNode }) {
         markSynced(remote.version)
         initialPullDoneRef.current = true
         repairAfterPreserve(applied)
+        await reconcilePlanoMigration()
         return { ok: true }
       } catch (e) {
         if (e instanceof SyncAuthError) setError('Não autorizado — verifique a senha e a URL.')
@@ -440,7 +468,7 @@ export function SyncProvider({ children }: { children: ReactNode }) {
         throw e
       }
     },
-    [finishUnlock, markSynced, repairAfterPreserve]
+    [finishUnlock, markSynced, repairAfterPreserve, reconcilePlanoMigration]
   )
 
   const confirmAdopt = useCallback(async () => {
@@ -452,6 +480,7 @@ export function SyncProvider({ children }: { children: ReactNode }) {
       markSynced(p.version)
       initialPullDoneRef.current = true
       repairAfterPreserve(applied)
+      await reconcilePlanoMigration()
       pending.current = null
     } catch (e) {
       // e.g. saveEncKey failed: the device stays locked. Surface it; reload +
@@ -459,7 +488,7 @@ export function SyncProvider({ children }: { children: ReactNode }) {
       setError(e instanceof Error ? e.message : 'Erro ao adotar dados da nuvem.')
       setStatus('locked')
     }
-  }, [finishUnlock, markSynced, repairAfterPreserve])
+  }, [finishUnlock, markSynced, repairAfterPreserve, reconcilePlanoMigration])
 
   const cancelAdopt = useCallback(() => {
     pending.current = null

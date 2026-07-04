@@ -6,24 +6,30 @@ import { Header } from '../layout/Header'
 import { CategorySection } from './CategorySection'
 import { PracticeReader } from './PracticeReader'
 import { MeditationView } from './MeditationView'
+import { AntiphonView } from './AntiphonView'
 import { RosaryContemplationView } from '../rosary/RosaryContemplationView'
 import { ExameParticularView } from '../examen/ExameParticularView'
 import { YesterdayReviewModal } from './YesterdayReviewModal'
 import { MissedReasonsModal } from './MissedReasonsModal'
 import { PropositoCard } from './PropositoCard'
+import { ViewModeFab } from './ViewModeFab'
 import { Spinner } from '../shared/Spinner'
 import { EmptyState } from '../shared/EmptyState'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
 import { useCategories } from '../../hooks/useCategories'
 import { usePractices } from '../../hooks/usePractices'
 import { useDailyRecords } from '../../hooks/useDailyRecords'
+import { useWeeklyCompletions } from '../../hooks/useWeeklyCompletion'
 import { useMorningFlow } from '../../hooks/useMorningFlow'
 import { useProposito } from '../../hooks/usePropositos'
-import { useHideCompleted } from '../../hooks/useSettings'
+import { useHideCompleted, useDailyViewMode, DAILY_VIEW_MODES } from '../../hooks/useSettings'
+import { PLANO_DE_VIDA_CATEGORY_ID } from '../../data/planoDeVida'
 import { isInActiveWindow } from '../../utils/season'
+import { isScheduledOn, isWeekly } from '../../utils/schedule'
 import { isMeditacaoPractice, getMeditacaoSlot } from '../../data/meditation'
 import { isRosaryContemplationPractice } from '../../data/rosary'
 import { isExameParticularPractice } from '../../data/exame'
+import { isAntiphonPractice } from '../../data/antiphon'
 import { formatDate, getToday, addDay, subDay } from '../../utils/dates'
 import type { Practice, Category } from '../../types'
 
@@ -35,6 +41,13 @@ export function DailyView() {
   // Persisted, synced preference: the hide-completed choice survives navigation,
   // reloads, and propagates to other devices. Filters only the list, not the reader pager.
   const [hideCompleted, setHideCompleted] = useHideCompleted()
+  // FAB-cycled visibility mode (also persisted + synced): the plan-of-life core,
+  // only the extras, or everything.
+  const [viewMode, setViewMode] = useDailyViewMode()
+  const cycleViewMode = () => {
+    const next = DAILY_VIEW_MODES[(DAILY_VIEW_MODES.indexOf(viewMode) + 1) % DAILY_VIEW_MODES.length]
+    setViewMode(next)
+  }
 
   const dateStr = formatDate(currentDate)
   const yesterdayStr = formatDate(subDay(currentDate, 1))
@@ -42,33 +55,58 @@ export function DailyView() {
   const { categories, isLoading: categoriesLoading } = useCategories()
   const { practices, isLoading: practicesLoading } = usePractices()
   const { isCompleted, togglePractice, markCompleted, clearAllForDate } = useDailyRecords(dateStr)
+  const { completedIdsInWeek, clearWeek } = useWeeklyCompletions(dateStr)
+
+  // Weekly-cadence practices (Confissão) count as done for the whole Mon-start
+  // week once checked on any of its days; unchecking clears the whole week.
+  // THIS pair — not the raw per-day API — is what every consumer below gets, so
+  // row state, category counts, hide-completed, and the readers all agree.
+  const weeklyIds = useMemo(() => new Set(practices.filter(isWeekly).map((p) => p.id)), [practices])
+  const isCompletedEffective = (practiceId: string): boolean =>
+    weeklyIds.has(practiceId) ? completedIdsInWeek.has(practiceId) : isCompleted(practiceId)
+  const toggleEffective = (practiceId: string) => {
+    if (weeklyIds.has(practiceId) && completedIdsInWeek.has(practiceId)) {
+      return clearWeek(practiceId)
+    }
+    return togglePractice(practiceId)
+  }
 
   const { step, advanceToMissedReasons, completeFlow } = useMorningFlow()
 
   // Proposito for today
   const { proposito, setProposito, clearProposito } = useProposito(dateStr)
 
-  // Only practices in their active calendar window for the day being viewed
-  // (ordinary practices have none → always active). A seasonal practice like the
-  // novena appears only on its dates and vanishes the rest of the year.
+  // Only practices that apply to the day being viewed: inside their calendar
+  // window (a seasonal practice like the novena appears only on its dates) AND
+  // on their weekday schedule (a Saturday-only practice hides Mon–Fri). Ordinary
+  // practices have neither → always active.
   const activePractices = useMemo(
-    () => practices.filter((p) => isInActiveWindow(p, currentDate)),
+    () => practices.filter((p) => isInActiveWindow(p, currentDate) && isScheduledOn(p, currentDate)),
     [practices, currentDate]
   )
+
+  // The FAB mode narrows what the day shows: 'plano' = the Plano de Vida
+  // category plus any required practice elsewhere; 'extras' = the exact
+  // complement; 'all' = everything. Composes with hide-completed (below).
+  const visiblePractices = useMemo(() => {
+    if (viewMode === 'all') return activePractices
+    const inPlano = (p: Practice) => p.categoryId === PLANO_DE_VIDA_CATEGORY_ID || p.isRequired
+    return activePractices.filter((p) => (viewMode === 'plano' ? inPlano(p) : !inPlano(p)))
+  }, [activePractices, viewMode])
 
   const practicesByCategory = useMemo(() => {
     const map = new Map<string, Practice[]>()
     for (const category of categories) {
       map.set(category.id, [])
     }
-    for (const practice of activePractices) {
+    for (const practice of visiblePractices) {
       const list = map.get(practice.categoryId)
       if (list) {
         list.push(practice)
       }
     }
     return map
-  }, [categories, activePractices])
+  }, [categories, visiblePractices])
 
   // Flat ordered list of all practices, for the reader overlay. Includes
   // text-less practices so the reader can page through every practice.
@@ -79,12 +117,14 @@ export function DailyView() {
       const categoryPractices = practicesByCategory.get(category.id) ?? []
       for (const practice of categoryPractices) {
         // Practices with a dedicated reader (either meditation slot, the rosary
-        // contemplation) have their own overlay (see below); keep them out of the
-        // text pager so swiping never lands on an empty placeholder.
+        // contemplation, the Marian antiphon) have their own overlay (see below);
+        // keep them out of the text pager so swiping never lands on an empty
+        // placeholder.
         if (
           isMeditacaoPractice(practice) ||
           isRosaryContemplationPractice(practice) ||
-          isExameParticularPractice(practice)
+          isExameParticularPractice(practice) ||
+          isAntiphonPractice(practice)
         )
           continue
         items.push({ practice, category: categoryMap.get(practice.categoryId)! })
@@ -107,6 +147,7 @@ export function DailyView() {
   const openedIsExameParticular = openedPractice
     ? isExameParticularPractice(openedPractice)
     : false
+  const openedIsAntiphon = openedPractice ? isAntiphonPractice(openedPractice) : false
 
   const handlePrevDay = () => setCurrentDate((d) => subDay(d, 1))
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
@@ -120,7 +161,7 @@ export function DailyView() {
     setShowClearDialog(false)
   }
 
-  const hasAnyCompleted = activePractices.some((p) => isCompleted(p.id))
+  const hasAnyCompleted = visiblePractices.some((p) => isCompletedEffective(p.id))
 
   if (categoriesLoading || practicesLoading) {
     return <Spinner className="h-64" />
@@ -190,8 +231,8 @@ export function DailyView() {
               category={category}
               practices={categoryPractices}
               viewDate={currentDate}
-              isCompleted={isCompleted}
-              onTogglePractice={togglePractice}
+              isCompleted={isCompletedEffective}
+              onTogglePractice={toggleEffective}
               onOpenPracticeDetail={handleOpenPracticeDetail}
               hideCompleted={hideCompleted}
             />
@@ -199,8 +240,13 @@ export function DailyView() {
         })}
 
         {/* When hiding completed empties the whole list, affirm rather than show a blank gap */}
-        {hideCompleted && activePractices.length > 0 && activePractices.every((p) => isCompleted(p.id)) && (
+        {hideCompleted && visiblePractices.length > 0 && visiblePractices.every((p) => isCompletedEffective(p.id)) && (
           <EmptyState icon={CheckCircle2} message="Tudo concluído por hoje" />
+        )}
+
+        {/* The current mode has nothing to show, but other practices exist */}
+        {visiblePractices.length === 0 && activePractices.length > 0 && (
+          <EmptyState icon={ClipboardList} message="Nenhuma prática neste modo" />
         )}
 
         {activePractices.length === 0 && (
@@ -211,6 +257,8 @@ export function DailyView() {
           />
         )}
       </motion.div>
+
+      <ViewModeFab mode={viewMode} onCycle={cycleViewMode} />
 
       <YesterdayReviewModal isOpen={step === 'yesterday-review'} yesterdayStr={yesterdayStr} onComplete={advanceToMissedReasons} />
       <MissedReasonsModal isOpen={step === 'missed-reasons'} yesterdayStr={yesterdayStr} onComplete={completeFlow} />
@@ -228,16 +276,25 @@ export function DailyView() {
         {openedPractice && openedIsExameParticular ? (
           <ExameParticularView
             practiceId={openedPractice.id}
-            isCompleted={isCompleted}
-            onTogglePractice={togglePractice}
+            isCompleted={isCompletedEffective}
+            onTogglePractice={toggleEffective}
             onClose={() => setReaderPracticeId(null)}
           />
         ) : openedPractice && openedIsRosaryContemplation ? (
           <RosaryContemplationView
             practiceId={openedPractice.id}
             viewDate={currentDate}
-            isCompleted={isCompleted}
-            onTogglePractice={togglePractice}
+            isCompleted={isCompletedEffective}
+            onTogglePractice={toggleEffective}
+            onClose={() => setReaderPracticeId(null)}
+          />
+        ) : openedPractice && openedIsAntiphon ? (
+          <AntiphonView
+            practiceId={openedPractice.id}
+            viewDate={currentDate}
+            isCompleted={isCompletedEffective}
+            onTogglePractice={toggleEffective}
+            onMarkViewed={markCompleted}
             onClose={() => setReaderPracticeId(null)}
           />
         ) : openedPractice && openedMeditacaoSlot ? (
@@ -246,8 +303,8 @@ export function DailyView() {
             slot={openedMeditacaoSlot}
             title={openedPractice.name}
             viewDate={currentDate}
-            isCompleted={isCompleted}
-            onTogglePractice={togglePractice}
+            isCompleted={isCompletedEffective}
+            onTogglePractice={toggleEffective}
             onClose={() => setReaderPracticeId(null)}
           />
         ) : (
@@ -257,8 +314,8 @@ export function DailyView() {
               items={readerItems}
               initialPracticeId={readerPracticeId}
               viewDate={currentDate}
-              isCompleted={isCompleted}
-              onTogglePractice={togglePractice}
+              isCompleted={isCompletedEffective}
+              onTogglePractice={toggleEffective}
               onMarkViewed={markCompleted}
               onClose={() => setReaderPracticeId(null)}
             />

@@ -3,8 +3,9 @@ import { motion, AnimatePresence, type PanInfo } from 'motion/react'
 import { X, Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import { CategoryIcon } from '../shared/CategoryIcon'
 import { MarkdownRenderer } from '../shared/MarkdownRenderer'
-import { getBundledText } from '../../data/bundledTexts'
+import { getBundledText, PRACTICE_TEXT_LANG_KEY } from '../../data/bundledTexts'
 import { resolveNovenaReaderText } from '../../data/novena'
+import { resolveAngelusReaderText } from '../../data/angelus'
 import { isLifestyle } from '../../utils/domain'
 import type { Practice, Category } from '../../types'
 
@@ -27,7 +28,7 @@ interface PracticeReaderProps {
 
 const SWIPE_THRESHOLD = 50
 const VELOCITY_THRESHOLD = 500
-const LANG_KEY = 'practiceTextLang'
+const LANG_KEY = PRACTICE_TEXT_LANG_KEY
 
 type Lang = 'pt' | 'la'
 
@@ -79,10 +80,13 @@ export function PracticeReader({
 
   const { practice, category } = current
   const completed = isCompleted(practice.id)
-  // The novena resolves to the day matching viewDate; everything else is a plain
-  // bundled-text lookup.
+  // Date-dependent texts first: the Angelus becomes the Regina Coeli during
+  // Eastertide, the novena resolves to the day matching viewDate; everything
+  // else is a plain bundled-text lookup.
   const bundledText =
-    resolveNovenaReaderText(practice, viewDate) ?? getBundledText(practice.bundledTextId)
+    resolveAngelusReaderText(practice, viewDate) ??
+    resolveNovenaReaderText(practice, viewDate) ??
+    getBundledText(practice.bundledTextId)
   const isBundled = !!bundledText
 
   const hasMultipleLangs = isBundled && Object.keys(bundledText.texts).length > 1
