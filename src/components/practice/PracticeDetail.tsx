@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { ChevronLeft, FileText } from 'lucide-react'
+import { ChevronLeft, FileText, Pencil } from 'lucide-react'
 import { db } from '../../db'
 import { Spinner } from '../shared/Spinner'
 import { EmptyState } from '../shared/EmptyState'
@@ -25,9 +25,16 @@ export function PracticeDetail() {
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <h1 className="flex-1 text-center font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark pr-10">
+          <h1 className="flex-1 text-center font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark truncate px-2">
             {practice.name}
           </h1>
+          <button
+            onClick={() => navigate(`/settings/practices/${practice.id}/edit`)}
+            className="p-2 -mr-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
+            aria-label="Editar prática"
+          >
+            <Pencil className="w-5 h-5" />
+          </button>
         </div>
       </header>
 

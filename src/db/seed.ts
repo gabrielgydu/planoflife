@@ -6,22 +6,28 @@ import {
   PLANO_DE_VIDA_CATEGORY_NAME,
   PLANO_DE_VIDA_ICON,
 } from '../data/planoDeVida'
+import {
+  COSTUMES_CATEGORY_ID,
+  COSTUMES_CATEGORY_NAME,
+  COSTUMES_ICON,
+} from '../data/costumes'
 
 const now = new Date().toISOString()
 
-// "Plano de Vida" carries a FIXED id (not generateId): the v14 migration creates
-// the same row on existing installs, and a fresh install that later adopts a
-// synced snapshot must agree on the id or the union-merge would duplicate the
-// category (no tombstones). The time-of-day categories predate sync and keep
-// their per-device random ids.
+// "Plano de Vida" and "Costumes" carry FIXED ids (not generateId): the v14/v15
+// migrations create the same rows on existing installs, and a fresh install
+// that later adopts a synced snapshot must agree on the ids or the union-merge
+// would duplicate the categories (no tombstones). The time-of-day categories
+// predate sync and keep their per-device random ids.
 const defaultCategories: Category[] = [
   { id: PLANO_DE_VIDA_CATEGORY_ID, name: PLANO_DE_VIDA_CATEGORY_NAME, sortOrder: 0, emoji: PLANO_DE_VIDA_ICON, createdAt: now, updatedAt: now },
-  { id: generateId(), name: 'Orações da Manhã', sortOrder: 1, emoji: 'Sunrise', createdAt: now, updatedAt: now },
-  { id: generateId(), name: 'Meio da Manhã', sortOrder: 2, emoji: 'Sun', createdAt: now, updatedAt: now },
-  { id: generateId(), name: 'Meio-dia', sortOrder: 3, emoji: 'Clock', createdAt: now, updatedAt: now },
-  { id: generateId(), name: 'Tarde', sortOrder: 4, emoji: 'CloudSun', createdAt: now, updatedAt: now },
-  { id: generateId(), name: 'Noite', sortOrder: 5, emoji: 'Moon', createdAt: now, updatedAt: now },
-  { id: generateId(), name: 'Missa / Igreja', sortOrder: 6, emoji: 'Church', createdAt: now, updatedAt: now },
+  { id: COSTUMES_CATEGORY_ID, name: COSTUMES_CATEGORY_NAME, sortOrder: 1, emoji: COSTUMES_ICON, createdAt: now, updatedAt: now },
+  { id: generateId(), name: 'Orações da Manhã', sortOrder: 2, emoji: 'Sunrise', createdAt: now, updatedAt: now },
+  { id: generateId(), name: 'Meio da Manhã', sortOrder: 3, emoji: 'Sun', createdAt: now, updatedAt: now },
+  { id: generateId(), name: 'Meio-dia', sortOrder: 4, emoji: 'Clock', createdAt: now, updatedAt: now },
+  { id: generateId(), name: 'Tarde', sortOrder: 5, emoji: 'CloudSun', createdAt: now, updatedAt: now },
+  { id: generateId(), name: 'Noite', sortOrder: 6, emoji: 'Moon', createdAt: now, updatedAt: now },
+  { id: generateId(), name: 'Missa / Igreja', sortOrder: 7, emoji: 'Church', createdAt: now, updatedAt: now },
 ]
 
 function createDefaultPractices(categories: Category[]): Practice[] {
@@ -46,8 +52,8 @@ function createDefaultPractices(categories: Category[]): Practice[] {
     // Meio-dia
     { id: generateId(), name: 'Lembrai-vos', categoryId: catMap['Meio-dia'], content: '', imageData: null, bundledTextId: 'lembrai_vos', isRequired: false, sortOrder: 0, isArchived: false, createdAt: now, updatedAt: now },
 
-    // Noite
-    { id: generateId(), name: 'Três Ave-Marias', categoryId: catMap['Noite'], content: '', imageData: null, isRequired: false, sortOrder: 0, isArchived: false, createdAt: now, updatedAt: now },
+    // Costumes (Água Benta + Três Ave-Marias) come from ADDITIONAL_PRACTICES
+    // below — their specs carry fixed ids and pinned sortOrders.
 
     // Missa / Igreja
     { id: generateId(), name: 'Comunhão Espiritual', categoryId: catMap['Missa / Igreja'], content: '', imageData: null, isRequired: false, sortOrder: 0, isArchived: false, createdAt: now, updatedAt: now },

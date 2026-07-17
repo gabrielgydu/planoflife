@@ -45,6 +45,16 @@ import {
   CONFISSAO_NAME,
 } from '../data/planoDeVida'
 import { ANTIPHON_PRACTICE_ID, ANTIPHON_NAME } from '../data/antiphon'
+import {
+  COSTUMES_CATEGORY_ID,
+  COSTUMES_CATEGORY_NAME,
+  COSTUMES_ICON,
+  AGUA_BENTA_PRACTICE_ID,
+  AGUA_BENTA_NAME,
+  TRES_AVE_MARIAS_PRACTICE_ID,
+  TRES_AVE_MARIAS_NAME,
+  TRES_AVE_MARIAS_OLD_CATEGORY_NAME,
+} from '../data/costumes'
 
 // Practices added after the initial seed. Used by both the fresh-install seed
 // and the version(3) upgrade, so existing installs pick them up on next load.
@@ -143,6 +153,26 @@ export const ADDITIONAL_PRACTICES: AdditionalPracticeSpec[] = [
     isRequired: false,
     cadence: 'weekly',
     sortOrder: 13,
+  },
+  // The "Costumes" pair (v15). Água Benta is brand new; Três Ave-Marias
+  // normally already exists (original seed, per-device random id, in Noite)
+  // and is MOVED by ensureCostumesState — its spec only inserts a fixed-id
+  // replacement when the user had deleted that row (the by-name idempotency
+  // check skips it otherwise). Plain checkboxes, no reader text; deliberately
+  // not required — customs, not norms, so no missed-reason nagging.
+  {
+    id: AGUA_BENTA_PRACTICE_ID,
+    name: AGUA_BENTA_NAME,
+    categoryName: COSTUMES_CATEGORY_NAME,
+    isRequired: false,
+    sortOrder: 0,
+  },
+  {
+    id: TRES_AVE_MARIAS_PRACTICE_ID,
+    name: TRES_AVE_MARIAS_NAME,
+    categoryName: COSTUMES_CATEGORY_NAME,
+    isRequired: false,
+    sortOrder: 1,
   },
 ]
 
@@ -337,6 +367,96 @@ export async function ensurePlanoDeVidaState(tx: TableSource): Promise<void> {
   await addMissingAdditionalPractices(tx)
 }
 
+// Same one-time "migration still needs to reach the cloud" marker pattern as
+// PLANO_V14_PENDING_PUSH_KEY, for the v15 Costumes migration \u2014 see that
+// constant for the full rationale.
+export const COSTUMES_V15_PENDING_PUSH_KEY = 'costumes-v15-pending-push'
+
+/**
+ * The v15 "Costumes" migration, idempotent for the same two call sites as
+ * ensurePlanoDeVidaState: the version(15) upgrade and the post-sync
+ * reconciliation. Creates the fixed-id category right after Plano de Vida,
+ * moves the seeded "Tr\u00eas Ave-Marias" (per-device random id \u2014 the name is the
+ * only stable cross-device key) out of Noite into it, and inserts \u00c1gua Benta.
+ * Rows it actually changes get a bumped updatedAt so they win the LWW merge
+ * against stale pre-migration devices.
+ */
+export async function ensureCostumesState(tx: TableSource): Promise<void> {
+  const categoriesTable = tx.table('categories')
+  const practicesTable = tx.table('practices')
+
+  const allCategories = (await categoriesTable.toArray()) as Category[]
+  if (allCategories.length === 0) return
+  const now = new Date().toISOString()
+
+  // 1. Ensure the category, directly after Plano de Vida. The fractional
+  // sortOrder slips it between plano and plano's successor without rewriting
+  // any other category row (the fresh seed uses plain integers instead). By
+  // fixed id first, by normalized name as a fallback \u2014 reuse a hand-created
+  // "Costumes" rather than duplicating it.
+  let costumes =
+    allCategories.find((c) => c.id === COSTUMES_CATEGORY_ID) ??
+    allCategories.find((c) => normalizeName(c.name) === normalizeName(COSTUMES_CATEGORY_NAME))
+  if (!costumes) {
+    const plano =
+      allCategories.find((c) => c.id === PLANO_DE_VIDA_CATEGORY_ID) ??
+      allCategories.find(
+        (c) => normalizeName(c.name) === normalizeName(PLANO_DE_VIDA_CATEGORY_NAME)
+      )
+    costumes = {
+      id: COSTUMES_CATEGORY_ID,
+      name: COSTUMES_CATEGORY_NAME,
+      sortOrder: plano
+        ? plano.sortOrder + 0.5
+        : Math.min(...allCategories.map((c) => c.sortOrder)) - 1,
+      emoji: COSTUMES_ICON,
+      createdAt: now,
+      updatedAt: now,
+    }
+    await categoriesTable.add(costumes)
+  }
+
+  // 2. Move the seeded "Tr\u00eas Ave-Marias" into it. Matched by normalized name;
+  // on multiple matches the row in the original seed category (Noite) wins,
+  // then one already in Costumes, so a user-created duplicate elsewhere is
+  // left alone. A missing row is skipped \u2014 the spec insert below then provides
+  // the fixed-id replacement.
+  const allPractices = (await practicesTable.toArray()) as Practice[]
+  const categoryIdByName = new Map(allCategories.map((c) => [normalizeName(c.name), c.id]))
+  const candidates = allPractices.filter(
+    (p) => normalizeName(p.name) === normalizeName(TRES_AVE_MARIAS_NAME)
+  )
+  const oldCategoryId = categoryIdByName.get(normalizeName(TRES_AVE_MARIAS_OLD_CATEGORY_NAME))
+  const target =
+    candidates.find((p) => p.categoryId === oldCategoryId) ??
+    candidates.find((p) => p.categoryId === costumes.id) ??
+    candidates[0]
+  if (target && !(target.categoryId === costumes.id && target.sortOrder === 1)) {
+    await practicesTable.update(target.id, {
+      categoryId: costumes.id,
+      sortOrder: 1,
+      updatedAt: now,
+    })
+  }
+
+  // 3. Normalize the fixed-id Costumes specs a pre-v15 helper run dropped into
+  // the fallback category (a device upgrading straight from v2 runs version(3)
+  // before this category exists \u2014 same edge as ensurePlanoDeVidaState step 3),
+  // then insert whatever is still missing (\u00c1gua Benta on the normal v14 \u2192 v15
+  // path).
+  for (const spec of ADDITIONAL_PRACTICES) {
+    if (spec.categoryName !== COSTUMES_CATEGORY_NAME || spec.sortOrder === undefined) continue
+    const row = allPractices.find((p) => p.id === spec.id)
+    if (!row || (row.categoryId === costumes.id && row.sortOrder === spec.sortOrder)) continue
+    await practicesTable.update(row.id, {
+      categoryId: costumes.id,
+      sortOrder: spec.sortOrder,
+      updatedAt: now,
+    })
+  }
+  await addMissingAdditionalPractices(tx)
+}
+
 export class PlanOfLifeDB extends Dexie {
   categories!: EntityTable<Category, 'id'>
   practices!: EntityTable<Practice, 'id'>
@@ -506,6 +626,20 @@ export class PlanOfLifeDB extends Dexie {
       } catch {
         // localStorage unavailable (private mode edge) — sync reconciliation is
         // skipped, which only matters on synced installs that also hit this.
+      }
+    })
+
+    // The "Costumes" customs category (Água Benta + Três Ave-Marias): create
+    // the fixed-id category next to Plano de Vida, move the seeded Três
+    // Ave-Marias into it, insert Água Benta. Same sync-safety pattern as v14 —
+    // idempotent body shared with the post-sync reconciliation, marker flag
+    // cleared only after a successful push (see COSTUMES_V15_PENDING_PUSH_KEY).
+    this.version(15).stores({}).upgrade(async (tx) => {
+      await ensureCostumesState(tx)
+      try {
+        localStorage.setItem(COSTUMES_V15_PENDING_PUSH_KEY, 'true')
+      } catch {
+        // localStorage unavailable — see the v14 note above.
       }
     })
   }

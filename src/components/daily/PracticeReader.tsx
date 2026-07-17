@@ -1,8 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router'
 import { motion, AnimatePresence, type PanInfo } from 'motion/react'
-import { X, Check, ChevronLeft, ChevronRight } from 'lucide-react'
+import { X, Check, ChevronLeft, ChevronRight, MoreVertical, Pencil, Archive, Trash2 } from 'lucide-react'
 import { CategoryIcon } from '../shared/CategoryIcon'
+import { ConfirmDialog } from '../shared/ConfirmDialog'
 import { MarkdownRenderer } from '../shared/MarkdownRenderer'
+import { usePractices } from '../../hooks/usePractices'
 import { getBundledText, PRACTICE_TEXT_LANG_KEY } from '../../data/bundledTexts'
 import { resolveNovenaReaderText } from '../../data/novena'
 import { resolveAngelusReaderText } from '../../data/angelus'
@@ -46,9 +49,13 @@ export function PracticeReader({
   onMarkViewed,
   onClose,
 }: PracticeReaderProps) {
+  const navigate = useNavigate()
+  const { archivePractice, deletePractice } = usePractices()
   const initialIndex = items.findIndex((i) => i.practice.id === initialPracticeId)
   const [currentIndex, setCurrentIndex] = useState(Math.max(0, initialIndex))
   const [direction, setDirection] = useState(0)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [lang, setLang] = useState<Lang>(() => {
     const saved = localStorage.getItem(LANG_KEY)
     return saved === 'la' ? 'la' : 'pt'
@@ -75,6 +82,22 @@ export function PracticeReader({
     if (cur && !isLifestyle(cur.practice)) onMarkViewed(cur.practice.id)
   }, [currentIndex, items, onMarkViewed])
 
+  const goTo = useCallback(
+    (next: number) => {
+      if (next < 0 || next >= items.length) return
+      setMenuOpen(false) // the menu acts on the CURRENT practice — never carry it over
+      setDirection(next > currentIndex ? 1 : -1)
+      setCurrentIndex(next)
+    },
+    [currentIndex, items.length],
+  )
+
+  const goPrev = useCallback(() => goTo(currentIndex - 1), [goTo, currentIndex])
+  const goNext = useCallback(() => goTo(currentIndex + 1), [goTo, currentIndex])
+
+  // All hooks are above this return: archiving/deleting from the menu below
+  // shrinks `items`, and a re-render can hit this guard before onClose lands —
+  // an early return after the hooks keeps React's hook order intact.
   const current = items[currentIndex]
   if (!current) return null
 
@@ -98,17 +121,25 @@ export function PracticeReader({
     ? (bundledText.title[activeLang] ?? bundledText.title[Object.keys(bundledText.title)[0]])
     : practice.name
 
-  const goTo = useCallback(
-    (next: number) => {
-      if (next < 0 || next >= items.length) return
-      setDirection(next > currentIndex ? 1 : -1)
-      setCurrentIndex(next)
-    },
-    [currentIndex, items.length],
-  )
+  const handleEdit = () => {
+    setMenuOpen(false)
+    navigate(`/settings/practices/${practice.id}/edit`)
+  }
 
-  const goPrev = useCallback(() => goTo(currentIndex - 1), [goTo, currentIndex])
-  const goNext = useCallback(() => goTo(currentIndex + 1), [goTo, currentIndex])
+  // Archive = hide from the daily list (recoverable under Configurações →
+  // Práticas → Arquivadas). Close afterwards: the practice leaves `items` and
+  // the pager would silently land on a neighbor.
+  const handleArchive = async () => {
+    setMenuOpen(false)
+    await archivePractice(practice.id)
+    onClose()
+  }
+
+  const handleDelete = async () => {
+    await deletePractice(practice.id)
+    setShowDeleteDialog(false)
+    onClose()
+  }
 
   const handleDragEnd = (_: unknown, info: PanInfo) => {
     const { offset, velocity } = info
@@ -165,6 +196,49 @@ export function PracticeReader({
           >
             {completed && <Check className="w-4 h-4 text-btn-text dark:text-btn-dark-text" strokeWidth={3} />}
           </motion.button>
+
+          <div className="relative">
+            <button
+              onClick={() => setMenuOpen((o) => !o)}
+              className="p-2 -mr-2 ml-1 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
+              aria-label="Mais opções"
+              aria-expanded={menuOpen}
+            >
+              <MoreVertical className="w-5 h-5" />
+            </button>
+
+            {menuOpen && (
+              <>
+                <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
+                <div className="absolute right-0 top-full z-20 mt-1 w-52 py-1 bg-surface-card dark:bg-surface-card-dark border border-border dark:border-border-dark rounded-lg shadow-lg">
+                  <button
+                    onClick={handleEdit}
+                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-left text-text-primary dark:text-text-primary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark transition-colors"
+                  >
+                    <Pencil className="w-4 h-4 shrink-0" />
+                    Editar prática
+                  </button>
+                  <button
+                    onClick={handleArchive}
+                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-left text-text-primary dark:text-text-primary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark transition-colors"
+                  >
+                    <Archive className="w-4 h-4 shrink-0" />
+                    Arquivar prática
+                  </button>
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false)
+                      setShowDeleteDialog(true)
+                    }}
+                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-left text-[#9B6B6B] dark:text-gray-400 hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4 shrink-0" />
+                    Excluir prática
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </header>
 
@@ -266,6 +340,16 @@ export function PracticeReader({
           </div>
         </div>
       </footer>
+
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        title="Excluir prática"
+        message={`Excluir "${practice.name}" e todo o seu histórico? Esta ação não pode ser desfeita.`}
+        confirmLabel="Excluir"
+        variant="danger"
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteDialog(false)}
+      />
     </motion.div>
   )
 }

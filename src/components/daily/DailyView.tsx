@@ -24,6 +24,7 @@ import { useMorningFlow } from '../../hooks/useMorningFlow'
 import { useProposito } from '../../hooks/usePropositos'
 import { useHideCompleted, useDailyViewMode, DAILY_VIEW_MODES } from '../../hooks/useSettings'
 import { PLANO_DE_VIDA_CATEGORY_ID } from '../../data/planoDeVida'
+import { COSTUMES_CATEGORY_ID } from '../../data/costumes'
 import { isInActiveWindow } from '../../utils/season'
 import { isScheduledOn, isWeekly } from '../../utils/schedule'
 import { isMeditacaoPractice, getMeditacaoSlot } from '../../data/meditation'
@@ -85,12 +86,15 @@ export function DailyView() {
     [practices, currentDate]
   )
 
-  // The FAB mode narrows what the day shows: 'plano' = the Plano de Vida
-  // category plus any required practice elsewhere; 'extras' = the exact
-  // complement; 'all' = everything. Composes with hide-completed (below).
+  // The FAB mode narrows what the day shows: 'plano' = the Plano de Vida and
+  // Costumes categories plus any required practice elsewhere; 'extras' = the
+  // exact complement; 'all' = everything. Composes with hide-completed (below).
   const visiblePractices = useMemo(() => {
     if (viewMode === 'all') return activePractices
-    const inPlano = (p: Practice) => p.categoryId === PLANO_DE_VIDA_CATEGORY_ID || p.isRequired
+    const inPlano = (p: Practice) =>
+      p.categoryId === PLANO_DE_VIDA_CATEGORY_ID ||
+      p.categoryId === COSTUMES_CATEGORY_ID ||
+      p.isRequired
     return activePractices.filter((p) => (viewMode === 'plano' ? inPlano(p) : !inPlano(p)))
   }, [activePractices, viewMode])
 
