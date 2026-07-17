@@ -52,19 +52,30 @@ export function PracticeForm() {
 
   const showCareerOption = careerEnabled || domain === 'career'
 
+  // Load the row into the form ONCE per practice id. existingPractice is a live
+  // query — it re-emits a fresh object on every write to the practices table
+  // (a sync pull, say) — so re-running this would overwrite whatever the user
+  // has typed or picked since. It used to also re-run on its own output
+  // (categoryId was a dep), which snapped the category select straight back to
+  // the stored value and made the category impossible to change at all.
+  const hydratedIdRef = useRef<string | null>(null)
   useEffect(() => {
-    if (existingPractice) {
-      setName(existingPractice.name)
-      setCategoryId(existingPractice.categoryId)
-      setIsRequired(existingPractice.isRequired)
-      setDomain(getPracticeDomain(existingPractice))
-      setScheduleDays(existingPractice.scheduleDays ?? [])
-      setContent(existingPractice.content)
-      setImageData(existingPractice.imageData)
-    } else if (categories.length > 0 && !categoryId) {
-      setCategoryId(categories[0].id)
-    }
-  }, [existingPractice, categories, categoryId])
+    if (!existingPractice || hydratedIdRef.current === existingPractice.id) return
+    hydratedIdRef.current = existingPractice.id
+    setName(existingPractice.name)
+    setCategoryId(existingPractice.categoryId)
+    setIsRequired(existingPractice.isRequired)
+    setDomain(getPracticeDomain(existingPractice))
+    setScheduleDays(existingPractice.scheduleDays ?? [])
+    setContent(existingPractice.content)
+    setImageData(existingPractice.imageData)
+  }, [existingPractice])
+
+  // New practice: preselect the first category once they've loaded.
+  useEffect(() => {
+    if (isEditing || categoryId || categories.length === 0) return
+    setCategoryId(categories[0].id)
+  }, [isEditing, categories, categoryId])
 
   const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
