@@ -1,31 +1,6 @@
 import { useState, useEffect } from 'react'
 import { onSettingsChanged, setSyncedSetting } from '../sync/settingsBus'
 
-export type ExamenPropositoTarget = 'today' | 'tomorrow'
-
-const EXAMEN_PROPOSITO_TARGET_KEY = 'settings-examen-proposito-target'
-
-export function useExamenPropositoTarget(): [ExamenPropositoTarget, (value: ExamenPropositoTarget) => void] {
-  const [target, setTargetState] = useState<ExamenPropositoTarget>(() => {
-    return (localStorage.getItem(EXAMEN_PROPOSITO_TARGET_KEY) as ExamenPropositoTarget) || 'tomorrow'
-  })
-
-  useEffect(
-    () =>
-      onSettingsChanged(() =>
-        setTargetState((localStorage.getItem(EXAMEN_PROPOSITO_TARGET_KEY) as ExamenPropositoTarget) || 'tomorrow')
-      ),
-    []
-  )
-
-  const setTarget = (value: ExamenPropositoTarget) => {
-    setSyncedSetting(EXAMEN_PROPOSITO_TARGET_KEY, value)
-    setTargetState(value)
-  }
-
-  return [target, setTarget]
-}
-
 const INDIVIDUAL_REASONS_KEY = 'settings-individual-reasons'
 
 export function useIndividualReasons(): [boolean, (value: boolean) => void] {

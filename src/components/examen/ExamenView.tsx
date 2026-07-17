@@ -7,8 +7,7 @@ import { ExamenEntryCard } from './ExamenEntryCard'
 import { ExamenEntryForm } from './ExamenEntryForm'
 import { Spinner } from '../shared/Spinner'
 import { useExamenEntries } from '../../hooks/useExamen'
-import { useProposito } from '../../hooks/usePropositos'
-import { useExamenPropositoTarget } from '../../hooks/useSettings'
+import { usePropositoTarget, setPropositoForDate } from '../../hooks/usePropositos'
 import { formatDate, getToday, parseDate, addDay, subDay } from '../../utils/dates'
 import { EXAMEN_COLORS, EXAMEN_LABELS } from '../../utils/constants'
 import type { ExamenCategory, ExamenEntry } from '../../types'
@@ -23,11 +22,11 @@ export function ExamenView() {
   const [editingEntry, setEditingEntry] = useState<ExamenEntry | null>(null)
 
   const dateStr = formatDate(currentDate)
-  const [propositoTarget] = useExamenPropositoTarget()
-  const propositoDateStr = propositoTarget === 'today' ? dateStr : formatDate(addDay(currentDate, 1))
+  // Keyed off the clock, not the viewed day: a propósito is for the day you can
+  // still live it out on, even when promoted from an older examen.
+  const propositoTarget = usePropositoTarget()
   const { entriesByCategory, addEntry, updateEntry, deleteEntry, toggleConfession, isLoading } =
     useExamenEntries(dateStr)
-  const { setProposito } = useProposito(propositoDateStr)
 
   const handlePrevDay = () => setCurrentDate((d) => subDay(d, 1))
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
@@ -55,7 +54,7 @@ export function ExamenView() {
   }
 
   const handleMakeProposito = async (entry: ExamenEntry) => {
-    await setProposito(entry.text, entry.id)
+    await setPropositoForDate(propositoTarget.date, entry.text, entry.id)
   }
 
   if (isLoading) {
@@ -135,6 +134,7 @@ export function ExamenView() {
                     onMakeProposito={
                       category === 'ayudame' ? () => handleMakeProposito(entry) : undefined
                     }
+                    propositoTargetLabel={propositoTarget.isTomorrow ? 'amanhã' : 'hoje'}
                   />
                 ))}
               </div>

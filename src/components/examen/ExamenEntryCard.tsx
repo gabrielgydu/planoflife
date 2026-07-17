@@ -8,6 +8,7 @@ interface ExamenEntryCardProps {
   onDelete: () => void
   onToggleConfession: () => void
   onMakeProposito?: () => void
+  propositoTargetLabel?: string
 }
 
 export function ExamenEntryCard({
@@ -16,6 +17,7 @@ export function ExamenEntryCard({
   onDelete,
   onToggleConfession,
   onMakeProposito,
+  propositoTargetLabel,
 }: ExamenEntryCardProps) {
   const color = EXAMEN_COLORS[entry.category]
 
@@ -53,7 +55,7 @@ export function ExamenEntryCard({
                 className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-[#A89548]/15 text-[#A89548] hover:bg-[#A89548]/25 transition-colors"
               >
                 <ArrowRight className="w-3 h-3" />
-                Propósito
+                Propósito{propositoTargetLabel && ` · ${propositoTargetLabel}`}
               </button>
             )}
           </div>

@@ -4,12 +4,15 @@
 //
 // Excluded on purpose: 'morning-flow-last-reviewed-date' is transient per-device
 // flow state, not a preference — syncing it could wrongly skip the morning review.
+//
+// Retired: 'settings-examen-proposito-target'. The propósito day is now derived
+// from the clock (see usePropositos). Old devices may still push the key; unknown
+// keys are ignored on both collect and apply, so it just falls away.
 
 export const SYNCED_SETTING_KEYS = [
   'theme-mode',
   'settings-practice-font-size',
   'settings-ui-font-size',
-  'settings-examen-proposito-target',
   'settings-individual-reasons',
   'settings-hide-completed',
   'settings-exame-particular-point',
