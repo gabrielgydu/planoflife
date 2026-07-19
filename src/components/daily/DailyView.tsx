@@ -22,10 +22,10 @@ import { useDailyRecords } from '../../hooks/useDailyRecords'
 import { useWeeklyCompletions } from '../../hooks/useWeeklyCompletion'
 import { useMorningFlow } from '../../hooks/useMorningFlow'
 import { useProposito } from '../../hooks/usePropositos'
-import { useHideCompleted, useDailyViewMode, DAILY_VIEW_MODES } from '../../hooks/useSettings'
+import { useHideCompleted, useDailyViewMode, useNovenaStart, DAILY_VIEW_MODES } from '../../hooks/useSettings'
 import { PLANO_DE_VIDA_CATEGORY_ID } from '../../data/planoDeVida'
 import { COSTUMES_CATEGORY_ID } from '../../data/costumes'
-import { isInActiveWindow } from '../../utils/season'
+import { isPracticeVisibleOn } from '../../data/novena'
 import { isScheduledOn, isWeekly } from '../../utils/schedule'
 import { isMeditacaoPractice, getMeditacaoSlot } from '../../data/meditation'
 import { isRosaryContemplationPractice } from '../../data/rosary'
@@ -45,6 +45,8 @@ export function DailyView() {
   // FAB-cycled visibility mode (also persisted + synced): the plan-of-life core,
   // only the extras, or everything.
   const [viewMode, setViewMode] = useDailyViewMode()
+  // The manually-started novena (settings) shows outside 17–25 June for nine days.
+  const { start: novenaStart } = useNovenaStart()
   const cycleViewMode = () => {
     const next = DAILY_VIEW_MODES[(DAILY_VIEW_MODES.indexOf(viewMode) + 1) % DAILY_VIEW_MODES.length]
     setViewMode(next)
@@ -82,8 +84,11 @@ export function DailyView() {
   // on their weekday schedule (a Saturday-only practice hides Mon–Fri). Ordinary
   // practices have neither → always active.
   const activePractices = useMemo(
-    () => practices.filter((p) => isInActiveWindow(p, currentDate) && isScheduledOn(p, currentDate)),
-    [practices, currentDate]
+    () =>
+      practices.filter(
+        (p) => isPracticeVisibleOn(p, currentDate, novenaStart) && isScheduledOn(p, currentDate)
+      ),
+    [practices, currentDate, novenaStart]
   )
 
   // The FAB mode narrows what the day shows: 'plano' = the Plano de Vida and
@@ -235,6 +240,7 @@ export function DailyView() {
               category={category}
               practices={categoryPractices}
               viewDate={currentDate}
+              novenaStart={novenaStart}
               isCompleted={isCompletedEffective}
               onTogglePractice={toggleEffective}
               onOpenPracticeDetail={handleOpenPracticeDetail}
@@ -318,6 +324,7 @@ export function DailyView() {
               items={readerItems}
               initialPracticeId={readerPracticeId}
               viewDate={currentDate}
+              novenaStart={novenaStart}
               isCompleted={isCompletedEffective}
               onTogglePractice={toggleEffective}
               onMarkViewed={markCompleted}

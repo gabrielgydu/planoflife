@@ -1,5 +1,7 @@
+import { differenceInCalendarDays, parseISO } from 'date-fns'
 import type { Practice } from '../types'
 import type { BundledText } from './bundledTexts'
+import { isInActiveWindow } from '../utils/season'
 
 // "Novena do Trabalho — a São Josemaria Escrivá", by Francisco Faus (with
 // ecclesiastical approval). Prayed 17–25 June, the nine days leading to St.
@@ -267,6 +269,9 @@ const DAYS: NovenaDay[] = [
   },
 ]
 
+/** Length of the novena — nine days (its span when started manually). */
+export const NOVENA_LENGTH = DAYS.length
+
 /**
  * Index (0–8) of the novena day matching the given date, or null if the date
  * falls outside the 17–25 June window. Matches on month/day so it recurs yearly.
@@ -276,6 +281,60 @@ export function getNovenaDayIndex(date: Date): number | null {
   const d = date.getDate()
   const i = DAYS.findIndex((day) => day.month === m && day.day === d)
   return i === -1 ? null : i
+}
+
+/**
+ * Index (0–8) into the novena when it was MANUALLY started on `startISO`
+ * (a YYYY-MM-DD date) and `viewDate` falls within the nine-day span beginning
+ * that day; null when there is no manual start, or the date is before it or past
+ * the ninth day. This is what makes a manual run "expire" on its own: once the
+ * ninth day passes it stops matching and the novena leaves the daily list.
+ */
+export function manualNovenaDayIndex(
+  startISO: string | null | undefined,
+  viewDate: Date
+): number | null {
+  if (!startISO) return null
+  const diff = differenceInCalendarDays(viewDate, parseISO(startISO))
+  return diff >= 0 && diff < DAYS.length ? diff : null
+}
+
+/**
+ * Which novena day (0–8) to show for a view date: a manual run takes precedence
+ * within its nine-day span, otherwise the fixed 17–25 June calendar. Null when
+ * neither applies. (`0` is a valid index, so this coalesces on null only.)
+ */
+function novenaDayIndex(viewDate: Date, startISO: string | null | undefined): number | null {
+  return manualNovenaDayIndex(startISO, viewDate) ?? getNovenaDayIndex(viewDate)
+}
+
+/** True when a manual run of the novena covers `viewDate` (drives visibility). */
+export function isNovenaManuallyActiveOn(
+  practice: Pick<Practice, 'bundledTextId'>,
+  viewDate: Date,
+  startISO: string | null | undefined
+): boolean {
+  return (
+    practice.bundledTextId === NOVENA_TRABALHO_BUNDLED_ID &&
+    manualNovenaDayIndex(startISO, viewDate) !== null
+  )
+}
+
+/**
+ * Is the practice shown on `viewDate`? Its ordinary calendar window (season.ts)
+ * OR — for the novena only — an in-progress manual run started outside it. Use
+ * this everywhere the daily list / history / report decides visibility, so a
+ * manually-started novena behaves exactly like the seasonal one, on new dates.
+ */
+export function isPracticeVisibleOn(
+  practice: Pick<Practice, 'activeWindow' | 'bundledTextId'>,
+  viewDate: Date,
+  novenaStartISO: string | null | undefined
+): boolean {
+  return (
+    isInActiveWindow(practice, viewDate) ||
+    isNovenaManuallyActiveOn(practice, viewDate, novenaStartISO)
+  )
 }
 
 function dayMarkdown(d: NovenaDay): string {
@@ -307,10 +366,11 @@ function dayMarkdown(d: NovenaDay): string {
  */
 export function resolveNovenaReaderText(
   practice: Pick<Practice, 'bundledTextId'>,
-  date: Date
+  date: Date,
+  startISO?: string | null
 ): BundledText | null {
   if (practice.bundledTextId !== NOVENA_TRABALHO_BUNDLED_ID) return null
-  const day = DAYS[getNovenaDayIndex(date) ?? 0]
+  const day = DAYS[novenaDayIndex(date, startISO) ?? 0]
   return {
     id: NOVENA_TRABALHO_BUNDLED_ID,
     title: { pt: NOVENA_TRABALHO_NAME },
@@ -325,10 +385,11 @@ export function resolveNovenaReaderText(
  */
 export function novenaRowSubtitle(
   practice: Pick<Practice, 'bundledTextId'>,
-  date: Date
+  date: Date,
+  startISO?: string | null
 ): string | null {
   if (practice.bundledTextId !== NOVENA_TRABALHO_BUNDLED_ID) return null
-  const i = getNovenaDayIndex(date)
+  const i = novenaDayIndex(date, startISO)
   if (i === null) return null
   const d = DAYS[i]
   return `${d.ordinal} dia · ${d.theme}`

@@ -17,7 +17,8 @@ import { formatDate } from '../../utils/dates'
 import { useTheme } from '../../hooks/useTheme'
 import { getPracticeDomain } from '../../utils/domain'
 import { isScheduledOn, isWeekly } from '../../utils/schedule'
-import { isInActiveWindow } from '../../utils/season'
+import { isPracticeVisibleOn } from '../../data/novena'
+import { useNovenaStart } from '../../hooks/useSettings'
 import type { PracticeDomain } from '../../types'
 
 interface MonthGridProps {
@@ -54,6 +55,7 @@ function getCompletionLevel(fillPercent: number): string {
 
 export function MonthGrid({ month, domain }: MonthGridProps) {
   const theme = useTheme()
+  const { start: novenaStart } = useNovenaStart()
   const colors = theme === 'dark' ? DARK_COLORS : LIGHT_COLORS
   const monthStart = startOfMonth(month)
   const monthEnd = endOfMonth(month)
@@ -122,7 +124,7 @@ export function MonthGrid({ month, domain }: MonthGridProps) {
       const parsed = new Date(`${date}T00:00:00`)
       const scheduled = [...scheduledIdsByWeekday[getDay(parsed)]].filter((id) => {
         const p = practiceById.get(id)
-        return p ? isInActiveWindow(p, parsed) : false
+        return p ? isPracticeVisibleOn(p, parsed, novenaStart) : false
       })
       const scheduledSet = new Set(scheduled)
       const completed = [...completedIds].filter((id) => scheduledSet.has(id)).length
@@ -132,7 +134,7 @@ export function MonthGrid({ month, domain }: MonthGridProps) {
     }
 
     return stats
-  }, [records, practices, domain])
+  }, [records, practices, domain, novenaStart])
 
   // Generate calendar grid
   const days = useMemo(() => {

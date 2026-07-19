@@ -11,6 +11,9 @@ interface CategorySectionProps {
   category: Category
   practices: Practice[]
   viewDate: Date
+  // Manual-run start of the novena (YYYY-MM-DD) — drives its per-day subtitle
+  // when it runs outside the 17–25 June calendar window.
+  novenaStart?: string | null
   isCompleted: (practiceId: string) => boolean
   onTogglePractice: (practiceId: string) => void
   onOpenPracticeDetail: (practice: Practice) => void
@@ -21,6 +24,7 @@ export function CategorySection({
   category,
   practices,
   viewDate,
+  novenaStart,
   isCompleted,
   onTogglePractice,
   onOpenPracticeDetail,
@@ -73,7 +77,7 @@ export function CategorySection({
                 key={practice.id}
                 practice={practice}
                 nameOverride={angelusDisplayName(practice, viewDate) ?? undefined}
-                subtitle={novenaRowSubtitle(practice, viewDate) ?? undefined}
+                subtitle={novenaRowSubtitle(practice, viewDate, novenaStart) ?? undefined}
                 isCompleted={isCompleted(practice.id)}
                 onToggle={() => onTogglePractice(practice.id)}
                 onOpenDetail={() => onOpenPracticeDetail(practice)}

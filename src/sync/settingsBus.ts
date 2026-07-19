@@ -17,6 +17,7 @@ export const SYNCED_SETTING_KEYS = [
   'settings-hide-completed',
   'settings-exame-particular-point',
   'settings-daily-view-mode',
+  'settings-novena-start',
 ] as const
 
 // Two distinct events, on purpose:

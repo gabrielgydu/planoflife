@@ -1,7 +1,9 @@
 import { Link } from 'react-router'
-import { ClipboardList, FolderOpen, Download, FileText, ChevronRight, Sun, Moon, Circle, type LucideIcon } from 'lucide-react'
+import { ClipboardList, FolderOpen, Download, FileText, ChevronRight, Sun, Moon, Circle, Sparkles, type LucideIcon } from 'lucide-react'
 import { useThemeMode, type ThemeMode } from '../../hooks/useThemeMode'
-import { useIndividualReasons, usePracticeFontSize, useUIFontSize, type FontSizeLevel } from '../../hooks/useSettings'
+import { useIndividualReasons, usePracticeFontSize, useUIFontSize, useNovenaStart, type FontSizeLevel } from '../../hooks/useSettings'
+import { manualNovenaDayIndex, NOVENA_LENGTH } from '../../data/novena'
+import { getToday, getTodayStr, formatDateShort, parseDate } from '../../utils/dates'
 import { SyncSettingsSection } from '../sync/SyncSettingsSection'
 
 const menuItems: { to: string; label: string; icon: LucideIcon; description: string }[] = [
@@ -28,6 +30,12 @@ export function SettingsView() {
   const [individualReasons, setIndividualReasons] = useIndividualReasons()
   const [practiceFontSize, setPracticeFontSize] = usePracticeFontSize()
   const [uiFontSize, setUIFontSize] = useUIFontSize()
+
+  // Manual novena run: 0-based day index when today falls in an active 9-day
+  // run, else null. Starting stores today's date; it auto-ends after nine days.
+  const { start: novenaStart, setStart: setNovenaStart } = useNovenaStart()
+  const novenaDayIndex = manualNovenaDayIndex(novenaStart, getToday())
+  const novenaRunning = novenaDayIndex !== null
 
   return (
     <div className="min-h-full">
@@ -129,6 +137,49 @@ export function SettingsView() {
               />
             </div>
           </button>
+        </section>
+
+        {/* Novena a São Josemaria — start the nine-day novena outside its usual
+            17–25 June window; it then shows in the daily list until it ends. */}
+        <section>
+          <h2 className="font-heading text-xs font-medium text-text-muted dark:text-text-muted-dark uppercase tracking-widest mb-3">
+            Novena a São Josemaria
+          </h2>
+          <div className="p-4 bg-surface-secondary dark:bg-surface-secondary-dark rounded-lg space-y-3">
+            <div className="flex items-start gap-3">
+              <Sparkles className="w-5 h-5 text-primary dark:text-primary-light mt-0.5 shrink-0" />
+              {novenaRunning ? (
+                <div className="flex-1">
+                  <div className="text-sm font-medium text-text-primary dark:text-text-primary-dark">
+                    Em andamento — dia {novenaDayIndex + 1} de {NOVENA_LENGTH}
+                  </div>
+                  <div className="text-xs text-text-muted dark:text-text-muted-dark mt-0.5">
+                    Iniciada em {formatDateShort(parseDate(novenaStart!))}. Aparece na lista diária até terminar.
+                  </div>
+                </div>
+              ) : (
+                <p className="flex-1 text-xs text-text-muted dark:text-text-muted-dark">
+                  Rezar a Novena do Trabalho fora do período habitual (17–25 de junho).
+                  Começa hoje e aparece na lista diária durante nove dias.
+                </p>
+              )}
+            </div>
+            {novenaRunning ? (
+              <button
+                onClick={() => setNovenaStart(null)}
+                className="w-full py-2.5 text-sm rounded-lg border border-border dark:border-border-dark text-text-secondary dark:text-text-secondary-dark hover:bg-border/40 dark:hover:bg-border-dark/40 transition-colors"
+              >
+                Encerrar novena
+              </button>
+            ) : (
+              <button
+                onClick={() => setNovenaStart(getTodayStr())}
+                className="w-full py-2.5 text-sm font-medium rounded-lg bg-btn dark:bg-btn-dark text-btn-text dark:text-btn-dark-text hover:opacity-90 transition-opacity"
+              >
+                Iniciar novena hoje
+              </button>
+            )}
+          </div>
         </section>
 
         {/* Menu Items */}

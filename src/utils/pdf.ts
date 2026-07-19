@@ -10,18 +10,27 @@ import {
 import { ptBR } from 'date-fns/locale'
 import { formatDate } from './dates'
 import { isCareer } from './domain'
-import { isInActiveWindow } from './season'
 import { isScheduledOn, isWeekly } from './schedule'
+import { isPracticeVisibleOn } from '../data/novena'
 import type { Practice } from '../types'
 
-// A practice "applies" on a day when the day is inside its calendar window AND
-// on its weekday schedule. Weekly practices never apply to a single day — they
-// draw completed dots but stay out of every denominator.
-function appliesOn(practice: Pick<Practice, 'activeWindow' | 'scheduleDays'>, day: Date): boolean {
-  return isInActiveWindow(practice, day) && isScheduledOn(practice, day)
+// A practice "applies" on a day when the day is inside its calendar window (or a
+// manual novena run covers it) AND it's on its weekday schedule. Weekly practices
+// never apply to a single day — they draw completed dots but stay out of every
+// denominator.
+function appliesOn(
+  practice: Pick<Practice, 'activeWindow' | 'scheduleDays' | 'bundledTextId'>,
+  day: Date,
+  novenaStart: string | null
+): boolean {
+  return isPracticeVisibleOn(practice, day, novenaStart) && isScheduledOn(practice, day)
 }
 
-export async function generateMonthPdf(year: number, month: number): Promise<void> {
+export async function generateMonthPdf(
+  year: number,
+  month: number,
+  novenaStart: string | null = null
+): Promise<void> {
   const monthDate = new Date(year, month, 1)
   const monthStart = startOfMonth(monthDate)
   const monthEnd = endOfMonth(monthDate)
@@ -85,7 +94,7 @@ export async function generateMonthPdf(year: number, month: number): Promise<voi
   // Drop windowed practices (e.g. a novena) that never fall inside this month —
   // otherwise they'd add an all-blank row and skew the summary percentage.
   const visiblePractices = practices.filter((p) =>
-    days.some((d) => appliesOn(p, d))
+    days.some((d) => appliesOn(p, d, novenaStart))
   )
 
   for (const practice of visiblePractices) {
@@ -107,7 +116,7 @@ export async function generateMonthPdf(year: number, month: number): Promise<voi
       // (e.g. Confissão) applies to no single day: only its completions show.
       if (isWeekly(practice)) {
         if (!isCompleted) continue
-      } else if (!appliesOn(practice, days[day - 1])) {
+      } else if (!appliesOn(practice, days[day - 1], novenaStart)) {
         continue
       }
 
@@ -151,7 +160,7 @@ export async function generateMonthPdf(year: number, month: number): Promise<voi
   for (let day = 1; day <= daysInMonth; day++) {
     const dateStr = formatDate(days[day - 1])
     const daySet = completionMap.get(dateStr)
-    const dayPractices = visiblePractices.filter((p) => !isWeekly(p) && appliesOn(p, days[day - 1]))
+    const dayPractices = visiblePractices.filter((p) => !isWeekly(p) && appliesOn(p, days[day - 1], novenaStart))
     totalPossible += dayPractices.length
     totalCompleted += dayPractices.filter((p) => daySet?.has(p.id)).length
   }

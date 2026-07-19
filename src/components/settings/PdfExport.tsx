@@ -4,9 +4,11 @@ import { ChevronLeft, FileText, Lightbulb } from 'lucide-react'
 import { format, subMonths } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { generateMonthPdf } from '../../utils/pdf'
+import { useNovenaStart } from '../../hooks/useSettings'
 
 export function PdfExport() {
   const navigate = useNavigate()
+  const { start: novenaStart } = useNovenaStart()
   const now = new Date()
 
   const [selectedYear, setSelectedYear] = useState(now.getFullYear())
@@ -30,7 +32,7 @@ export function PdfExport() {
     setIsGenerating(true)
 
     try {
-      await generateMonthPdf(selectedYear, selectedMonth)
+      await generateMonthPdf(selectedYear, selectedMonth, novenaStart)
     } catch (err) {
       console.error(err)
       setError('Erro ao gerar PDF')

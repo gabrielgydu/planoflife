@@ -1,6 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../db'
-import { isInActiveWindow } from '../utils/season'
+import { isPracticeVisibleOn } from '../data/novena'
+import { readNovenaStart } from './useSettings'
 import { isScheduledOn, isWeekly } from '../utils/schedule'
 import type { Practice } from '../types'
 
@@ -9,6 +10,7 @@ export function useYesterdayUncompleted(date: string) {
     // The reviewed day, for windowed practices (e.g. a novena only shows on its
     // dates — mirror the daily list so it isn't flagged as "missed" off-window).
     const reviewedDate = new Date(`${date}T00:00:00`)
+    const novenaStart = readNovenaStart()
     // Mirror the daily list view ordering: categories by sortOrder, then
     // practices by sortOrder within each category.
     const [categories, allPractices, records] = await Promise.all([
@@ -23,7 +25,7 @@ export function useYesterdayUncompleted(date: string) {
     for (const category of categories) byCategory.set(category.id, [])
     for (const practice of allPractices) {
       if (practice.isArchived) continue
-      if (!isInActiveWindow(practice, reviewedDate)) continue
+      if (!isPracticeVisibleOn(practice, reviewedDate, novenaStart)) continue
       // Off-schedule days and weekly practices aren't "uncompleted" for a single
       // day — mirror the daily list and the missed-reasons filter.
       if (!isScheduledOn(practice, reviewedDate)) continue

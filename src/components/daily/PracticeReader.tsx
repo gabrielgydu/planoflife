@@ -23,6 +23,9 @@ interface PracticeReaderProps {
   // The day being viewed in DailyView — drives date-dependent content (e.g. the
   // novena shows the reflection for whichever of its nine days this date is).
   viewDate: Date
+  // Manual-run start of the novena (YYYY-MM-DD) — anchors day 1 when it runs
+  // outside the 17–25 June calendar window.
+  novenaStart?: string | null
   isCompleted: (practiceId: string) => boolean
   onTogglePractice: (practiceId: string) => void
   onMarkViewed: (practiceId: string) => void
@@ -44,6 +47,7 @@ export function PracticeReader({
   items,
   initialPracticeId,
   viewDate,
+  novenaStart,
   isCompleted,
   onTogglePractice,
   onMarkViewed,
@@ -108,7 +112,7 @@ export function PracticeReader({
   // else is a plain bundled-text lookup.
   const bundledText =
     resolveAngelusReaderText(practice, viewDate) ??
-    resolveNovenaReaderText(practice, viewDate) ??
+    resolveNovenaReaderText(practice, viewDate, novenaStart) ??
     getBundledText(practice.bundledTextId)
   const isBundled = !!bundledText
 

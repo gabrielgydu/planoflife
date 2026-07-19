@@ -7,7 +7,8 @@ import { usePractices } from '../../hooks/usePractices'
 import { useHistoryDomain } from '../../hooks/useHistoryDomain'
 import { getPracticeDomain, isLifestyle, isCareer } from '../../utils/domain'
 import { isScheduledOn, isWeekly } from '../../utils/schedule'
-import { isInActiveWindow } from '../../utils/season'
+import { isPracticeVisibleOn } from '../../data/novena'
+import { useNovenaStart } from '../../hooks/useSettings'
 import { DomainToggle } from './DomainToggle'
 import { parseDate, formatDateLong } from '../../utils/dates'
 import { CategoryIcon } from '../shared/CategoryIcon'
@@ -22,6 +23,7 @@ export function DayDetail() {
   const { isCompleted } = useDailyRecords(date ?? '')
   const { proposito } = useProposito(date ?? '')
   const [domain, setDomain] = useHistoryDomain()
+  const { start: novenaStart } = useNovenaStart()
 
   if (!date) return null
 
@@ -102,7 +104,9 @@ export function DayDetail() {
                   // Weekly practices (Confissão) never count against a single
                   // day; a completion surfaces via the bonus path below.
                   scheduled:
-                    !isWeekly(p) && isScheduledOn(p, parsedDate) && isInActiveWindow(p, parsedDate),
+                    !isWeekly(p) &&
+                    isScheduledOn(p, parsedDate) &&
+                    isPracticeVisibleOn(p, parsedDate, novenaStart),
                   done: isCompleted(p.id),
                 }))
                 .filter((x) => x.scheduled || x.done)
