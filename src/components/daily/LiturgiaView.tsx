@@ -46,10 +46,13 @@ function firstOf<T>(arr?: T[]): T | undefined {
   return arr && arr.length > 0 ? arr[0] : undefined
 }
 
-// Slide order per LITURGY_PLAN.md §E, skipping any slide whose content is
-// absent. Reading/psalm arrays carry alternates (multiple celebrations) — only
-// the first is shown, except `leituras.extras` (Easter Vigil-style extra
-// readings), where every entry becomes its own slide.
+// Slides shown when opening "Santa Missa": the entrance antiphon and the day's
+// Scripture — 1st reading, responsorial psalm, 2nd reading (Sundays/solemnities
+// only) and the Gospel — skipping any that's absent. Deliberately NOT the
+// collect/offertory/communion prayers, the communion antiphon, or the Easter
+// Vigil extra readings: this is a "follow the readings at Mass" aid, not the
+// full propers. Reading/psalm arrays carry alternates (multiple celebrations);
+// only the first is shown.
 function buildSlides(data: LiturgyDay): LiturgiaSlide[] {
   const slides: LiturgiaSlide[] = []
 
@@ -93,17 +96,6 @@ function buildSlides(data: LiturgyDay): LiturgiaSlide[] {
     })
   }
 
-  ;(data.leituras.extras ?? []).forEach((extra, i) => {
-    slides.push({
-      key: `extra-${i}`,
-      label: extra.tipo ?? 'Leitura',
-      referencia: extra.referencia,
-      titulo: extra.titulo,
-      textoPt: extra.texto,
-      textoLatim: extra.textoLatim,
-    })
-  })
-
   const evangelho = firstOf(data.leituras.evangelho)
   if (evangelho) {
     slides.push({
@@ -114,19 +106,6 @@ function buildSlides(data: LiturgyDay): LiturgiaSlide[] {
       textoPt: evangelho.texto,
       textoLatim: evangelho.textoLatim,
     })
-  }
-
-  if (data.oracoes?.coleta) {
-    slides.push({ key: 'coleta', label: 'Coleta', textoPt: data.oracoes.coleta })
-  }
-  if (data.oracoes?.oferendas) {
-    slides.push({ key: 'oferendas', label: 'Oferendas', textoPt: data.oracoes.oferendas })
-  }
-  if (data.oracoes?.comunhao) {
-    slides.push({ key: 'pos-comunhao', label: 'Após a Comunhão', textoPt: data.oracoes.comunhao })
-  }
-  if (data.antifonas?.comunhao) {
-    slides.push({ key: 'antifona-comunhao', label: 'Antífona da comunhão', textoPt: data.antifonas.comunhao })
   }
 
   return slides
@@ -140,22 +119,21 @@ interface LiturgiaViewProps {
   viewDate: Date
   isCompleted: (practiceId: string) => boolean
   onTogglePractice: (practiceId: string) => void
-  onMarkViewed: (practiceId: string) => void
   onClose: () => void
 }
 
 /**
- * Full-screen reader for the day's Mass propers (entrance antiphon → readings →
- * psalm → gospel → collect/offertory/communion prayers → communion antiphon),
- * swipeable like AntiphonView. Unlike the other overlays it auto-marks the
- * practice on open — reading the day's liturgy IS the practice.
+ * Full-screen reader opened from "Santa Missa": the day's entrance antiphon and
+ * Scripture readings (1st reading → psalm → 2nd reading → Gospel), swipeable
+ * like AntiphonView. Unlike Liturgia do Dia used to, it does NOT auto-mark on
+ * open — attending Mass is the plan-of-life obligation, and merely reading the
+ * day's readings mustn't record it as done; the header checkmark stays manual.
  */
 export function LiturgiaView({
   practiceId,
   viewDate,
   isCompleted,
   onTogglePractice,
-  onMarkViewed,
   onClose,
 }: LiturgiaViewProps) {
   const [state, setState] = useState<LoadState>({ status: 'loading' })
@@ -200,11 +178,6 @@ export function LiturgiaView({
   useEffect(() => {
     localStorage.setItem(PRACTICE_TEXT_LANG_KEY, lang)
   }, [lang])
-
-  // Auto-mark on open (set-only; never un-marks) — same semantics as AntiphonView.
-  useEffect(() => {
-    onMarkViewed(practiceId)
-  }, [onMarkViewed, practiceId])
 
   const goTo = useCallback(
     (next: number) => {

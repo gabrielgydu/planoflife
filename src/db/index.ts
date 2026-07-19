@@ -45,7 +45,6 @@ import {
   CONFISSAO_NAME,
 } from '../data/planoDeVida'
 import { ANTIPHON_PRACTICE_ID, ANTIPHON_NAME } from '../data/antiphon'
-import { LITURGIA_PRACTICE_ID, LITURGIA_PRACTICE_NAME } from '../data/liturgiaPractice'
 import {
   COSTUMES_CATEGORY_ID,
   COSTUMES_CATEGORY_NAME,
@@ -151,19 +150,8 @@ export const ADDITIONAL_PRACTICES: AdditionalPracticeSpec[] = [
     scheduleDays: [6],
     sortOrder: 12,
   },
-  // The daily Mass propers reader (v17, see LITURGY_PLAN.md). No bundledTextId;
-  // routes to its own overlay reader (src/data/liturgiaPractice.ts) like the
-  // antiphon and rosary contemplation. Unlike the antiphon it has no
-  // scheduleDays — it's daily. Not required: a devotional aid, not a plan-of-life
-  // norm, so no missed-reason nagging. Fractional sortOrder slots it right after
-  // the antiphon without renumbering Confissão.
-  {
-    id: LITURGIA_PRACTICE_ID,
-    name: LITURGIA_PRACTICE_NAME,
-    categoryName: PLANO_DE_VIDA_CATEGORY_NAME,
-    isRequired: false,
-    sortOrder: 12.5,
-  },
+  // (The v17 "Liturgia do Dia" practice was removed in v18 — the daily Mass
+  // readings now open from "Santa Missa" instead. See ensureLiturgiaRemoved.)
   // Weekly confession (v14): shown every day, satisfied by any completed record
   // in the Monday-start week, resets the following Monday. Deliberately NOT
   // required — no missed-reason nagging about confession.
@@ -492,6 +480,47 @@ export async function ensureCostumesState(tx: TableSource): Promise<void> {
   await addMissingAdditionalPractices(tx)
 }
 
+// The v17 "Liturgia do Dia" practice, removed in v18 (its reader now opens from
+// "Santa Missa"). Kept only so ensureLiturgiaRemoved can find and delete the row.
+const LITURGIA_PRACTICE_ID = 'liturgia-do-dia'
+const LITURGIA_PRACTICE_NAME = 'Liturgia do Dia'
+
+// Same one-time "migration still needs to reach the cloud" marker as
+// PLANO_V14/COSTUMES_V15 — but for a DELETE. Crucial here: the v18 upgrade
+// deletes the row locally, but the very first pull re-applies the still-present
+// v17 cloud snapshot (full clear+bulkAdd) and RESURRECTS it. The reconciliation
+// re-runs the delete through the live (hook-captured) db and pushes, so the
+// deletion actually reaches the cloud. Cleared only after a successful push.
+export const LITURGIA_V18_PENDING_PUSH_KEY = 'liturgia-v18-pending-push'
+
+/**
+ * Remove the standalone "Liturgia do Dia" practice (v17). The daily Mass
+ * readings now open from "Santa Missa" (see isSantaMissaPractice + LiturgiaView).
+ * Idempotent: a no-op once the row is gone. Deletes the fixed-id row (and any
+ * by-name match, in case a device renamed it) together with its now-orphaned
+ * dailyRecords. Runs from version(18).upgrade AND — because upgrade writes are
+ * never marked dirty and a plain pull would resurrect the row — from the
+ * post-sync reconciliation (see LITURGIA_V18_PENDING_PUSH_KEY).
+ */
+export async function ensureLiturgiaRemoved(tx: TableSource): Promise<void> {
+  const practicesTable = tx.table('practices')
+  const dailyRecordsTable = tx.table('dailyRecords')
+
+  const allPractices = (await practicesTable.toArray()) as Practice[]
+  const targetIds = allPractices
+    .filter(
+      (p) =>
+        p.id === LITURGIA_PRACTICE_ID ||
+        normalizeName(p.name) === normalizeName(LITURGIA_PRACTICE_NAME)
+    )
+    .map((p) => p.id)
+
+  for (const id of targetIds) {
+    await practicesTable.delete(id)
+    await dailyRecordsTable.where('practiceId').equals(id).delete()
+  }
+}
+
 export class PlanOfLifeDB extends Dexie {
   categories!: EntityTable<Category, 'id'>
   practices!: EntityTable<Practice, 'id'>
@@ -694,6 +723,22 @@ export class PlanOfLifeDB extends Dexie {
     // category, so unlike the row-modifying v14/v15 it needs no reconciliation
     // flag. Idempotent + name-matched (see helper).
     this.version(17).stores({}).upgrade(addMissingAdditionalPractices)
+
+    // Remove the standalone "Liturgia do Dia" practice (v17): the daily Mass
+    // readings now open from "Santa Missa" (see isSantaMissaPractice +
+    // LiturgiaView). A row DELETE, so — like the row-modifying v14/v15 and unlike
+    // the pure inserts — it needs the reconciliation flag: the first pull would
+    // otherwise re-apply the still-present v17 cloud snapshot and resurrect the
+    // row. The flag makes SyncProvider re-run the delete through the live db and
+    // push; it's cleared only after a successful push (LITURGIA_V18_PENDING_PUSH_KEY).
+    this.version(18).stores({}).upgrade(async (tx) => {
+      await ensureLiturgiaRemoved(tx)
+      try {
+        localStorage.setItem(LITURGIA_V18_PENDING_PUSH_KEY, 'true')
+      } catch {
+        // localStorage unavailable — see the v14 note above.
+      }
+    })
   }
 }
 

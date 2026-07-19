@@ -1,3 +1,5 @@
+import type { Practice } from '../types'
+
 // The "Plano de Vida" category: the core plan-of-life obligations, gathered
 // from the time-of-day categories into one list (v14 migration + fresh seed).
 // The category id is FIXED so every device creates the same row — the sync
@@ -43,3 +45,17 @@ export const MORTIFICACAO_PRACTICE_ID = 'mortificacao-corporal'
 export const MORTIFICACAO_NAME = 'Mortificação corporal'
 export const CONFISSAO_PRACTICE_ID = 'confissao-sacramental'
 export const CONFISSAO_NAME = 'Confissão sacramental'
+
+// "Santa Missa" (a core move, per-device random id — matched by normalized name,
+// the only stable cross-device key). Opening it shows the day's liturgy readings
+// (LiturgiaView) instead of the plain text pager. NOT a fixed id: the v14 move
+// renamed the seeded "Missa" row in place, keeping its original id.
+export const SANTA_MISSA_NAME = 'Santa Missa'
+
+const normalizeName = (s: string) =>
+  s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim()
+
+/** True for the "Santa Missa" practice — used to route it to the liturgy reader. */
+export function isSantaMissaPractice(practice: Practice): boolean {
+  return normalizeName(practice.name) === normalizeName(SANTA_MISSA_NAME)
+}

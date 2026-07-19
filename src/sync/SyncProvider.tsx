@@ -46,8 +46,10 @@ import {
   db,
   ensurePlanoDeVidaState,
   ensureCostumesState,
+  ensureLiturgiaRemoved,
   PLANO_V14_PENDING_PUSH_KEY,
   COSTUMES_V15_PENDING_PUSH_KEY,
+  LITURGIA_V18_PENDING_PUSH_KEY,
 } from '../db'
 import {
   onLocalSettingChanged,
@@ -271,6 +273,7 @@ export function SyncProvider({ children }: { children: ReactNode }) {
           try {
             localStorage.removeItem(PLANO_V14_PENDING_PUSH_KEY)
             localStorage.removeItem(COSTUMES_V15_PENDING_PUSH_KEY)
+            localStorage.removeItem(LITURGIA_V18_PENDING_PUSH_KEY)
           } catch {
             /* ignore */
           }
@@ -339,6 +342,12 @@ export function SyncProvider({ children }: { children: ReactNode }) {
       if (localStorage.getItem(COSTUMES_V15_PENDING_PUSH_KEY) === 'true') {
         await db.transaction('rw', db.categories, db.practices, () =>
           ensureCostumesState(db)
+        )
+        onDirty()
+      }
+      if (localStorage.getItem(LITURGIA_V18_PENDING_PUSH_KEY) === 'true') {
+        await db.transaction('rw', db.practices, db.dailyRecords, () =>
+          ensureLiturgiaRemoved(db)
         )
         onDirty()
       }

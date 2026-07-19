@@ -24,7 +24,7 @@ import { useWeeklyCompletions } from '../../hooks/useWeeklyCompletion'
 import { useMorningFlow } from '../../hooks/useMorningFlow'
 import { useProposito } from '../../hooks/usePropositos'
 import { useHideCompleted, useDailyViewMode, useNovenaStart, DAILY_VIEW_MODES } from '../../hooks/useSettings'
-import { PLANO_DE_VIDA_CATEGORY_ID } from '../../data/planoDeVida'
+import { PLANO_DE_VIDA_CATEGORY_ID, isSantaMissaPractice } from '../../data/planoDeVida'
 import { COSTUMES_CATEGORY_ID } from '../../data/costumes'
 import { isPracticeVisibleOn } from '../../data/novena'
 import { isScheduledOn, isWeekly, isOnMonthlySchedule } from '../../utils/schedule'
@@ -32,7 +32,6 @@ import { isMeditacaoPractice, getMeditacaoSlot } from '../../data/meditation'
 import { isRosaryContemplationPractice } from '../../data/rosary'
 import { isExameParticularPractice } from '../../data/exame'
 import { isAntiphonPractice } from '../../data/antiphon'
-import { isLiturgiaPractice } from '../../data/liturgiaPractice'
 import { formatDate, getToday, addDay, subDay } from '../../utils/dates'
 import type { Practice, Category } from '../../types'
 
@@ -131,15 +130,15 @@ export function DailyView() {
       const categoryPractices = practicesByCategory.get(category.id) ?? []
       for (const practice of categoryPractices) {
         // Practices with a dedicated reader (either meditation slot, the rosary
-        // contemplation, the Marian antiphon) have their own overlay (see below);
-        // keep them out of the text pager so swiping never lands on an empty
-        // placeholder.
+        // contemplation, the Marian antiphon, Santa Missa's liturgy) have their
+        // own overlay (see below); keep them out of the text pager so swiping
+        // never lands on an empty placeholder.
         if (
           isMeditacaoPractice(practice) ||
           isRosaryContemplationPractice(practice) ||
           isExameParticularPractice(practice) ||
           isAntiphonPractice(practice) ||
-          isLiturgiaPractice(practice)
+          isSantaMissaPractice(practice)
         )
           continue
         items.push({ practice, category: categoryMap.get(practice.categoryId)! })
@@ -163,7 +162,7 @@ export function DailyView() {
     ? isExameParticularPractice(openedPractice)
     : false
   const openedIsAntiphon = openedPractice ? isAntiphonPractice(openedPractice) : false
-  const openedIsLiturgia = openedPractice ? isLiturgiaPractice(openedPractice) : false
+  const openedIsSantaMissa = openedPractice ? isSantaMissaPractice(openedPractice) : false
 
   const handlePrevDay = () => setCurrentDate((d) => subDay(d, 1))
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
@@ -314,13 +313,12 @@ export function DailyView() {
             onMarkViewed={markCompleted}
             onClose={() => setReaderPracticeId(null)}
           />
-        ) : openedPractice && openedIsLiturgia ? (
+        ) : openedPractice && openedIsSantaMissa ? (
           <LiturgiaView
             practiceId={openedPractice.id}
             viewDate={currentDate}
             isCompleted={isCompletedEffective}
             onTogglePractice={toggleEffective}
-            onMarkViewed={markCompleted}
             onClose={() => setReaderPracticeId(null)}
           />
         ) : openedPractice && openedMeditacaoSlot ? (
