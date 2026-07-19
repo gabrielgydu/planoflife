@@ -45,6 +45,7 @@ import {
   CONFISSAO_NAME,
 } from '../data/planoDeVida'
 import { ANTIPHON_PRACTICE_ID, ANTIPHON_NAME } from '../data/antiphon'
+import { LITURGIA_PRACTICE_ID, LITURGIA_PRACTICE_NAME } from '../data/liturgiaPractice'
 import {
   COSTUMES_CATEGORY_ID,
   COSTUMES_CATEGORY_NAME,
@@ -149,6 +150,19 @@ export const ADDITIONAL_PRACTICES: AdditionalPracticeSpec[] = [
     isRequired: true,
     scheduleDays: [6],
     sortOrder: 12,
+  },
+  // The daily Mass propers reader (v17, see LITURGY_PLAN.md). No bundledTextId;
+  // routes to its own overlay reader (src/data/liturgiaPractice.ts) like the
+  // antiphon and rosary contemplation. Unlike the antiphon it has no
+  // scheduleDays — it's daily. Not required: a devotional aid, not a plan-of-life
+  // norm, so no missed-reason nagging. Fractional sortOrder slots it right after
+  // the antiphon without renumbering Confissão.
+  {
+    id: LITURGIA_PRACTICE_ID,
+    name: LITURGIA_PRACTICE_NAME,
+    categoryName: PLANO_DE_VIDA_CATEGORY_NAME,
+    isRequired: false,
+    sortOrder: 12.5,
   },
   // Weekly confession (v14): shown every day, satisfied by any completed record
   // in the Monday-start week, resets the following Monday. Deliberately NOT
@@ -672,6 +686,14 @@ export class PlanOfLifeDB extends Dexie {
     // row-modifying v14/v15 it needs no reconciliation flag. Idempotent +
     // name-matched (see helper); it copies the monthlySchedule onto the row.
     this.version(16).stores({}).upgrade(addMissingAdditionalPractices)
+
+    // Add "Liturgia do Dia" (the daily Mass propers reader — see LITURGY_PLAN.md)
+    // to existing installs. Same FIXED-id reasoning as v8/v9/v11/v12/v13/v16: both
+    // of a user's devices insert the identical row, so sync converges instead of
+    // duplicating — a pure fixed-id insert into the existing Plano de Vida
+    // category, so unlike the row-modifying v14/v15 it needs no reconciliation
+    // flag. Idempotent + name-matched (see helper).
+    this.version(17).stores({}).upgrade(addMissingAdditionalPractices)
   }
 }
 

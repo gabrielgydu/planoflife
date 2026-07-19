@@ -7,6 +7,7 @@ import { CategorySection } from './CategorySection'
 import { PracticeReader } from './PracticeReader'
 import { MeditationView } from './MeditationView'
 import { AntiphonView } from './AntiphonView'
+import { LiturgiaView } from './LiturgiaView'
 import { RosaryContemplationView } from '../rosary/RosaryContemplationView'
 import { ExameParticularView } from '../examen/ExameParticularView'
 import { YesterdayReviewModal } from './YesterdayReviewModal'
@@ -31,6 +32,7 @@ import { isMeditacaoPractice, getMeditacaoSlot } from '../../data/meditation'
 import { isRosaryContemplationPractice } from '../../data/rosary'
 import { isExameParticularPractice } from '../../data/exame'
 import { isAntiphonPractice } from '../../data/antiphon'
+import { isLiturgiaPractice } from '../../data/liturgiaPractice'
 import { formatDate, getToday, addDay, subDay } from '../../utils/dates'
 import type { Practice, Category } from '../../types'
 
@@ -136,7 +138,8 @@ export function DailyView() {
           isMeditacaoPractice(practice) ||
           isRosaryContemplationPractice(practice) ||
           isExameParticularPractice(practice) ||
-          isAntiphonPractice(practice)
+          isAntiphonPractice(practice) ||
+          isLiturgiaPractice(practice)
         )
           continue
         items.push({ practice, category: categoryMap.get(practice.categoryId)! })
@@ -160,6 +163,7 @@ export function DailyView() {
     ? isExameParticularPractice(openedPractice)
     : false
   const openedIsAntiphon = openedPractice ? isAntiphonPractice(openedPractice) : false
+  const openedIsLiturgia = openedPractice ? isLiturgiaPractice(openedPractice) : false
 
   const handlePrevDay = () => setCurrentDate((d) => subDay(d, 1))
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
@@ -303,6 +307,15 @@ export function DailyView() {
           />
         ) : openedPractice && openedIsAntiphon ? (
           <AntiphonView
+            practiceId={openedPractice.id}
+            viewDate={currentDate}
+            isCompleted={isCompletedEffective}
+            onTogglePractice={toggleEffective}
+            onMarkViewed={markCompleted}
+            onClose={() => setReaderPracticeId(null)}
+          />
+        ) : openedPractice && openedIsLiturgia ? (
+          <LiturgiaView
             practiceId={openedPractice.id}
             viewDate={currentDate}
             isCompleted={isCompletedEffective}

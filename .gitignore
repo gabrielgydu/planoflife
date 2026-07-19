@@ -15,3 +15,6 @@ practice_texts/
 
 # Rosary image review staging (local only; downsized copies live in public/rosary-images)
 rosary-images-review/
+
+# Liturgy build-time caches (harvested API data + Vulgate sources; regenerable)
+scripts/liturgy/.cache/
