@@ -6,7 +6,7 @@ import { useCategories } from '../../hooks/useCategories'
 import { usePractices } from '../../hooks/usePractices'
 import { useHistoryDomain } from '../../hooks/useHistoryDomain'
 import { getPracticeDomain, isLifestyle, isCareer } from '../../utils/domain'
-import { isScheduledOn, isWeekly } from '../../utils/schedule'
+import { isScheduledOn, isWeekly, isOnMonthlySchedule } from '../../utils/schedule'
 import { isPracticeVisibleOn } from '../../data/novena'
 import { useNovenaStart } from '../../hooks/useSettings'
 import { DomainToggle } from './DomainToggle'
@@ -106,7 +106,8 @@ export function DayDetail() {
                   scheduled:
                     !isWeekly(p) &&
                     isScheduledOn(p, parsedDate) &&
-                    isPracticeVisibleOn(p, parsedDate, novenaStart),
+                    isPracticeVisibleOn(p, parsedDate, novenaStart) &&
+                    isOnMonthlySchedule(p, parsedDate),
                   done: isCompleted(p.id),
                 }))
                 .filter((x) => x.scheduled || x.done)

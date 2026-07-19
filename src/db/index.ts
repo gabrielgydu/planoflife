@@ -54,6 +54,10 @@ import {
   TRES_AVE_MARIAS_PRACTICE_ID,
   TRES_AVE_MARIAS_NAME,
   TRES_AVE_MARIAS_OLD_CATEGORY_NAME,
+  CREDO_ATANASIO_PRACTICE_ID,
+  CREDO_ATANASIO_NAME,
+  CREDO_ATANASIO_BUNDLED_ID,
+  CREDO_ATANASIO_MONTHLY,
 } from '../data/costumes'
 
 // Practices added after the initial seed. Used by both the fresh-install seed
@@ -78,6 +82,9 @@ export interface AdditionalPracticeSpec {
   // 'weekly' = satisfied by any completed record in the Monday-start week
   // (e.g. Confissão sacramental). Copied verbatim onto the row.
   cadence?: Practice['cadence']
+  // Monthly recurrence: show only on the Nth weekday of the month (e.g. the
+  // Athanasian Creed on the third Sunday). Copied verbatim onto the row.
+  monthlySchedule?: Practice['monthlySchedule']
   // Explicit position within the category. Absent = append after the current
   // max (the pre-v14 behavior). Needed by the Plano de Vida specs, whose slots
   // (4, 9, 11–13) are interleaved with rows the v14 migration moves there.
@@ -174,6 +181,19 @@ export const ADDITIONAL_PRACTICES: AdditionalPracticeSpec[] = [
     isRequired: false,
     sortOrder: 1,
   },
+  // The Athanasian Creed (v16): a bundled-text custom (PT + Latin) shown only on
+  // the third Sunday of each month via monthlySchedule. Pure fixed-id insert into
+  // the existing Costumes category — not required (a custom, no missed-reason
+  // nagging), same convergence reasoning as the other post-sync additions.
+  {
+    id: CREDO_ATANASIO_PRACTICE_ID,
+    name: CREDO_ATANASIO_NAME,
+    categoryName: COSTUMES_CATEGORY_NAME,
+    isRequired: false,
+    bundledTextId: CREDO_ATANASIO_BUNDLED_ID,
+    monthlySchedule: CREDO_ATANASIO_MONTHLY,
+    sortOrder: 2,
+  },
 ]
 
 const normalizeName = (s: string) =>
@@ -239,6 +259,7 @@ async function addMissingAdditionalPractices(tx: TableSource): Promise<void> {
       ...(spec.activeWindow ? { activeWindow: spec.activeWindow } : {}),
       ...(spec.scheduleDays ? { scheduleDays: spec.scheduleDays } : {}),
       ...(spec.cadence ? { cadence: spec.cadence } : {}),
+      ...(spec.monthlySchedule ? { monthlySchedule: spec.monthlySchedule } : {}),
     }
     await practicesTable.add(practice)
     existingNames.add(normalizeName(spec.name))
@@ -642,6 +663,15 @@ export class PlanOfLifeDB extends Dexie {
         // localStorage unavailable — see the v14 note above.
       }
     })
+
+    // Add "Credo de Atanásio" (the Athanasian Creed, shown only on the third
+    // Sunday of each month via monthlySchedule) to existing installs. A pure
+    // fixed-id insert into the existing Costumes category — same convergence
+    // reasoning as v8/v9/v11/v12/v13 (both of a user's devices insert the
+    // identical row, so sync converges instead of duplicating), so unlike the
+    // row-modifying v14/v15 it needs no reconciliation flag. Idempotent +
+    // name-matched (see helper); it copies the monthlySchedule onto the row.
+    this.version(16).stores({}).upgrade(addMissingAdditionalPractices)
   }
 }
 

@@ -2,7 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../db'
 import { isPracticeVisibleOn } from '../data/novena'
 import { readNovenaStart } from './useSettings'
-import { isScheduledOn, isWeekly } from '../utils/schedule'
+import { isScheduledOn, isWeekly, isOnMonthlySchedule } from '../utils/schedule'
 import type { Practice } from '../types'
 
 export function useYesterdayUncompleted(date: string) {
@@ -29,6 +29,7 @@ export function useYesterdayUncompleted(date: string) {
       // Off-schedule days and weekly practices aren't "uncompleted" for a single
       // day — mirror the daily list and the missed-reasons filter.
       if (!isScheduledOn(practice, reviewedDate)) continue
+      if (!isOnMonthlySchedule(practice, reviewedDate)) continue
       if (isWeekly(practice)) continue
       byCategory.get(practice.categoryId)?.push(practice)
     }

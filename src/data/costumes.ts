@@ -19,3 +19,12 @@ export const AGUA_BENTA_NAME = 'Água Benta'
 export const TRES_AVE_MARIAS_PRACTICE_ID = 'tres-ave-marias'
 export const TRES_AVE_MARIAS_NAME = 'Três Ave-Marias'
 export const TRES_AVE_MARIAS_OLD_CATEGORY_NAME = 'Noite'
+
+// The Athanasian Creed (Symbolum Quicumque), prayed on the third Sunday of every
+// month. A bundled-text practice (PT + Latin) whose visibility is gated by the
+// monthlySchedule field — week 3, weekday 0 (Sunday), computed from the clock.
+export const CREDO_ATANASIO_PRACTICE_ID = 'credo-atanasio'
+export const CREDO_ATANASIO_NAME = 'Credo de Atanásio'
+export const CREDO_ATANASIO_BUNDLED_ID = 'credo_atanasio'
+// Third Sunday of the month (date-fns getDay: 0 = Sunday).
+export const CREDO_ATANASIO_MONTHLY: { week: number; weekday: number } = { week: 3, weekday: 0 }

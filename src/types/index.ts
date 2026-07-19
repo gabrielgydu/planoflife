@@ -37,6 +37,13 @@ export interface Practice {
   // hidden from the daily list and counts as NEUTRAL in stats — never a miss.
   // Read via isInActiveWindow() in utils/season.ts.
   activeWindow?: { startMonth: number; startDay: number; endMonth: number; endDay: number }
+  // Monthly recurrence: the practice is scheduled only on the Nth occurrence of a
+  // weekday each month (e.g. the Athanasian Creed on the third Sunday). `week` is
+  // 1-based (1 = first); `weekday` follows date-fns getDay (0 = Sunday). Absent =
+  // not a monthly practice (every ordinary row). Like scheduleDays, off-days are
+  // hidden from the daily list and NEUTRAL in stats — never a miss. Read via
+  // isOnMonthlySchedule() in utils/schedule.ts.
+  monthlySchedule?: { week: number; weekday: number }
   isRequired: boolean
   sortOrder: number
   isArchived: boolean

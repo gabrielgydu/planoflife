@@ -26,7 +26,7 @@ import { useHideCompleted, useDailyViewMode, useNovenaStart, DAILY_VIEW_MODES } 
 import { PLANO_DE_VIDA_CATEGORY_ID } from '../../data/planoDeVida'
 import { COSTUMES_CATEGORY_ID } from '../../data/costumes'
 import { isPracticeVisibleOn } from '../../data/novena'
-import { isScheduledOn, isWeekly } from '../../utils/schedule'
+import { isScheduledOn, isWeekly, isOnMonthlySchedule } from '../../utils/schedule'
 import { isMeditacaoPractice, getMeditacaoSlot } from '../../data/meditation'
 import { isRosaryContemplationPractice } from '../../data/rosary'
 import { isExameParticularPractice } from '../../data/exame'
@@ -86,7 +86,10 @@ export function DailyView() {
   const activePractices = useMemo(
     () =>
       practices.filter(
-        (p) => isPracticeVisibleOn(p, currentDate, novenaStart) && isScheduledOn(p, currentDate)
+        (p) =>
+          isPracticeVisibleOn(p, currentDate, novenaStart) &&
+          isScheduledOn(p, currentDate) &&
+          isOnMonthlySchedule(p, currentDate)
       ),
     [practices, currentDate, novenaStart]
   )

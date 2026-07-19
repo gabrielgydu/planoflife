@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../db'
 import { isInActiveWindow } from '../utils/season'
-import { isScheduledOn, isWeekly } from '../utils/schedule'
+import { isScheduledOn, isWeekly, isOnMonthlySchedule } from '../utils/schedule'
 import type { MissedReason } from '../types'
 import { generateId } from '../utils/id'
 
@@ -66,6 +66,7 @@ export function useMissedRequiredPractices(date: string) {
           !p.isArchived &&
           isInActiveWindow(p, reviewedDate) &&
           isScheduledOn(p, reviewedDate) &&
+          isOnMonthlySchedule(p, reviewedDate) &&
           !isWeekly(p)
       )
       .toArray()

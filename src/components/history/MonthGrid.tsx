@@ -16,7 +16,7 @@ import {
 import { formatDate } from '../../utils/dates'
 import { useTheme } from '../../hooks/useTheme'
 import { getPracticeDomain } from '../../utils/domain'
-import { isScheduledOn, isWeekly } from '../../utils/schedule'
+import { isScheduledOn, isWeekly, isOnMonthlySchedule } from '../../utils/schedule'
 import { isPracticeVisibleOn } from '../../data/novena'
 import { useNovenaStart } from '../../hooks/useSettings'
 import type { PracticeDomain } from '../../types'
@@ -124,7 +124,7 @@ export function MonthGrid({ month, domain }: MonthGridProps) {
       const parsed = new Date(`${date}T00:00:00`)
       const scheduled = [...scheduledIdsByWeekday[getDay(parsed)]].filter((id) => {
         const p = practiceById.get(id)
-        return p ? isPracticeVisibleOn(p, parsed, novenaStart) : false
+        return p ? isPracticeVisibleOn(p, parsed, novenaStart) && isOnMonthlySchedule(p, parsed) : false
       })
       const scheduledSet = new Set(scheduled)
       const completed = [...completedIds].filter((id) => scheduledSet.has(id)).length

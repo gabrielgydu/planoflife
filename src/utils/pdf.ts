@@ -10,7 +10,7 @@ import {
 import { ptBR } from 'date-fns/locale'
 import { formatDate } from './dates'
 import { isCareer } from './domain'
-import { isScheduledOn, isWeekly } from './schedule'
+import { isScheduledOn, isWeekly, isOnMonthlySchedule } from './schedule'
 import { isPracticeVisibleOn } from '../data/novena'
 import type { Practice } from '../types'
 
@@ -19,11 +19,15 @@ import type { Practice } from '../types'
 // never apply to a single day — they draw completed dots but stay out of every
 // denominator.
 function appliesOn(
-  practice: Pick<Practice, 'activeWindow' | 'scheduleDays' | 'bundledTextId'>,
+  practice: Pick<Practice, 'activeWindow' | 'scheduleDays' | 'bundledTextId' | 'monthlySchedule'>,
   day: Date,
   novenaStart: string | null
 ): boolean {
-  return isPracticeVisibleOn(practice, day, novenaStart) && isScheduledOn(practice, day)
+  return (
+    isPracticeVisibleOn(practice, day, novenaStart) &&
+    isScheduledOn(practice, day) &&
+    isOnMonthlySchedule(practice, day)
+  )
 }
 
 export async function generateMonthPdf(

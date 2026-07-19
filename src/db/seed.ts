@@ -83,6 +83,7 @@ function createDefaultPractices(categories: Category[]): Practice[] {
       ...(spec.activeWindow ? { activeWindow: spec.activeWindow } : {}),
       ...(spec.scheduleDays ? { scheduleDays: spec.scheduleDays } : {}),
       ...(spec.cadence ? { cadence: spec.cadence } : {}),
+      ...(spec.monthlySchedule ? { monthlySchedule: spec.monthlySchedule } : {}),
     })
   }
 
