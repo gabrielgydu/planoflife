@@ -175,3 +175,17 @@ body {
 .prose-prayer strong {
   font-weight: 700;
 }
+
+/* Scripture verse numbers: small, muted, superscript-style like a missal */
+.prose-prayer .verse-num {
+  font-size: 0.62em;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  vertical-align: super;
+  line-height: 0;
+  margin-right: 0.15em;
+}
+
+:is(.dark, .black) .prose-prayer .verse-num {
+  color: var(--color-text-muted-dark);
+}

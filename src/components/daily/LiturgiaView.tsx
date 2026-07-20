@@ -46,6 +46,19 @@ function firstOf<T>(arr?: T[]): T | undefined {
   return arr && arr.length > 0 ? arr[0] : undefined
 }
 
+// Scripture verse numbers arrive glued to the following word (e.g. "9Ana",
+// "10Ana", "11E fez"). Wrap each digit run so CSS renders it small and muted
+// like a missal. Only digits fused to a letter/opening-quote qualify — never
+// the space-flanked role numbers of the Passion narrative ("Narrador 1",
+// "Leitor 2"). The leading capture group stands in for a lookbehind (avoided
+// for older iOS/Kindle WebKit). marked passes the inline HTML straight through.
+function markVerseNumbers(text: string): string {
+  return text.replace(
+    /(^|[^\w])(\d{1,3})(?=[A-Za-zÀ-ÿ“"])/gu,
+    '$1<span class="verse-num">$2</span>'
+  )
+}
+
 // Slides shown when opening "Santa Missa": the entrance antiphon and the day's
 // Scripture — 1st reading, responsorial psalm, 2nd reading (Sundays/solemnities
 // only) and the Gospel — skipping any that's absent. Deliberately NOT the
@@ -320,10 +333,10 @@ export function LiturgiaView({
                       <p className="text-[10px] uppercase tracking-widest text-text-muted dark:text-text-muted-dark font-heading mb-1">
                         Refrão
                       </p>
-                      <MarkdownRenderer markdown={slide.refrao} className="prose-prayer" />
+                      <MarkdownRenderer markdown={markVerseNumbers(slide.refrao)} className="prose-prayer" />
                     </div>
                   )}
-                  <MarkdownRenderer markdown={activeText} className="prose-prayer" />
+                  <MarkdownRenderer markdown={markVerseNumbers(activeText)} className="prose-prayer" />
                 </div>
               </motion.div>
             </AnimatePresence>
