@@ -14,11 +14,12 @@ import type {
   CareerWin,
   CareerLogEntry,
   MeditationDay,
+  ReadingPosition,
 } from '../types'
 
 // Bump whenever SyncState gains tables. v2 = career tables (Dexie v7).
-// v3 = meditationDays (Dexie v10).
-export const SYNC_SCHEMA = 3
+// v3 = meditationDays (Dexie v10). v4 = readingPositions (Dexie v19).
+export const SYNC_SCHEMA = 4
 
 /** The decrypted payload that travels to/from the Worker (mirrors scripts/sync-core.mjs). */
 export interface SyncState {
@@ -46,6 +47,9 @@ export interface SyncState {
     // array as "older client, no opinion" (preserve local rows), never as an
     // empty table. See applyState.ts and merge.ts (`?? []`).
     meditationDays: MeditationDay[]
+    // Where each continuous read-through stopped (schema 4). Same "missing key
+    // means older client, no opinion" rule as the tables above.
+    readingPositions: ReadingPosition[]
   }
   settings: Record<string, string>
 }
@@ -81,6 +85,7 @@ export const SYNC_TABLES = [
   'careerWins',
   'careerLog',
   'meditationDays',
+  'readingPositions',
 ] as const
 
 /** Cloud snapshot was produced by a NEWER app than this one. */

@@ -8,6 +8,7 @@ import { PracticeReader } from './PracticeReader'
 import { MeditationView } from './MeditationView'
 import { AntiphonView } from './AntiphonView'
 import { LiturgiaView } from './LiturgiaView'
+import { NovoTestamentoView } from './NovoTestamentoView'
 import { RosaryContemplationView } from '../rosary/RosaryContemplationView'
 import { ExameParticularView } from '../examen/ExameParticularView'
 import { YesterdayReviewModal } from './YesterdayReviewModal'
@@ -25,6 +26,7 @@ import { useMorningFlow } from '../../hooks/useMorningFlow'
 import { useProposito } from '../../hooks/usePropositos'
 import { useHideCompleted, useDailyViewMode, useNovenaStart, DAILY_VIEW_MODES } from '../../hooks/useSettings'
 import { PLANO_DE_VIDA_CATEGORY_ID, isSantaMissaPractice } from '../../data/planoDeVida'
+import { isNovoTestamentoPractice } from '../../data/novoTestamento'
 import { COSTUMES_CATEGORY_ID } from '../../data/costumes'
 import { isPracticeVisibleOn } from '../../data/novena'
 import { isScheduledOn, isWeekly, isOnMonthlySchedule } from '../../utils/schedule'
@@ -130,15 +132,16 @@ export function DailyView() {
       const categoryPractices = practicesByCategory.get(category.id) ?? []
       for (const practice of categoryPractices) {
         // Practices with a dedicated reader (either meditation slot, the rosary
-        // contemplation, the Marian antiphon, Santa Missa's liturgy) have their
-        // own overlay (see below); keep them out of the text pager so swiping
-        // never lands on an empty placeholder.
+        // contemplation, the Marian antiphon, Santa Missa's liturgy, the New
+        // Testament read-through) have their own overlay (see below); keep them
+        // out of the text pager so swiping never lands on an empty placeholder.
         if (
           isMeditacaoPractice(practice) ||
           isRosaryContemplationPractice(practice) ||
           isExameParticularPractice(practice) ||
           isAntiphonPractice(practice) ||
-          isSantaMissaPractice(practice)
+          isSantaMissaPractice(practice) ||
+          isNovoTestamentoPractice(practice)
         )
           continue
         items.push({ practice, category: categoryMap.get(practice.categoryId)! })
@@ -163,6 +166,7 @@ export function DailyView() {
     : false
   const openedIsAntiphon = openedPractice ? isAntiphonPractice(openedPractice) : false
   const openedIsSantaMissa = openedPractice ? isSantaMissaPractice(openedPractice) : false
+  const openedIsNovoTestamento = openedPractice ? isNovoTestamentoPractice(openedPractice) : false
 
   const handlePrevDay = () => setCurrentDate((d) => subDay(d, 1))
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
@@ -317,6 +321,13 @@ export function DailyView() {
           <LiturgiaView
             practiceId={openedPractice.id}
             viewDate={currentDate}
+            isCompleted={isCompletedEffective}
+            onTogglePractice={toggleEffective}
+            onClose={() => setReaderPracticeId(null)}
+          />
+        ) : openedPractice && openedIsNovoTestamento ? (
+          <NovoTestamentoView
+            practiceId={openedPractice.id}
             isCompleted={isCompletedEffective}
             onTogglePractice={toggleEffective}
             onClose={() => setReaderPracticeId(null)}

@@ -106,6 +106,15 @@ export function mergeStates(
         ours.data.meditationDays ?? [],
         newerUpdatedAt,
       ),
+      // Reading position: a single fixed-id row per track, rewritten as you read.
+      // Newest wins — if both devices read offline, the one that stopped later is
+      // where you resume, which is the only answer that can't lose progress
+      // silently. `?? []` tolerates a schema-≤3 snapshot (preserve ours).
+      readingPositions: mergeById(
+        base.data.readingPositions ?? [],
+        ours.data.readingPositions ?? [],
+        newerUpdatedAt,
+      ),
     },
     settings,
   }

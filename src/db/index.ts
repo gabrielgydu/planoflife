@@ -15,6 +15,7 @@ import type {
   CareerWin,
   CareerLogEntry,
   MeditationDay,
+  ReadingPosition,
 } from '../types'
 import { generateId } from '../utils/id'
 import {
@@ -537,6 +538,7 @@ export class PlanOfLifeDB extends Dexie {
   careerWins!: EntityTable<CareerWin, 'id'>
   careerLog!: EntityTable<CareerLogEntry, 'id'>
   meditationDays!: EntityTable<MeditationDay, 'id'>
+  readingPositions!: EntityTable<ReadingPosition, 'id'>
 
   constructor() {
     super('PlanOfLifeDB')
@@ -739,6 +741,16 @@ export class PlanOfLifeDB extends Dexie {
         // localStorage unavailable — see the v14 note above.
       }
     })
+
+    // Where the New Testament read-through stopped (see src/types —
+    // "Reading position"). A new empty store keyed by the track id, so — like the
+    // career tables in v7 and meditationDays in v10 — there is no upgrade function
+    // and the migration is trivially idempotent. No practice is added or changed:
+    // "Leitura do Novo Testamento" already exists on every install and is routed to
+    // the new reader by name (see isNovoTestamentoPractice), so this needs neither a
+    // fixed-id spec nor a reconciliation flag. The position syncs, so the sync
+    // schema bumps to 4 — see src/sync/types.ts and scripts/sync-core.mjs.
+    this.version(19).stores({ readingPositions: 'id' })
   }
 }
 

@@ -15,6 +15,7 @@ import type {
   CareerWin,
   CareerLogEntry,
   MeditationDay,
+  ReadingPosition,
 } from '../types'
 import { encryptData, decryptData } from './crypto'
 import { generateId } from './id'
@@ -43,6 +44,9 @@ export interface BackupData {
     // Optional, like the career keys: absent from backups exported before the
     // Meditação feature; an ABSENT array preserves the local table on import.
     meditationDays?: MeditationDay[]
+    // Optional, like the keys above: absent from backups exported before the
+    // New Testament reader; an ABSENT array preserves the local table on import.
+    readingPositions?: ReadingPosition[]
   }
 }
 
@@ -63,6 +67,7 @@ export async function exportBackup(): Promise<BackupData> {
     careerWins,
     careerLog,
     meditationDays,
+    readingPositions,
   ] = await Promise.all([
     db.categories.toArray(),
     db.practices.toArray(),
@@ -79,6 +84,7 @@ export async function exportBackup(): Promise<BackupData> {
     db.careerWins.toArray(),
     db.careerLog.toArray(),
     db.meditationDays.toArray(),
+    db.readingPositions.toArray(),
   ])
 
   return {
@@ -100,6 +106,7 @@ export async function exportBackup(): Promise<BackupData> {
       careerWins,
       careerLog,
       meditationDays,
+      readingPositions,
     },
   }
 }
@@ -127,6 +134,7 @@ export async function importBackup(backup: BackupData): Promise<void> {
       db.careerWins,
       db.careerLog,
       db.meditationDays,
+      db.readingPositions,
     ],
     async () => {
       const d = backup.data
@@ -151,6 +159,7 @@ export async function importBackup(backup: BackupData): Promise<void> {
         replace(db.careerWins, d.careerWins),
         replace(db.careerLog, d.careerLog),
         replace(db.meditationDays, d.meditationDays),
+        replace(db.readingPositions, d.readingPositions),
       ])
     }
   )

@@ -18,3 +18,6 @@ rosary-images-review/
 
 # Liturgy build-time caches (harvested API data + Vulgate sources; regenerable)
 scripts/liturgy/.cache/
+
+# New Testament build-time cache (harvested HTML + parsed pt text; regenerable)
+scripts/nt/.cache/

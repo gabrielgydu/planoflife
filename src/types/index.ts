@@ -215,3 +215,22 @@ export interface MeditationDay {
   source: 'random.org' | 'crypto' // where the number came from
   updatedAt: string // bumped on draw + reroll; drives the sync conflict merge
 }
+
+// --- Reading position ---------------------------------------------------------
+//
+// Where a continuous read-through stopped, so it resumes there on any device.
+// One row per reading track, keyed by a FIXED id (currently only 'nt', the New
+// Testament — see NT_READING_ID in src/data/novoTestamento.ts); the fixed id is
+// what makes both devices converge on one row instead of the no-tombstone union
+// merge resurrecting two (same reasoning as the fixed-id practice specs).
+//
+// The anchor is a VERSE, never a pixel offset: font size is a synced preference
+// and screens differ, so a scroll offset would land somewhere else on the other
+// device. Synced (schema 4) and merged last-write-wins on updatedAt.
+export interface ReadingPosition {
+  id: string // 'nt'
+  book: string // NT book key, e.g. 'Matt' (see src/data/nt/books.ts)
+  chapter: number
+  verse: number // the verse that was at the top of the viewport
+  updatedAt: string
+}

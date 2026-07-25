@@ -189,3 +189,65 @@ body {
 :is(.dark, .black) .prose-prayer .verse-num {
   color: var(--color-text-muted-dark);
 }
+
+/* --- New Testament reader ---------------------------------------------------
+   Continuous Scripture text. Shares the practice font-scale setting with
+   .prose-prayer but keeps its own rules: verses are flowed inline (single-language
+   mode) or stacked per verse (interlinear), neither of which wants the paragraph
+   margins prayers use. */
+.nt-text {
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.75;
+  font-size: calc(1.05rem * var(--font-scale-practice, 1));
+  color: var(--color-text-primary);
+  text-align: justify;
+  hyphens: auto;
+}
+
+:is(.dark, .black) .nt-text {
+  color: var(--color-text-primary-dark);
+}
+
+.nt-text .verse-num {
+  font-size: 0.62em;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  vertical-align: super;
+  line-height: 0;
+  margin-right: 0.15em;
+}
+
+:is(.dark, .black) .nt-text .verse-num {
+  color: var(--color-text-muted-dark);
+}
+
+/* The Vulgate line under a verse in interlinear mode. */
+.nt-latin {
+  font-style: italic;
+  font-size: 0.92em;
+  color: var(--color-text-secondary);
+}
+
+:is(.dark, .black) .nt-latin {
+  color: var(--color-text-secondary-dark);
+}
+
+/* Chapter marker inside the continuous flow. */
+.nt-chapter {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: calc(0.72rem * var(--font-scale-practice, 1));
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 2em 0 0.85em;
+  text-align: center;
+}
+
+.nt-chapter:first-child {
+  margin-top: 0;
+}
+
+:is(.dark, .black) .nt-chapter {
+  color: var(--color-text-muted-dark);
+}
