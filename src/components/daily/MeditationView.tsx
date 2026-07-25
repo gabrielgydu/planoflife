@@ -380,14 +380,9 @@ function BookPage({
               i > 0 ? 'mt-7 pt-7 border-t border-border/40 dark:border-border-dark/40' : undefined
             }
           >
+            {/* All five headings read the same; only the chip marks the drawn point. */}
             <h2 className="mb-3 flex items-center gap-2 font-heading text-xs uppercase tracking-widest">
-              <span
-                className={
-                  drawn
-                    ? 'font-semibold text-text-primary dark:text-text-primary-dark tabular-nums'
-                    : 'text-text-muted dark:text-text-muted-dark tabular-nums'
-                }
-              >
+              <span className="tabular-nums text-text-muted dark:text-text-muted-dark">
                 № {n}
               </span>
               {drawn && (
@@ -396,11 +391,10 @@ function BookPage({
                 </span>
               )}
             </h2>
+            {/* Every point reads at full contrast — the drawn one is marked by its
+                heading, not by dimming the neighbours. */}
             {text ? (
-              <MarkdownRenderer
-                markdown={text}
-                className={drawn ? 'prose-prayer' : 'prose-prayer opacity-55'}
-              />
+              <MarkdownRenderer markdown={text} className="prose-prayer" />
             ) : (
               <p className="italic text-text-muted dark:text-text-muted-dark">(sem ponto)</p>
             )}
