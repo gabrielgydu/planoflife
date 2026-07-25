@@ -1,12 +1,13 @@
-// "Meditação" practice: a daily-drawn Escrivá point shown as three swipeable
-// cards — Caminho / Sulco / Forja — all for the SAME number (1–1055). Mirrors the
-// `om` CLI. The point text is bundled offline in escriva_points.json (built from
-// the om cache by scripts/build-escriva-points.mjs); the number is drawn once per
-// day via the Worker's /random (random.org) with a crypto fallback, then stored
-// and synced (db.meditationDays, keyed by date + slot — see meditationDayKey) so
-// it's stable and identical across devices. There are two daily slots — morning
-// "Meditação" and afternoon "Meditação da Tarde" — each with its own draw. Reroll
-// redraws and overwrites that slot's number for the day.
+// "Meditação" practice: a daily-drawn Escrivá point read across four swipeable
+// pages — an overview with the SAME number (1–1055) in all three books, then one
+// page per book (Caminho / Sulco / Forja) showing that point flanked by its
+// neighbours, like `om`'s single-book mode. The point text is bundled offline in
+// escriva_points.json (built from the om cache by scripts/build-escriva-points.mjs);
+// the number is drawn once per day via the Worker's /random (random.org) with a
+// crypto fallback, then stored and synced (db.meditationDays, keyed by date + slot
+// — see meditationDayKey) so it's stable and identical across devices. There are
+// two daily slots — morning "Meditação" and afternoon "Meditação da Tarde" — each
+// with its own draw. Reroll redraws and overwrites that slot's number for the day.
 
 import { getSyncUrl, getAuthToken } from '../sync/config'
 import type { Practice } from '../types'
@@ -56,6 +57,39 @@ export function loadEscrivaPoints(): Promise<EscrivaPoints> {
 /** The point text for a book + number, or null when that book has no such point. */
 export function getEscrivaPoint(points: EscrivaPoints, book: BookKey, n: number): string | null {
   return points[book]?.[String(n)] ?? null
+}
+
+/** Highest point number a book has (Caminho 999, Sulco 1000, Forja 1055). */
+export function bookMax(book: BookKey): number {
+  return BOOKS.find((b) => b.key === book)?.max ?? MAX_POINT
+}
+
+/** How many points flank the drawn one on a book's page → 2·2+1 = 5 in view. */
+export const CONTEXT_RADIUS = 2
+
+export interface BookWindow {
+  /** Consecutive point numbers to render, ascending. */
+  numbers: number[]
+  /** False when the book ends before the drawn number, so it isn't in `numbers`. */
+  hasDrawn: boolean
+}
+
+/**
+ * The run of points a single-book page shows: `2·radius+1` consecutive numbers
+ * centred on `n` — `om`'s single-book mode, widened from its three boxes to five.
+ * Near either end the window SLIDES instead of shrinking (as `om` clamps), so the
+ * page always holds the same count. The draw spans Forja's 1055, so a number past
+ * a shorter book's end has no midpoint there: the window falls back to that book's
+ * last points and `hasDrawn` is false, which the page calls out.
+ */
+export function getBookWindow(book: BookKey, n: number, radius = CONTEXT_RADIUS): BookWindow {
+  const max = bookMax(book)
+  const size = Math.min(2 * radius + 1, max)
+  const start = Math.min(Math.max(n - radius, 1), max - size + 1)
+  return {
+    numbers: Array.from({ length: size }, (_, i) => start + i),
+    hasDrawn: n >= 1 && n <= max,
+  }
 }
 
 const normalizeName = (s: string) =>
