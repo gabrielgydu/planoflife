@@ -174,9 +174,7 @@ export function NovoTestamentoView({
     // the smallest top: in single-language mode a verse is an inline <span> whose
     // rect spans every line it wraps onto, so the previous verse — starting far
     // above but still ending below the top edge — would always win and the anchor
-    // would creep backwards one verse per restore. The verse being read is the LAST
-    // one that starts at or above the top edge; if none does (a chapter break just
-    // scrolled in), it's the first one starting below it.
+    // would creep backwards one verse per restore. See the rule in the loop below.
     const visible = new Set<HTMLElement>()
     const observer = new IntersectionObserver(
       (entries) => {
