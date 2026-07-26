@@ -33,7 +33,9 @@ SPEC = [
     ("File:Antonio Allegri, called Correggio - The Holy Night - Google Art Project.jpg", "Correggio Holy Night Adoration Shepherds Dresden"),
   ]),
   (4, "purificacao", [
-    ("File:Den Haag - Mauritshuis - Rembrandt Harmensz. van Rijn (1606-1669) - Simeon’s song of praise 1631.jpg", "Rembrandt Simeon Song of Praise"),
+    # NOTE: the "Den Haag - Mauritshuis - ..." scan of this Rembrandt is a gallery
+    # photo dominated by its ornate frame; this file is the bare canvas.
+    ("File:Het loflied van Simeon, Rembrandt van Rijn, 1631, Mauritshuis, The Hague.jpg", "Rembrandt Simeon Song of Praise Mauritshuis"),
     ("File:Presentation in the Temple Prado Master.jpg", "Presentation in the Temple painting Prado"),
   ]),
   (5, "o-menino-perdido", [
@@ -52,11 +54,15 @@ SPEC = [
   ]),
   (3, "coroacao-de-espinhos", [
     ("File:The Crowning with Thorns-Caravaggio (1602).jpg", "Caravaggio Crowning with Thorns"),
-    ("File:Michelangelo Merisi, called Caravaggio - The Crowning with Thorns - Google Art Project.jpg", "Caravaggio Crowning with Thorns Google Art"),
+    # NOTE: the second slot used to be another scan of the SAME Caravaggio, so the
+    # carousel's random pick was wasted. Bosch gives a genuinely distinct image.
+    ("File:Hieronymus Bosch - Christ Mocked (The Crowning with Thorns) - Google Art Project.jpg", "Bosch Christ Mocked Crowning with Thorns National Gallery"),
   ]),
   (4, "a-cruz-as-costas", [
     ("File:El Greco - Christ Carrying the Cross - Google Art Project.jpg", "El Greco Christ Carrying the Cross"),
-    ("File:Christ Carrying the Cross MET DP347296.jpg", "Christ Carrying the Cross painting"),
+    # NOTE: "Christ Carrying the Cross MET DP347296.jpg" was dropped — that MET
+    # scan is the verso of the canvas (stretcher bars + gallery labels), not the painting.
+    ("File:Raphael Spasimo.jpg", "Raphael Lo Spasimo di Sicilia Prado"),
   ]),
   (5, "morte-de-jesus", [
     ("File:Cristo crucificado.jpg", "Velazquez Christ Crucified"),
