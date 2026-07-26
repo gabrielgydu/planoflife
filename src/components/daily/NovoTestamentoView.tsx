@@ -171,10 +171,9 @@ export function NovoTestamentoView({
 
     // Only the top sliver of the viewport is the observation zone, so only a couple
     // of verses are ever in play. Which of them is "where I am" is NOT the one with
-    // the smallest top: in single-language mode a verse is an inline <span> whose
-    // rect spans every line it wraps onto, so the previous verse — starting far
-    // above but still ending below the top edge — would always win and the anchor
-    // would creep backwards one verse per restore. See the rule in the loop below.
+    // the smallest top: a verse's rect spans every line it wraps onto, so a verse
+    // starting far above but still ending below the top edge would always win and
+    // the anchor would creep backwards one verse per restore. See the rule below.
     const visible = new Set<HTMLElement>()
     const observer = new IntersectionObserver(
       (entries) => {
@@ -418,17 +417,21 @@ export function NovoTestamentoView({
                         </div>
                       ))
                     ) : (
-                      // `lang` drives the browser's hyphenation dictionary; without it
-                      // `hyphens: auto` does nothing and the justified column opens up
-                      // rivers of whitespace.
-                      <p lang={lang === 'la' ? 'la' : 'pt'}>
-                        {verses.map((verse) => (
-                          <span key={verse.v} data-c={c} data-v={verse.v}>
-                            <span className="verse-num">{verse.v}</span>
-                            {(lang === 'la' ? verse.la : verse.pt) ?? verse.pt}{' '}
-                          </span>
-                        ))}
-                      </p>
+                      // One verse per line. `lang` drives the browser's hyphenation
+                      // dictionary; without it `hyphens: auto` does nothing and the
+                      // justified column opens up rivers of whitespace.
+                      verses.map((verse) => (
+                        <p
+                          key={verse.v}
+                          lang={lang === 'la' ? 'la' : 'pt'}
+                          data-c={c}
+                          data-v={verse.v}
+                          className="nt-verse"
+                        >
+                          <span className="verse-num">{verse.v}</span>
+                          {(lang === 'la' ? verse.la : verse.pt) ?? verse.pt}
+                        </p>
+                      ))
                     )}
                   </div>
                 )

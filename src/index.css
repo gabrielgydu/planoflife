@@ -192,9 +192,9 @@ body {
 
 /* --- New Testament reader ---------------------------------------------------
    Continuous Scripture text. Shares the practice font-scale setting with
-   .prose-prayer but keeps its own rules: verses are flowed inline (single-language
-   mode) or stacked per verse (interlinear), neither of which wants the paragraph
-   margins prayers use. */
+   .prose-prayer but keeps its own rules: one verse per line in both single-language
+   and interlinear mode, which wants tighter spacing than the paragraph margins
+   prayers use. */
 .nt-text {
   font-family: 'DM Sans', sans-serif;
   line-height: 1.75;
@@ -219,6 +219,16 @@ body {
 
 :is(.dark, .black) .nt-text .verse-num {
   color: var(--color-text-muted-dark);
+}
+
+/* A single verse on its own line (single-language mode). Tighter than a paragraph
+   gap: the verses are still one continuous passage, just broken per verse. */
+.nt-verse {
+  margin-bottom: 0.4em;
+}
+
+.nt-verse:last-child {
+  margin-bottom: 0;
 }
 
 /* The Vulgate line under a verse in interlinear mode. */
