@@ -20,22 +20,28 @@ const RESTORE_SETTLE_MS = 250
 // Distance from the top of the viewport at which a verse counts as "where I am".
 const ANCHOR_OFFSET_PX = 12
 
-type NtLang = 'pt' | 'la' | 'both'
+// 'ptla'/'lapt' are the two interlinear modes: both show the verse twice, the value
+// names which language leads.
+type NtLang = 'pt' | 'la' | 'ptla' | 'lapt'
 
 // Device-local, deliberately NOT synced and deliberately NOT the shared
-// PRACTICE_TEXT_LANG_KEY: this reader has a third mode the prayer readers don't
-// understand, and writing 'both' into the shared key would silently degrade them.
+// PRACTICE_TEXT_LANG_KEY: this reader has interlinear modes the prayer readers don't
+// understand, and writing one into the shared key would silently degrade them.
 const NT_LANG_KEY = 'ntReaderLang'
 
 const LANG_OPTIONS: { value: NtLang; label: string; aria: string }[] = [
   { value: 'pt', label: 'PT', aria: 'Português' },
   { value: 'la', label: 'LA', aria: 'Latim' },
-  { value: 'both', label: 'PT·LA', aria: 'Português e latim' },
+  { value: 'ptla', label: 'PT·LA', aria: 'Português com latim' },
+  { value: 'lapt', label: 'LA·PT', aria: 'Latim com português' },
 ]
 
 function readSavedLang(): NtLang {
   const saved = localStorage.getItem(NT_LANG_KEY)
-  return saved === 'la' || saved === 'both' ? saved : 'pt'
+  // 'both' is the legacy name of the PT-first interlinear mode; keep devices that
+  // stored it on the mode they chose.
+  if (saved === 'both') return 'ptla'
+  return saved === 'la' || saved === 'ptla' || saved === 'lapt' ? saved : 'pt'
 }
 
 interface NovoTestamentoViewProps {
@@ -340,7 +346,9 @@ export function NovoTestamentoView({
             aria-label="Escolher livro e capítulo"
           >
             <p className="text-[10px] leading-none text-text-muted dark:text-text-muted-dark uppercase tracking-widest font-heading">
-              {lang === 'la' ? (meta?.latinName ?? 'Novum Testamentum') : 'Novo Testamento'}
+              {lang === 'la' || lang === 'lapt'
+                ? (meta?.latinName ?? 'Novum Testamentum')
+                : 'Novo Testamento'}
             </p>
             <h1 className="font-heading text-base font-semibold text-primary dark:text-primary-light truncate mt-0.5 flex items-center justify-center gap-1">
               {meta ? `${meta.name} ${current.chapter}` : 'Carregando…'}
@@ -402,20 +410,32 @@ export function NovoTestamentoView({
                     <p className="nt-chapter" data-chapter-head={c} data-first-verse={firstVerse}>
                       Capítulo {c}
                     </p>
-                    {lang === 'both' ? (
-                      verses.map((verse) => (
-                        <div key={verse.v} data-c={c} data-v={verse.v} className="mb-3">
-                          <p lang="pt">
-                            <span className="verse-num">{verse.v}</span>
-                            {verse.pt}
-                          </p>
-                          {verse.la && (
-                            <p lang="la" className="nt-latin">
-                              {verse.la}
+                    {lang === 'ptla' || lang === 'lapt' ? (
+                      verses.map((verse) => {
+                        // A verse the Vulgate lacks has only one text to show, so it
+                        // leads with the Portuguese in either mode rather than
+                        // printing the same line twice.
+                        const latinLeads = lang === 'lapt' && !!verse.la
+                        return (
+                          <div key={verse.v} data-c={c} data-v={verse.v} className="mb-3">
+                            <p lang={latinLeads ? 'la' : 'pt'}>
+                              <span className="verse-num">{verse.v}</span>
+                              {latinLeads ? verse.la : verse.pt}
                             </p>
-                          )}
-                        </div>
-                      ))
+                            {latinLeads ? (
+                              <p lang="pt" className="nt-sub">
+                                {verse.pt}
+                              </p>
+                            ) : (
+                              verse.la && (
+                                <p lang="la" className="nt-sub">
+                                  {verse.la}
+                                </p>
+                              )
+                            )}
+                          </div>
+                        )
+                      })
                     ) : (
                       // One verse per line. `lang` drives the browser's hyphenation
                       // dictionary; without it `hyphens: auto` does nothing and the
@@ -448,7 +468,7 @@ export function NovoTestamentoView({
               onClick={() => setLang(opt.value)}
               aria-label={opt.aria}
               aria-pressed={lang === opt.value}
-              className={`px-3 py-2 text-xs font-medium transition-colors ${
+              className={`px-2.5 py-2 text-xs font-medium transition-colors ${
                 lang === opt.value
                   ? 'bg-primary text-white dark:bg-primary-light dark:text-surface-dark'
                   : 'text-text-secondary dark:text-text-secondary-dark hover:bg-border/50 dark:hover:bg-border-dark/50'

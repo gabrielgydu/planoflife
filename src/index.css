@@ -231,14 +231,20 @@ body {
   margin-bottom: 0;
 }
 
-/* The Vulgate line under a verse in interlinear mode. */
-.nt-latin {
-  font-style: italic;
+/* The second line under a verse in the interlinear modes: whichever language is not
+   leading. Set back so the eye reads one column and consults the other. */
+.nt-sub {
   font-size: 0.92em;
   color: var(--color-text-secondary);
 }
 
-:is(.dark, .black) .nt-latin {
+/* Latin reads as a gloss when it is the one being consulted; as the lead text
+   (LA·PT) it stays upright with the rest of the column. */
+.nt-sub[lang='la'] {
+  font-style: italic;
+}
+
+:is(.dark, .black) .nt-sub {
   color: var(--color-text-secondary-dark);
 }
 
