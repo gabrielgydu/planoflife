@@ -15,11 +15,13 @@ import type {
   CareerLogEntry,
   MeditationDay,
   ReadingPosition,
+  Prayer,
 } from '../types'
 
 // Bump whenever SyncState gains tables. v2 = career tables (Dexie v7).
 // v3 = meditationDays (Dexie v10). v4 = readingPositions (Dexie v19).
-export const SYNC_SCHEMA = 4
+// v5 = prayers (Dexie v22).
+export const SYNC_SCHEMA = 5
 
 /** The decrypted payload that travels to/from the Worker (mirrors scripts/sync-core.mjs). */
 export interface SyncState {
@@ -50,6 +52,11 @@ export interface SyncState {
     // Where each continuous read-through stopped (schema 4). Same "missing key
     // means older client, no opinion" rule as the tables above.
     readingPositions: ReadingPosition[]
+    // The Devocionário: the bundled prayer book plus the user's own prayers, their
+    // favorites and their order (schema 5). Same "missing key means older client,
+    // no opinion" rule again — a schema-≤4 snapshot must PRESERVE the local prayers,
+    // never clear them.
+    prayers: Prayer[]
   }
   settings: Record<string, string>
 }
@@ -86,6 +93,7 @@ export const SYNC_TABLES = [
   'careerLog',
   'meditationDays',
   'readingPositions',
+  'prayers',
 ] as const
 
 /** Cloud snapshot was produced by a NEWER app than this one. */

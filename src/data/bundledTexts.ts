@@ -22,5 +22,12 @@ export function getBundledText(id?: string): BundledText | undefined {
 }
 
 export function practiceHasText(practice: Practice): boolean {
-  return !!(practice.content || practice.imageData || getBundledText(practice.bundledTextId))
+  return !!(
+    practice.content ||
+    practice.imageData ||
+    getBundledText(practice.bundledTextId) ||
+    // A Devocionário prayer added to the daily list: the text lives in db.prayers
+    // (see PracticeReader), so the id alone is enough to know there is one.
+    practice.prayerId
+  )
 }

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router'
-import { Scale, Calendar, Briefcase, Settings, type LucideIcon } from 'lucide-react'
+import { Scale, BookOpen, Briefcase, Settings, type LucideIcon } from 'lucide-react'
 import { useCareerEnabled } from '../../hooks/useCareerEnabled'
 
 function OpusDeiSeal({ className }: { className?: string }) {
@@ -21,7 +21,9 @@ function OpusDeiSeal({ className }: { className?: string }) {
 const baseTabs: { to: string; icon: LucideIcon | null }[] = [
   { to: '/', icon: null },
   { to: '/examen', icon: Scale },
-  { to: '/history', icon: Calendar },
+  // The Devocionário took this slot from Histórico, which now lives under
+  // Configurações — the prayer book is opened daily, the month grid rarely.
+  { to: '/devocionario', icon: BookOpen },
   { to: '/settings', icon: Settings },
 ]
 

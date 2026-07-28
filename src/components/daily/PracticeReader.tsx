@@ -1,11 +1,14 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router'
+import { useLiveQuery } from 'dexie-react-hooks'
 import { motion, AnimatePresence, type PanInfo } from 'motion/react'
 import { X, Check, ChevronLeft, ChevronRight, MoreVertical, Pencil, Archive, Trash2 } from 'lucide-react'
 import { CategoryIcon } from '../shared/CategoryIcon'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
 import { MarkdownRenderer } from '../shared/MarkdownRenderer'
+import { db } from '../../db'
 import { usePractices } from '../../hooks/usePractices'
+import { prayerLangs, prayerText, prayerTitle } from '../../data/devocionario'
 import { getBundledText, PRACTICE_TEXT_LANG_KEY } from '../../data/bundledTexts'
 import { resolveNovenaReaderText } from '../../data/novena'
 import { resolveAngelusReaderText } from '../../data/angelus'
@@ -65,6 +68,15 @@ export function PracticeReader({
     return saved === 'la' ? 'la' : 'pt'
   })
 
+  // Devocionário prayers added to the daily list keep their text in db.prayers, so
+  // it stays live: editing the prayer changes what this reader shows. Loaded as one
+  // map rather than per-practice so paging through the list issues no new queries.
+  const prayerRows = useLiveQuery(() => db.prayers.toArray())
+  const prayersById = useMemo(
+    () => new Map((prayerRows ?? []).map((p) => [p.id, p])),
+    [prayerRows]
+  )
+
   useEffect(() => {
     const original = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -114,16 +126,32 @@ export function PracticeReader({
     resolveAngelusReaderText(practice, viewDate) ??
     resolveNovenaReaderText(practice, viewDate, novenaStart) ??
     getBundledText(practice.bundledTextId)
-  const isBundled = !!bundledText
+  // A prayer-linked practice never also carries a bundled text; the bundled one
+  // wins if both are somehow present.
+  const prayer = bundledText || !practice.prayerId ? undefined : prayersById.get(practice.prayerId)
+  const hasText = !!bundledText || !!prayer
 
-  const hasMultipleLangs = isBundled && Object.keys(bundledText.texts).length > 1
-  const activeLang = isBundled && bundledText.texts[lang] ? lang : Object.keys(bundledText?.texts ?? {})[0] as Lang
+  const availableLangs: Lang[] = bundledText
+    ? (Object.keys(bundledText.texts) as Lang[])
+    : prayer
+      ? prayerLangs(prayer)
+      : []
+  const hasMultipleLangs = availableLangs.length > 1
+  const activeLang: Lang = availableLangs.includes(lang) ? lang : (availableLangs[0] ?? 'pt')
   const toggleLang = () => setLang((l) => (l === 'pt' ? 'la' : 'pt'))
   const toggleLabel = lang === 'pt' ? LANG_LABELS.la : LANG_LABELS.pt
 
-  const headerTitle = isBundled
+  const readerMarkdown = bundledText
+    ? (bundledText.texts[activeLang] ?? '')
+    : prayer
+      ? prayerText(prayer, activeLang)
+      : ''
+
+  const headerTitle = bundledText
     ? (bundledText.title[activeLang] ?? bundledText.title[Object.keys(bundledText.title)[0]])
-    : practice.name
+    : prayer
+      ? prayerTitle(prayer, activeLang)
+      : practice.name
 
   const handleEdit = () => {
     setMenuOpen(false)
@@ -160,7 +188,7 @@ export function PracticeReader({
     exit: (d: number) => ({ x: d > 0 ? '-100%' : '100%', opacity: 0 }),
   }
 
-  const imageSrc = isBundled && bundledText.hasImage
+  const imageSrc = bundledText?.hasImage
     ? `${import.meta.env.BASE_URL}practice-images/${bundledText.id}.jpg`
     : practice.imageData
 
@@ -276,12 +304,9 @@ export function PracticeReader({
                 </div>
               )}
 
-              {isBundled ? (
+              {hasText ? (
                 <div className="p-5 pb-20">
-                  <MarkdownRenderer
-                    markdown={bundledText.texts[activeLang] ?? ''}
-                    className="prose-prayer"
-                  />
+                  <MarkdownRenderer markdown={readerMarkdown} className="prose-prayer" />
                 </div>
               ) : practice.content ? (
                 <div

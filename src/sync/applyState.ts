@@ -22,6 +22,7 @@ const ALL_TABLES = [
   db.careerLog,
   db.meditationDays,
   db.readingPositions,
+  db.prayers,
 ]
 
 /** Tables that are NEVER seeded — non-empty here means real user data exists. */
@@ -55,6 +56,7 @@ export async function snapshotLocal(): Promise<SyncState> {
     careerLog,
     meditationDays,
     readingPositions,
+    prayers,
   ] = await Promise.all([
     db.categories.toArray(),
     db.practices.toArray(),
@@ -72,6 +74,7 @@ export async function snapshotLocal(): Promise<SyncState> {
     db.careerLog.toArray(),
     db.meditationDays.toArray(),
     db.readingPositions.toArray(),
+    db.prayers.toArray(),
   ])
   return {
     schema: SYNC_SCHEMA,
@@ -92,6 +95,7 @@ export async function snapshotLocal(): Promise<SyncState> {
       careerLog,
       meditationDays,
       readingPositions,
+      prayers,
     },
     settings: collectSettings(),
   }
@@ -141,6 +145,7 @@ async function clearAndBulkAdd(state: SyncState): Promise<boolean> {
     replace(db.careerLog, d.careerLog),
     replace(db.meditationDays, d.meditationDays),
     replace(db.readingPositions, d.readingPositions),
+    replace(db.prayers, d.prayers),
   ])
   return preserved
 }

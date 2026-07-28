@@ -16,6 +16,11 @@ export interface Practice {
   content: string // HTML string
   imageData: string | null // base64 string
   bundledTextId?: string
+  // Set when the practice was created from a Devocionário prayer ("Adicionar às
+  // práticas"): the id of the db.prayers row whose text the reader shows. Absent on
+  // every ordinary practice. A prayer-linked practice has no bundledTextId — the
+  // two are alternative text sources, resolved in that order by the reader.
+  prayerId?: string
   // Spiritual devotion vs. non-religious lifestyle habit. Optional: legacy rows
   // (and whole-DB snapshots imported before the v6 migration) are treated as
   // 'spiritual' — read via getPracticeDomain(), never `.domain` directly.
@@ -232,5 +237,32 @@ export interface ReadingPosition {
   book: string // NT book key, e.g. 'Matt' (see src/data/nt/books.ts)
   chapter: number
   verse: number // the verse that was at the top of the viewport
+  updatedAt: string
+}
+
+// --- Devocionário -------------------------------------------------------------
+//
+// One prayer in the prayer book. The defaults are seeded from
+// src/data/devocionario.json (the pt-BR Livro de Orações on opusdei.org) and carry
+// its FIXED slug ids — the same reasoning as the fixed-id practice specs: the seed
+// runs independently on each device, and the no-tombstone union merge would keep
+// both copies if the ids differed (see src/sync/merge.ts). User-written prayers get
+// a generateId() UUID, which can never collide with a slug.
+//
+// Both `title` and `texts` are keyed by language and BOTH keys are optional, but at
+// least one is always present: the source really does carry Latin-only prayers (the
+// hymns "Ave maris stella", "Adeste, fideles", the two responsories for the dead …),
+// so a prayer with no Portuguese at all is normal, not a defect. Read them through
+// prayerTitle()/prayerLangs() in src/data/devocionario.ts rather than reaching for
+// `.pt` directly. Synced (schema 5).
+export interface Prayer {
+  id: string // fixed slug for the defaults, generateId() for user-written ones
+  section: string // section slug; 'minhas' for user-written prayers
+  title: { pt?: string; la?: string }
+  texts: { pt?: string; la?: string } // markdown, rendered by MarkdownRenderer
+  source: 'default' | 'user'
+  isFavorite: boolean
+  sortOrder: number // position within its section
+  createdAt: string
   updatedAt: string
 }

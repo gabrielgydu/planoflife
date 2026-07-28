@@ -1,15 +1,23 @@
-import { useParams, useNavigate } from 'react-router'
+import { useParams, useNavigate, Link } from 'react-router'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { ChevronLeft, FileText, Pencil } from 'lucide-react'
 import { db } from '../../db'
 import { Spinner } from '../shared/Spinner'
 import { EmptyState } from '../shared/EmptyState'
+import { MarkdownRenderer } from '../shared/MarkdownRenderer'
+import { prayerText, prayerTitle } from '../../data/devocionario'
 
 export function PracticeDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
 
   const practice = useLiveQuery(() => (id ? db.practices.get(id) : undefined), [id])
+  // Practices created from a Devocionário prayer show that prayer here, so the
+  // detail page isn't an empty shell for them.
+  const prayer = useLiveQuery(
+    () => (practice?.prayerId ? db.prayers.get(practice.prayerId) : undefined),
+    [practice?.prayerId]
+  )
 
   if (!practice) {
     return <Spinner className="h-64" />
@@ -56,7 +64,22 @@ export function PracticeDetail() {
           />
         )}
 
-        {!practice.content && !practice.imageData && (
+        {prayer && (
+          <div className="p-4">
+            <Link
+              to={`/devocionario/${prayer.id}`}
+              className="text-xs font-heading uppercase tracking-widest text-primary dark:text-primary-light"
+            >
+              Devocionário · {prayerTitle(prayer)}
+            </Link>
+            <MarkdownRenderer
+              markdown={prayerText(prayer, 'pt')}
+              className="prose-prayer mt-3"
+            />
+          </div>
+        )}
+
+        {!practice.content && !practice.imageData && !practice.prayerId && (
           <EmptyState icon={FileText} message="Nenhum conteúdo adicionado" />
         )}
       </div>

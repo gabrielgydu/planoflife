@@ -1,4 +1,4 @@
-import { db, ADDITIONAL_PRACTICES } from './index'
+import { db, ADDITIONAL_PRACTICES, seedDefaultPrayers } from './index'
 import type { Category, Practice } from '../types'
 import { generateId } from '../utils/id'
 import {
@@ -92,6 +92,13 @@ function createDefaultPractices(categories: Category[]): Practice[] {
 }
 
 export async function seedDatabase(): Promise<void> {
+  // The Devocionário prayers are seeded on EVERY start, not only on a fresh
+  // install: Dexie skips upgrade callbacks when it creates the database from
+  // scratch, so version(22) alone would leave a brand-new install with an empty
+  // prayer book. The helper is a pure, idempotent insert keyed by the bundled slug
+  // ids, so a normal start writes nothing.
+  await seedDefaultPrayers(db)
+
   const categoriesCount = await db.categories.count()
   if (categoriesCount > 0) return // Already seeded
 

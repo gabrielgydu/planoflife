@@ -8,6 +8,9 @@ import { ConfessionView } from './components/examen/ConfessionView'
 import { GuidingQuestionsList } from './components/examen/GuidingQuestionsList'
 import { HistoryView } from './components/history/HistoryView'
 import { DayDetail } from './components/history/DayDetail'
+import { DevocionarioView } from './components/devocionario/DevocionarioView'
+import { PrayerReader } from './components/devocionario/PrayerReader'
+import { PrayerForm } from './components/devocionario/PrayerForm'
 import { CareerView } from './components/career/CareerView'
 import { SettingsView } from './components/settings/SettingsView'
 import { PracticeList } from './components/practice/PracticeList'
@@ -33,10 +36,16 @@ export function App() {
         <Route element={<AppShell />}>
           <Route path="/" element={<DailyView />} />
           <Route path="/examen" element={<ExamenView />} />
+          <Route path="/devocionario" element={<DevocionarioView />} />
+          {/* Still routed, just no longer in the bottom bar — reached from
+              Configurações → Histórico (the Devocionário took that tab). */}
           <Route path="/history" element={<HistoryView />} />
           <Route path="/career" element={<CareerView />} />
           <Route path="/settings" element={<SettingsView />} />
         </Route>
+        <Route path="/devocionario/new" element={<PrayerForm />} />
+        <Route path="/devocionario/:id" element={<PrayerReader />} />
+        <Route path="/devocionario/:id/edit" element={<PrayerForm />} />
         <Route path="/history/:date" element={<DayDetail />} />
         <Route path="/examen/history" element={<ExamenHistoryView />} />
         <Route path="/examen/confession" element={<ConfessionView />} />

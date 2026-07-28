@@ -16,8 +16,10 @@ import type {
   CareerLogEntry,
   MeditationDay,
   ReadingPosition,
+  Prayer,
 } from '../types'
 import { generateId } from '../utils/id'
+import { defaultPrayers } from '../data/devocionario'
 import {
   NOVENA_TRABALHO_PRACTICE_ID,
   NOVENA_TRABALHO_BUNDLED_ID,
@@ -648,6 +650,27 @@ export async function ensureV20PracticeMoves(tx: TableSource): Promise<void> {
   await addMissingAdditionalPractices(tx)
 }
 
+/**
+ * Insert the bundled Devocionário prayers that aren't already there (matched by the
+ * FIXED slug id baked into src/data/devocionario.json). Idempotent, and a PURE
+ * INSERT: nothing existing is modified or deleted, so — unlike the row-modifying
+ * v14/v15/v20 and the v18 delete — it needs no reconciliation flag. Both devices
+ * run it independently and converge because the ids are identical (the union merge
+ * in src/sync/merge.ts has no tombstones; two random ids would mean two copies of
+ * every prayer). A prayer the user deleted stays deleted only until this runs again
+ * on a fresh upgrade, which is the same accepted property as the fixed-id practices.
+ *
+ * Shared by the version(22) upgrade and the fresh-install seed, so the two can't
+ * drift apart.
+ */
+export async function seedDefaultPrayers(tx: TableSource): Promise<void> {
+  const prayersTable = tx.table('prayers')
+  const existingIds = new Set((await prayersTable.toArray()).map((p: Prayer) => p.id))
+  const now = new Date().toISOString()
+  const missing = defaultPrayers(now).filter((p) => !existingIds.has(p.id))
+  if (missing.length) await prayersTable.bulkAdd(missing)
+}
+
 export class PlanOfLifeDB extends Dexie {
   categories!: EntityTable<Category, 'id'>
   practices!: EntityTable<Practice, 'id'>
@@ -665,6 +688,7 @@ export class PlanOfLifeDB extends Dexie {
   careerLog!: EntityTable<CareerLogEntry, 'id'>
   meditationDays!: EntityTable<MeditationDay, 'id'>
   readingPositions!: EntityTable<ReadingPosition, 'id'>
+  prayers!: EntityTable<Prayer, 'id'>
 
   constructor() {
     super('PlanOfLifeDB')
@@ -904,6 +928,16 @@ export class PlanOfLifeDB extends Dexie {
     // it needs no reconciliation flag. Idempotent + name-matched (see helper);
     // it copies the scheduleDays onto the row.
     this.version(21).stores({}).upgrade(addMissingAdditionalPractices)
+
+    // The Devocionário prayer book (see src/data/devocionario.ts). A new store plus
+    // its seed: the 88 bundled prayers carry FIXED slug ids, so both devices insert
+    // the identical rows and sync converges instead of duplicating — the same
+    // reasoning as the fixed-id practice specs, and a pure insert like v16/v17/v21,
+    // so no reconciliation flag. Fresh installs get the same rows from seed.ts
+    // (Dexie does not run upgrade callbacks when it creates the DB from scratch).
+    // The prayers sync, so the sync schema bumps to 5 — see src/sync/types.ts and
+    // scripts/sync-core.mjs.
+    this.version(22).stores({ prayers: 'id' }).upgrade(seedDefaultPrayers)
   }
 }
 

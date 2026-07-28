@@ -115,6 +115,11 @@ export function mergeStates(
         ours.data.readingPositions ?? [],
         newerUpdatedAt,
       ),
+      // Devocionário: the bundled prayers carry the same FIXED slug id on every
+      // device, so the union collapses the two independent seeds into one book;
+      // favorites, reorders and edits are ordinary updatedAt-recency wins. `?? []`
+      // tolerates a schema-≤4 snapshot (preserve ours).
+      prayers: mergeById(base.data.prayers ?? [], ours.data.prayers ?? [], newerUpdatedAt),
     },
     settings,
   }

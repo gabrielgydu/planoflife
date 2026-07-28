@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { ClipboardList, FolderOpen, Download, FileText, ChevronRight, Sun, Moon, Circle, Sparkles, type LucideIcon } from 'lucide-react'
+import { ClipboardList, FolderOpen, Download, FileText, ChevronRight, Calendar, Sun, Moon, Circle, Sparkles, type LucideIcon } from 'lucide-react'
 import { useThemeMode, type ThemeMode } from '../../hooks/useThemeMode'
 import { useIndividualReasons, usePracticeFontSize, useUIFontSize, useNovenaStart, type FontSizeLevel } from '../../hooks/useSettings'
 import { manualNovenaDayIndex, NOVENA_LENGTH } from '../../data/novena'
@@ -7,6 +7,9 @@ import { getToday, getTodayStr, formatDateShort, parseDate } from '../../utils/d
 import { SyncSettingsSection } from '../sync/SyncSettingsSection'
 
 const menuItems: { to: string; label: string; icon: LucideIcon; description: string }[] = [
+  // Histórico used to be a bottom-nav tab; the Devocionário took that slot, so the
+  // month grid is reached from here instead.
+  { to: '/history', label: 'Histórico', icon: Calendar, description: 'Calendário mensal e relatórios' },
   { to: '/settings/practices', label: 'Práticas', icon: ClipboardList, description: 'Gerenciar práticas espirituais' },
   { to: '/settings/categories', label: 'Categorias', icon: FolderOpen, description: 'Organizar categorias' },
   { to: '/settings/backup', label: 'Backup', icon: Download, description: 'Exportar e importar dados' },
