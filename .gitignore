@@ -21,3 +21,6 @@ scripts/liturgy/.cache/
 
 # New Testament build-time cache (harvested HTML + parsed pt text; regenerable)
 scripts/nt/.cache/
+
+# Devocionário build-time cache (the curled opusdei.org section pages; regenerable)
+scripts/.cache/
