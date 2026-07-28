@@ -30,6 +30,15 @@ export const LEMBRAI_VOS_NAME = 'Lembrai-vos'
 export const LEMBRAI_VOS_BUNDLED_ID = 'lembrai_vos'
 export const LEMBRAI_VOS_OLD_CATEGORY_NAME = 'Meio-dia'
 
+// Salmo 2 ("Quare fremuerunt gentes"), the Tuesday custom. A bundled-text
+// practice gated by scheduleDays rather than monthlySchedule: it shows only on
+// Tuesdays and is hidden — and stats-neutral — the other six days.
+export const SALMO_2_PRACTICE_ID = 'salmo-2'
+export const SALMO_2_NAME = 'Salmo 2'
+export const SALMO_2_BUNDLED_ID = 'salmo_2'
+// date-fns getDay: 0 = Sunday, so 2 = Tuesday.
+export const SALMO_2_SCHEDULE_DAYS = [2]
+
 // The Athanasian Creed (Symbolum Quicumque), prayed on the third Sunday of every
 // month. A bundled-text practice (PT + Latin) whose visibility is gated by the
 // monthlySchedule field — week 3, weekday 0 (Sunday), computed from the clock.

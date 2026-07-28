@@ -55,6 +55,10 @@ import {
   LEMBRAI_VOS_NAME,
   LEMBRAI_VOS_BUNDLED_ID,
   LEMBRAI_VOS_OLD_CATEGORY_NAME,
+  SALMO_2_PRACTICE_ID,
+  SALMO_2_NAME,
+  SALMO_2_BUNDLED_ID,
+  SALMO_2_SCHEDULE_DAYS,
 } from '../data/costumes'
 
 // Practices added after the initial seed. Used by both the fresh-install seed
@@ -209,6 +213,19 @@ export const ADDITIONAL_PRACTICES: AdditionalPracticeSpec[] = [
     isRequired: false,
     bundledTextId: LEMBRAI_VOS_BUNDLED_ID,
     sortOrder: 3,
+  },
+  // "Salmo 2" (v21): the Tuesday custom — a bundled-text Costume whose
+  // scheduleDays hides it Wed–Mon (and keeps those days neutral in stats), the
+  // same gate the Saturday Plano de Vida practices use. Pure fixed-id insert
+  // into the existing Costumes category, so it needs no reconciliation flag.
+  {
+    id: SALMO_2_PRACTICE_ID,
+    name: SALMO_2_NAME,
+    categoryName: COSTUMES_CATEGORY_NAME,
+    isRequired: false,
+    bundledTextId: SALMO_2_BUNDLED_ID,
+    scheduleDays: SALMO_2_SCHEDULE_DAYS,
+    sortOrder: 4,
   },
 ]
 
@@ -878,6 +895,15 @@ export class PlanOfLifeDB extends Dexie {
         // localStorage unavailable — see the v14 note above.
       }
     })
+
+    // Add "Salmo 2" (the Tuesday custom, hidden the other six days via
+    // scheduleDays) to existing installs. A pure fixed-id insert into the
+    // existing Costumes category — same convergence reasoning as v16/v17 (both
+    // devices insert the identical row, so sync converges instead of
+    // duplicating), so unlike the row-modifying v14/v15/v20 and the v18 delete
+    // it needs no reconciliation flag. Idempotent + name-matched (see helper);
+    // it copies the scheduleDays onto the row.
+    this.version(21).stores({}).upgrade(addMissingAdditionalPractices)
   }
 }
 
