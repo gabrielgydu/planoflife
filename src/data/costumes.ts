@@ -20,6 +20,16 @@ export const TRES_AVE_MARIAS_PRACTICE_ID = 'tres-ave-marias'
 export const TRES_AVE_MARIAS_NAME = 'Três Ave-Marias'
 export const TRES_AVE_MARIAS_OLD_CATEGORY_NAME = 'Noite'
 
+// "Lembrai-vos" (the Memorare) — a custom rather than a norm, moved out of
+// "Meio-dia" into Costumes by v20. Exactly the Três Ave-Marias situation: the row
+// normally already exists from the original seed with a per-device random id, so
+// ensureV20PracticeMoves moves it BY NAME and the fixed-id spec below only inserts
+// a replacement when the user had deleted it.
+export const LEMBRAI_VOS_PRACTICE_ID = 'lembrai-vos'
+export const LEMBRAI_VOS_NAME = 'Lembrai-vos'
+export const LEMBRAI_VOS_BUNDLED_ID = 'lembrai_vos'
+export const LEMBRAI_VOS_OLD_CATEGORY_NAME = 'Meio-dia'
+
 // The Athanasian Creed (Symbolum Quicumque), prayed on the third Sunday of every
 // month. A bundled-text practice (PT + Latin) whose visibility is gated by the
 // monthlySchedule field — week 3, weekday 0 (Sunday), computed from the clock.

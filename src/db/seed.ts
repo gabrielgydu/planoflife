@@ -34,9 +34,9 @@ function createDefaultPractices(categories: Category[]): Practice[] {
   const catMap = Object.fromEntries(categories.map((c) => [c.name, c.id]))
   const plano = catMap[PLANO_DE_VIDA_CATEGORY_NAME]
 
-  // The Plano de Vida slots 4, 9 and 11–13 come from ADDITIONAL_PRACTICES below
-  // (they carry explicit sortOrders); the base list holds everything else in its
-  // final v14 shape, so a fresh install needs no migration.
+  // The Plano de Vida slots 4, 7.5, 8.5, 9 and 11–13 come from ADDITIONAL_PRACTICES
+  // below (they carry explicit sortOrders); the base list holds everything else in
+  // its final v14/v20 shape, so a fresh install needs no migration.
   const base: Practice[] = [
     // Plano de Vida
     { id: generateId(), name: 'Oferecimento de Obras', categoryId: plano, content: '', imageData: null, bundledTextId: 'oferecimento_de_obras', isRequired: true, sortOrder: 0, isArchived: false, createdAt: now, updatedAt: now },
@@ -49,11 +49,10 @@ function createDefaultPractices(categories: Category[]): Practice[] {
     { id: generateId(), name: 'Ângelus', categoryId: plano, content: '', imageData: null, bundledTextId: 'angelus', isRequired: true, sortOrder: 8, isArchived: false, createdAt: now, updatedAt: now },
     { id: generateId(), name: 'Exame de Consciência', categoryId: plano, content: '', imageData: null, isRequired: true, sortOrder: 10, isArchived: false, createdAt: now, updatedAt: now },
 
-    // Meio-dia
-    { id: generateId(), name: 'Lembrai-vos', categoryId: catMap['Meio-dia'], content: '', imageData: null, bundledTextId: 'lembrai_vos', isRequired: false, sortOrder: 0, isArchived: false, createdAt: now, updatedAt: now },
-
-    // Costumes (Água Benta + Três Ave-Marias) come from ADDITIONAL_PRACTICES
-    // below — their specs carry fixed ids and pinned sortOrders.
+    // Costumes (Água Benta, Três Ave-Marias, Credo de Atanásio, Lembrai-vos) come
+    // from ADDITIONAL_PRACTICES below — their specs carry fixed ids and pinned
+    // sortOrders. Meio-dia is likewise seeded entirely from specs (Oração a São
+    // Josemaria + the June novena).
 
     // Missa / Igreja
     { id: generateId(), name: 'Comunhão Espiritual', categoryId: catMap['Missa / Igreja'], content: '', imageData: null, isRequired: false, sortOrder: 0, isArchived: false, createdAt: now, updatedAt: now },

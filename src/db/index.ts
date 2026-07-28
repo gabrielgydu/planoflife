@@ -25,16 +25,8 @@ import {
   NOVENA_TRABALHO_CATEGORY,
   NOVENA_TRABALHO_WINDOW,
 } from '../data/novena'
-import {
-  ROSARY_CONTEMPLATION_PRACTICE_ID,
-  ROSARY_CONTEMPLATION_NAME,
-  ROSARY_CONTEMPLATION_CATEGORY,
-} from '../data/rosary'
-import {
-  EXAME_PARTICULAR_PRACTICE_ID,
-  EXAME_PARTICULAR_NAME,
-  EXAME_PARTICULAR_CATEGORY,
-} from '../data/exame'
+import { ROSARY_CONTEMPLATION_PRACTICE_ID, ROSARY_CONTEMPLATION_NAME } from '../data/rosary'
+import { EXAME_PARTICULAR_PRACTICE_ID, EXAME_PARTICULAR_NAME } from '../data/exame'
 import {
   PLANO_DE_VIDA_CATEGORY_ID,
   PLANO_DE_VIDA_CATEGORY_NAME,
@@ -59,6 +51,10 @@ import {
   CREDO_ATANASIO_NAME,
   CREDO_ATANASIO_BUNDLED_ID,
   CREDO_ATANASIO_MONTHLY,
+  LEMBRAI_VOS_PRACTICE_ID,
+  LEMBRAI_VOS_NAME,
+  LEMBRAI_VOS_BUNDLED_ID,
+  LEMBRAI_VOS_OLD_CATEGORY_NAME,
 } from '../data/costumes'
 
 // Practices added after the initial seed. Used by both the fresh-install seed
@@ -114,22 +110,26 @@ export const ADDITIONAL_PRACTICES: AdditionalPracticeSpec[] = [
   },
   // Contemplation of the rosary mysteries NOT prayed today. No bundledTextId: like
   // "Meditação" it opens a dedicated overlay reader (routed by name, see
-  // src/data/rosary.ts) rather than the text pager. isRequired false — it's a
-  // contemplative aid alongside the obligatory "Rosário", not a separate duty.
+  // src/data/rosary.ts) rather than the text pager. Required, and pinned to the
+  // fractional slot right after "Santo Rosário" (7) by v20 — the fraction slips it
+  // between two existing norms without renumbering any of them.
   {
     id: ROSARY_CONTEMPLATION_PRACTICE_ID,
     name: ROSARY_CONTEMPLATION_NAME,
-    categoryName: ROSARY_CONTEMPLATION_CATEGORY,
-    isRequired: false,
+    categoryName: PLANO_DE_VIDA_CATEGORY_NAME,
+    isRequired: true,
+    sortOrder: 7.5,
   },
   // Midday particular examen. No bundledTextId; like the rosary contemplation it
   // opens a dedicated overlay reader (routed by name, see src/data/exame.ts). The
   // active point lives as a synced setting; completion is a normal dailyRecord.
+  // Required, pinned just after "Ângelus" (8) — same fractional-slot reasoning.
   {
     id: EXAME_PARTICULAR_PRACTICE_ID,
     name: EXAME_PARTICULAR_NAME,
-    categoryName: EXAME_PARTICULAR_CATEGORY,
-    isRequired: false,
+    categoryName: PLANO_DE_VIDA_CATEGORY_NAME,
+    isRequired: true,
+    sortOrder: 8.5,
   },
   // Saturday plan-of-life practices (v14). scheduleDays hides them Mon–Fri and
   // keeps those days neutral in stats. Plain checkbox — no reader text.
@@ -196,6 +196,19 @@ export const ADDITIONAL_PRACTICES: AdditionalPracticeSpec[] = [
     bundledTextId: CREDO_ATANASIO_BUNDLED_ID,
     monthlySchedule: CREDO_ATANASIO_MONTHLY,
     sortOrder: 2,
+  },
+  // "Lembrai-vos" (v20): a custom, not a norm — moved out of Meio-dia into
+  // Costumes. Same shape as Três Ave-Marias: the row normally already exists from
+  // the original seed with a per-device random id and is MOVED by
+  // ensureV20PracticeMoves; this fixed-id spec only inserts a replacement when the
+  // user had deleted it (the by-name idempotency check skips it otherwise).
+  {
+    id: LEMBRAI_VOS_PRACTICE_ID,
+    name: LEMBRAI_VOS_NAME,
+    categoryName: COSTUMES_CATEGORY_NAME,
+    isRequired: false,
+    bundledTextId: LEMBRAI_VOS_BUNDLED_ID,
+    sortOrder: 3,
   },
 ]
 
@@ -522,6 +535,102 @@ export async function ensureLiturgiaRemoved(tx: TableSource): Promise<void> {
   }
 }
 
+// Same one-time "migration still needs to reach the cloud" marker as
+// PLANO_V14/COSTUMES_V15/LITURGIA_V18 — v20 MODIFIES existing rows (category,
+// sortOrder, isRequired), so a plain pull of the older cloud snapshot would revert
+// it and version(20) never re-runs. See PLANO_V14_PENDING_PUSH_KEY for the full
+// rationale.
+export const MOVES_V20_PENDING_PUSH_KEY = 'moves-v20-pending-push'
+
+// The three practices v20 relocates. The first two carry fixed ids (inserted by
+// v12/v13 specs) so they are matched by id, falling back to the name in case a
+// device renamed them; "Lembrai-vos" comes from the ORIGINAL seed with a
+// per-device random id, so its name is the only stable cross-device key.
+const V20_TO_PLANO = [ROSARY_CONTEMPLATION_PRACTICE_ID, EXAME_PARTICULAR_PRACTICE_ID]
+
+/**
+ * The v20 moves, idempotent for the same two call sites as ensurePlanoDeVidaState:
+ * the version(20) upgrade and the post-sync reconciliation.
+ *
+ * - "Contemplação do Rosário" (was Tarde) and "Exame particular" (was Meio-dia)
+ *   become required Plano de Vida norms, at the fractional slots 7.5 / 8.5 so no
+ *   other Plano de Vida row is renumbered.
+ * - "Lembrai-vos" (was Meio-dia) becomes a Costumes custom, appended at 3. Its
+ *   isRequired is left alone — customs are deliberately never required.
+ *
+ * Only these three rows are touched; every other practice (including ones Gabriel
+ * reordered by hand) is left exactly as it is. Rows already in the target state get
+ * no write, so the reconciliation re-run after pulling a migrated snapshot is a
+ * no-op; rows it does change get a bumped updatedAt so they WIN the LWW merge
+ * against a stale pre-migration device.
+ */
+export async function ensureV20PracticeMoves(tx: TableSource): Promise<void> {
+  const categoriesTable = tx.table('categories')
+  const practicesTable = tx.table('practices')
+
+  const allCategories = (await categoriesTable.toArray()) as Category[]
+  if (allCategories.length === 0) return
+  const now = new Date().toISOString()
+
+  const categoryIdByName = new Map(allCategories.map((c) => [normalizeName(c.name), c.id]))
+  const findCategoryId = (fixedId: string, name: string) =>
+    allCategories.find((c) => c.id === fixedId)?.id ?? categoryIdByName.get(normalizeName(name))
+  const planoId = findCategoryId(PLANO_DE_VIDA_CATEGORY_ID, PLANO_DE_VIDA_CATEGORY_NAME)
+  const costumesId = findCategoryId(COSTUMES_CATEGORY_ID, COSTUMES_CATEGORY_NAME)
+
+  const allPractices = (await practicesTable.toArray()) as Practice[]
+
+  // 1. Promote the two readers to required Plano de Vida norms. Category and
+  // sortOrder come from their (already updated) specs, so the migration and the
+  // fresh seed can never disagree.
+  if (planoId) {
+    for (const specId of V20_TO_PLANO) {
+      const spec = ADDITIONAL_PRACTICES.find((s) => s.id === specId)
+      if (!spec || spec.sortOrder === undefined) continue
+      const row =
+        allPractices.find((p) => p.id === specId) ??
+        allPractices.find((p) => normalizeName(p.name) === normalizeName(spec.name))
+      if (!row) continue
+      if (row.categoryId === planoId && row.sortOrder === spec.sortOrder && row.isRequired) continue
+      await practicesTable.update(row.id, {
+        categoryId: planoId,
+        sortOrder: spec.sortOrder,
+        isRequired: true,
+        updatedAt: now,
+      })
+    }
+  }
+
+  // 2. Move "Lembrai-vos" into Costumes. On multiple name matches the row in the
+  // original seed category (Meio-dia) wins, then one already in Costumes, so a
+  // user-created duplicate elsewhere is left alone. A missing row is skipped — the
+  // spec insert below then provides the fixed-id replacement.
+  if (costumesId) {
+    const spec = ADDITIONAL_PRACTICES.find((s) => s.id === LEMBRAI_VOS_PRACTICE_ID)
+    const candidates = allPractices.filter(
+      (p) => normalizeName(p.name) === normalizeName(LEMBRAI_VOS_NAME)
+    )
+    const oldCategoryId = categoryIdByName.get(normalizeName(LEMBRAI_VOS_OLD_CATEGORY_NAME))
+    const target =
+      candidates.find((p) => p.categoryId === oldCategoryId) ??
+      candidates.find((p) => p.categoryId === costumesId) ??
+      candidates[0]
+    if (
+      spec?.sortOrder !== undefined &&
+      target &&
+      !(target.categoryId === costumesId && target.sortOrder === spec.sortOrder)
+    ) {
+      await practicesTable.update(target.id, {
+        categoryId: costumesId,
+        sortOrder: spec.sortOrder,
+        updatedAt: now,
+      })
+    }
+  }
+
+  await addMissingAdditionalPractices(tx)
+}
+
 export class PlanOfLifeDB extends Dexie {
   categories!: EntityTable<Category, 'id'>
   practices!: EntityTable<Practice, 'id'>
@@ -751,6 +860,24 @@ export class PlanOfLifeDB extends Dexie {
     // fixed-id spec nor a reconciliation flag. The position syncs, so the sync
     // schema bumps to 4 — see src/sync/types.ts and scripts/sync-core.mjs.
     this.version(19).stores({ readingPositions: 'id' })
+
+    // Relocate three practices: "Contemplação do Rosário" and "Exame particular"
+    // become required Plano de Vida norms (slots 7.5 / 8.5), and "Lembrai-vos"
+    // becomes a Costumes custom. Row MODIFICATIONS, so — like v14/v15/v18 and
+    // unlike the pure fixed-id inserts — it needs the reconciliation flag: the
+    // first pull would otherwise re-apply the older cloud snapshot and undo the
+    // moves. The flag makes SyncProvider re-run the idempotent body through the
+    // live db and push; it's cleared only after a successful push
+    // (MOVES_V20_PENDING_PUSH_KEY). No new store and practices is already synced,
+    // so the sync schema is unchanged.
+    this.version(20).stores({}).upgrade(async (tx) => {
+      await ensureV20PracticeMoves(tx)
+      try {
+        localStorage.setItem(MOVES_V20_PENDING_PUSH_KEY, 'true')
+      } catch {
+        // localStorage unavailable — see the v14 note above.
+      }
+    })
   }
 }
 
