@@ -671,6 +671,52 @@ export async function seedDefaultPrayers(tx: TableSource): Promise<void> {
   if (missing.length) await prayersTable.bulkAdd(missing)
 }
 
+// Same one-time "migration still needs to reach the cloud" marker as
+// PLANO_V14/COSTUMES_V15/LITURGIA_V18/MOVES_V20 — v23 MODIFIES existing prayer rows,
+// so a plain pull of the older cloud snapshot would revert it and version(23) never
+// re-runs. See PLANO_V14_PENDING_PUSH_KEY for the full rationale.
+export const PRAYERS_V23_PENDING_PUSH_KEY = 'prayers-v23-pending-push'
+
+/**
+ * Bring the bundled Devocionário rows back in line with src/data/devocionario.json.
+ *
+ * seedDefaultPrayers only INSERTS what is missing, so a correction to a prayer
+ * already on a device — a retitling, a fixed text, a moved section — would otherwise
+ * reach fresh installs only. This is the general mechanism for that: every future
+ * corpus fix is a version bump that calls this, with no new code.
+ *
+ * What it deliberately does NOT touch: `isFavorite` and `sortOrder` are the user's,
+ * not the corpus's, and a row whose `source` is no longer 'default' has been taken
+ * over by a user prayer and is left completely alone. Rows already correct get no
+ * write at all, so the post-sync reconciliation re-run after pulling a migrated
+ * snapshot is a no-op; rows it does change get a bumped updatedAt so they win the
+ * LWW merge against a stale device.
+ */
+export async function ensureDefaultPrayerContent(tx: TableSource): Promise<void> {
+  const prayersTable = tx.table('prayers')
+  const existing = (await prayersTable.toArray()) as Prayer[]
+  const byId = new Map(existing.map((p) => [p.id, p]))
+  const now = new Date().toISOString()
+
+  for (const bundled of defaultPrayers(now)) {
+    const row = byId.get(bundled.id)
+    if (!row || row.source !== 'default') continue
+    const same =
+      row.section === bundled.section &&
+      JSON.stringify(row.title) === JSON.stringify(bundled.title) &&
+      JSON.stringify(row.texts) === JSON.stringify(bundled.texts)
+    if (same) continue
+    await prayersTable.update(row.id, {
+      section: bundled.section,
+      title: bundled.title,
+      texts: bundled.texts,
+      updatedAt: now,
+    })
+  }
+
+  await seedDefaultPrayers(tx)
+}
+
 export class PlanOfLifeDB extends Dexie {
   categories!: EntityTable<Category, 'id'>
   practices!: EntityTable<Practice, 'id'>
@@ -938,6 +984,23 @@ export class PlanOfLifeDB extends Dexie {
     // The prayers sync, so the sync schema bumps to 5 — see src/sync/types.ts and
     // scripts/sync-core.mjs.
     this.version(22).stores({ prayers: 'id' }).upgrade(seedDefaultPrayers)
+
+    // Re-apply the bundled Devocionário content to rows that already exist: v22's
+    // seed only inserts what is missing, so the retitling of "Aspirações ao
+    // Santíssimo Redentor" → "Alma de Cristo" (the name every other edition of the
+    // prayer book uses; the pt-BR one titled it after its Latin title) would reach
+    // fresh installs only. Row MODIFICATIONS, so — like v14/v15/v20 and unlike the
+    // pure inserts — it needs the reconciliation flag: the first pull would
+    // otherwise re-apply the older cloud snapshot and undo the rename. The prayer's
+    // ID is deliberately unchanged; see the note in scripts/fetch-devocionario.mjs.
+    this.version(23).stores({}).upgrade(async (tx) => {
+      await ensureDefaultPrayerContent(tx)
+      try {
+        localStorage.setItem(PRAYERS_V23_PENDING_PUSH_KEY, 'true')
+      } catch {
+        // localStorage unavailable — see the v14 note above.
+      }
+    })
   }
 }
 

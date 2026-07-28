@@ -78,6 +78,20 @@ const SECTIONS = [
   { slug: 'doutrina', section1: 201, section2: 52, namePt: 'Fórmulas de Doutrina Católica', count: 13 },
 ]
 
+// The pt-BR edition titles this prayer after its LATIN title ("Aspiratiónes ad
+// Ssmum. Redemptórem"); every other edition of the same book uses the prayer's own
+// name — "Alma de Cristo" in Spanish, "Anima Christi" in English. Gabriel prays it
+// as Alma de Cristo, so that is what it is called here.
+//
+// The ID DELIBERATELY DOES NOT FOLLOW THE TITLE. Ids are the primary key the sync
+// merge unions on, and it has no tombstones: a device that already holds
+// `aspiracoes-ao-santissimo-redentor` would keep it while a re-seeded device
+// inserted `alma-de-cristo`, and the union would leave the user with both. A
+// mismatched slug is the cheap half of that trade. See src/sync/merge.ts.
+const TITLE_OVERRIDES = {
+  'aspiracoes-ao-santissimo-redentor': { pt: 'Alma de Cristo' },
+}
+
 // --- fetching -----------------------------------------------------------------
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -598,6 +612,20 @@ async function main() {
       seen.add(candidate)
       p.id = candidate
     }
+  }
+
+  // Ids are final from here on — the title overrides are keyed by id precisely so
+  // they can never move a row to a different one.
+  const prayerById = new Map(prayers.map((p) => [p.id, p]))
+
+  for (const [id, override] of Object.entries(TITLE_OVERRIDES)) {
+    const target = prayerById.get(id)
+    if (!target) {
+      failures.push(`title override: no prayer with id "${id}"`)
+      continue
+    }
+    notes.push(`title override "${id}": ${target.title.pt} → ${override.pt} (id unchanged)`)
+    Object.assign(target.title, override)
   }
 
   // Source quirks worth a human's eyes rather than a silent normalization: the site
