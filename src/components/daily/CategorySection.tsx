@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { ChevronDown } from 'lucide-react'
 import type { Category, Practice } from '../../types'
@@ -18,6 +17,10 @@ interface CategorySectionProps {
   onTogglePractice: (practiceId: string) => void
   onOpenPracticeDetail: (practice: Practice) => void
   hideCompleted?: boolean
+  // Controlled by the caller so the fold survives leaving the view — see
+  // useCollapsedCategories.
+  isExpanded: boolean
+  onToggleExpanded: () => void
 }
 
 export function CategorySection({
@@ -29,9 +32,9 @@ export function CategorySection({
   onTogglePractice,
   onOpenPracticeDetail,
   hideCompleted = false,
+  isExpanded,
+  onToggleExpanded,
 }: CategorySectionProps) {
-  const [isExpanded, setIsExpanded] = useState(true)
-
   // Counts always reflect the full set; only the rendered rows are filtered, so
   // the "2/5" badge stays truthful while completed rows are hidden.
   const completedCount = practices.filter((p) => isCompleted(p.id)).length
@@ -45,7 +48,8 @@ export function CategorySection({
   return (
     <section className="mb-2">
       <button
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={onToggleExpanded}
+        aria-expanded={isExpanded}
         className="w-full flex items-center gap-2 px-5 py-4 hover:bg-surface-secondary/50 dark:hover:bg-surface-secondary-dark/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary dark:focus-visible:ring-primary-light"
       >
         <CategoryIcon name={category.emoji} className="w-4 h-4 text-text-secondary dark:text-text-secondary-dark" />

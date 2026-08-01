@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { usePracticeFontSize, useUIFontSize } from './hooks/useSettings'
 import { AppShell } from './components/layout/AppShell'
+import { ScrollMemory } from './components/layout/ScrollMemory'
 import { DailyView } from './components/daily/DailyView'
 import { ExamenView } from './components/examen/ExamenView'
 import { ExamenHistoryView } from './components/examen/ExamenHistoryView'
@@ -31,6 +32,7 @@ export function App() {
   return (
     <SyncProvider>
     <BrowserRouter basename="/planoflife">
+      <ScrollMemory />
       <InstallBanner />
       <Routes>
         <Route element={<AppShell />}>

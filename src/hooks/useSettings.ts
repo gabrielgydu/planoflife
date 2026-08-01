@@ -67,6 +67,44 @@ export function useDailyViewMode(): [DailyViewMode, (value: DailyViewMode) => vo
   return [mode, setMode]
 }
 
+const COLLAPSED_CATEGORIES_KEY = 'settings-collapsed-categories'
+
+function readCollapsedCategories(): Set<string> {
+  try {
+    const parsed: unknown = JSON.parse(localStorage.getItem(COLLAPSED_CATEGORIES_KEY) ?? '[]')
+    return new Set(Array.isArray(parsed) ? parsed.filter((id) => typeof id === 'string') : [])
+  } catch {
+    return new Set()
+  }
+}
+
+/**
+ * Which categories are folded shut in the daily checklist. Stored as the ids of
+ * the COLLAPSED ones, so a category added later (here or on the other device)
+ * shows up open, which is the default the list has always had.
+ *
+ * The id of a deleted category simply stops matching anything — not worth
+ * pruning, and keeping it means an undo of that deletion comes back folded the
+ * way it was left.
+ */
+export function useCollapsedCategories(): {
+  isCollapsed: (categoryId: string) => boolean
+  toggleCategory: (categoryId: string) => void
+} {
+  const [collapsed, setCollapsed] = useState<Set<string>>(readCollapsedCategories)
+
+  useEffect(() => onSettingsChanged(() => setCollapsed(readCollapsedCategories())), [])
+
+  const toggleCategory = (categoryId: string) => {
+    const next = new Set(collapsed)
+    if (!next.delete(categoryId)) next.add(categoryId)
+    setSyncedSetting(COLLAPSED_CATEGORIES_KEY, JSON.stringify([...next]))
+    setCollapsed(next)
+  }
+
+  return { isCollapsed: (categoryId: string) => collapsed.has(categoryId), toggleCategory }
+}
+
 const NOVENA_START_KEY = 'settings-novena-start'
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/
 

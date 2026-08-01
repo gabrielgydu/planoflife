@@ -24,7 +24,13 @@ import { useDailyRecords } from '../../hooks/useDailyRecords'
 import { useWeeklyCompletions } from '../../hooks/useWeeklyCompletion'
 import { useMorningFlow } from '../../hooks/useMorningFlow'
 import { useProposito } from '../../hooks/usePropositos'
-import { useHideCompleted, useDailyViewMode, useNovenaStart, DAILY_VIEW_MODES } from '../../hooks/useSettings'
+import {
+  useHideCompleted,
+  useDailyViewMode,
+  useNovenaStart,
+  useCollapsedCategories,
+  DAILY_VIEW_MODES,
+} from '../../hooks/useSettings'
 import { PLANO_DE_VIDA_CATEGORY_ID, isSantaMissaPractice } from '../../data/planoDeVida'
 import { isNovoTestamentoPractice } from '../../data/novoTestamento'
 import { COSTUMES_CATEGORY_ID } from '../../data/costumes'
@@ -48,6 +54,9 @@ export function DailyView() {
   // FAB-cycled visibility mode (also persisted + synced): the plan-of-life core,
   // only the extras, or everything.
   const [viewMode, setViewMode] = useDailyViewMode()
+  // Folded categories are a preference too: they stay folded across navigation,
+  // app restarts, and the other device.
+  const { isCollapsed, toggleCategory } = useCollapsedCategories()
   // The manually-started novena (settings) shows outside 17–25 June for nine days.
   const { start: novenaStart } = useNovenaStart()
   const cycleViewMode = () => {
@@ -255,6 +264,8 @@ export function DailyView() {
               onTogglePractice={toggleEffective}
               onOpenPracticeDetail={handleOpenPracticeDetail}
               hideCompleted={hideCompleted}
+              isExpanded={!isCollapsed(category.id)}
+              onToggleExpanded={() => toggleCategory(category.id)}
             />
           )
         })}
