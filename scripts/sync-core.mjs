@@ -56,15 +56,20 @@ export const READING_TABLES = ['readingPositions']
 // schema-≤4 snapshots lack this key entirely; validateSyncState allows it missing.
 export const PRAYER_TABLES = ['prayers']
 
+// Added in sync schema 6 (the exame-particular temas). Same rule again:
+// schema-≤5 snapshots lack this key entirely; validateSyncState allows it missing.
+export const EXAME_TABLES = ['exameTemas']
+
 export const TABLES = [
   ...LEGACY_TABLES,
   ...CAREER_TABLES,
   ...MEDITATION_TABLES,
   ...READING_TABLES,
   ...PRAYER_TABLES,
+  ...EXAME_TABLES,
 ]
 
-export const SYNC_SCHEMA = 5
+export const SYNC_SCHEMA = 6
 
 export function b64(bytes) {
   return Buffer.from(bytes).toString('base64')
@@ -153,7 +158,13 @@ export function validateSyncState(state) {
   for (const t of LEGACY_TABLES) {
     if (!Array.isArray(state.data[t])) throw new Error(`state.data.${t} must be an array`)
   }
-  for (const t of [...CAREER_TABLES, ...MEDITATION_TABLES, ...READING_TABLES, ...PRAYER_TABLES]) {
+  for (const t of [
+    ...CAREER_TABLES,
+    ...MEDITATION_TABLES,
+    ...READING_TABLES,
+    ...PRAYER_TABLES,
+    ...EXAME_TABLES,
+  ]) {
     if (state.data[t] !== undefined && !Array.isArray(state.data[t])) {
       throw new Error(`state.data.${t} must be an array when present`)
     }

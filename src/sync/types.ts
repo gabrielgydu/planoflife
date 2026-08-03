@@ -16,12 +16,13 @@ import type {
   MeditationDay,
   ReadingPosition,
   Prayer,
+  ExameTema,
 } from '../types'
 
 // Bump whenever SyncState gains tables. v2 = career tables (Dexie v7).
 // v3 = meditationDays (Dexie v10). v4 = readingPositions (Dexie v19).
-// v5 = prayers (Dexie v22).
-export const SYNC_SCHEMA = 5
+// v5 = prayers (Dexie v22). v6 = exameTemas (Dexie v24).
+export const SYNC_SCHEMA = 6
 
 /** The decrypted payload that travels to/from the Worker (mirrors scripts/sync-core.mjs). */
 export interface SyncState {
@@ -57,6 +58,10 @@ export interface SyncState {
     // no opinion" rule again — a schema-≤4 snapshot must PRESERVE the local prayers,
     // never clear them.
     prayers: Prayer[]
+    // The exame-particular temas — the active tema and the concluded history
+    // (schema 6). Same "missing key means older client, no opinion" rule again —
+    // a schema-≤5 snapshot must PRESERVE the local temas, never clear them.
+    exameTemas: ExameTema[]
   }
   settings: Record<string, string>
 }
@@ -94,6 +99,7 @@ export const SYNC_TABLES = [
   'meditationDays',
   'readingPositions',
   'prayers',
+  'exameTemas',
 ] as const
 
 /** Cloud snapshot was produced by a NEWER app than this one. */

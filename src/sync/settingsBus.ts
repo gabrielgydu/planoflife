@@ -5,9 +5,12 @@
 // Excluded on purpose: 'morning-flow-last-reviewed-date' is transient per-device
 // flow state, not a preference — syncing it could wrongly skip the morning review.
 //
-// Retired: 'settings-examen-proposito-target'. The propósito day is now derived
-// from the clock (see usePropositos). Old devices may still push the key; unknown
-// keys are ignored on both collect and apply, so it just falls away.
+// Retired: 'settings-examen-proposito-target' — the propósito day is now derived
+// from the clock (see usePropositos) — and 'settings-exame-particular-point' —
+// the exame-particular tema now lives in the synced db.exameTemas table (see
+// useExameTema; the Dexie v24 upgrade converts the old value into a row). Old
+// devices may still push these keys; unknown keys are ignored on both collect
+// and apply, so they just fall away.
 
 export const SYNCED_SETTING_KEYS = [
   'theme-mode',
@@ -15,7 +18,6 @@ export const SYNCED_SETTING_KEYS = [
   'settings-ui-font-size',
   'settings-individual-reasons',
   'settings-hide-completed',
-  'settings-exame-particular-point',
   'settings-daily-view-mode',
   'settings-collapsed-categories',
   'settings-novena-start',

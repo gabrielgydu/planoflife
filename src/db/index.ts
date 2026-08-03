@@ -17,6 +17,7 @@ import type {
   MeditationDay,
   ReadingPosition,
   Prayer,
+  ExameTema,
 } from '../types'
 import { generateId } from '../utils/id'
 import { defaultPrayers } from '../data/devocionario'
@@ -717,6 +718,64 @@ export async function ensureDefaultPrayerContent(tx: TableSource): Promise<void>
   await seedDefaultPrayers(tx)
 }
 
+// Same one-time "migration still needs to reach the cloud" marker as
+// PLANO_V14/…/PRAYERS_V23 — v24 INSERTS a row whose only source is this device's
+// localStorage (the retired exame-particular setting), so unlike the re-creatable
+// v22 prayer seed it must be re-runnable and pushed: the upgrade write is never
+// marked dirty, and a schema-6 client that never held the setting legitimately
+// pushes exameTemas as an EMPTY array — a plain pull of that snapshot would clear
+// the migrated row with no way back. See PLANO_V14_PENDING_PUSH_KEY for the
+// mechanism.
+export const EXAME_V24_PENDING_PUSH_KEY = 'exame-v24-pending-push'
+
+/**
+ * Convert the retired 'settings-exame-particular-point' setting into the FIXED-id
+ * exameTemas row, idempotent for the same two call sites as ensurePlanoDeVidaState:
+ * the version(24) upgrade and the post-sync reconciliation. The setting value was
+ * itself synced, so both devices hold the same text and insert the identical row —
+ * the no-tombstone union merge converges instead of duplicating.
+ *
+ * The row is stamped with the Unix EPOCH, not the migration moment: updatedAt is
+ * exactly what the LWW merge ranks on, and the two devices upgrade days apart — a
+ * wall-clock stamp would let the later device's pristine row silently revert
+ * pontos/guidance/conclusion edited on the earlier one (same reasoning as the v5
+ * backfill: a never-touched row must always LOSE to a real edit).
+ */
+export async function ensureExameTemaMigrated(tx: TableSource): Promise<void> {
+  const temasTable = tx.table('exameTemas')
+  if (await temasTable.get('exame-tema-migrado')) return
+
+  let raw: string | null = null
+  try {
+    raw = localStorage.getItem('settings-exame-particular-point')
+  } catch {
+    // localStorage unavailable — nothing to migrate.
+  }
+  if (!raw) return
+  try {
+    const p = JSON.parse(raw) as { text?: string; startDate?: string }
+    if (p && typeof p.text === 'string' && p.text.trim()) {
+      const epoch = new Date(0).toISOString()
+      const tema: ExameTema = {
+        id: 'exame-tema-migrado',
+        title: p.text.trim(),
+        pontos: [],
+        guidance: '',
+        startDate:
+          typeof p.startDate === 'string' && p.startDate
+            ? p.startDate
+            : new Date().toISOString().slice(0, 10),
+        endedAt: null,
+        createdAt: epoch,
+        updatedAt: epoch,
+      }
+      await temasTable.add(tema)
+    }
+  } catch {
+    // Malformed setting — nothing to migrate.
+  }
+}
+
 export class PlanOfLifeDB extends Dexie {
   categories!: EntityTable<Category, 'id'>
   practices!: EntityTable<Practice, 'id'>
@@ -735,6 +794,7 @@ export class PlanOfLifeDB extends Dexie {
   meditationDays!: EntityTable<MeditationDay, 'id'>
   readingPositions!: EntityTable<ReadingPosition, 'id'>
   prayers!: EntityTable<Prayer, 'id'>
+  exameTemas!: EntityTable<ExameTema, 'id'>
 
   constructor() {
     super('PlanOfLifeDB')
@@ -997,6 +1057,33 @@ export class PlanOfLifeDB extends Dexie {
       await ensureDefaultPrayerContent(tx)
       try {
         localStorage.setItem(PRAYERS_V23_PENDING_PUSH_KEY, 'true')
+      } catch {
+        // localStorage unavailable — see the v14 note above.
+      }
+    })
+
+    // The exame-particular tema (v24): the single free-text point — until now a
+    // synced SETTING — becomes a row in a new synced table, so a tema can carry
+    // its pontos concretos and the guidance received, and concluded temas remain
+    // as history (see src/types — "Exame particular"). The setting key is retired
+    // from SYNCED_SETTING_KEYS but deliberately NOT scrubbed from localStorage —
+    // the reconciliation below must be able to re-read it, and unknown keys are
+    // ignored on both collect and apply anyway (the same fate as
+    // 'settings-examen-proposito-target'). An insert, but unlike the v22 prayers
+    // it DOES need the reconciliation flag: the prayers can be re-created from the
+    // bundle by any client, while this row's only source is the localStorage of
+    // the devices that held the setting — and the migration runs before any dirty
+    // handler exists, so without the flag the row would sit local-only until an
+    // organic edit, and a fresh schema-6 install pushing exameTemas PRESENT-as-[]
+    // could wipe it for good (version(24) never re-runs). The flag makes
+    // SyncProvider re-run the idempotent body through the live db and push; it's
+    // cleared only after a successful push (EXAME_V24_PENDING_PUSH_KEY). The
+    // temas sync, so the sync schema bumps to 6 — see src/sync/types.ts and
+    // scripts/sync-core.mjs.
+    this.version(24).stores({ exameTemas: 'id' }).upgrade(async (tx) => {
+      await ensureExameTemaMigrated(tx)
+      try {
+        localStorage.setItem(EXAME_V24_PENDING_PUSH_KEY, 'true')
       } catch {
         // localStorage unavailable — see the v14 note above.
       }

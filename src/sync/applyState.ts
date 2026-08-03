@@ -23,18 +23,20 @@ const ALL_TABLES = [
   db.meditationDays,
   db.readingPositions,
   db.prayers,
+  db.exameTemas,
 ]
 
 /** Tables that are NEVER seeded — non-empty here means real user data exists. */
 export async function hasUserData(): Promise<boolean> {
-  const [records, examen, missed, props, outreach] = await Promise.all([
+  const [records, examen, missed, props, outreach, temas] = await Promise.all([
     db.dailyRecords.count(),
     db.examenEntries.count(),
     db.missedReasons.count(),
     db.propositos.count(),
     db.careerOutreach.count(),
+    db.exameTemas.count(),
   ])
-  return records + examen + missed + props + outreach > 0
+  return records + examen + missed + props + outreach + temas > 0
 }
 
 /** Build a SyncState from the current local DB + synced settings. */
@@ -57,6 +59,7 @@ export async function snapshotLocal(): Promise<SyncState> {
     meditationDays,
     readingPositions,
     prayers,
+    exameTemas,
   ] = await Promise.all([
     db.categories.toArray(),
     db.practices.toArray(),
@@ -75,6 +78,7 @@ export async function snapshotLocal(): Promise<SyncState> {
     db.meditationDays.toArray(),
     db.readingPositions.toArray(),
     db.prayers.toArray(),
+    db.exameTemas.toArray(),
   ])
   return {
     schema: SYNC_SCHEMA,
@@ -96,6 +100,7 @@ export async function snapshotLocal(): Promise<SyncState> {
       meditationDays,
       readingPositions,
       prayers,
+      exameTemas,
     },
     settings: collectSettings(),
   }
@@ -146,6 +151,7 @@ async function clearAndBulkAdd(state: SyncState): Promise<boolean> {
     replace(db.meditationDays, d.meditationDays),
     replace(db.readingPositions, d.readingPositions),
     replace(db.prayers, d.prayers),
+    replace(db.exameTemas, d.exameTemas),
   ])
   return preserved
 }

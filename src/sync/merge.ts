@@ -120,6 +120,12 @@ export function mergeStates(
       // favorites, reorders and edits are ordinary updatedAt-recency wins. `?? []`
       // tolerates a schema-≤4 snapshot (preserve ours).
       prayers: mergeById(base.data.prayers ?? [], ours.data.prayers ?? [], newerUpdatedAt),
+      // Exame particular: edits, conclusions and guidance notes all bump
+      // updatedAt, so recency wins per tema; the v24-migrated row carries the
+      // same FIXED id on both devices, so the union collapses the two
+      // independent migrations into one. `?? []` tolerates a schema-≤5
+      // snapshot (preserve ours).
+      exameTemas: mergeById(base.data.exameTemas ?? [], ours.data.exameTemas ?? [], newerUpdatedAt),
     },
     settings,
   }

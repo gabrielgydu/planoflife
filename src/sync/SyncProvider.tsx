@@ -49,11 +49,13 @@ import {
   ensureLiturgiaRemoved,
   ensureV20PracticeMoves,
   ensureDefaultPrayerContent,
+  ensureExameTemaMigrated,
   PLANO_V14_PENDING_PUSH_KEY,
   COSTUMES_V15_PENDING_PUSH_KEY,
   LITURGIA_V18_PENDING_PUSH_KEY,
   MOVES_V20_PENDING_PUSH_KEY,
   PRAYERS_V23_PENDING_PUSH_KEY,
+  EXAME_V24_PENDING_PUSH_KEY,
 } from '../db'
 import {
   onLocalSettingChanged,
@@ -280,6 +282,7 @@ export function SyncProvider({ children }: { children: ReactNode }) {
             localStorage.removeItem(LITURGIA_V18_PENDING_PUSH_KEY)
             localStorage.removeItem(MOVES_V20_PENDING_PUSH_KEY)
             localStorage.removeItem(PRAYERS_V23_PENDING_PUSH_KEY)
+            localStorage.removeItem(EXAME_V24_PENDING_PUSH_KEY)
           } catch {
             /* ignore */
           }
@@ -365,6 +368,10 @@ export function SyncProvider({ children }: { children: ReactNode }) {
       }
       if (localStorage.getItem(PRAYERS_V23_PENDING_PUSH_KEY) === 'true') {
         await db.transaction('rw', db.prayers, () => ensureDefaultPrayerContent(db))
+        onDirty()
+      }
+      if (localStorage.getItem(EXAME_V24_PENDING_PUSH_KEY) === 'true') {
+        await db.transaction('rw', db.exameTemas, () => ensureExameTemaMigrated(db))
         onDirty()
       }
     } catch (e) {

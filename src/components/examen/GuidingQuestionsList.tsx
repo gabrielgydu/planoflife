@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useNavigate } from 'react-router'
-import { ChevronLeft, Plus, GripVertical, Pencil, Archive, HelpCircle } from 'lucide-react'
+import { ChevronLeft, Plus, GripVertical, Pencil, Archive, HelpCircle, Swords } from 'lucide-react'
 import { useGuidingQuestions } from '../../hooks/useGuidingQuestions'
+import { useExameTema } from '../../hooks/useExameTema'
 import { SortableList } from '../shared/SortableList'
 import { Spinner } from '../shared/Spinner'
 import { EmptyState } from '../shared/EmptyState'
@@ -20,6 +21,11 @@ export function GuidingQuestionsList() {
     deleteQuestion,
     reorderQuestions,
   } = useGuidingQuestions()
+
+  // The active exame-particular tema, listed above the questions: the night examen
+  // is where the day's fight on those pontos gets looked at (and, if it went badly,
+  // written down as an ordinary examen entry).
+  const { activeTema } = useExameTema()
 
   const [showForm, setShowForm] = useState(false)
   const [editingQuestion, setEditingQuestion] = useState<GuidingQuestion | null>(null)
@@ -85,6 +91,35 @@ export function GuidingQuestionsList() {
           </button>
         </div>
       </header>
+
+      {activeTema && (
+        <section className="mx-auto w-full max-w-2xl px-4 py-4 border-b border-border/30 dark:border-border-dark/30">
+          <div className="flex items-start gap-3">
+            <Swords className="w-4 h-4 mt-0.5 text-primary dark:text-primary-light shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-heading font-medium text-text-muted dark:text-text-muted-dark uppercase tracking-wide">
+                Exame particular
+              </p>
+              <p className="mt-1 text-sm font-medium text-text-primary dark:text-text-primary-dark">
+                {activeTema.title}
+              </p>
+              {activeTema.pontos.length > 0 && (
+                <ul className="mt-2 space-y-1">
+                  {activeTema.pontos.map((ponto, i) => (
+                    <li
+                      key={i}
+                      className="flex items-start gap-2 text-sm text-text-secondary dark:text-text-secondary-dark"
+                    >
+                      <span className="mt-[7px] w-1 h-1 rounded-full bg-primary/60 dark:bg-primary-light/60 shrink-0" />
+                      {ponto}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       {questions.length === 0 ? (
         <div className="mx-auto w-full max-w-2xl">

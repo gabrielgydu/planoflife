@@ -102,6 +102,27 @@ export interface Proposito {
   createdAt: string
 }
 
+// --- Exame particular -----------------------------------------------------------
+//
+// One tema of the particular examen: a small concrete front of interior struggle
+// (e.g. "Tratar mais o Anjo da Guarda"), lived for a few weeks through a handful
+// of pontos concretos, then concluded and replaced by the next tema. At most one
+// row is active (endedAt === null); concluded temas are kept as history — what the
+// fight was, when, and what was said about it. `guidance` accumulates advice
+// received about this tema (spiritual direction, confession). Synced (schema 6),
+// merged last-write-wins on updatedAt. The day's completion is NOT here: it is the
+// "Exame particular" practice's own dailyRecord (see src/data/exame.ts).
+export interface ExameTema {
+  id: string
+  title: string
+  pontos: string[] // the concrete pontos de luta, shown as a plain list
+  guidance: string // advice received while living this tema; '' when none
+  startDate: string // YYYY-MM-DD
+  endedAt: string | null // YYYY-MM-DD when concluded; null = the active tema
+  createdAt: string
+  updatedAt: string
+}
+
 // --- Career section -----------------------------------------------------------
 //
 // These tables exist on every install but stay empty for everyone except devices
