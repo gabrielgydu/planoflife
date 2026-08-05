@@ -1,5 +1,5 @@
 import { useState, useEffect, useLayoutEffect, useCallback, useRef, useMemo } from 'react'
-import { motion, AnimatePresence, type PanInfo } from 'motion/react'
+import { motion, AnimatePresence } from 'motion/react'
 import { X, Check, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
 import { Spinner } from '../shared/Spinner'
 import { NtBookPicker } from './NtBookPicker'
@@ -8,8 +8,6 @@ import { NT_READING_ID } from '../../data/novoTestamento'
 import { NT_BOOKS, NT_FIRST_BOOK, getNtBook, nextNtBook, prevNtBook } from '../../data/nt/books'
 import { loadNtBook, chapterNumbers, clampToBook, type NtBookText } from '../../data/nt'
 
-const SWIPE_THRESHOLD = 60
-const VELOCITY_THRESHOLD = 500
 // How long the anchor must hold still before the bookmark is written. Every write
 // marks the sync state dirty and schedules an encrypted push, so this is
 // deliberately longer than a flick.
@@ -54,7 +52,8 @@ interface NovoTestamentoViewProps {
 /**
  * Full-screen reader for "Leitura do Novo Testamento": the whole New Testament in
  * Portuguese (Pe. Matos Soares, 1956) and the Clementine Vulgate, one book per
- * continuous scroll, swipe to change book.
+ * continuous scroll. Books change through the footer arrows, the picker or the
+ * arrow keys — never by swiping, so a sideways drag while reading does nothing.
  *
  * The point of the thing is resuming: the verse at the top of the viewport is saved
  * (debounced) to db.readingPositions, which syncs, so five minutes on the phone
@@ -277,12 +276,6 @@ export function NovoTestamentoView({
     if (nextBook) goToBook(nextBook.key, 1, 1)
   }, [nextBook, goToBook])
 
-  const handleDragEnd = (_: unknown, info: PanInfo) => {
-    const { offset, velocity } = info
-    if (offset.x < -SWIPE_THRESHOLD || velocity.x < -VELOCITY_THRESHOLD) goNext()
-    else if (offset.x > SWIPE_THRESHOLD || velocity.x > VELOCITY_THRESHOLD) goPrev()
-  }
-
   const handlePick = useCallback(
     (pickedBook: string, pickedChapter: number) => {
       setPickerOpen(false)
@@ -381,15 +374,9 @@ export function NovoTestamentoView({
 
       {/* Text */}
       <div className="flex-1 overflow-hidden relative">
-        <motion.div
-          ref={scrollRef}
-          drag="x"
-          dragDirectionLock
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.15}
-          onDragEnd={handleDragEnd}
-          className="absolute inset-0 overflow-y-auto touch-pan-y"
-        >
+        {/* No horizontal drag here: a sideways swipe must do nothing. Books change
+            only through the footer arrows, the picker or the arrow keys. */}
+        <div ref={scrollRef} className="absolute inset-0 overflow-y-auto">
           {!book ? (
             <Spinner className="h-full" />
           ) : (
@@ -458,7 +445,7 @@ export function NovoTestamentoView({
               })}
             </motion.div>
           )}
-        </motion.div>
+        </div>
 
         {/* Language mode */}
         <div className="absolute bottom-4 right-4 flex rounded-full overflow-hidden shadow-lg bg-surface-secondary dark:bg-surface-secondary-dark">
