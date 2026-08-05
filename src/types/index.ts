@@ -245,16 +245,20 @@ export interface MeditationDay {
 // --- Reading position ---------------------------------------------------------
 //
 // Where a continuous read-through stopped, so it resumes there on any device.
-// One row per reading track, keyed by a FIXED id (currently only 'nt', the New
-// Testament — see NT_READING_ID in src/data/novoTestamento.ts); the fixed id is
-// what makes both devices converge on one row instead of the no-tombstone union
-// merge resurrecting two (same reasoning as the fixed-id practice specs).
+// Two kinds of row per reading track, both keyed by a FIXED id (currently only the
+// New Testament — see NT_READING_ID in src/data/novoTestamento.ts): the track
+// pointer 'nt' (where reading stopped, whichever book) and one bookmark per book,
+// 'nt:<book>' (where THAT book was left, so stepping away to look something up
+// elsewhere and coming back resumes in place). The fixed ids are what make both
+// devices converge on the same rows instead of the no-tombstone union merge
+// resurrecting two of each (same reasoning as the fixed-id practice specs).
 //
 // The anchor is a VERSE, never a pixel offset: font size is a synced preference
 // and screens differ, so a scroll offset would land somewhere else on the other
-// device. Synced (schema 4) and merged last-write-wins on updatedAt.
+// device. Synced (schema 4) and merged last-write-wins on updatedAt — per row, which
+// is why the per-book bookmarks are rows and not a map inside the pointer.
 export interface ReadingPosition {
-  id: string // 'nt'
+  id: string // 'nt' (track pointer) or 'nt:<book>' (that book's bookmark)
   book: string // NT book key, e.g. 'Matt' (see src/data/nt/books.ts)
   chapter: number
   verse: number // the verse that was at the top of the viewport

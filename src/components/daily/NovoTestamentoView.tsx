@@ -58,6 +58,11 @@ interface NovoTestamentoViewProps {
  * The point of the thing is resuming: the verse at the top of the viewport is saved
  * (debounced) to db.readingPositions, which syncs, so five minutes on the phone
  * this morning and five on the laptop tomorrow are one continuous read-through.
+ * Every book keeps its OWN bookmark besides the shared one, so stepping out of São
+ * Marcos to check something in São Lucas and coming back resumes in Marcos where you
+ * stopped — the footer arrows, the arrow keys and the picker's "continuar" badge all
+ * land on the remembered verse; a chapter tapped in the picker's grid is an explicit
+ * jump and starts at its first verse.
  * Completion is MANUAL (header checkmark) — opening the reader to look something up
  * must not claim the day's reading was done.
  */
@@ -67,7 +72,7 @@ export function NovoTestamentoView({
   onTogglePractice,
   onClose,
 }: NovoTestamentoViewProps) {
-  const { position, loading: positionLoading, save } = useReadingPosition(NT_READING_ID)
+  const { position, byBook, loading: positionLoading, save } = useReadingPosition(NT_READING_ID)
 
   const [bookKey, setBookKey] = useState<string | null>(null)
   const [book, setBook] = useState<NtBookText | null>(null)
@@ -85,6 +90,9 @@ export function NovoTestamentoView({
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   // Latest anchor, for the flush-on-close path (state would be stale in cleanup).
   const latestRef = useRef<{ book: string; chapter: number; verse: number } | null>(null)
+  // Where each book was left DURING this session — what resumeIn trusts ahead of the
+  // live query, which only catches up a write or two later.
+  const sessionMarksRef = useRef(new Map<string, { chapter: number; verse: number }>())
 
   // --- open at the saved position -------------------------------------------
   // Runs ONCE, after the position query resolves. Deliberately not reactive to
@@ -98,6 +106,12 @@ export function NovoTestamentoView({
       ? { chapter: position.chapter, verse: position.verse }
       : { chapter: 1, verse: 1 }
     restoreRef.current = startAt
+    // Seed the flush anchor before a single verse has been observed, so changing book
+    // during the first second — before the debounced save has ever run — still leaves
+    // this book's bookmark behind. Also what backfills the per-book row for a
+    // position saved before per-book bookmarks existed.
+    latestRef.current = { book: startBook, chapter: startAt.chapter, verse: startAt.verse }
+    sessionMarksRef.current.set(startBook, startAt)
     setCurrent(startAt)
     setBookKey(startBook)
   }, [positionLoading, position])
@@ -111,9 +125,11 @@ export function NovoTestamentoView({
       if (cancelled) return
       if (!loaded) {
         // Unknown/removed chunk — fall back to the start of the NT rather than
-        // leaving the reader stuck on a spinner.
+        // leaving the reader stuck on a spinner. The anchor follows, so the flush on
+        // close saves where the reader actually IS and not the unreadable book.
         setBookKey(NT_FIRST_BOOK.key)
         restoreRef.current = { chapter: 1, verse: 1 }
+        latestRef.current = { book: NT_FIRST_BOOK.key, chapter: 1, verse: 1 }
         return
       }
       restoreRef.current = clampToBook(loaded, restoreRef.current.chapter, restoreRef.current.verse)
@@ -224,8 +240,12 @@ export function NovoTestamentoView({
 
   // --- persist the anchor (debounced) -----------------------------------------
   useEffect(() => {
-    if (!bookKey || !book) return
+    // `book.key !== bookKey` is the in-between commit of a book change: the new key is
+    // set but the old text is still mounted, and a late IntersectionObserver report
+    // from it would otherwise be filed under the book being opened.
+    if (!bookKey || !book || book.key !== bookKey) return
     latestRef.current = { book: bookKey, chapter: current.chapter, verse: current.verse }
+    sessionMarksRef.current.set(bookKey, { chapter: current.chapter, verse: current.verse })
     // Keep the restore anchor on where you actually are, so switching language
     // mode re-lands on the verse being read rather than wherever the book opened.
     restoreRef.current = { chapter: current.chapter, verse: current.verse }
@@ -243,50 +263,84 @@ export function NovoTestamentoView({
     }
   }, [bookKey, book, current, save])
 
-  // Closing the reader must not lose the last few seconds of reading: flush the
-  // pending anchor immediately instead of waiting out the debounce.
-  useEffect(() => {
-    return () => {
-      if (saveTimerRef.current) clearTimeout(saveTimerRef.current)
-      const last = latestRef.current
-      if (last) void save(last.book, last.chapter, last.verse)
+  // Write the pending anchor NOW instead of waiting out the debounce. Two callers,
+  // for the same reason: closing the reader must not lose the last few seconds of
+  // reading, and leaving a book must not lose its bookmark — the pending write names
+  // the book being left, and switching clears its timer before it ever fires.
+  const flushPending = useCallback(() => {
+    if (saveTimerRef.current) {
+      clearTimeout(saveTimerRef.current)
+      saveTimerRef.current = null
     }
+    const last = latestRef.current
+    if (last) void save(last.book, last.chapter, last.verse)
   }, [save])
 
+  useEffect(() => {
+    return () => flushPending()
+  }, [flushPending])
+
   // --- navigation -------------------------------------------------------------
+  /** Where this book was left, or its very beginning if it was never opened. */
+  const resumeIn = useCallback(
+    (key: string) => {
+      // This session's own anchors come first: byBook is a live query, so the book you
+      // left three seconds ago may still be reported at the verse BEFORE that, and
+      // stepping out and straight back would quietly rewind you. What this reader saw
+      // is never staler than what the database has echoed back.
+      const bookmark = sessionMarksRef.current.get(key) ?? byBook.get(key)
+      return bookmark
+        ? { chapter: bookmark.chapter, verse: bookmark.verse }
+        : { chapter: 1, verse: 1 }
+    },
+    [byBook]
+  )
+
   const goToBook = useCallback(
-    (key: string, chapter: number, dir: number) => {
-      restoreRef.current = { chapter, verse: 1 }
+    (key: string, chapter: number, verse: number, dir: number) => {
+      // Order matters: flush the book being LEFT (its bookmark is what the pending
+      // write names), then make the destination the pending anchor — closing the
+      // reader before the new text has loaded must still leave you there.
+      flushPending()
+      latestRef.current = { book: key, chapter, verse }
+      sessionMarksRef.current.set(key, { chapter, verse })
+      restoreRef.current = { chapter, verse }
       setDirection(dir)
-      setCurrent({ chapter, verse: 1 })
+      setCurrent({ chapter, verse })
       setBookKey(key)
     },
-    []
+    [flushPending]
   )
 
   const meta = bookKey ? getNtBook(bookKey) : undefined
   const prevBook = bookKey ? prevNtBook(bookKey) : undefined
   const nextBook = bookKey ? nextNtBook(bookKey) : undefined
 
+  // Stepping between books resumes where each was left — a book you have never
+  // opened resumes at 1,1, which is what the arrows always did.
   const goPrev = useCallback(() => {
-    if (prevBook) goToBook(prevBook.key, 1, -1)
-  }, [prevBook, goToBook])
+    if (!prevBook) return
+    const at = resumeIn(prevBook.key)
+    goToBook(prevBook.key, at.chapter, at.verse, -1)
+  }, [prevBook, resumeIn, goToBook])
 
   const goNext = useCallback(() => {
-    if (nextBook) goToBook(nextBook.key, 1, 1)
-  }, [nextBook, goToBook])
+    if (!nextBook) return
+    const at = resumeIn(nextBook.key)
+    goToBook(nextBook.key, at.chapter, at.verse, 1)
+  }, [nextBook, resumeIn, goToBook])
 
   const handlePick = useCallback(
-    (pickedBook: string, pickedChapter: number) => {
+    (pickedBook: string, pickedChapter: number, pickedVerse: number) => {
       setPickerOpen(false)
       if (pickedBook === bookKey && book) {
-        restoreRef.current = { chapter: pickedChapter, verse: 1 }
-        setCurrent({ chapter: pickedChapter, verse: 1 })
-        scrollToVerse(pickedChapter, 1)
+        restoreRef.current = { chapter: pickedChapter, verse: pickedVerse }
+        setCurrent({ chapter: pickedChapter, verse: pickedVerse })
+        scrollToVerse(pickedChapter, pickedVerse)
         return
       }
       const dir = NT_BOOKS.findIndex((b) => b.key === pickedBook) >= NT_BOOKS.findIndex((b) => b.key === bookKey) ? 1 : -1
-      goToBook(pickedBook, pickedChapter, dir)
+      goToBook(pickedBook, pickedChapter, pickedVerse, dir)
     },
     [bookKey, book, goToBook, scrollToVerse]
   )
@@ -502,6 +556,7 @@ export function NovoTestamentoView({
           <NtBookPicker
             currentBook={bookKey}
             currentChapter={current.chapter}
+            bookmarks={byBook}
             onSelect={handlePick}
             onClose={() => setPickerOpen(false)}
           />

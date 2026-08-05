@@ -12,6 +12,7 @@ export const NOVO_TESTAMENTO_NAME = 'Leitura do Novo Testamento'
 // Fixed id of the db.readingPositions row for the NT read-through. A FIXED id (not
 // generateId()) so both devices write the same row: the push-conflict merge unions
 // by id with no tombstones, so two random ids would become two competing bookmarks.
+// Each book also gets its own bookmark row, `nt:<book>` — see useReadingPosition.
 export const NT_READING_ID = 'nt'
 
 const normalizeName = (s: string) =>
