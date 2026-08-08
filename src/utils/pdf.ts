@@ -1,14 +1,7 @@
 import { jsPDF } from 'jspdf'
 import { db } from '../db'
-import {
-  startOfMonth,
-  endOfMonth,
-  eachDayOfInterval,
-  format,
-  getDaysInMonth,
-} from 'date-fns'
-import { ptBR } from 'date-fns/locale'
-import { formatDate } from './dates'
+import { startOfMonth, endOfMonth, eachDayOfInterval, getDaysInMonth } from 'date-fns'
+import { formatDate, formatMonthLong } from './dates'
 import { isCareer } from './domain'
 import { isScheduledOn, isWeekly, isOnMonthlySchedule } from './schedule'
 import { isPracticeVisibleOn } from '../data/novena'
@@ -78,7 +71,7 @@ export async function generateMonthPdf(
   const colWidth = (pageWidth - margin * 2 - 80) / daysInMonth // 80mm for practice names
 
   // Title
-  const monthLabel = format(monthDate, "MMMM 'de' yyyy", { locale: ptBR })
+  const monthLabel = formatMonthLong(monthDate)
   doc.setFontSize(16)
   doc.setFont('helvetica', 'bold')
   doc.text(`Plano de Vida — ${monthLabel}`, margin, margin + 8)

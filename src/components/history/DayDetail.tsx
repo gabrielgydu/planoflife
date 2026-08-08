@@ -58,7 +58,7 @@ export function DayDetail() {
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <h1 className="flex-1 text-center font-heading text-base font-medium text-text-primary dark:text-text-primary-dark capitalize">
+          <h1 className="flex-1 text-center font-heading text-base font-medium text-text-primary dark:text-text-primary-dark">
             {dateLabel}
           </h1>
           <div className="w-10" />

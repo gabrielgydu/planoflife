@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { ChevronLeft, FileText, Lightbulb } from 'lucide-react'
-import { format, subMonths } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
+import { subMonths } from 'date-fns'
 import { generateMonthPdf } from '../../utils/pdf'
+import { formatMonthLong } from '../../utils/dates'
 import { useNovenaStart } from '../../hooks/useSettings'
 
 export function PdfExport() {
@@ -23,7 +23,7 @@ export function PdfExport() {
     monthOptions.push({
       year: date.getFullYear(),
       month: date.getMonth(),
-      label: format(date, "MMMM 'de' yyyy", { locale: ptBR }),
+      label: formatMonthLong(date),
     })
   }
 
@@ -86,7 +86,7 @@ export function PdfExport() {
                     setSelectedYear(year)
                     setSelectedMonth(month)
                   }}
-                  className="w-full px-4 py-3 bg-surface-card dark:bg-surface-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark capitalize focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full px-4 py-3 bg-surface-card dark:bg-surface-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
                   {monthOptions.map((opt) => (
                     <option key={`${opt.year}-${opt.month}`} value={`${opt.year}-${opt.month}`}>

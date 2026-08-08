@@ -5,8 +5,24 @@ export function formatDate(date: Date): string {
   return format(date, 'yyyy-MM-dd')
 }
 
+/**
+ * Uppercase the first character only.
+ *
+ * Portuguese weekdays and months are lowercase ("sábado, 8 de agosto"), and a
+ * heading wants a capital. CSS `capitalize` can't do it: it hits every word and
+ * renders "Sábado, 8 De Agosto".
+ */
+function capitalizeFirst(str: string): string {
+  return str.charAt(0).toLocaleUpperCase('pt-BR') + str.slice(1)
+}
+
 export function formatDateLong(date: Date): string {
-  return format(date, "EEEE, d 'de' MMMM", { locale: ptBR })
+  return capitalizeFirst(format(date, "EEEE, d 'de' MMMM", { locale: ptBR }))
+}
+
+/** "Agosto de 2026" — the month headings of the calendars, the PDF and its picker. */
+export function formatMonthLong(date: Date): string {
+  return capitalizeFirst(format(date, "MMMM 'de' yyyy", { locale: ptBR }))
 }
 
 export function formatDateShort(date: Date): string {

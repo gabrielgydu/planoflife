@@ -38,7 +38,7 @@ export function Header({ date, onPrevDay, onNextDay, onToday, title, rightAction
   // narrow phones drop a step; 380px and up keep full size. `truncate` remains the
   // backstop for the user's largest UI-font setting.
   const dateClass =
-    'font-heading text-sm min-[380px]:text-base font-medium text-text-primary dark:text-text-primary-dark capitalize truncate'
+    'font-heading text-sm min-[380px]:text-base font-medium text-text-primary dark:text-text-primary-dark truncate'
 
   return (
     <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">

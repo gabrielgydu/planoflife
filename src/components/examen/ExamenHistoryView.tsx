@@ -16,8 +16,7 @@ import {
   addMonths,
   subMonths,
 } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
-import { formatDate } from '../../utils/dates'
+import { formatDate, formatMonthLong } from '../../utils/dates'
 
 const WEEKDAYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
 
@@ -28,7 +27,7 @@ export function ExamenHistoryView() {
   const handlePrevMonth = () => setCurrentMonth((d) => subMonths(d, 1))
   const handleNextMonth = () => setCurrentMonth((d) => addMonths(d, 1))
 
-  const monthLabel = format(currentMonth, "MMMM 'de' yyyy", { locale: ptBR })
+  const monthLabel = formatMonthLong(currentMonth)
 
   const monthStart = startOfMonth(currentMonth)
   const monthEnd = endOfMonth(currentMonth)
@@ -81,7 +80,7 @@ export function ExamenHistoryView() {
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            <h1 className="font-heading text-base font-semibold text-text-primary dark:text-text-primary-dark capitalize min-w-[160px] text-center">
+            <h1 className="font-heading text-base font-semibold text-text-primary dark:text-text-primary-dark min-w-[160px] text-center">
               {monthLabel}
             </h1>
 

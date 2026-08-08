@@ -7,8 +7,8 @@ import { usePractices } from '../../hooks/usePractices'
 import { useHistoryDomain } from '../../hooks/useHistoryDomain'
 import { isLifestyle, isCareer } from '../../utils/domain'
 import type { PracticeDomain } from '../../types'
-import { format, addMonths, subMonths, startOfMonth } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
+import { addMonths, subMonths, startOfMonth } from 'date-fns'
+import { formatMonthLong } from '../../utils/dates'
 
 export function HistoryView() {
   const [currentMonth, setCurrentMonth] = useState(() => startOfMonth(new Date()))
@@ -29,7 +29,7 @@ export function HistoryView() {
   const handlePrevMonth = () => setCurrentMonth((d) => subMonths(d, 1))
   const handleNextMonth = () => setCurrentMonth((d) => addMonths(d, 1))
 
-  const monthLabel = format(currentMonth, "MMMM 'de' yyyy", { locale: ptBR })
+  const monthLabel = formatMonthLong(currentMonth)
 
   return (
     <div className="flex flex-col min-h-full">
@@ -43,7 +43,7 @@ export function HistoryView() {
             <ChevronLeft className="w-5 h-5" />
           </button>
 
-          <h1 className="font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark capitalize">
+          <h1 className="font-heading text-lg font-semibold text-text-primary dark:text-text-primary-dark">
             {monthLabel}
           </h1>
 
