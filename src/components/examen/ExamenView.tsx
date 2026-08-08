@@ -30,6 +30,7 @@ export function ExamenView() {
 
   const handlePrevDay = () => setCurrentDate((d) => subDay(d, 1))
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
+  const handleToday = () => setCurrentDate(getToday())
 
   const handleAddEntry = (category: ExamenCategory) => {
     setFormCategory(category)
@@ -67,8 +68,9 @@ export function ExamenView() {
         date={currentDate}
         onPrevDay={handlePrevDay}
         onNextDay={handleNextDay}
+        onToday={handleToday}
         rightAction={
-          <div className="flex items-center gap-1 -mr-2">
+          <div className="flex items-center gap-1">
             <Link
               to="/examen/history"
               className="p-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"

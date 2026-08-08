@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useNavigate } from 'react-router'
-import { ChevronRight, RotateCcw, ClipboardList, Eye, EyeOff, CheckCircle2 } from 'lucide-react'
+import { RotateCcw, ClipboardList, Eye, EyeOff, CheckCircle2 } from 'lucide-react'
 import { Header } from '../layout/Header'
 import { CategorySection } from './CategorySection'
 import { PracticeReader } from './PracticeReader'
@@ -40,7 +40,15 @@ import { isMeditacaoPractice, getMeditacaoSlot } from '../../data/meditation'
 import { isRosaryContemplationPractice } from '../../data/rosary'
 import { isExameParticularPractice } from '../../data/exame'
 import { isAntiphonPractice } from '../../data/antiphon'
-import { formatDate, getToday, addDay, subDay } from '../../utils/dates'
+import {
+  formatDate,
+  formatDateShort,
+  getToday,
+  addDay,
+  subDay,
+  isToday,
+  relativeDayLabel,
+} from '../../utils/dates'
 import type { Practice, Category } from '../../types'
 
 export function DailyView() {
@@ -85,6 +93,21 @@ export function DailyView() {
     }
     return togglePractice(practiceId)
   }
+
+  // Auto-mark-on-view (PracticeReader on open/swipe, AntiphonView on open) is a
+  // convenience for the day you are actually living: it records a practice as
+  // done merely because its reader was on screen. On any other day that records
+  // something the user never did — and on a FUTURE day it is worse than noise,
+  // because a pre-checked practice is then hidden from that day's own list by
+  // hide-completed, so it silently disappears before it has been prayed. Same
+  // rule useMeditationDay already applies to its auto-draw. Deliberate taps
+  // (the ✓ in a row or a reader header) still work on any day.
+  const markViewed = useCallback(
+    (practiceId: string) => {
+      if (isToday(currentDate)) void markCompleted(practiceId)
+    },
+    [currentDate, markCompleted],
+  )
 
   const { step, advanceToMissedReasons, completeFlow } = useMorningFlow()
 
@@ -177,8 +200,12 @@ export function DailyView() {
   const openedIsSantaMissa = openedPractice ? isSantaMissaPractice(openedPractice) : false
   const openedIsNovoTestamento = openedPractice ? isNovoTestamentoPractice(openedPractice) : false
 
+  // Both directions, unbounded: a day ahead is as legitimate a target as a day
+  // behind. Saturday evening's vigil Mass is Sunday's liturgy and belongs on
+  // Sunday's record, so "tomorrow" has to be reachable and markable.
   const handlePrevDay = () => setCurrentDate((d) => subDay(d, 1))
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
+  const handleToday = () => setCurrentDate(getToday())
 
   const handleOpenPracticeDetail = (practice: Practice) => {
     setReaderPracticeId(practice.id)
@@ -201,25 +228,7 @@ export function DailyView() {
         date={currentDate}
         onPrevDay={handlePrevDay}
         onNextDay={handleNextDay}
-        rightAction={
-          hasAnyCompleted ? (
-            <button
-              onClick={() => setShowClearDialog(true)}
-              className="p-2 -mr-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
-              aria-label="Limpar tudo"
-            >
-              <RotateCcw className="w-5 h-5" />
-            </button>
-          ) : (
-            <button
-              onClick={handleNextDay}
-              className="p-2 -mr-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
-              aria-label="Próximo dia"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          )
-        }
+        onToday={handleToday}
       />
 
       <motion.div
@@ -237,15 +246,25 @@ export function DailyView() {
         {/* The midday particular examen and the rosary contemplation are now tracked
             practices (tap them in the list) — no more quick-access buttons here. */}
 
-        {/* Hide-completed toggle — only useful once something is done */}
+        {/* Hide-completed and clear-all — both only useful once something is done,
+            so they share one row. Clearing lives here rather than in the header:
+            up there it took over the forward-day chevron, so the control under
+            the thumb changed meaning the moment a practice was checked. */}
         {hasAnyCompleted && (
-          <div className="px-4 pb-1">
+          <div className="px-4 pb-1 flex items-center justify-between gap-3">
             <button
               onClick={() => setHideCompleted(!hideCompleted)}
               className="flex items-center gap-2 text-sm text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors"
             >
               {hideCompleted ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
               {hideCompleted ? 'Mostrar concluídas' : 'Ocultar concluídas'}
+            </button>
+            <button
+              onClick={() => setShowClearDialog(true)}
+              className="flex items-center gap-2 text-sm text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors"
+            >
+              <RotateCcw className="w-4 h-4" />
+              Limpar tudo
             </button>
           </div>
         )}
@@ -297,7 +316,9 @@ export function DailyView() {
       <ConfirmDialog
         isOpen={showClearDialog}
         title="Limpar tudo"
-        message="Deseja desmarcar todas as práticas de hoje?"
+        message={`Deseja desmarcar todas as práticas de ${
+          relativeDayLabel(currentDate)?.toLocaleLowerCase('pt-BR') ?? formatDateShort(currentDate)
+        }?`}
         confirmLabel="Limpar"
         onConfirm={handleClearAll}
         onCancel={() => setShowClearDialog(false)}
@@ -325,7 +346,7 @@ export function DailyView() {
             viewDate={currentDate}
             isCompleted={isCompletedEffective}
             onTogglePractice={toggleEffective}
-            onMarkViewed={markCompleted}
+            onMarkViewed={markViewed}
             onClose={() => setReaderPracticeId(null)}
           />
         ) : openedPractice && openedIsSantaMissa ? (
@@ -363,7 +384,7 @@ export function DailyView() {
               novenaStart={novenaStart}
               isCompleted={isCompletedEffective}
               onTogglePractice={toggleEffective}
-              onMarkViewed={markCompleted}
+              onMarkViewed={markViewed}
               onClose={() => setReaderPracticeId(null)}
             />
           )
