@@ -12,6 +12,19 @@ import { formatDate, getToday, parseDate, addDay, subDay } from '../../utils/dat
 import { EXAMEN_COLORS, EXAMEN_LABELS } from '../../utils/constants'
 import type { ExamenCategory, ExamenEntry } from '../../types'
 
+// The examen's three sibling pages. They used to be split across two
+// presentations — Histórico and Confissão as bare icons in the day header,
+// Perguntas as a labelled link at the foot of the page — which left the header
+// too crowded to show a long date: "quarta-feira, 30 de setembro" truncated on
+// a phone once the header also had to carry both day chevrons. One labelled row
+// above the content keeps all three a single tap away, gives the date the whole
+// header, and names what the two icons never did.
+const EXAMEN_LINKS = [
+  { to: '/examen/history', label: 'Histórico', icon: CalendarDays },
+  { to: '/examen/confession', label: 'Confissão', icon: BookOpen },
+  { to: '/examen/questions', label: 'Perguntas', icon: HelpCircle },
+]
+
 export function ExamenView() {
   const { date: dateParam } = useParams<{ date: string }>()
   const [currentDate, setCurrentDate] = useState(() =>
@@ -69,25 +82,20 @@ export function ExamenView() {
         onPrevDay={handlePrevDay}
         onNextDay={handleNextDay}
         onToday={handleToday}
-        rightAction={
-          <div className="flex items-center gap-1">
-            <Link
-              to="/examen/history"
-              className="p-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
-              aria-label="Histórico"
-            >
-              <CalendarDays className="w-5 h-5" />
-            </Link>
-            <Link
-              to="/examen/confession"
-              className="p-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
-              aria-label="Confissão"
-            >
-              <BookOpen className="w-5 h-5" />
-            </Link>
-          </div>
-        }
       />
+
+      <nav className="flex mx-auto w-full max-w-2xl border-b border-border dark:border-border-dark">
+        {EXAMEN_LINKS.map((link) => (
+          <Link
+            key={link.to}
+            to={link.to}
+            className="flex-1 flex items-center justify-center gap-2 py-3 text-xs text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark transition-colors"
+          >
+            <link.icon className="w-4 h-4 shrink-0" />
+            {link.label}
+          </Link>
+        ))}
+      </nav>
 
       <motion.div
         className="flex-1 p-4 space-y-8 mx-auto w-full max-w-2xl"
@@ -143,16 +151,6 @@ export function ExamenView() {
             )}
           </section>
         ))}
-
-        <div className="pt-4">
-          <Link
-            to="/examen/questions"
-            className="flex items-center justify-center gap-2 py-3 text-sm text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors"
-          >
-            <HelpCircle className="w-4 h-4" />
-            Perguntas orientadoras
-          </Link>
-        </div>
       </motion.div>
 
       <ExamenEntryForm

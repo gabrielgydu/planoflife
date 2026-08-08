@@ -22,14 +22,23 @@ interface HeaderProps {
 export function Header({ date, onPrevDay, onNextDay, onToday, title, rightAction }: HeaderProps) {
   const dateStr = formatDateLong(date)
   const relative = relativeDayLabel(date)
+  // The relative marker is set a size down: it is a secondary signal, and at the
+  // date's own size the longest days ("quarta-feira, 30 de setembro") plus a
+  // marker overflow the header on a narrow phone.
   const dateLabel = (
     <>
       {dateStr}
-      {relative && <span className="text-primary dark:text-primary-light"> ({relative})</span>}
+      {relative && (
+        <span className="ml-1.5 text-xs text-primary dark:text-primary-light">{relative}</span>
+      )}
     </>
   )
+  // Portuguese long dates are wide ("segunda-feira, 30 de novembro"). At 16px the
+  // longest of them plus a relative marker overflow a ≤375px header, so the very
+  // narrow phones drop a step; 380px and up keep full size. `truncate` remains the
+  // backstop for the user's largest UI-font setting.
   const dateClass =
-    'font-heading text-base font-medium text-text-primary dark:text-text-primary-dark capitalize truncate'
+    'font-heading text-sm min-[380px]:text-base font-medium text-text-primary dark:text-text-primary-dark capitalize truncate'
 
   return (
     <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
@@ -52,7 +61,7 @@ export function Header({ date, onPrevDay, onNextDay, onToday, title, rightAction
             // returning means tapping a chevron once per day travelled.
             <button
               onClick={onToday}
-              className="max-w-full rounded-md px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
+              className="max-w-full min-w-0 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
               aria-label="Voltar para hoje"
             >
               <h1 className={dateClass}>{dateLabel}</h1>
