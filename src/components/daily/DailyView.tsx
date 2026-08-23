@@ -10,6 +10,7 @@ import { AntiphonView } from './AntiphonView'
 import { LiturgiaView } from './LiturgiaView'
 import { NovoTestamentoView } from './NovoTestamentoView'
 import { RosaryContemplationView } from '../rosary/RosaryContemplationView'
+import { RosaryPrayerView } from '../rosary/RosaryPrayerView'
 import { ExameParticularView } from '../examen/ExameParticularView'
 import { YesterdayReviewModal } from './YesterdayReviewModal'
 import { MissedReasonsModal } from './MissedReasonsModal'
@@ -38,7 +39,7 @@ import { COSTUMES_CATEGORY_ID } from '../../data/costumes'
 import { isPracticeVisibleOn, novenaCatchUpSubtitle } from '../../data/novena'
 import { isScheduledOn, isWeekly, isOnMonthlySchedule } from '../../utils/schedule'
 import { isMeditacaoPractice, getMeditacaoSlot } from '../../data/meditation'
-import { isRosaryContemplationPractice } from '../../data/rosary'
+import { isRosaryContemplationPractice, isSantoRosarioPractice } from '../../data/rosary'
 import { isExameParticularPractice } from '../../data/exame'
 import { isAntiphonPractice } from '../../data/antiphon'
 import {
@@ -199,12 +200,14 @@ export function DailyView() {
       const categoryPractices = practicesByCategory.get(category.id) ?? []
       for (const practice of categoryPractices) {
         // Practices with a dedicated reader (either meditation slot, the rosary
-        // contemplation, the Marian antiphon, Santa Missa's liturgy, the New
-        // Testament read-through) have their own overlay (see below); keep them
-        // out of the text pager so swiping never lands on an empty placeholder.
+        // contemplation, the rosary praying engine, the Marian antiphon, Santa
+        // Missa's liturgy, the New Testament read-through) have their own overlay
+        // (see below); keep them out of the text pager so swiping never lands on
+        // an empty placeholder.
         if (
           isMeditacaoPractice(practice) ||
           isRosaryContemplationPractice(practice) ||
+          isSantoRosarioPractice(practice) ||
           isExameParticularPractice(practice) ||
           isAntiphonPractice(practice) ||
           isSantaMissaPractice(practice) ||
@@ -228,6 +231,7 @@ export function DailyView() {
   const openedIsRosaryContemplation = openedPractice
     ? isRosaryContemplationPractice(openedPractice)
     : false
+  const openedIsSantoRosario = openedPractice ? isSantoRosarioPractice(openedPractice) : false
   const openedIsExameParticular = openedPractice
     ? isExameParticularPractice(openedPractice)
     : false
@@ -404,6 +408,14 @@ export function DailyView() {
           />
         ) : openedPractice && openedIsRosaryContemplation ? (
           <RosaryContemplationView
+            practiceId={openedPractice.id}
+            viewDate={currentDate}
+            isCompleted={isCompletedEffective}
+            onTogglePractice={toggleEffective}
+            onClose={() => setReaderPracticeId(null)}
+          />
+        ) : openedPractice && openedIsSantoRosario ? (
+          <RosaryPrayerView
             practiceId={openedPractice.id}
             viewDate={currentDate}
             isCompleted={isCompletedEffective}

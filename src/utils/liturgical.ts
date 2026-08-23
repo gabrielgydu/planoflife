@@ -27,6 +27,21 @@ export function pentecostSunday(year: number): Date {
   return addDays(easterSunday(year), 49)
 }
 
+export type TriduumDay = 'quinta' | 'sexta' | 'sabado'
+
+/**
+ * Holy Thursday / Good Friday / Holy Saturday (Easter −3/−2/−1), or null. The
+ * rosary swaps the Glória for the graded "Christus factus est" on these days.
+ */
+export function holyTriduumDay(date: Date): TriduumDay | null {
+  const d = startOfDay(date).getTime()
+  const easter = easterSunday(date.getFullYear())
+  if (d === addDays(easter, -3).getTime()) return 'quinta'
+  if (d === addDays(easter, -2).getTime()) return 'sexta'
+  if (d === addDays(easter, -1).getTime()) return 'sabado'
+  return null
+}
+
 /** Eastertide for the Regina Coeli swap: Easter Sunday … Pentecost, inclusive. */
 export function isEastertide(date: Date): boolean {
   const d = startOfDay(date).getTime()

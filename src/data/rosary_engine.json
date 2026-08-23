@@ -1,0 +1,74 @@
+{
+  "source": "src/data/devocionario.json → prayer \"santo-rosario\" (opusdei.org pt-BR Livro de Orações)",
+  "generatedBy": "scripts/extract-rosary-engine.mjs",
+  "abertura": {
+    "pt": "**℣.** Pelo sinal † da Santa Cruz, livrai-nos Deus, † Nosso Senhor, dos nossos † inimigos. Em nome do Pai, e do Filho, † e do Espírito Santo. Amém.\n\nAto de Contrição\n\nGlória ao Pai...",
+    "la": "**℣.** Per signum Crucis de inimícis nostris líbera nos, Deus Noster. In Nómine Patris, et Fílii, et Spíritus Sancti. Amen.\n\nDominum meum Iesum Christum...\n\n**℣.** Dómine, labia mea apéries,\n\n**℟.** et os meum annuntiábit laudem tuam.\n\n**℣.** Deus, in adiutórium meum inténde,\n\n**℟.** Dómine, ad adiuvándum me festína.\n\nGloria Patri..."
+  },
+  "fatima": {
+    "pt": "Ó meu Jesus, perdoai-nos, livrai-nos do fogo do inferno. Levai as almas todas para o céu e socorrei principalmente as que mais precisarem.."
+  },
+  "avesFinais": {
+    "pt": [
+      "– Ave Maria, Filha de Deus Pai, cheia de graça, …",
+      "– Ave Maria, Mãe de Deus Filho, cheia de graça, …",
+      "– Ave Maria, Esposa de Deus Espírito Santo, cheia de graça, …"
+    ]
+  },
+  "ladainha": {
+    "pt": "**Ladainha a Nossa Senhora**\n\n**℣.** Senhor, tende piedade de nós.\n\n**℟.** Senhor, tende piedade de nós.\n\n**℣.** Jesus Cristo, tende piedade de nós.\n\n**℟.** Jesus Cristo, tende piedade de nós.\n\n**℣.** Senhor, tende piedade de nós.\n\n**℟.** Senhor, tende piedade de nós.\n\n**℣.** Jesus Cristo, ouvi-nos.\n\n**℟.** Jesus Cristo, ouvi-nos.\n\n**℣.** Jesus Cristo, atendei-nos.\n\n**℟.** Jesus Cristo, atendei-nos.\n\n**℣.** Deus Pai dos céus.\n\n**℟.** Tende piedade de nós.\n\n**℣.** Deus Filho Redentor do mundo,\n\n**℟.** Tende piedade de nós.\n\n**℣.** Deus Espírito Santo,\n\n**℟.** Tende piedade de nós.\n\n**℣.** Santíssima Trindade, que sois um só Deus,\n\n**℟.** Tende piedade de nós.\n\n**℣.** Santa Maria,\n\n**℟.** Rogai por nós.\n\nSanta Mãe de Deus,\n\nSanta Virgem das Virgens,\n\nMãe de Jesus Cristo,\n\nMãe da Igreja,\n\nMãe da Misericórdia,\n\nMãe da divina graça,\n\nMãe da Esperança,\n\nMãe puríssima,\n\nMãe castíssima,\n\nMãe imaculada,\n\nMãe intacta,\n\nMãe amável,\n\nMãe admirável,\n\nMãe do bom conselho,\n\nMãe do Criador,\n\nMãe do Salvador,\n\nVirgem prudentíssima,\n\nVirgem venerável,\n\nVirgem digna de louvor,\n\nVirgem poderosa,\n\nVirgem clemente,\n\nVirgem fiel,\n\nEspelho de justiça,\n\nSede de sabedoria,\n\nCausa da nossa alegria,\n\nVaso espiritual,\n\nVaso honorável,\n\nVaso insigne de devoção,\n\nRosa mística,\n\nTorre de Davi,\n\nTorre de marfim,\n\nCasa de ouro,\n\nArca da aliança,\n\nPorta do Céu,\n\nEstrela da manhã,\n\nSaúde dos enfermos,\n\nRefúgio dos pecadores,\n\nSocorro dos migrantes,\n\nConsoladora dos aflitos,\n\nAuxílio dos cristãos,\n\nRainha dos Anjos,\n\nRainha dos Patriarcas,\n\nRainha dos Profetas,\n\nRainha dos Apóstolos,\n\nRainha dos Mártires,\n\nRainha dos Confessores,\n\nRainha das Virgens,\n\nRainha de todos os Santos,\n\nRainha concebida sem pecado original,\n\nRainha assunta aos céus,\n\nRainha do Santíssimo Rosário,\n\nRainha da Família,\n\nRainha da Paz,\n\n**℣.** Cordeiro de Deus, que tirais o pecado do mundo,\n\n**℟.** Perdoai-nos, Senhor.\n\n**℣.** Cordeiro de Deus, que tirais o pecado do mundo,\n\n**℟.** Ouvi-nos, Senhor.\n\n**℣.** Cordeiro de Deus, que tirais o pecado do mundo,\n\n**℟.** Tende piedade de nós.",
+    "la": "**Litaniarum Lauretanarum**\n\n**℣.** Kýrie, eléison.\n\n**℟.** Kýrie, eléison.\n\n**℣.** Christe, eléison.\n\n**℟.** Christe, eléison.\n\n**℣.** Kýrie, eléison.\n\n**℟.** Kýrie, eléison.\n\n**℣.** Christe, audi nos.\n\n**℟.** Christe, audi nos.\n\n**℣.** Christe, exáudi nos.\n\n**℟.** Christe, exáudi nos.\n\n**℣.** Pater de cælis, Deus,\n\n**℟.** miserére nobis.\n\n**℣.** Fili, Redémptor mundi, Deus,\n\n**℟.** miserére nobis.\n\n**℣.** Spíritus Sancte, Deus,\n\n**℟.** miserére nobis.\n\n**℣.** Sancta Trínitas, unus Deus,\n\n**℟.** miserére nobis.\n\n**℣.** Sancta Maria,\n\n**℟.** ora pro nobis.\n\nSancta Dei Génetrix,\n\nSancta Virgo vírginum,\n\nMater Christi,\n\nMater Ecclésiæ,\n\nMater Misericordiæ,\n\nMater divínæ gratiæ,\n\nMater Spei,\n\nMater puríssima,\n\nMater castíssima,\n\nMater invioláta,\n\nMater intemeráta,\n\nMater immaculáta,\n\nMater amábilis,\n\nMater admirábilis,\n\nMater boni Consílii,\n\nMater Creatóris,\n\nMater Salvatóris,\n\nVirgo prudentíssima,\n\nVirgo veneránda,\n\nVirgo prædicánda,\n\nVirgo potens,\n\nVirgo clemens,\n\nVirgo fidélis,\n\nSpéculum iustítiæ,\n\nSedes Sapiéntiæ,\n\nCausa nostræ lætítiæ,\n\nVas spirituále,\n\nVas honorábile,\n\nVas insigne devotiónis,\n\nRosa mýstica,\n\nTurris Davídica,\n\nTurris ebúrnea,\n\nDomus áurea,\n\nFœderis arca,\n\nIánua cæli,\n\nStella matutina,\n\nSalus infirmórum,\n\nRefugium peccatórum,\n\nSolacium migrantium,\n\nConsolátrix afflictórum,\n\nAuxílium christianórum,\n\nRegina Angelórum,\n\nRegina Patriarchárum,\n\nRegina Prophetárum,\n\nRegina Apostolórum,\n\nRegina Mártyrum,\n\nRegina Confessórum,\n\nRegina Vírginum,\n\nRegina Sanctórum ómnium,\n\nRegina sine labe originali concépta,\n\nRegina in cælum assumpta,\n\nRegina sacratíssimi Rosárii,\n\nRegina famíliæ,\n\nRegina pacis,\n\n**℣.** Agnus Dei, qui tollis peccáta mundi,\n\n**℟.** parce nobis, Dómine.\n\n**℣.** Agnus Dei, qui tollis peccáta mundi,\n\n**℟.** exáudi nos, Dómine.\n\n**℣.** Agnus Dei, qui tollis peccáta mundi,\n\n**℟.** miserére nobis."
+  },
+  "finais": {
+    "pt": "À vossa proteção nós recorremos, Santa Mãe de Deus; não desprezeis as súplicas que em nossas necessidades vos dirigimos, mas livrai-nos sempre de todos os perigos, ó Virgem gloriosa e bendita.\n\n**℣.** Rogai por nós Santa Mãe de Deus.\n\n**℟.** Para que sejamos dignos das promessas de Cristo.\n\nOREMOS\n\nInfundi, Senhor, nós vos pedimos, em nossas almas a vossa graça, para que nós, que conhecemos pela Anunciação do Anjo a Encarnação de Jesus Cristo, vosso Filho, cheguemos por sua Paixão e sua Cruz à glória da ressurreição. Pelo mesmo Jesus Cristo, Senhor Nosso.\n\n**℟.** Amém.",
+    "la": "Sub tuum præsídium confúgimus, Sancta Dei Génetrix, nostras deprecatiónes ne despícias in necessitátibus; sed a perículis cunctis líbera nos semper, Virgo gloriósa et benedícta.\n\n**℣.** Ora pro nobis, Sancta Dei Génetrix.\n\n**℟.** Ut digni efficiámur promissiónibus Christi.\n\nORÉMUS\n\nGrátiam tuam, quǽsumus, Dómine, méntibus nostris infúnde: ut qui, Ángelo nuntiánte, Christi Fílii tui Incarnatiónem cognóvimus; per Passiónem eius et Crucem, ad resurrectiónis glóriam perducámur. Per Christum Dóminum nostrum.\n\n**℟.** Amen."
+  },
+  "intencoes": {
+    "pt": "– Pelas necessidades da Igreja e do Estado: *Pai Nosso, Ave Maria, Glória.*\n\n– Pela pessoa e intenções do Sr. Bispo desta diocese: *Pai Nosso, Ave Maria, Glória.*\n\n– Pelas benditas almas do Purgatório: *Pai Nosso, Ave Maria. Descansem em paz. Amém,*",
+    "la": "– Pro necessitatibus Ecclesiæ et Status: *Pater noster. Ave Maria. Gloria Patri.*\n\n– Pro persona et intentionibus Excellentissimi ac Reverendissimi Domini Episcopi huius diœcesis: *Pater noster. Ave Maria. Gloria Patri.*\n\n– Pro animabus benedictis in Purgatorio: *Pater noster. Ave Maria. Requiescant in pace. Amen.*"
+  },
+  "triduo": {
+    "quinta": {
+      "pt": "**℣.** Cristo se fez por nós.\n\n**℟.** Obediente até a morte.",
+      "la": "**℣.** Christus factus est pro nobis.\n\n**℟.** Obœdiens usque ad mortem."
+    },
+    "sexta": {
+      "pt": "**℣.** Cristo se fez por nós obediente até a morte.\n\n**℟.** E morte de Cruz.",
+      "la": "**℣.** Christus factus est pro nobis obœdiens usque ad mortem.\n\n**℟.** Mortem autem crucis."
+    },
+    "sabado": {
+      "pt": "**℣.** Cristo se fez por nós obediente até a morte e morte de cruz.\n\n**℟.** Por isso Deus o exaltou e lhe deu um Nome que está acima de todo nome.",
+      "la": "**℣.** Christus factus est pro nobis obœdiens usque ad mortem, mortem autem crucis.\n\n**℟.** Propter quod et Deus exaltávit íllum: et dedit ílli nomen, quod est super omne nomen."
+    }
+  },
+  "mysteryTitlesLa": {
+    "gozosos": [
+      "Annuntiatione Domini",
+      "Visitatio Beatæ Mariæ Virginis ad S. Elisabeth.",
+      "Nativitas Filii Dei in Bethlehem",
+      "Presentatio Iesu in Templo",
+      "Inventio pueri Iesu in Templo"
+    ],
+    "dolorosos": [
+      "Oratio in Horto",
+      "Flagellatio Domini",
+      "Coronatio Spinis",
+      "Baiulatio Crucis",
+      "Crucifixio et Mors Domini Iesu"
+    ],
+    "gloriosos": [
+      "Resurrectio Domini",
+      "Ascensio Domini",
+      "Descensus Spiritus Sancti",
+      "Assumptio Beatæ Mariæ Virginis",
+      "Coronatio Beatæ Mariæ Virginis"
+    ],
+    "luminosos": [
+      "Baptismus Domini",
+      "Nuptiæ Canæ Galilææ",
+      "Regni Dei proclamatio",
+      "Transfiguratio Domini",
+      "Institutio Eucharistiæ"
+    ]
+  }
+}

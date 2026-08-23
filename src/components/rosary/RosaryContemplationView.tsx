@@ -3,8 +3,8 @@ import { ChevronLeft, ChevronRight, Shuffle, BookOpen, X, Check } from 'lucide-r
 import { motion, AnimatePresence, type PanInfo } from 'motion/react'
 import rosaryRaw from '../../data/rosary_contemplation.json'
 import rosaryImagesRaw from '../../data/rosary_images.json'
+import { prayedSetForWeekday, SET_ORDER, type SetKey } from '../../data/rosary'
 
-type SetKey = 'gozosos' | 'dolorosos' | 'gloriosos' | 'luminosos'
 interface RosaryMystery {
   title: string
   quotes: string[]
@@ -27,22 +27,6 @@ interface ImageCandidate {
 const data = rosaryRaw as unknown as RosaryData
 // Per set: one array of candidate images per mystery (index-aligned to sets.mysteries).
 const images = rosaryImagesRaw as unknown as Record<SetKey, ImageCandidate[][]>
-
-// Which set is prayed vocally on a given weekday, per the traditional schedule
-// (Mon/Sat → Gozosos, Tue/Fri → Dolorosos, Wed/Sun → Gloriosos, Thu → Luminosos),
-// derived from each set's vocalDays. The contemplation shows everything BUT this set.
-const setByWeekday = (Object.keys(data.sets) as SetKey[]).reduce<Record<number, SetKey>>(
-  (acc, key) => {
-    for (const day of data.sets[key].vocalDays) acc[day] = key
-    return acc
-  },
-  {},
-)
-
-// Canonical liturgical order (Joyful → Luminous → Sorrowful → Glorious). The
-// contemplation walks the three NON-prayed sets in this order, so the swipe always
-// starts at the first remaining group and ends at the last.
-const SET_ORDER: SetKey[] = ['gozosos', 'luminosos', 'dolorosos', 'gloriosos']
 
 const SWIPE_THRESHOLD = 50
 const VELOCITY_THRESHOLD = 500
@@ -90,9 +74,10 @@ export function RosaryContemplationView({
   onTogglePractice,
   onClose,
 }: RosaryContemplationViewProps) {
-  // Sets not prayed on the viewed weekday, in canonical order → three groups.
+  // Sets not prayed on the viewed weekday (the praying engine's set), in
+  // canonical order → three groups.
   const nonDaySets = useMemo(() => {
-    const prayed = setByWeekday[viewDate.getDay()]
+    const prayed = prayedSetForWeekday(viewDate)
     return SET_ORDER.filter((k) => k !== prayed)
   }, [viewDate])
 
