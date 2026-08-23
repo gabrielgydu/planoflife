@@ -64,10 +64,16 @@
   }
 
   const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true
+  const iosMatch = navigator.userAgent.match(/iPhone OS (\d+)[_.](\d+)/)
+  const switchSupported = 'switch' in document.createElement('input')
   document.getElementById('env').textContent =
-    'UA: ' + navigator.userAgent +
+    'iOS detectado no UA: ' + (iosMatch ? iosMatch[1] + '.' + iosMatch[2] : 'não encontrado') +
+    '\natributo switch suportado: ' + switchSupported +
     '\nPWA instalada (standalone): ' + standalone +
-    '\nnavigator.vibrate existe: ' + ('vibrate' in navigator)
+    '\nnavigator.vibrate existe: ' + ('vibrate' in navigator) +
+    '\nUA: ' + navigator.userAgent +
+    (switchSupported ? '' : '\n\n⚠ Sem suporte a switch: o teste A aparece como caixa quadrada e NENHUM haptic é possível neste iOS.') +
+    '\n\nSe nada vibrar: Ajustes → Sons e Tato → confira se o tato do sistema está ativado.'
 
   const label = document.getElementById('hapticLabel')
   const tick = () => label.click()
