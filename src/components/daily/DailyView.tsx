@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react'
 import { useNavigate } from 'react-router'
 import { RotateCcw, ClipboardList, Eye, EyeOff, CheckCircle2 } from 'lucide-react'
 import { Header } from '../layout/Header'
-import { CategorySection } from './CategorySection'
+import { CategorySection, type CatchUpRow } from './CategorySection'
 import { PracticeReader } from './PracticeReader'
 import { MeditationView } from './MeditationView'
 import { AntiphonView } from './AntiphonView'
@@ -20,7 +20,8 @@ import { EmptyState } from '../shared/EmptyState'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
 import { useCategories } from '../../hooks/useCategories'
 import { usePractices } from '../../hooks/usePractices'
-import { useDailyRecords } from '../../hooks/useDailyRecords'
+import { useDailyRecords, toggleRecordOn } from '../../hooks/useDailyRecords'
+import { useNovenaCatchUp } from '../../hooks/useNovenaCatchUp'
 import { useWeeklyCompletions } from '../../hooks/useWeeklyCompletion'
 import { useMorningFlow } from '../../hooks/useMorningFlow'
 import { useProposito } from '../../hooks/usePropositos'
@@ -34,7 +35,7 @@ import {
 import { PLANO_DE_VIDA_CATEGORY_ID, isSantaMissaPractice } from '../../data/planoDeVida'
 import { isNovoTestamentoPractice } from '../../data/novoTestamento'
 import { COSTUMES_CATEGORY_ID } from '../../data/costumes'
-import { isPracticeVisibleOn } from '../../data/novena'
+import { isPracticeVisibleOn, novenaCatchUpSubtitle } from '../../data/novena'
 import { isScheduledOn, isWeekly, isOnMonthlySchedule } from '../../utils/schedule'
 import { isMeditacaoPractice, getMeditacaoSlot } from '../../data/meditation'
 import { isRosaryContemplationPractice } from '../../data/rosary'
@@ -47,6 +48,7 @@ import {
   addDay,
   subDay,
   isToday,
+  parseDate,
   relativeDayLabel,
 } from '../../utils/dates'
 import type { Practice, Category } from '../../types'
@@ -56,6 +58,10 @@ export function DailyView() {
   const [currentDate, setCurrentDate] = useState(getToday)
   const [showClearDialog, setShowClearDialog] = useState(false)
   const [readerPracticeId, setReaderPracticeId] = useState<string | null>(null)
+  // A catch-up row's reader: the missed day (YYYY-MM-DD) whose novena text is
+  // open, or null. Separate from readerPracticeId because everything about it —
+  // content, check state, the record its ✓ writes — belongs to THAT day.
+  const [catchUpReaderDate, setCatchUpReaderDate] = useState<string | null>(null)
   // Persisted, synced preference: the hide-completed choice survives navigation,
   // reloads, and propagates to other devices. Filters only the list, not the reader pager.
   const [hideCompleted, setHideCompleted] = useHideCompleted()
@@ -132,14 +138,43 @@ export function DailyView() {
   // The FAB mode narrows what the day shows: 'plano' = the Plano de Vida and
   // Costumes categories plus any required practice elsewhere; 'extras' = the
   // exact complement; 'all' = everything. Composes with hide-completed (below).
-  const visiblePractices = useMemo(() => {
-    if (viewMode === 'all') return activePractices
-    const inPlano = (p: Practice) =>
-      p.categoryId === PLANO_DE_VIDA_CATEGORY_ID ||
-      p.categoryId === COSTUMES_CATEGORY_ID ||
-      p.isRequired
-    return activePractices.filter((p) => (viewMode === 'plano' ? inPlano(p) : !inPlano(p)))
-  }, [activePractices, viewMode])
+  const matchesViewMode = useCallback(
+    (p: Practice) => {
+      if (viewMode === 'all') return true
+      const inPlano =
+        p.categoryId === PLANO_DE_VIDA_CATEGORY_ID ||
+        p.categoryId === COSTUMES_CATEGORY_ID ||
+        p.isRequired
+      return viewMode === 'plano' ? inPlano : !inPlano
+    },
+    [viewMode],
+  )
+  const visiblePractices = useMemo(
+    () => activePractices.filter(matchesViewMode),
+    [activePractices, matchesViewMode],
+  )
+
+  // Missed days of the current novena run: the run advances even when a day
+  // goes unprayed, so today's list also offers the day(s) left behind, each as
+  // its own checkable row writing to ITS date. Only on the real today —
+  // browsing another date shows that date's own practices as ever.
+  const { practice: novenaPractice, days: novenaCatchUpDays } = useNovenaCatchUp(
+    practices,
+    novenaStart,
+    isToday(currentDate),
+  )
+  const catchUpRows = useMemo<CatchUpRow[]>(() => {
+    if (!novenaPractice || !matchesViewMode(novenaPractice)) return []
+    return novenaCatchUpDays
+      .filter((d) => !d.completed)
+      .map((d) => ({
+        practice: novenaPractice,
+        dateStr: d.dateStr,
+        subtitle: novenaCatchUpSubtitle(d.dayIndex, d.date),
+      }))
+  }, [novenaPractice, matchesViewMode, novenaCatchUpDays])
+  const handleToggleCatchUp = (row: CatchUpRow) => void toggleRecordOn(row.dateStr, row.practice.id)
+  const handleOpenCatchUpDetail = (row: CatchUpRow) => setCatchUpReaderDate(row.dateStr)
 
   const practicesByCategory = useMemo(() => {
     const map = new Map<string, Practice[]>()
@@ -199,6 +234,16 @@ export function DailyView() {
   const openedIsAntiphon = openedPractice ? isAntiphonPractice(openedPractice) : false
   const openedIsSantaMissa = openedPractice ? isSantaMissaPractice(openedPractice) : false
   const openedIsNovoTestamento = openedPractice ? isNovoTestamentoPractice(openedPractice) : false
+
+  // The open catch-up reader, resolved to everything it needs. Its ✓ toggles
+  // the MISSED day's record; auto-mark-on-view stays off (same policy as any
+  // non-today date — only a deliberate tap marks a day you are not living).
+  const catchUpNovenaCategory = categories.find((c) => c.id === novenaPractice?.categoryId)
+  const catchUpReader =
+    catchUpReaderDate && novenaPractice && catchUpNovenaCategory
+      ? { dateStr: catchUpReaderDate, practice: novenaPractice, category: catchUpNovenaCategory }
+      : null
+  const ignoreViewed = useCallback(() => {}, [])
 
   // Both directions, unbounded: a day ahead is as legitimate a target as a day
   // behind. Saturday evening's vigil Mass is Sunday's liturgy and belongs on
@@ -279,6 +324,13 @@ export function DailyView() {
               practices={categoryPractices}
               viewDate={currentDate}
               novenaStart={novenaStart}
+              catchUpRows={
+                catchUpRows.length > 0 && category.id === novenaPractice?.categoryId
+                  ? catchUpRows
+                  : undefined
+              }
+              onToggleCatchUp={handleToggleCatchUp}
+              onOpenCatchUpDetail={handleOpenCatchUpDetail}
               isCompleted={isCompletedEffective}
               onTogglePractice={toggleEffective}
               onOpenPracticeDetail={handleOpenPracticeDetail}
@@ -290,9 +342,12 @@ export function DailyView() {
         })}
 
         {/* When hiding completed empties the whole list, affirm rather than show a blank gap */}
-        {hideCompleted && visiblePractices.length > 0 && visiblePractices.every((p) => isCompletedEffective(p.id)) && (
-          <EmptyState icon={CheckCircle2} message="Tudo concluído por hoje" />
-        )}
+        {hideCompleted &&
+          visiblePractices.length > 0 &&
+          catchUpRows.length === 0 &&
+          visiblePractices.every((p) => isCompletedEffective(p.id)) && (
+            <EmptyState icon={CheckCircle2} message="Tudo concluído por hoje" />
+          )}
 
         {/* The current mode has nothing to show, but other practices exist */}
         {visiblePractices.length === 0 && activePractices.length > 0 && (
@@ -325,7 +380,22 @@ export function DailyView() {
       />
 
       <AnimatePresence>
-        {openedPractice && openedIsExameParticular ? (
+        {catchUpReader ? (
+          <PracticeReader
+            items={[{ practice: catchUpReader.practice, category: catchUpReader.category }]}
+            initialPracticeId={catchUpReader.practice.id}
+            viewDate={parseDate(catchUpReader.dateStr)}
+            novenaStart={novenaStart}
+            isCompleted={() =>
+              novenaCatchUpDays.find((d) => d.dateStr === catchUpReader.dateStr)?.completed ?? false
+            }
+            onTogglePractice={() =>
+              void toggleRecordOn(catchUpReader.dateStr, catchUpReader.practice.id)
+            }
+            onMarkViewed={ignoreViewed}
+            onClose={() => setCatchUpReaderDate(null)}
+          />
+        ) : openedPractice && openedIsExameParticular ? (
           <ExameParticularView
             practiceId={openedPractice.id}
             isCompleted={isCompletedEffective}

@@ -3,6 +3,35 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../db'
 import type { DailyRecord } from '../types'
 
+/**
+ * Toggle the record of a practice on an arbitrary date. Exported for writers
+ * acting outside the currently-viewed day — the novena catch-up rows complete
+ * the MISSED day's record from today's list.
+ */
+export async function toggleRecordOn(date: string, practiceId: string) {
+  const recordId = `${date}|${practiceId}`
+  const existing = await db.dailyRecords.get(recordId)
+
+  const now = new Date().toISOString()
+  if (existing) {
+    await db.dailyRecords.update(recordId, {
+      isCompleted: !existing.isCompleted,
+      completedAt: existing.isCompleted ? null : now,
+      updatedAt: now,
+    })
+  } else {
+    const record: DailyRecord = {
+      id: recordId,
+      date,
+      practiceId,
+      isCompleted: true,
+      completedAt: now,
+      updatedAt: now,
+    }
+    await db.dailyRecords.add(record)
+  }
+}
+
 export function useDailyRecords(date: string) {
   const records = useLiveQuery(() => db.dailyRecords.where('date').equals(date).toArray(), [date])
 
@@ -12,27 +41,7 @@ export function useDailyRecords(date: string) {
   }
 
   async function togglePractice(practiceId: string) {
-    const recordId = `${date}|${practiceId}`
-    const existing = await db.dailyRecords.get(recordId)
-
-    const now = new Date().toISOString()
-    if (existing) {
-      await db.dailyRecords.update(recordId, {
-        isCompleted: !existing.isCompleted,
-        completedAt: existing.isCompleted ? null : now,
-        updatedAt: now,
-      })
-    } else {
-      const record: DailyRecord = {
-        id: recordId,
-        date,
-        practiceId,
-        isCompleted: true,
-        completedAt: now,
-        updatedAt: now,
-      }
-      await db.dailyRecords.add(record)
-    }
+    await toggleRecordOn(date, practiceId)
   }
 
   // Mark a practice as done without ever un-marking it (used by auto-mark on

@@ -1,7 +1,8 @@
-import { differenceInCalendarDays, parseISO } from 'date-fns'
+import { addDays, differenceInCalendarDays, parseISO } from 'date-fns'
 import type { Practice } from '../types'
 import type { BundledText } from './bundledTexts'
 import { isInActiveWindow } from '../utils/season'
+import { formatDateShort, relativeDayLabel } from '../utils/dates'
 
 // "Novena do Trabalho — a São Josemaria Escrivá", by Francisco Faus (with
 // ecclesiastical approval). Prayed 17–25 June, the nine days leading to St.
@@ -308,6 +309,38 @@ function novenaDayIndex(viewDate: Date, startISO: string | null | undefined): nu
   return manualNovenaDayIndex(startISO, viewDate) ?? getNovenaDayIndex(viewDate)
 }
 
+/**
+ * The past days of the CURRENT novena run, for the daily list's catch-up rows:
+ * the run advances even when a day goes unprayed, so the next morning has to
+ * offer the day(s) left behind alongside the current one. Returns every run
+ * date strictly before `today`; the caller filters out the ones already
+ * completed (this module has no database access). Empty when no run is
+ * current. A manual run takes precedence over the June calendar window,
+ * mirroring novenaDayIndex. The run stays catch-up-relevant through the day
+ * AFTER it ends, so a missed ninth day can still be prayed the next morning.
+ */
+export function novenaCatchUpCandidates(
+  today: Date,
+  startISO: string | null | undefined
+): { date: Date; dayIndex: number }[] {
+  const w = NOVENA_TRABALHO_WINDOW
+  const firstDays = [
+    startISO ? parseISO(startISO) : null,
+    new Date(today.getFullYear(), w.startMonth - 1, w.startDay),
+  ]
+  for (const first of firstDays) {
+    if (!first) continue
+    const diff = differenceInCalendarDays(today, first)
+    // Relevant from the run's second day through one day past its ninth.
+    if (diff < 1 || diff > DAYS.length) continue
+    return Array.from({ length: Math.min(diff, DAYS.length) }, (_, i) => ({
+      date: addDays(first, i),
+      dayIndex: i,
+    }))
+  }
+  return []
+}
+
 /** True when a manual run of the novena covers `viewDate` (drives visibility). */
 export function isNovenaManuallyActiveOn(
   practice: Pick<Practice, 'bundledTextId'>,
@@ -337,12 +370,12 @@ export function isPracticeVisibleOn(
   )
 }
 
-function dayMarkdown(d: NovenaDay): string {
+function dayMarkdown(d: NovenaDay, dateLabel: string): string {
   const reflections = d.reflections
     .map((r) => `*${r.quote}*\n— ${r.source}`)
     .join('\n\n')
   return [
-    `## ${d.ordinal} dia — ${d.dateLabel}`,
+    `## ${d.ordinal} dia — ${dateLabel}`,
     `### ${d.theme}`,
     '*Palavras de São Josemaria Escrivá*',
     reflections,
@@ -370,12 +403,18 @@ export function resolveNovenaReaderText(
   startISO?: string | null
 ): BundledText | null {
   if (practice.bundledTextId !== NOVENA_TRABALHO_BUNDLED_ID) return null
-  const day = DAYS[novenaDayIndex(date, startISO) ?? 0]
+  const i = novenaDayIndex(date, startISO)
+  const day = DAYS[i ?? 0]
+  // The heading shows the date actually being viewed — a manual run prays the
+  // nine days on its own dates, not on the June calendar the texts were written
+  // for. (When `i` is null the reader fell back to day one; only that day's own
+  // June date is a truthful label then.)
+  const dateLabel = i === null ? day.dateLabel : formatDateShort(date)
   return {
     id: NOVENA_TRABALHO_BUNDLED_ID,
     title: { pt: NOVENA_TRABALHO_NAME },
     hasImage: false,
-    texts: { pt: dayMarkdown(day) },
+    texts: { pt: dayMarkdown(day, dateLabel) },
   }
 }
 
@@ -391,6 +430,19 @@ export function novenaRowSubtitle(
   if (practice.bundledTextId !== NOVENA_TRABALHO_BUNDLED_ID) return null
   const i = novenaDayIndex(date, startISO)
   if (i === null) return null
+  return dayLabel(i)
+}
+
+/** "Nº dia · theme" fragment shared by the row subtitles. */
+function dayLabel(i: number): string {
   const d = DAYS[i]
   return `${d.ordinal} dia · ${d.theme}`
+}
+
+/**
+ * Subtitle for a catch-up row: when the missed day was + which novena day it
+ * is — "Ontem · Segundo dia · Trabalhar por amor a Deus".
+ */
+export function novenaCatchUpSubtitle(dayIndex: number, date: Date): string {
+  return `${relativeDayLabel(date) ?? formatDateShort(date)} · ${dayLabel(dayIndex)}`
 }
