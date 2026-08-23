@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Teste de Haptics</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    margin: 0; padding: 1.25rem; font-family: -apple-system, system-ui, sans-serif;
+    background: light-dark(#faf7f2, #16130f); color: light-dark(#2b2620, #e8e2d8);
+    max-width: 34rem; margin-inline: auto;
+  }
+  h1 { font-size: 1.2rem; margin: 0 0 .25rem; }
+  p.sub { margin: 0 0 1rem; opacity: .7; font-size: .85rem; }
+  section { margin-bottom: 1rem; }
+  button {
+    display: block; width: 100%; padding: .9rem 1rem; margin-bottom: .5rem;
+    font-size: 1rem; border-radius: .6rem; border: 1px solid light-dark(#d8cfc0, #3a342b);
+    background: light-dark(#fff, #211c15); color: inherit; text-align: left;
+  }
+  button small { display: block; opacity: .6; font-size: .75rem; margin-top: .15rem; }
+  #env, #log {
+    font-family: ui-monospace, monospace; font-size: .72rem; white-space: pre-wrap;
+    background: light-dark(#f0ebe2, #211c15); border-radius: .5rem; padding: .6rem .7rem;
+  }
+  .switchrow {
+    display: flex; align-items: center; gap: .75rem; padding: .9rem 1rem; margin-bottom: .5rem;
+    border: 1px solid light-dark(#d8cfc0, #3a342b); border-radius: .6rem;
+    background: light-dark(#fff, #211c15);
+  }
+  .offscreen { position: fixed; top: 0; left: -100px; width: 1px; height: 1px; opacity: 0; }
+</style>
+</head>
+<body>
+<h1>Teste de Haptics — Rosário</h1>
+<p class="sub">Toque em cada teste e anote se o iPhone vibrou (e quantos "ticks").</p>
+
+<div id="env"></div>
+
+<section>
+  <!-- Real user toggle: native haptic on any iOS 18+, should survive every patch -->
+  <label class="switchrow">
+    <input type="checkbox" switch id="realSwitch">
+    <span>A — Switch real: alterne com o dedo<br><small style="opacity:.6;font-size:.75rem">esperado: 1 tick a cada alternada</small></span>
+  </label>
+
+  <button id="b">B — 1 tick programático<small>label.click() dentro do toque</small></button>
+  <button id="c">C — 2 ticks (Pai Nosso?)<small>0ms + 150ms</small></button>
+  <button id="d">D — 3 ticks (Glória?)<small>0ms + 130ms + 260ms</small></button>
+  <button id="e">E — tick atrasado 1,5s<small>testa expiração do "user activation" — deve FALHAR no iOS ≥ 18.4</small></button>
+  <button id="f">F — navigator.vibrate(80)<small>só existe no Android; no iOS deve dizer "indisponível"</small></button>
+</section>
+
+<div id="log">— log —</div>
+
+<!-- Hidden switch driven programmatically via its label -->
+<label id="hapticLabel" class="offscreen"><input type="checkbox" switch></label>
+
+<script>
+  const log = (m) => {
+    const el = document.getElementById('log')
+    el.textContent += '\n' + new Date().toLocaleTimeString() + '  ' + m
+  }
+
+  const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true
+  document.getElementById('env').textContent =
+    'UA: ' + navigator.userAgent +
+    '\nPWA instalada (standalone): ' + standalone +
+    '\nnavigator.vibrate existe: ' + ('vibrate' in navigator)
+
+  const label = document.getElementById('hapticLabel')
+  const tick = () => label.click()
+
+  document.getElementById('realSwitch').addEventListener('change', () => log('A: switch alternado (sentiu tick?)'))
+  document.getElementById('b').addEventListener('click', () => { tick(); log('B: 1 tick disparado') })
+  document.getElementById('c').addEventListener('click', () => {
+    tick(); setTimeout(tick, 150); log('C: 2 ticks disparados')
+  })
+  document.getElementById('d').addEventListener('click', () => {
+    tick(); setTimeout(tick, 130); setTimeout(tick, 260); log('D: 3 ticks disparados')
+  })
+  document.getElementById('e').addEventListener('click', () => {
+    setTimeout(() => { tick(); log('E: tick após 1,5s disparado (sentiu?)') }, 1500)
+    log('E: aguardando 1,5s…')
+  })
+  document.getElementById('f').addEventListener('click', () => {
+    if ('vibrate' in navigator) { const ok = navigator.vibrate(80); log('F: vibrate(80) → ' + ok) }
+    else log('F: navigator.vibrate indisponível (esperado no iOS)')
+  })
+</script>
+</body>
+</html>
