@@ -50,6 +50,21 @@
   <button id="d">D — 3 ticks (Glória?)<small>0ms + 130ms + 260ms</small></button>
   <button id="e">E — tick atrasado 1,5s<small>testa expiração do "user activation" — deve FALHAR no iOS ≥ 18.4</small></button>
   <button id="f">F — navigator.vibrate(80)<small>só existe no Android; no iOS deve dizer "indisponível"</small></button>
+
+  <label class="switchrow" style="position:relative;min-height:5.5rem">
+    <input type="checkbox" switch id="gSwitch" style="position:absolute;left:4px;bottom:4px;width:1px;height:1px;opacity:0">
+    <span>G — toque em QUALQUER lugar deste cartão<br><small style="opacity:.6;font-size:.75rem">switch invisível — tick com switch escondido?</small></span>
+  </label>
+
+  <label class="switchrow" style="min-height:5.5rem">
+    <input type="checkbox" switch id="hSwitch">
+    <span>H — toque neste TEXTO (não no switch ao lado)<br><small style="opacity:.6;font-size:.75rem">tick quando o toque cai no label, não no switch?</small></span>
+  </label>
+
+  <label class="switchrow" style="min-height:6.5rem;justify-content:center">
+    <input type="checkbox" switch id="iSwitch" style="transform:scale(2.4)">
+    <span style="margin-left:1.5rem">I — toque no switch GIGANTE<br><small style="opacity:.6;font-size:.75rem">switch escalado ainda dá tick?</small></span>
+  </label>
 </section>
 
 <div id="log">— log —</div>
@@ -79,6 +94,9 @@
   const tick = () => label.click()
 
   document.getElementById('realSwitch').addEventListener('change', () => log('A: switch alternado (sentiu tick?)'))
+  document.getElementById('gSwitch').addEventListener('change', () => log('G: switch escondido alternado (sentiu tick?)'))
+  document.getElementById('hSwitch').addEventListener('change', () => log('H: alternado via label (sentiu tick?)'))
+  document.getElementById('iSwitch').addEventListener('change', () => log('I: switch gigante alternado (sentiu tick?)'))
   document.getElementById('b').addEventListener('click', () => { tick(); log('B: 1 tick disparado') })
   document.getElementById('c').addEventListener('click', () => {
     tick(); setTimeout(tick, 150); log('C: 2 ticks disparados')
