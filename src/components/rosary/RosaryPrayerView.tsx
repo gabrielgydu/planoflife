@@ -93,8 +93,7 @@ interface RosaryPrayerViewProps {
  * anywhere advances one step; prayed-from-memory steps (Pai Nosso, Aves,
  * Glória, Fátima) land on a visually-hidden iOS switch and tick
  * (HapticTapArea), the look-at-the-screen steps (anúncio and the scroll pages)
- * are deliberately silent. The Glória alone takes THREE ticking taps — the
- * felt decade-end marker. Finishing the flow marks the "Santo Rosário"
+ * are deliberately silent. Finishing the flow marks the "Santo Rosário"
  * practice done.
  */
 export function RosaryPrayerView({
@@ -160,17 +159,6 @@ export function RosaryPrayerView({
     else setStepIndex((i) => i + 1)
   }, [isLast, finish])
   const goBack = useCallback(() => setStepIndex((i) => Math.max(0, i - 1)), [])
-
-  // The Glória advances on the THIRD tap — one per Person of the Trinity. Each
-  // tap is a real switch toggle so each one ticks: a quick tick-tick-tick is
-  // the only distinct decade-end sensation iOS allows, since both patterned
-  // vibration and programmatic ticks are unavailable (see HapticTapArea).
-  const [gloriaTaps, setGloriaTaps] = useState(0)
-  useEffect(() => setGloriaTaps(0), [stepIndex])
-  const onGloriaTap = () => {
-    if (gloriaTaps >= 2) goNext()
-    else setGloriaTaps(gloriaTaps + 1)
-  }
 
   // Arrow-key navigation (desktop / PWA on laptop).
   useEffect(() => {
@@ -299,11 +287,10 @@ export function RosaryPrayerView({
           </HapticTapArea>
         ) : (
           // Decade steps: the mystery's painting + quote stay up; the band below
-          // names the current prayer. A tap anywhere advances — except the
-          // Glória, which needs three.
+          // names the current prayer. A tap anywhere advances (Aves tick).
           <HapticTapArea
             haptic={step.haptic}
-            onTap={step.kind === 'gloria' ? onGloriaTap : goNext}
+            onTap={goNext}
             className="h-full flex flex-col cursor-pointer select-none"
           >
             <div className="flex-1 overflow-y-auto">
@@ -336,17 +323,9 @@ export function RosaryPrayerView({
             </div>
             <PrayerBand
               label={label}
-              beadIndex={step.kind === 'ave' ? step.aveIndex : step.kind === 'gloria' ? gloriaTaps : undefined}
-              beadCount={step.kind === 'ave' ? 10 : step.kind === 'gloria' ? 3 : undefined}
-              hint={
-                step.kind === 'anuncio'
-                  ? 'Toque para avançar'
-                  : step.kind === 'gloria'
-                    ? triduumGloria
-                      ? 'Toque três vezes'
-                      : 'Três toques — ao Pai, ao Filho, ao Espírito Santo'
-                    : undefined
-              }
+              beadIndex={step.kind === 'ave' ? step.aveIndex : undefined}
+              beadCount={step.kind === 'ave' ? 10 : undefined}
+              hint={step.kind === 'anuncio' ? 'Toque para avançar' : undefined}
             >
               {step.kind === 'fatima' && (
                 <p className="text-sm text-text-secondary dark:text-text-secondary-dark leading-relaxed text-center">
