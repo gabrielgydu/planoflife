@@ -90,10 +90,11 @@ interface RosaryPrayerViewProps {
 
 /**
  * Full-screen engine to PRAY the rosary as in Opus Dei, bead by bead. A tap
- * anywhere advances one step; Ave taps land on a visually-hidden iOS switch and
- * tick (HapticTapArea), every other step is deliberately silent — silence marks
- * the decade boundary like the big bead of a physical rosary. Finishing the
- * flow marks the "Santo Rosário" practice done.
+ * anywhere advances one step; prayed-from-memory steps (Pai Nosso, Aves,
+ * Glória, Fátima) land on a visually-hidden iOS switch and tick
+ * (HapticTapArea), the look-at-the-screen steps (anúncio and the scroll pages)
+ * are deliberately silent. Finishing the flow marks the "Santo Rosário"
+ * practice done.
  */
 export function RosaryPrayerView({
   practiceId,

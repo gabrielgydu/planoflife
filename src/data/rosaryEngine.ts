@@ -60,12 +60,12 @@ function buildSteps(): RosaryStep[] {
   steps.push({ kind: 'abertura', haptic: false, scroll: true })
   for (let m = 0; m < 5; m++) {
     steps.push({ kind: 'anuncio', haptic: false, scroll: false, mysteryIndex: m })
-    steps.push({ kind: 'painosso', haptic: false, scroll: false, mysteryIndex: m })
+    steps.push({ kind: 'painosso', haptic: true, scroll: false, mysteryIndex: m })
     for (let a = 0; a < 10; a++) {
       steps.push({ kind: 'ave', haptic: true, scroll: false, mysteryIndex: m, aveIndex: a })
     }
-    steps.push({ kind: 'gloria', haptic: false, scroll: false, mysteryIndex: m })
-    steps.push({ kind: 'fatima', haptic: false, scroll: false, mysteryIndex: m })
+    steps.push({ kind: 'gloria', haptic: true, scroll: false, mysteryIndex: m })
+    steps.push({ kind: 'fatima', haptic: true, scroll: false, mysteryIndex: m })
   }
   for (let a = 0; a < 3; a++) {
     steps.push({ kind: 'ave-final', haptic: true, scroll: false, aveIndex: a })

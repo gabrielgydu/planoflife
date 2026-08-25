@@ -9,9 +9,10 @@ import type { ReactNode } from 'react'
 // The switch must stay rendered (1×1px, opacity 0) — display:none kills the tick.
 // It is uncontrolled on purpose: only the toggle gesture matters, never the value.
 //
-// haptic={false} renders a plain tappable div instead — no switch, no tick. The
-// silence is the point: transition beads (Pai Nosso, Glória…) deliberately don't
-// tick, marking the decade boundary like the big bead of a physical rosary.
+// haptic={false} renders a plain tappable div instead — no switch, no tick.
+// Silent steps are the look-at-the-screen ones (anúncio, scroll pages): every
+// prayer prayed from memory ticks, and iOS offers exactly one fixed tick, so a
+// distinct decade-boundary vibration is not possible.
 
 // React's TS types don't know the non-standard iOS `switch` attribute.
 declare module 'react' {
