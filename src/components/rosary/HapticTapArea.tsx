@@ -11,8 +11,9 @@ import type { ReactNode } from 'react'
 //
 // haptic={false} renders a plain tappable div instead — no switch, no tick.
 // Silent steps are the look-at-the-screen ones (anúncio, scroll pages): every
-// prayer prayed from memory ticks, and iOS offers exactly one fixed tick, so a
-// distinct decade-boundary vibration is not possible.
+// prayer prayed from memory ticks. iOS offers exactly one fixed tick per real
+// tap and no vibration API, so a distinct decade-end sensation can only come
+// from MORE REAL TAPS — the Glória requires three (see RosaryPrayerView).
 
 // React's TS types don't know the non-standard iOS `switch` attribute.
 declare module 'react' {
