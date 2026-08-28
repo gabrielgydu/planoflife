@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { motion, AnimatePresence, type PanInfo } from 'motion/react'
-import { X, Check, ChevronLeft, ChevronRight, MoreVertical, Pencil, Archive, Trash2 } from 'lucide-react'
+import { X, Check, ChevronLeft, ChevronRight, MoreVertical, Pencil, Archive, Trash2, CalendarX } from 'lucide-react'
 import { CategoryIcon } from '../shared/CategoryIcon'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
 import { MarkdownRenderer } from '../shared/MarkdownRenderer'
@@ -10,9 +10,15 @@ import { db } from '../../db'
 import { usePractices } from '../../hooks/usePractices'
 import { prayerLangs, prayerText, prayerTitle } from '../../data/devocionario'
 import { getBundledText, PRACTICE_TEXT_LANG_KEY } from '../../data/bundledTexts'
-import { resolveNovenaReaderText } from '../../data/novena'
+import {
+  manualNovenaDayIndex,
+  resolveNovenaReaderText,
+  NOVENA_TRABALHO_BUNDLED_ID,
+} from '../../data/novena'
 import { resolveAngelusReaderText } from '../../data/angelus'
+import { useNovenaStart } from '../../hooks/useSettings'
 import { isLifestyle } from '../../utils/domain'
+import { getToday } from '../../utils/dates'
 import type { Practice, Category } from '../../types'
 
 interface PracticeWithCategory {
@@ -63,6 +69,10 @@ export function PracticeReader({
   const [direction, setDirection] = useState(0)
   const [menuOpen, setMenuOpen] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showStopNovenaDialog, setShowStopNovenaDialog] = useState(false)
+  // Only the SETTER: the run's start date already arrives as the `novenaStart`
+  // prop (same synced setting), so there is one source of truth for it here.
+  const { setStart: setNovenaStart } = useNovenaStart()
   const [lang, setLang] = useState<Lang>(() => {
     const saved = localStorage.getItem(LANG_KEY)
     return saved === 'la' ? 'la' : 'pt'
@@ -119,6 +129,12 @@ export function PracticeReader({
 
   const { practice, category } = current
   const completed = isCompleted(practice.id)
+  // A manually-started novena run covering TODAY (not viewDate — browsing a past
+  // day of a finished run must not offer to end what is no longer running).
+  // Ending it from here saves a trip to Configurações, where it can be started again.
+  const novenaRunning =
+    practice.bundledTextId === NOVENA_TRABALHO_BUNDLED_ID &&
+    manualNovenaDayIndex(novenaStart, getToday()) !== null
   // Date-dependent texts first: the Angelus becomes the Regina Coeli during
   // Eastertide, the novena resolves to the day matching viewDate; everything
   // else is a plain bundled-text lookup.
@@ -164,6 +180,15 @@ export function PracticeReader({
   const handleArchive = async () => {
     setMenuOpen(false)
     await archivePractice(practice.id)
+    onClose()
+  }
+
+  // Ending the run clears the synced start date, so the novena leaves the daily
+  // list on both devices. Close: the practice is gone from `items` and the pager
+  // would silently land on a neighbor (same reason as handleArchive).
+  const handleStopNovena = () => {
+    setNovenaStart(null)
+    setShowStopNovenaDialog(false)
     onClose()
   }
 
@@ -250,6 +275,18 @@ export function PracticeReader({
                     <Pencil className="w-4 h-4 shrink-0" />
                     Editar prática
                   </button>
+                  {novenaRunning && (
+                    <button
+                      onClick={() => {
+                        setMenuOpen(false)
+                        setShowStopNovenaDialog(true)
+                      }}
+                      className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-left text-text-primary dark:text-text-primary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark transition-colors"
+                    >
+                      <CalendarX className="w-4 h-4 shrink-0" />
+                      Encerrar novena
+                    </button>
+                  )}
                   <button
                     onClick={handleArchive}
                     className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-left text-text-primary dark:text-text-primary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark transition-colors"
@@ -369,6 +406,15 @@ export function PracticeReader({
           </div>
         </div>
       </footer>
+
+      <ConfirmDialog
+        isOpen={showStopNovenaDialog}
+        title="Encerrar novena"
+        message="A novena sai da lista diária e o histórico dos dias já rezados fica guardado. Você pode iniciá-la de novo quando quiser, em Configurações."
+        confirmLabel="Encerrar"
+        onConfirm={handleStopNovena}
+        onCancel={() => setShowStopNovenaDialog(false)}
+      />
 
       <ConfirmDialog
         isOpen={showDeleteDialog}
