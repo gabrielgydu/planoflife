@@ -11,7 +11,3 @@ export function getPracticeDomain(practice: Pick<Practice, 'domain'>): PracticeD
 export function isLifestyle(practice: Pick<Practice, 'domain'>): boolean {
   return getPracticeDomain(practice) === 'lifestyle'
 }
-
-export function isCareer(practice: Pick<Practice, 'domain'>): boolean {
-  return getPracticeDomain(practice) === 'career'
-}

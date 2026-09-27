@@ -12,7 +12,7 @@ const HISTORY_DOMAIN_KEY = 'history-domain'
 export function useHistoryDomain(): [PracticeDomain, (domain: PracticeDomain) => void] {
   const [domain, setDomainState] = useState<PracticeDomain>(() => {
     const stored = localStorage.getItem(HISTORY_DOMAIN_KEY)
-    return stored === 'lifestyle' || stored === 'career' ? stored : 'spiritual'
+    return stored === 'lifestyle' ? stored : 'spiritual'
   })
 
   const setDomain = (value: PracticeDomain) => {

@@ -5,7 +5,7 @@ import { MonthGrid } from './MonthGrid'
 import { DomainToggle } from './DomainToggle'
 import { usePractices } from '../../hooks/usePractices'
 import { useHistoryDomain } from '../../hooks/useHistoryDomain'
-import { isLifestyle, isCareer } from '../../utils/domain'
+import { isLifestyle } from '../../utils/domain'
 import type { PracticeDomain } from '../../types'
 import { addMonths, subMonths, startOfMonth } from 'date-fns'
 import { formatMonthLong } from '../../utils/dates'
@@ -22,7 +22,6 @@ export function HistoryView() {
   const domains: PracticeDomain[] = [
     'spiritual',
     ...(practices.some(isLifestyle) ? (['lifestyle'] as const) : []),
-    ...(practices.some(isCareer) ? (['career'] as const) : []),
   ]
   const effectiveDomain = domains.includes(domain) ? domain : 'spiritual'
 

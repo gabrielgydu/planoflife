@@ -5,7 +5,7 @@ import { useProposito } from '../../hooks/usePropositos'
 import { useCategories } from '../../hooks/useCategories'
 import { usePractices } from '../../hooks/usePractices'
 import { useHistoryDomain } from '../../hooks/useHistoryDomain'
-import { getPracticeDomain, isLifestyle, isCareer } from '../../utils/domain'
+import { getPracticeDomain, isLifestyle } from '../../utils/domain'
 import { isScheduledOn, isWeekly, isOnMonthlySchedule } from '../../utils/schedule'
 import { isPracticeVisibleOn } from '../../data/novena'
 import { useNovenaStart } from '../../hooks/useSettings'
@@ -35,7 +35,6 @@ export function DayDetail() {
   const domains: PracticeDomain[] = [
     'spiritual',
     ...(practices.some(isLifestyle) ? (['lifestyle'] as const) : []),
-    ...(practices.some(isCareer) ? (['career'] as const) : []),
   ]
   const effectiveDomain = domains.includes(domain) ? domain : 'spiritual'
 
@@ -94,7 +93,7 @@ export function DayDetail() {
           <div className="space-y-4">
             {categories.map((category) => {
               // Match MonthGrid's neutral-day semantics: unscheduled practices
-              // don't count against the day (career Sundays). An off-schedule
+              // don't count against the day (Saturday-only norms). An off-schedule
               // completion still shows, marked as bonus, but isn't in the total.
               const dayPractices = (practicesByCategory.get(category.id) ?? [])
                 .map((p) => ({

@@ -32,20 +32,12 @@ const LEGACY_TABLES = [
   'propositos',
 ]
 
-// Added in sync schema 2 (career section). Snapshots from schema-1 clients lack
-// these keys entirely — normalizeSyncState() fills them in on pull.
-export const CAREER_TABLES = [
-  'careerPlan',
-  'careerMoves',
-  'careerDeadlines',
-  'careerOutreach',
-  'careerLadder',
-  'careerWins',
-  'careerLog',
-]
+// Sync schema 2 added the seven career tables; schema 7 dropped them again (the
+// career section was removed — Dexie v25). A schema-≤6 snapshot may still carry
+// those keys: they pass through untouched and the app ignores them.
 
-// Added in sync schema 3 (Meditação daily point). Like the career tables,
-// schema-≤2 snapshots lack this key entirely; validateSyncState allows it missing.
+// Added in sync schema 3 (Meditação daily point). Schema-≤2 snapshots lack this
+// key entirely; validateSyncState allows it missing.
 export const MEDITATION_TABLES = ['meditationDays']
 
 // Added in sync schema 4 (New Testament reading position). Same rule again:
@@ -62,14 +54,13 @@ export const EXAME_TABLES = ['exameTemas']
 
 export const TABLES = [
   ...LEGACY_TABLES,
-  ...CAREER_TABLES,
   ...MEDITATION_TABLES,
   ...READING_TABLES,
   ...PRAYER_TABLES,
   ...EXAME_TABLES,
 ]
 
-export const SYNC_SCHEMA = 6
+export const SYNC_SCHEMA = 7
 
 export function b64(bytes) {
   return Buffer.from(bytes).toString('base64')
@@ -146,7 +137,7 @@ export async function decryptState(blobBase64, key) {
 /**
  * Minimal structural validation of a SyncState before pushing.
  *
- * Career tables are allowed to be MISSING (not just empty): a missing key means
+ * Post-schema-1 tables are allowed to be MISSING (not just empty): a missing key means
  * "this snapshot's writer had no opinion about that table" and app clients then
  * PRESERVE their local rows instead of clearing them. Filling missing keys with
  * `[]` before a push would launder "no opinion" into "authoritatively empty"
@@ -159,7 +150,6 @@ export function validateSyncState(state) {
     if (!Array.isArray(state.data[t])) throw new Error(`state.data.${t} must be an array`)
   }
   for (const t of [
-    ...CAREER_TABLES,
     ...MEDITATION_TABLES,
     ...READING_TABLES,
     ...PRAYER_TABLES,
@@ -178,7 +168,7 @@ export function validateSyncState(state) {
 /**
  * Refuse snapshots NEWER than this code understands — pushing one back would
  * strip the tables this version doesn't know about. Returns the state as-is;
- * deliberately does NOT fill missing career keys (see validateSyncState).
+ * deliberately does NOT fill missing table keys (see validateSyncState).
  */
 export function assertKnownSchema(state) {
   if (!state || typeof state !== 'object' || !state.data) {

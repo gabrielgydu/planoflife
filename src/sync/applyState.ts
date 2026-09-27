@@ -13,13 +13,6 @@ const ALL_TABLES = [
   db.examenEntries,
   db.guidingQuestions,
   db.propositos,
-  db.careerPlan,
-  db.careerMoves,
-  db.careerDeadlines,
-  db.careerOutreach,
-  db.careerLadder,
-  db.careerWins,
-  db.careerLog,
   db.meditationDays,
   db.readingPositions,
   db.prayers,
@@ -28,15 +21,14 @@ const ALL_TABLES = [
 
 /** Tables that are NEVER seeded — non-empty here means real user data exists. */
 export async function hasUserData(): Promise<boolean> {
-  const [records, examen, missed, props, outreach, temas] = await Promise.all([
+  const [records, examen, missed, props, temas] = await Promise.all([
     db.dailyRecords.count(),
     db.examenEntries.count(),
     db.missedReasons.count(),
     db.propositos.count(),
-    db.careerOutreach.count(),
     db.exameTemas.count(),
   ])
-  return records + examen + missed + props + outreach + temas > 0
+  return records + examen + missed + props + temas > 0
 }
 
 /** Build a SyncState from the current local DB + synced settings. */
@@ -49,13 +41,6 @@ export async function snapshotLocal(): Promise<SyncState> {
     examenEntries,
     guidingQuestions,
     propositos,
-    careerPlan,
-    careerMoves,
-    careerDeadlines,
-    careerOutreach,
-    careerLadder,
-    careerWins,
-    careerLog,
     meditationDays,
     readingPositions,
     prayers,
@@ -68,13 +53,6 @@ export async function snapshotLocal(): Promise<SyncState> {
     db.examenEntries.toArray(),
     db.guidingQuestions.toArray(),
     db.propositos.toArray(),
-    db.careerPlan.toArray(),
-    db.careerMoves.toArray(),
-    db.careerDeadlines.toArray(),
-    db.careerOutreach.toArray(),
-    db.careerLadder.toArray(),
-    db.careerWins.toArray(),
-    db.careerLog.toArray(),
     db.meditationDays.toArray(),
     db.readingPositions.toArray(),
     db.prayers.toArray(),
@@ -90,13 +68,6 @@ export async function snapshotLocal(): Promise<SyncState> {
       examenEntries,
       guidingQuestions,
       propositos,
-      careerPlan,
-      careerMoves,
-      careerDeadlines,
-      careerOutreach,
-      careerLadder,
-      careerWins,
-      careerLog,
       meditationDays,
       readingPositions,
       prayers,
@@ -141,13 +112,6 @@ async function clearAndBulkAdd(state: SyncState): Promise<boolean> {
     replace(db.examenEntries, d.examenEntries),
     replace(db.guidingQuestions, d.guidingQuestions),
     replace(db.propositos, d.propositos),
-    replace(db.careerPlan, d.careerPlan),
-    replace(db.careerMoves, d.careerMoves),
-    replace(db.careerDeadlines, d.careerDeadlines),
-    replace(db.careerOutreach, d.careerOutreach),
-    replace(db.careerLadder, d.careerLadder),
-    replace(db.careerWins, d.careerWins),
-    replace(db.careerLog, d.careerLog),
     replace(db.meditationDays, d.meditationDays),
     replace(db.readingPositions, d.readingPositions),
     replace(db.prayers, d.prayers),

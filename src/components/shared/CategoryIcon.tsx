@@ -11,7 +11,6 @@ import {
   Star,
   Flame,
   HandHeart,
-  Briefcase,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -28,13 +27,9 @@ const ICON_MAP: Record<string, LucideIcon> = {
   Star,
   Flame,
   HandHeart,
-  Briefcase,
 }
 
-// Briefcase renders (career category, seeded via sync) but is deliberately NOT
-// offered in the public category-icon picker — installs without career data
-// keep the exact pre-career option list.
-export const ICON_OPTIONS = Object.keys(ICON_MAP).filter((n) => n !== 'Briefcase')
+export const ICON_OPTIONS = Object.keys(ICON_MAP)
 
 export function CategoryIcon({
   name,

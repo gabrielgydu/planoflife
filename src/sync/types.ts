@@ -6,23 +6,18 @@ import type {
   ExamenEntry,
   GuidingQuestion,
   Proposito,
-  CareerPlan,
-  CareerMove,
-  CareerDeadline,
-  CareerOutreachAttempt,
-  CareerLadderRung,
-  CareerWin,
-  CareerLogEntry,
   MeditationDay,
   ReadingPosition,
   Prayer,
   ExameTema,
 } from '../types'
 
-// Bump whenever SyncState gains tables. v2 = career tables (Dexie v7).
+// Bump whenever SyncState gains or drops tables. v2 = career tables (Dexie v7).
 // v3 = meditationDays (Dexie v10). v4 = readingPositions (Dexie v19).
-// v5 = prayers (Dexie v22). v6 = exameTemas (Dexie v24).
-export const SYNC_SCHEMA = 6
+// v5 = prayers (Dexie v22). v6 = exameTemas (Dexie v24). v7 = career tables
+// dropped (Dexie v25) — the bump makes not-yet-reloaded schema-6 clients refuse
+// the new snapshot instead of pushing their career rows back into the cloud.
+export const SYNC_SCHEMA = 7
 
 /** The decrypted payload that travels to/from the Worker (mirrors scripts/sync-core.mjs). */
 export interface SyncState {
@@ -35,20 +30,10 @@ export interface SyncState {
     examenEntries: ExamenEntry[]
     guidingQuestions: GuidingQuestion[]
     propositos: Proposito[]
-    // Career tables (schema 2). Snapshots produced by schema-1 clients lack these
-    // keys entirely — consumers must treat a MISSING array as "older client, no
-    // opinion" (preserve local rows), never as an empty table. See applyState.ts.
-    careerPlan: CareerPlan[]
-    careerMoves: CareerMove[]
-    careerDeadlines: CareerDeadline[]
-    careerOutreach: CareerOutreachAttempt[]
-    careerLadder: CareerLadderRung[]
-    careerWins: CareerWin[]
-    careerLog: CareerLogEntry[]
-    // Meditação (schema 3). Like the career tables above, a snapshot pushed by a
-    // schema-≤2 client lacks this key entirely — consumers must treat a MISSING
-    // array as "older client, no opinion" (preserve local rows), never as an
-    // empty table. See applyState.ts and merge.ts (`?? []`).
+    // Meditação (schema 3). A snapshot pushed by a schema-≤2 client lacks this
+    // key entirely — consumers must treat a MISSING array as "older client, no
+    // opinion" (preserve local rows), never as an empty table. See applyState.ts
+    // and merge.ts (`?? []`).
     meditationDays: MeditationDay[]
     // Where each continuous read-through stopped (schema 4). Same "missing key
     // means older client, no opinion" rule as the tables above.
@@ -89,13 +74,6 @@ export const SYNC_TABLES = [
   'examenEntries',
   'guidingQuestions',
   'propositos',
-  'careerPlan',
-  'careerMoves',
-  'careerDeadlines',
-  'careerOutreach',
-  'careerLadder',
-  'careerWins',
-  'careerLog',
   'meditationDays',
   'readingPositions',
   'prayers',

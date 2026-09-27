@@ -2,7 +2,6 @@ import { jsPDF } from 'jspdf'
 import { db } from '../db'
 import { startOfMonth, endOfMonth, eachDayOfInterval, getDaysInMonth } from 'date-fns'
 import { formatDate, formatMonthLong } from './dates'
-import { isCareer } from './domain'
 import { isScheduledOn, isWeekly, isOnMonthlySchedule } from './schedule'
 import { isPracticeVisibleOn } from '../data/novena'
 import type { Practice } from '../types'
@@ -35,11 +34,9 @@ export async function generateMonthPdf(
   const startDateStr = formatDate(monthStart)
   const endDateStr = formatDate(monthEnd)
 
-  // Get data. Career habits are excluded: this export is the spiritual
-  // plan-of-life report (the one shared with a director), not the career
-  // tracker. Lifestyle habits keep their existing (included) behavior.
+  // Get data
   const [practices, records] = await Promise.all([
-    db.practices.filter((p) => !p.isArchived && !isCareer(p)).sortBy('sortOrder'),
+    db.practices.filter((p) => !p.isArchived).sortBy('sortOrder'),
     db.dailyRecords
       .where('date')
       .between(startDateStr, endDateStr, true, true)

@@ -10,11 +10,10 @@ interface DomainToggleProps {
 const LABELS: Record<PracticeDomain, string> = {
   spiritual: 'Espiritual',
   lifestyle: 'Hábito',
-  career: 'Carreira',
 }
 
-// Segmented control that splits the History stats between spiritual devotions,
-// lifestyle habits and (when present) career habits. Mirrors the segmented
+// Segmented control that splits the History stats between spiritual devotions
+// and lifestyle habits. Mirrors the segmented
 // selectors in SettingsView. Rendered as a standalone full-width row (owns its
 // own padding) under the History/DayDetail header.
 export function DomainToggle({ value, onChange, domains }: DomainToggleProps) {

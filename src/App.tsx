@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router'
 import { usePracticeFontSize, useUIFontSize } from './hooks/useSettings'
 import { AppShell } from './components/layout/AppShell'
 import { ScrollMemory } from './components/layout/ScrollMemory'
@@ -12,7 +12,6 @@ import { DayDetail } from './components/history/DayDetail'
 import { DevocionarioView } from './components/devocionario/DevocionarioView'
 import { PrayerReader } from './components/devocionario/PrayerReader'
 import { PrayerForm } from './components/devocionario/PrayerForm'
-import { CareerView } from './components/career/CareerView'
 import { SettingsView } from './components/settings/SettingsView'
 import { PracticeList } from './components/practice/PracticeList'
 import { PracticeDetail } from './components/practice/PracticeDetail'
@@ -42,7 +41,6 @@ export function App() {
           {/* Still routed, just no longer in the bottom bar — reached from
               Configurações → Histórico (the Devocionário took that tab). */}
           <Route path="/history" element={<HistoryView />} />
-          <Route path="/career" element={<CareerView />} />
           <Route path="/settings" element={<SettingsView />} />
         </Route>
         <Route path="/devocionario/new" element={<PrayerForm />} />
@@ -62,6 +60,9 @@ export function App() {
         <Route path="/settings/categories/:id/edit" element={<CategoryForm />} />
         <Route path="/settings/backup" element={<BackupRestore />} />
         <Route path="/settings/pdf" element={<PdfExport />} />
+        {/* Unknown paths (e.g. a tab left on a removed route) fall back to the
+            daily view instead of rendering a blank screen with no nav. */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
     </SyncProvider>

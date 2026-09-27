@@ -76,28 +76,6 @@ export function mergeStates(
         keepOurs
       ),
       propositos: mergeById(base.data.propositos, ours.data.propositos, keepOurs),
-      // Career tables all carry updatedAt. `?? []` because a snapshot pushed by a
-      // schema-1 client lacks these keys entirely — the union with ours then keeps
-      // every local row, and pushing the merged result restores them in the cloud.
-      careerPlan: mergeById(base.data.careerPlan ?? [], ours.data.careerPlan ?? [], newerUpdatedAt),
-      careerMoves: mergeById(base.data.careerMoves ?? [], ours.data.careerMoves ?? [], newerUpdatedAt),
-      careerDeadlines: mergeById(
-        base.data.careerDeadlines ?? [],
-        ours.data.careerDeadlines ?? [],
-        newerUpdatedAt
-      ),
-      careerOutreach: mergeById(
-        base.data.careerOutreach ?? [],
-        ours.data.careerOutreach ?? [],
-        newerUpdatedAt
-      ),
-      careerLadder: mergeById(
-        base.data.careerLadder ?? [],
-        ours.data.careerLadder ?? [],
-        newerUpdatedAt
-      ),
-      careerWins: mergeById(base.data.careerWins ?? [], ours.data.careerWins ?? [], newerUpdatedAt),
-      careerLog: mergeById(base.data.careerLog ?? [], ours.data.careerLog ?? [], newerUpdatedAt),
       // Meditação: keyed by date (= id), updatedAt bumped on draw + reroll, so a
       // concurrent reroll on two devices resolves deterministically (newer wins).
       // `?? []` tolerates a schema-≤2 snapshot that lacks the key (preserve ours).

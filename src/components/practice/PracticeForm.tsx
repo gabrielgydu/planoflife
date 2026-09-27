@@ -10,15 +10,9 @@ import { ConfirmDialog } from '../shared/ConfirmDialog'
 import { compressImage } from '../../utils/imageCompression'
 import { getPracticeDomain } from '../../utils/domain'
 import { normalizeScheduleDays } from '../../utils/schedule'
-import { useCareerEnabled } from '../../hooks/useCareerEnabled'
 import type { PracticeDomain } from '../../types'
 
 const WEEKDAY_CHIPS = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'] // Dom … Sáb
-const DOMAIN_OPTIONS: { key: PracticeDomain; label: string }[] = [
-  { key: 'spiritual', label: 'Espiritual' },
-  { key: 'lifestyle', label: 'Hábito' },
-  { key: 'career', label: 'Carreira' },
-]
 
 const RichTextEditor = lazy(() =>
   import('../shared/RichTextEditor').then((m) => ({ default: m.RichTextEditor }))
@@ -35,9 +29,6 @@ export function PracticeForm() {
     usePractices()
 
   const existingPractice = useLiveQuery(() => (id ? db.practices.get(id) : undefined), [id])
-  // "Carreira" is only offered where the career section exists (or the practice
-  // already is one) — on every other install the form keeps the binary toggle.
-  const careerEnabled = useCareerEnabled()
 
   const [name, setName] = useState('')
   const [categoryId, setCategoryId] = useState('')
@@ -49,8 +40,6 @@ export function PracticeForm() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [isCompressing, setIsCompressing] = useState(false)
-
-  const showCareerOption = careerEnabled || domain === 'career'
 
   // Load the row into the form ONCE per practice id. existingPractice is a live
   // query — it re-emits a fresh object on every write to the practices table
@@ -204,53 +193,27 @@ export function PracticeForm() {
           </select>
         </div>
 
-        {showCareerOption ? (
-          <div className="py-2">
-            <span className="text-sm font-medium text-text-secondary dark:text-text-secondary-dark">Tipo</span>
-            <p className="text-xs text-text-muted dark:text-text-muted-dark mb-2">
-              Devoção espiritual, hábito de estilo de vida ou hábito de carreira
+        <div className="flex items-center justify-between py-2">
+          <div>
+            <span className="text-sm font-medium text-text-secondary dark:text-text-secondary-dark">Hábito</span>
+            <p className="text-xs text-text-muted dark:text-text-muted-dark">
+              Hábito de estilo de vida, separado das devoções espirituais
             </p>
-            <div className="flex gap-2">
-              {DOMAIN_OPTIONS.map((opt) => (
-                <button
-                  key={opt.key}
-                  type="button"
-                  onClick={() => setDomain(opt.key)}
-                  aria-pressed={domain === opt.key}
-                  className={`flex-1 py-2 px-3 text-sm rounded-lg transition-colors ${
-                    domain === opt.key
-                      ? 'bg-btn dark:bg-btn-dark text-btn-text dark:text-btn-dark-text'
-                      : 'bg-surface-secondary dark:bg-surface-secondary-dark text-text-secondary dark:text-text-secondary-dark hover:bg-border dark:hover:bg-border-dark'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
           </div>
-        ) : (
-          <div className="flex items-center justify-between py-2">
-            <div>
-              <span className="text-sm font-medium text-text-secondary dark:text-text-secondary-dark">Hábito</span>
-              <p className="text-xs text-text-muted dark:text-text-muted-dark">
-                Hábito de estilo de vida, separado das devoções espirituais
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setDomain((d) => (d === 'lifestyle' ? 'spiritual' : 'lifestyle'))}
-              className={`relative w-12 h-7 rounded-full transition-colors ${
-                domain === 'lifestyle' ? 'bg-btn dark:bg-btn-dark' : 'bg-border dark:bg-border-dark'
+          <button
+            type="button"
+            onClick={() => setDomain((d) => (d === 'lifestyle' ? 'spiritual' : 'lifestyle'))}
+            className={`relative w-12 h-7 rounded-full transition-colors ${
+              domain === 'lifestyle' ? 'bg-btn dark:bg-btn-dark' : 'bg-border dark:bg-border-dark'
+            }`}
+          >
+            <span
+              className={`absolute top-1 w-5 h-5 bg-btn-text dark:bg-btn-dark-text rounded-full shadow transition-transform ${
+                domain === 'lifestyle' ? 'translate-x-6' : 'translate-x-1'
               }`}
-            >
-              <span
-                className={`absolute top-1 w-5 h-5 bg-btn-text dark:bg-btn-dark-text rounded-full shadow transition-transform ${
-                  domain === 'lifestyle' ? 'translate-x-6' : 'translate-x-1'
-                }`}
-              />
-            </button>
-          </div>
-        )}
+            />
+          </button>
+        </div>
 
         {/* Available for every domain: spiritual practices schedule weekdays too
             (e.g. the Saturday plan-of-life practices). */}

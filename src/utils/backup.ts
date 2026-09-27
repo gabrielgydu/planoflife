@@ -7,13 +7,6 @@ import type {
   ExamenEntry,
   GuidingQuestion,
   Proposito,
-  CareerPlan,
-  CareerMove,
-  CareerDeadline,
-  CareerOutreachAttempt,
-  CareerLadderRung,
-  CareerWin,
-  CareerLogEntry,
   MeditationDay,
   ReadingPosition,
   Prayer,
@@ -33,18 +26,9 @@ export interface BackupData {
     examenEntries: ExamenEntry[]
     guidingQuestions: GuidingQuestion[]
     propositos: Proposito[]
-    // Optional: absent from backups exported before the career section existed.
-    // On import, an ABSENT array preserves the local table (older file, no
+    // Optional: absent from backups exported before the Meditação feature. On
+    // import, an ABSENT array preserves the local table (older file, no
     // opinion) — mirroring how sync treats snapshots from older clients.
-    careerPlan?: CareerPlan[]
-    careerMoves?: CareerMove[]
-    careerDeadlines?: CareerDeadline[]
-    careerOutreach?: CareerOutreachAttempt[]
-    careerLadder?: CareerLadderRung[]
-    careerWins?: CareerWin[]
-    careerLog?: CareerLogEntry[]
-    // Optional, like the career keys: absent from backups exported before the
-    // Meditação feature; an ABSENT array preserves the local table on import.
     meditationDays?: MeditationDay[]
     // Optional, like the keys above: absent from backups exported before the
     // New Testament reader; an ABSENT array preserves the local table on import.
@@ -67,13 +51,6 @@ export async function exportBackup(): Promise<BackupData> {
     examenEntries,
     guidingQuestions,
     propositos,
-    careerPlan,
-    careerMoves,
-    careerDeadlines,
-    careerOutreach,
-    careerLadder,
-    careerWins,
-    careerLog,
     meditationDays,
     readingPositions,
     prayers,
@@ -86,13 +63,6 @@ export async function exportBackup(): Promise<BackupData> {
     db.examenEntries.toArray(),
     db.guidingQuestions.toArray(),
     db.propositos.toArray(),
-    db.careerPlan.toArray(),
-    db.careerMoves.toArray(),
-    db.careerDeadlines.toArray(),
-    db.careerOutreach.toArray(),
-    db.careerLadder.toArray(),
-    db.careerWins.toArray(),
-    db.careerLog.toArray(),
     db.meditationDays.toArray(),
     db.readingPositions.toArray(),
     db.prayers.toArray(),
@@ -110,13 +80,6 @@ export async function exportBackup(): Promise<BackupData> {
       examenEntries,
       guidingQuestions,
       propositos,
-      careerPlan,
-      careerMoves,
-      careerDeadlines,
-      careerOutreach,
-      careerLadder,
-      careerWins,
-      careerLog,
       meditationDays,
       readingPositions,
       prayers,
@@ -140,13 +103,6 @@ export async function importBackup(backup: BackupData): Promise<void> {
       db.examenEntries,
       db.guidingQuestions,
       db.propositos,
-      db.careerPlan,
-      db.careerMoves,
-      db.careerDeadlines,
-      db.careerOutreach,
-      db.careerLadder,
-      db.careerWins,
-      db.careerLog,
       db.meditationDays,
       db.readingPositions,
       db.prayers,
@@ -167,13 +123,6 @@ export async function importBackup(backup: BackupData): Promise<void> {
         replace(db.examenEntries, d.examenEntries),
         replace(db.guidingQuestions, d.guidingQuestions),
         replace(db.propositos, d.propositos),
-        replace(db.careerPlan, d.careerPlan),
-        replace(db.careerMoves, d.careerMoves),
-        replace(db.careerDeadlines, d.careerDeadlines),
-        replace(db.careerOutreach, d.careerOutreach),
-        replace(db.careerLadder, d.careerLadder),
-        replace(db.careerWins, d.careerWins),
-        replace(db.careerLog, d.careerLog),
         replace(db.meditationDays, d.meditationDays),
         replace(db.readingPositions, d.readingPositions),
         replace(db.prayers, d.prayers),

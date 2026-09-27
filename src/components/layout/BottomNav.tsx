@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router'
-import { Scale, BookOpen, Briefcase, Settings, type LucideIcon } from 'lucide-react'
-import { useCareerEnabled } from '../../hooks/useCareerEnabled'
+import { Scale, BookOpen, Settings, type LucideIcon } from 'lucide-react'
 
 function OpusDeiSeal({ className }: { className?: string }) {
   return (
@@ -18,7 +17,7 @@ function OpusDeiSeal({ className }: { className?: string }) {
   )
 }
 
-const baseTabs: { to: string; icon: LucideIcon | null }[] = [
+const tabs: { to: string; icon: LucideIcon | null }[] = [
   { to: '/', icon: null },
   { to: '/examen', icon: Scale },
   // The Devocionário took this slot from Histórico, which now lives under
@@ -27,15 +26,7 @@ const baseTabs: { to: string; icon: LucideIcon | null }[] = [
   { to: '/settings', icon: Settings },
 ]
 
-const careerTab = { to: '/career', icon: Briefcase }
-
 export function BottomNav() {
-  // The Carreira tab exists only when career data is present (Gabriel's devices);
-  // every other install sees the unchanged four-tab bar.
-  const careerEnabled = useCareerEnabled()
-  const tabs = careerEnabled
-    ? [...baseTabs.slice(0, 3), careerTab, ...baseTabs.slice(3)]
-    : baseTabs
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-surface-card dark:bg-surface-card-dark border-t border-border dark:border-border-dark pb-[var(--safe-area-bottom)] sm:left-1/2 sm:right-auto sm:bottom-6 sm:-translate-x-1/2 sm:w-auto sm:border sm:rounded-2xl sm:shadow-lg sm:pb-0">
       <div className="flex justify-around items-center h-16 sm:justify-center sm:gap-2 sm:px-2">

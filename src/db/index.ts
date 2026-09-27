@@ -7,13 +7,6 @@ import type {
   ExamenEntry,
   GuidingQuestion,
   Proposito,
-  CareerPlan,
-  CareerMove,
-  CareerDeadline,
-  CareerOutreachAttempt,
-  CareerLadderRung,
-  CareerWin,
-  CareerLogEntry,
   MeditationDay,
   ReadingPosition,
   Prayer,
@@ -776,6 +769,54 @@ export async function ensureExameTemaMigrated(tx: TableSource): Promise<void> {
   }
 }
 
+// The career section's category and habits, removed in v25 together with its
+// seven stores. Kept only so ensureCareerRemoved can find and delete the rows.
+const CAREER_CATEGORY_ID = 'career-cat'
+const CAREER_DOMAIN = 'career'
+
+// Same one-time "migration still needs to reach the cloud" marker as
+// LITURGIA_V18 — v25 DELETES rows, and the first pull re-applies the
+// still-present schema-6 cloud snapshot (full clear+bulkAdd), which RESURRECTS
+// the career category and practices. The reconciliation re-runs the delete
+// through the live (hook-captured) db and pushes, so the deletion — and the
+// career-less snapshot — actually reach the cloud. Cleared only after a
+// successful push.
+export const CAREER_V25_PENDING_PUSH_KEY = 'career-v25-pending-push'
+
+/**
+ * Remove what the career section left in the shared tables: the fixed-id
+ * "Carreira" category, every career-domain practice (and any practice still
+ * filed under that category), and those practices' dailyRecords and
+ * missedReasons. The seven career stores themselves are dropped by the
+ * version(25) schema. Idempotent: a no-op once the rows are gone, and on every
+ * install that never received career data via sync. Runs from
+ * version(25).upgrade AND from the post-sync reconciliation (see
+ * CAREER_V25_PENDING_PUSH_KEY).
+ */
+export async function ensureCareerRemoved(tx: TableSource): Promise<void> {
+  const categoriesTable = tx.table('categories')
+  const practicesTable = tx.table('practices')
+  const dailyRecordsTable = tx.table('dailyRecords')
+  const missedReasonsTable = tx.table('missedReasons')
+
+  // Read `domain` raw: the PracticeDomain type no longer includes 'career'.
+  const allPractices = (await practicesTable.toArray()) as {
+    id: string
+    categoryId: string
+    domain?: string
+  }[]
+  const targetIds = allPractices
+    .filter((p) => p.domain === CAREER_DOMAIN || p.categoryId === CAREER_CATEGORY_ID)
+    .map((p) => p.id)
+
+  for (const id of targetIds) {
+    await practicesTable.delete(id)
+    await dailyRecordsTable.where('practiceId').equals(id).delete()
+    await missedReasonsTable.where('practiceId').equals(id).delete()
+  }
+  await categoriesTable.delete(CAREER_CATEGORY_ID)
+}
+
 export class PlanOfLifeDB extends Dexie {
   categories!: EntityTable<Category, 'id'>
   practices!: EntityTable<Practice, 'id'>
@@ -784,13 +825,6 @@ export class PlanOfLifeDB extends Dexie {
   examenEntries!: EntityTable<ExamenEntry, 'id'>
   guidingQuestions!: EntityTable<GuidingQuestion, 'id'>
   propositos!: EntityTable<Proposito, 'id'>
-  careerPlan!: EntityTable<CareerPlan, 'id'>
-  careerMoves!: EntityTable<CareerMove, 'id'>
-  careerDeadlines!: EntityTable<CareerDeadline, 'id'>
-  careerOutreach!: EntityTable<CareerOutreachAttempt, 'id'>
-  careerLadder!: EntityTable<CareerLadderRung, 'id'>
-  careerWins!: EntityTable<CareerWin, 'id'>
-  careerLog!: EntityTable<CareerLogEntry, 'id'>
   meditationDays!: EntityTable<MeditationDay, 'id'>
   readingPositions!: EntityTable<ReadingPosition, 'id'>
   prayers!: EntityTable<Prayer, 'id'>
@@ -880,10 +914,10 @@ export class PlanOfLifeDB extends Dexie {
       }
     })
 
-    // Career section tables (see src/types — "Career section"). New, empty stores
-    // only — no upgrade function needed, and existing rows are untouched, so the
-    // migration is trivially idempotent. They stay empty on every install until a
-    // synced snapshot carries career data (Gabriel's devices only).
+    // Career section tables. New, empty stores only — no upgrade function needed,
+    // and existing rows are untouched, so the migration is trivially idempotent.
+    // They stayed empty on every install except the ones whose synced snapshot
+    // carried career data (Gabriel's devices). Dropped again in v25.
     this.version(7).stores({
       careerPlan: 'id',
       careerMoves: 'id, sortOrder',
@@ -1088,6 +1122,33 @@ export class PlanOfLifeDB extends Dexie {
         // localStorage unavailable — see the v14 note above.
       }
     })
+
+    // Remove the career section ("Carreira" tab) entirely: drop its seven stores
+    // (v7) and delete what it left in the shared tables — the "Carreira" category,
+    // the career-domain practices and their records (ensureCareerRemoved). A row
+    // DELETE, so — like v18 — it needs the reconciliation flag, or the first pull
+    // would resurrect the category and practices from the schema-6 cloud snapshot.
+    // Dropping synced stores bumps the sync schema to 7, so a device that hasn't
+    // reloaded yet refuses the new snapshot instead of pushing its career rows back
+    // — see src/sync/types.ts and scripts/sync-core.mjs.
+    this.version(25)
+      .stores({
+        careerPlan: null,
+        careerMoves: null,
+        careerDeadlines: null,
+        careerOutreach: null,
+        careerLadder: null,
+        careerWins: null,
+        careerLog: null,
+      })
+      .upgrade(async (tx) => {
+        await ensureCareerRemoved(tx)
+        try {
+          localStorage.setItem(CAREER_V25_PENDING_PUSH_KEY, 'true')
+        } catch {
+          // localStorage unavailable — see the v14 note above.
+        }
+      })
   }
 }
 

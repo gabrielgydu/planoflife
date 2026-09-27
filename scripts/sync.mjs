@@ -119,7 +119,7 @@ async function cmdPull() {
   }
   if (!remote.salt) die('Cloud has data but no salt — inconsistent state.')
   const key = await deriveEncKey(SYNC_PASSPHRASE, unb64(remote.salt))
-  // NOTE: a snapshot from a pre-career writer lacks the career table keys.
+  // NOTE: a snapshot from an older writer lacks the newer table keys.
   // They stay missing in state.json on purpose — missing means "no opinion,
   // preserve device rows"; filling [] here would wipe devices on the next push.
   const state = assertKnownSchema(await decryptState(remote.blob, key))
