@@ -70,6 +70,43 @@ export function GuidingQuestionsList() {
     return <Spinner className="h-64" />
   }
 
+  // The user's own questions (no section) come first; each section — a set taken
+  // from one source, e.g. a círculo's exame — follows under its own heading.
+  // Reordering stays inside a group, so sortOrder is only ever compared within one.
+  const ownQuestions = questions.filter((q) => !q.section)
+  const sections = [...new Set(questions.flatMap((q) => (q.section ? [q.section] : [])))]
+    .sort((a, b) => a.localeCompare(b, 'pt'))
+    .map((title) => ({ title, questions: questions.filter((q) => q.section === title) }))
+
+  const renderQuestion = (question: GuidingQuestion) => (
+    <div className="flex items-center gap-3 px-4 py-4 bg-surface-card dark:bg-surface-dark">
+      <span className="text-text-muted dark:text-text-muted-dark cursor-grab">
+        <GripVertical className="w-5 h-5" />
+      </span>
+      <span className="flex-1 text-sm text-text-primary dark:text-text-primary-dark whitespace-pre-line">
+        {question.text}
+      </span>
+      <button
+        onClick={(e) => {
+          e.stopPropagation()
+          handleOpenForm(question)
+        }}
+        className="p-1.5 text-text-muted hover:text-text-secondary dark:hover:text-text-secondary-dark transition-colors"
+      >
+        <Pencil className="w-4 h-4" />
+      </button>
+      <button
+        onClick={(e) => {
+          e.stopPropagation()
+          archiveQuestion(question.id)
+        }}
+        className="p-1.5 text-text-muted hover:text-[#A89548] transition-colors"
+      >
+        <Archive className="w-4 h-4" />
+      </button>
+    </div>
+  )
+
   return (
     <div className="min-h-full">
       <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
@@ -130,38 +167,27 @@ export function GuidingQuestionsList() {
           />
         </div>
       ) : (
-        <div className="divide-y divide-border/30 dark:divide-border-dark mx-auto w-full max-w-2xl">
-          <SortableList
-            items={questions}
-            onReorder={handleReorder}
-            renderItem={(question) => (
-              <div className="flex items-center gap-3 px-4 py-4 bg-surface-card dark:bg-surface-dark">
-                <span className="text-text-muted dark:text-text-muted-dark cursor-grab">
-                  <GripVertical className="w-5 h-5" />
-                </span>
-                <span className="flex-1 text-sm text-text-primary dark:text-text-primary-dark">{question.text}</span>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleOpenForm(question)
-                  }}
-                  className="p-1.5 text-text-muted hover:text-text-secondary dark:hover:text-text-secondary-dark transition-colors"
-                >
-                  <Pencil className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    archiveQuestion(question.id)
-                  }}
-                  className="p-1.5 text-text-muted hover:text-[#A89548] transition-colors"
-                >
-                  <Archive className="w-4 h-4" />
-                </button>
+        <>
+          {ownQuestions.length > 0 && (
+            <div className="divide-y divide-border/30 dark:divide-border-dark mx-auto w-full max-w-2xl">
+              <SortableList items={ownQuestions} onReorder={handleReorder} renderItem={renderQuestion} />
+            </div>
+          )}
+          {sections.map((section) => (
+            <section key={section.title} className="mx-auto w-full max-w-2xl">
+              <h2 className="px-4 pt-6 pb-2 text-xs font-heading font-medium text-text-muted dark:text-text-muted-dark uppercase tracking-wide border-b border-border/30 dark:border-border-dark/30">
+                {section.title}
+              </h2>
+              <div className="divide-y divide-border/30 dark:divide-border-dark">
+                <SortableList
+                  items={section.questions}
+                  onReorder={handleReorder}
+                  renderItem={renderQuestion}
+                />
               </div>
-            )}
-          />
-        </div>
+            </section>
+          ))}
+        </>
       )}
 
       {/* Form Modal */}
@@ -193,7 +219,7 @@ export function GuidingQuestionsList() {
                 value={formText}
                 onChange={(e) => setFormText(e.target.value)}
                 placeholder="Digite a pergunta orientadora..."
-                className="w-full h-24 px-4 py-3 bg-surface-secondary dark:bg-surface-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 dark:focus:ring-ring-dark/30"
+                className="w-full h-40 px-4 py-3 bg-surface-secondary dark:bg-surface-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 dark:focus:ring-ring-dark/30"
                 autoFocus
               />
               <div className="flex gap-3 pb-4">

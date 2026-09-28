@@ -92,6 +92,10 @@ export interface GuidingQuestion {
   sortOrder: number
   isArchived: boolean
   createdAt: string
+  // Optional heading the question is listed under on the Perguntas page, for a
+  // set that comes from one source (e.g. a círculo's exame). Absent = the user's
+  // own questions, listed first. Not indexed, so no Dexie version bump.
+  section?: string
 }
 
 export interface Proposito {
