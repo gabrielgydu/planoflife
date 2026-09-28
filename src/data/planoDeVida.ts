@@ -59,3 +59,24 @@ const normalizeName = (s: string) =>
 export function isSantaMissaPractice(practice: Practice): boolean {
   return normalizeName(practice.name) === normalizeName(SANTA_MISSA_NAME)
 }
+
+// "Sempre" — the norms lived all day long rather than done once. Not practices:
+// there is nothing to check off, so they are a read-only list shown under the
+// Plano de Vida category (SempreSection) to be re-read until they're second
+// nature. The id is the section's key in the synced collapsed-categories setting,
+// so folding it away once internalized sticks on both devices.
+export const SEMPRE_SECTION_ID = 'sempre'
+export const SEMPRE_NAME = 'Sempre'
+export const SEMPRE_ITEMS = [
+  'Presença de Deus.',
+  'Consideração da nossa filiação divina.',
+  'Comunhões espirituais.',
+  'Ações de graças.',
+  'Atos de desagravo.',
+  'Orações jaculatórias.',
+  'Mortificação.',
+  'Estudo.',
+  'Trabalho.',
+  'Ordem.',
+  'Alegria.',
+]

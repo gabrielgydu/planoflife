@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { Fragment, useState, useMemo, useCallback } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useNavigate } from 'react-router'
 import { RotateCcw, ClipboardList, Eye, EyeOff, CheckCircle2 } from 'lucide-react'
@@ -15,6 +15,7 @@ import { ExameParticularView } from '../examen/ExameParticularView'
 import { YesterdayReviewModal } from './YesterdayReviewModal'
 import { MissedReasonsModal } from './MissedReasonsModal'
 import { PropositoCard } from './PropositoCard'
+import { SempreSection } from './SempreSection'
 import { ViewModeFab } from './ViewModeFab'
 import { Spinner } from '../shared/Spinner'
 import { EmptyState } from '../shared/EmptyState'
@@ -33,7 +34,11 @@ import {
   useCollapsedCategories,
   DAILY_VIEW_MODES,
 } from '../../hooks/useSettings'
-import { PLANO_DE_VIDA_CATEGORY_ID, isSantaMissaPractice } from '../../data/planoDeVida'
+import {
+  PLANO_DE_VIDA_CATEGORY_ID,
+  SEMPRE_SECTION_ID,
+  isSantaMissaPractice,
+} from '../../data/planoDeVida'
 import { isNovoTestamentoPractice } from '../../data/novoTestamento'
 import { COSTUMES_CATEGORY_ID } from '../../data/costumes'
 import { isPracticeVisibleOn, novenaCatchUpSubtitle } from '../../data/novena'
@@ -322,26 +327,36 @@ export function DailyView() {
         {categories.map((category) => {
           const categoryPractices = practicesByCategory.get(category.id) ?? []
           return (
-            <CategorySection
-              key={category.id}
-              category={category}
-              practices={categoryPractices}
-              viewDate={currentDate}
-              novenaStart={novenaStart}
-              catchUpRows={
-                catchUpRows.length > 0 && category.id === novenaPractice?.categoryId
-                  ? catchUpRows
-                  : undefined
-              }
-              onToggleCatchUp={handleToggleCatchUp}
-              onOpenCatchUpDetail={handleOpenCatchUpDetail}
-              isCompleted={isCompletedEffective}
-              onTogglePractice={toggleEffective}
-              onOpenPracticeDetail={handleOpenPracticeDetail}
-              hideCompleted={hideCompleted}
-              isExpanded={!isCollapsed(category.id)}
-              onToggleExpanded={() => toggleCategory(category.id)}
-            />
+            <Fragment key={category.id}>
+              <CategorySection
+                category={category}
+                practices={categoryPractices}
+                viewDate={currentDate}
+                novenaStart={novenaStart}
+                catchUpRows={
+                  catchUpRows.length > 0 && category.id === novenaPractice?.categoryId
+                    ? catchUpRows
+                    : undefined
+                }
+                onToggleCatchUp={handleToggleCatchUp}
+                onOpenCatchUpDetail={handleOpenCatchUpDetail}
+                isCompleted={isCompletedEffective}
+                onTogglePractice={toggleEffective}
+                onOpenPracticeDetail={handleOpenPracticeDetail}
+                hideCompleted={hideCompleted}
+                isExpanded={!isCollapsed(category.id)}
+                onToggleExpanded={() => toggleCategory(category.id)}
+              />
+              {/* The "Sempre" norms read as part of the plan of life, so they
+                  follow its category and leave with it in the extras mode. Not
+                  subject to hide-completed: there is nothing to complete. */}
+              {category.id === PLANO_DE_VIDA_CATEGORY_ID && viewMode !== 'extras' && (
+                <SempreSection
+                  isExpanded={!isCollapsed(SEMPRE_SECTION_ID)}
+                  onToggleExpanded={() => toggleCategory(SEMPRE_SECTION_ID)}
+                />
+              )}
+            </Fragment>
           )
         })}
 
