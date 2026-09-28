@@ -454,7 +454,7 @@
             "text": "Na manhã da Sexta Feira Santa, Pilatos apresentou Cristo, torturado e humilhado, ao povo, dizendo: Ecce Homo “Eis o homem” (Jo 19, 5). Horas depois seria crucificado.\nEm um famoso quadro de Ticiano – o Ecce Homo – pode-se ver Jesus, destroçado como homem, mas, no entanto, fazendo brilhar sua divindade e beleza. Deus quis tornar-se visível também na vulnerabilidade."
           }
         ],
-        "notes": "SR regrouped [0-2] | [3] | [4-5]; the leading '- ' of SR paragraph [4] was dropped because the unit starts there (paragraph opens with a dialogue dash). Sulco 35: escriva.org reads 'baixar a fronte'; the repo's src/data/escriva_points.json has 'baixar a fonte' (corpus typo, affects the Meditação reader — out of scope)."
+        "notes": "SR regrouped [0-2] | [3] | [4-5]; the leading '- ' of SR paragraph [4] was dropped because the unit starts there (paragraph opens with a dialogue dash). Sulco 35: escriva.org reads 'baixar a fronte'; src/data/escriva_points.json had 'baixar a fonte' from a stale om cache (fixed in the cache and rebuilt)."
       },
       {
         "title": "A Cruz às Costas",
