@@ -1,4 +1,4 @@
-import { Fragment, useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useNavigate } from 'react-router'
 import { RotateCcw, ClipboardList, Eye, EyeOff, CheckCircle2 } from 'lucide-react'
@@ -327,36 +327,26 @@ export function DailyView() {
         {categories.map((category) => {
           const categoryPractices = practicesByCategory.get(category.id) ?? []
           return (
-            <Fragment key={category.id}>
-              <CategorySection
-                category={category}
-                practices={categoryPractices}
-                viewDate={currentDate}
-                novenaStart={novenaStart}
-                catchUpRows={
-                  catchUpRows.length > 0 && category.id === novenaPractice?.categoryId
-                    ? catchUpRows
-                    : undefined
-                }
-                onToggleCatchUp={handleToggleCatchUp}
-                onOpenCatchUpDetail={handleOpenCatchUpDetail}
-                isCompleted={isCompletedEffective}
-                onTogglePractice={toggleEffective}
-                onOpenPracticeDetail={handleOpenPracticeDetail}
-                hideCompleted={hideCompleted}
-                isExpanded={!isCollapsed(category.id)}
-                onToggleExpanded={() => toggleCategory(category.id)}
-              />
-              {/* The "Sempre" norms read as part of the plan of life, so they
-                  follow its category and leave with it in the extras mode. Not
-                  subject to hide-completed: there is nothing to complete. */}
-              {category.id === PLANO_DE_VIDA_CATEGORY_ID && viewMode !== 'extras' && (
-                <SempreSection
-                  isExpanded={!isCollapsed(SEMPRE_SECTION_ID)}
-                  onToggleExpanded={() => toggleCategory(SEMPRE_SECTION_ID)}
-                />
-              )}
-            </Fragment>
+            <CategorySection
+              key={category.id}
+              category={category}
+              practices={categoryPractices}
+              viewDate={currentDate}
+              novenaStart={novenaStart}
+              catchUpRows={
+                catchUpRows.length > 0 && category.id === novenaPractice?.categoryId
+                  ? catchUpRows
+                  : undefined
+              }
+              onToggleCatchUp={handleToggleCatchUp}
+              onOpenCatchUpDetail={handleOpenCatchUpDetail}
+              isCompleted={isCompletedEffective}
+              onTogglePractice={toggleEffective}
+              onOpenPracticeDetail={handleOpenPracticeDetail}
+              hideCompleted={hideCompleted}
+              isExpanded={!isCollapsed(category.id)}
+              onToggleExpanded={() => toggleCategory(category.id)}
+            />
           )
         })}
 
@@ -378,6 +368,17 @@ export function DailyView() {
             icon={ClipboardList}
             message="Nenhuma prática cadastrada"
             action={{ label: 'Adicionar práticas', onClick: () => navigate('/settings/practices') }}
+          />
+        )}
+
+        {/* The "Sempre" norms belong to the plan of life, so they leave with it
+            in the extras mode — but they are read, not done, so they close the
+            list instead of sitting among the checkable categories. Not subject to
+            hide-completed: there is nothing to complete. */}
+        {viewMode !== 'extras' && categories.some((c) => c.id === PLANO_DE_VIDA_CATEGORY_ID) && (
+          <SempreSection
+            isExpanded={!isCollapsed(SEMPRE_SECTION_ID)}
+            onToggleExpanded={() => toggleCategory(SEMPRE_SECTION_ID)}
           />
         )}
       </motion.div>

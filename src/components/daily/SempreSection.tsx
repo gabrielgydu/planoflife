@@ -7,7 +7,7 @@ interface SempreSectionProps {
   onToggleExpanded: () => void
 }
 
-// The "Sempre" norms under the Plano de Vida category. Folds like a category
+// The "Sempre" norms, last in the daily view. Folds like a category
 // (same header) but has no count and no checkboxes: it is there to be read.
 export function SempreSection({ isExpanded, onToggleExpanded }: SempreSectionProps) {
   return (
