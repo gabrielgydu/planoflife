@@ -3,24 +3,22 @@ import { ChevronLeft, ChevronRight, Shuffle, BookOpen, X, Check } from 'lucide-r
 import { motion, AnimatePresence, type PanInfo } from 'motion/react'
 import rosaryRaw from '../../data/rosary_contemplation.json'
 import rosaryImagesRaw from '../../data/rosary_images.json'
-import { prayedSetForWeekday, SET_ORDER, type SetKey } from '../../data/rosary'
+import {
+  prayedSetForWeekday,
+  SET_ORDER,
+  type RosaryMystery,
+  type RosarySet,
+  type SetKey,
+} from '../../data/rosary'
+import { RosaryQuoteText } from './RosaryQuoteText'
 
-interface RosaryMystery {
-  title: string
-  quotes: string[]
-}
-interface RosarySet {
-  label: string
-  vocalDays: number[]
-  mysteries: RosaryMystery[]
-}
 interface RosaryData {
   prologo: { title: string; author: string; date: string | null; paragraphs: string[] }
   nonDaySetByWeekday: Record<string, SetKey>
   sets: Record<SetKey, RosarySet>
 }
 interface ImageCandidate {
-  f: string // path relative to /rosary-images/, e.g. "gozosos/1-a-anunciacao-1.jpg"
+  f: string // path relative to /rosary-images/, e.g. "gozosos/1-a-anunciacao-1.webp"
   a: string // painter (caption)
 }
 
@@ -64,8 +62,8 @@ interface RosaryContemplationViewProps {
  * Full-screen contemplation reader for the rosary mysteries NOT prayed on the
  * viewed day. The three remaining sets are flattened into one continuous sequence
  * of 15 mysteries; swiping left/right walks from the first group to the last. One
- * random Escrivá quote and one random painting per mystery, re-rolled on every open
- * and on demand (↻).
+ * random passage (St. Josemaría or his successors, with its source) and one random
+ * painting per mystery, re-rolled on every open and on demand (↻).
  */
 export function RosaryContemplationView({
   practiceId,
@@ -257,9 +255,7 @@ export function RosaryContemplationView({
                 <h2 className="font-heading text-2xl font-semibold text-text-primary dark:text-text-primary-dark">
                   {slide.mystery.title}
                 </h2>
-                <p className="text-lg italic text-text-secondary dark:text-text-secondary-dark leading-relaxed">
-                  {quote}
-                </p>
+                <RosaryQuoteText quote={quote} textClassName="text-lg" />
                 {img?.a && (
                   <p className="text-xs text-text-muted dark:text-text-muted-dark pt-1">
                     Arte: {img.a}
@@ -301,9 +297,11 @@ export function RosaryContemplationView({
                   ))}
                 </div>
                 <p className="text-xs text-text-muted dark:text-text-muted-dark leading-relaxed mt-6 pt-4 border-t border-border dark:border-border-dark">
-                  Citações de «Santo Rosário», de São Josemaria. Uma frase ao acaso por mistério — toque
-                  em ↻ para trocar. Contemplam-se hoje os mistérios que não são rezados no dia. Os
-                  mistérios luminosos foram acrescentados após o texto original de 1934.
+                  Textos de São Josemaria — «Santo Rosário» e outras obras — e dos seus sucessores à
+                  frente do Opus Dei, com a fonte de cada um. Um texto e uma pintura ao acaso por
+                  mistério — toque em ↻ para trocar. Contemplam-se hoje os mistérios que não são
+                  rezados no dia. Os mistérios luminosos foram acrescentados após o texto original de
+                  1934.
                 </p>
               </div>
             </motion.div>

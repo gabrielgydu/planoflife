@@ -1,0 +1,1202 @@
+{
+  "source": {
+    "note": "Textos de São Josemaria (escriva.org, pt-br) e dos seus sucessores à frente do Opus Dei (opusdei.org); cada citação traz a sua fonte. Mistérios luminosos: não constam do texto original de 1934; a edição posterior compõe-nos com textos de outras obras de São Josemaria.",
+    "build": "scripts/build-rosary-contemplation.mjs (verifica cada texto contra a página de origem)"
+  },
+  "sets": {
+    "gozosos": [
+      {
+        "title": "A Anunciação",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/1/",
+            "text": "Não te esqueças, meu amigo, de que somos crianças. A Senhora do doce nome, Maria, está recolhida em oração.\nTu és, naquela casa, o que quiseres ser: um amigo, um criado, um curioso, um vizinho… - Eu por agora não me atrevo a ser nada. Escondo-me atrás de ti e, pasmado, contemplo a cena."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/1/",
+            "text": "O Arcanjo comunica a sua mensagem… - Quomodo fiet istud, quoniam virum non cognosco? - Como se fará isso, se não conheço varão? (Lc 1, 34).\nA voz da nossa Mãe traz à minha memória, por contraste, todas as impurezas dos homens…, as minhas também.\nE como odeio então essas baixas misérias da terra!… Que propósitos!"
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/1/",
+            "text": "Fiat mihi secundum verbum tuum. - Faça-se em mim segundo a tua palavra (Lc 1, 38). Ao encanto destas palavras virginais, o Verbo se fez carne.\nVai terminar a primeira dezena… Ainda tenho tempo de dizer ao meu Deus, antes que nenhum mortal: Jesus, eu Te amo."
+          },
+          {
+            "ref": "Sulco, 481",
+            "url": "https://escriva.org/pt-br/surco/481/",
+            "text": "Como enamora a cena da Anunciação! Maria - quantas vezes temos meditado nisso! - está recolhida em oração…, aplica os seus cinco sentidos e todas as suas potências na conversa com Deus. Na oração conhece a Vontade divina; e com a oração converte-a em vida da sua vida. Não esqueças o exemplo de Nossa Senhora!"
+          },
+          {
+            "ref": "Amigos de Deus, 25",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/25/",
+            "text": "Consideremos agora o momento sublime em que o Arcanjo São Gabriel anuncia a Santa Maria o desígnio do Altíssimo. A nossa Mãe escuta, e a seguir pergunta, para compreender melhor o que o Senhor lhe pede; depois vem a resposta firme: Fiat! - faça-se em mim segundo a tua palavra! -, o fruto da melhor liberdade: a de decidir-se por Deus."
+          },
+          {
+            "ref": "É Cristo que passa, 173",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/173/",
+            "text": "Nossa Senhora ouve com atenção o que Deus quer, pondera o que não entende, pergunta o que não sabe. Depois, entrega-se por completo ao cumprimento da vontade divina: Eis aqui a escrava do Senhor, faça-se em mim segundo a tua palavra. Vemos a maravilha? Santa Maria, mestra de toda a nossa conduta, ensina-nos agora que a obediência a Deus não é servilismo, não subjuga a consciência; pelo contrário, move-nos interiormente a descobrir a liberdade dos filhos de Deus."
+          },
+          {
+            "ref": "Caminho, 512",
+            "url": "https://escriva.org/pt-br/camino/512/",
+            "text": "Ó Mãe, Mãe! Com essa tua palavra - \"fiat\" - nos tornaste irmãos de Deus e herdeiros da sua glória. - Bendita sejas!"
+          },
+          {
+            "ref": "Forja, 328",
+            "url": "https://escriva.org/pt-br/forja/328/",
+            "text": "\"Quomodo fiet istud quoniam virum non cognosco?\" - como poderá realizar-se este prodígio, se não conheço varão? Pergunta de Maria ao Anjo, que é reflexo do seu Coração sincero.\nOlhando para a Virgem Santa, confirmei-me numa norma clara: para termos paz e vivermos em paz, temos de ser muito sinceros com Deus, com os que dirigem a nossa alma e conosco próprios."
+          },
+          {
+            "ref": "Sulco, 124",
+            "url": "https://escriva.org/pt-br/surco/124/",
+            "text": "Queres viver a audácia santa, para conseguir que Deus atue através de ti? - recorre a Maria, e Ela te acompanhará pelo caminho da humildade, de modo que, diante dos impossíveis para a mente humana, saibas responder com um \"fiat!\" - faça-se! - que una a terra ao Céu."
+          },
+          {
+            "ref": "Amigos de Deus, 109",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/109/",
+            "text": "Eva, depois de pecar por ter querido na sua loucura igualar-se a Deus, escondia-se do Senhor e envergonhava-se: estava triste. Maria, ao confessar-se escrava do Senhor, é feita Mãe do Verbo divino e enche-se de júbilo. Que este seu júbilo, de Mãe boa, nos contagie a todos nós: que nisto saiamos a Ela - a Santa Maria -, e assim nos pareceremos mais com Cristo."
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Meditação, Advento de 2020",
+            "url": "https://opusdei.org/pt-br/article/audio-prelado-opus-dei-advento-2020/",
+            "text": "Olhando para Nossa Senhora, diremos: “Mais do que tu, só Deus!”. Ela recebe uma vocação surpreendente. Pergunta para saber bem do que se trata. E quando o Anjo lhe explica, aparece a resposta de plena dedicação: Fiat! “Faça-se”. “Faça-se em mim segundo a tua palavra” (Lc 1,38)."
+          }
+        ],
+        "notes": "SR regrouped [0-1] scene / [2-4] message→contrast→propósitos / [5-6] fiat + end of decade. Skipped Caminho 510 (escriva page carries a '*' footnote marker + N. do T. line) and AD 109's opening (source typo 'nostraelaetitiae'), so AD 109 starts at 'Eva, depois de pecar'. Ocáriz unit is from the transcribed audio meditation (Advent 2020; page shows dateModified 2020-12-07)."
+      },
+      {
+        "title": "Visitação de Nossa Senhora",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/2/",
+            "text": "Agora, meu pequeno amigo, espero que já saibas mexer-te. - Acompanha alegremente José e Santa Maria… e escutarás tradições da Casa de Davi.\nOuvirás falar de Isabel e de Zacarias, enternecer-te-ás com o amor puríssimo de José, e baterá fortemente o teu coração cada vez que pronunciarem o nome do Menino que nascerá em Belém…"
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/2/",
+            "text": "Caminhamos apressadamente em direção às montanhas, até uma aldeia da tribo de Judá (Lc 1, 39).\nChegamos. - É a casa onde vai nascer João Batista. - Isabel aclama, agradecida, a Mãe do seu Redentor: Bendita és tu entre as mulheres e bendito é o fruto do teu ventre! A que devo tamanho bem, que venha visitar-me a Mãe do meu Senhor? (Lc 1, 42-43)."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/2/",
+            "text": "O Batista, ainda por nascer, estremece… (Lc 1, 41). - A humildade de Maria derrama-se no Magnificat… - E tu e eu, que somos - que éramos - uns soberbos, prometemos ser humildes."
+          },
+          {
+            "ref": "Sulco, 371",
+            "url": "https://escriva.org/pt-br/surco/371/",
+            "text": "Volta os teus olhos para a Virgem Maria e contempla como vive a virtude da lealdade. Quando Isabel precisa dela, diz o Evangelho que vai \"cum festinatione\" com pressa alegre. Aprende!"
+          },
+          {
+            "ref": "Sulco, 566",
+            "url": "https://escriva.org/pt-br/surco/566/",
+            "text": "Bem-aventurada és tu porque acreditaste, diz Isabel à nossa Mãe. - A união com Deus, a vida sobrenatural, comporta sempre a prática atraente das virtudes humanas: Maria leva a alegria ao lar de sua prima, porque “leva” Cristo."
+          },
+          {
+            "ref": "Sulco, 95",
+            "url": "https://escriva.org/pt-br/surco/95/",
+            "text": "Como seria o olhar alegre de Jesus! O mesmo que brilharia nos olhos de sua Mãe, que não pode conter a alegria - \"Magnificat anima mea Dominum!\" - e a sua alma glorifica o Senhor, desde que O traz de si e a seu lado. Oh Mãe! Que a nossa alegria, como a tua, seja a alegria de estar com Ele e de O ter."
+          },
+          {
+            "ref": "Caminho, 598",
+            "url": "https://escriva.org/pt-br/camino/598/",
+            "text": "Como é grande o valor da humildade! - \"Quia respexit humilitatem…\" Acima da fé, da caridade, da pureza imaculada, reza o hino jubiloso de nossa Mãe em casa de Zacarias:\n“Porque Ele olhou a humildade da sua serva, eis que desde agora me chamarão bem-aventurada todas as gerações…”"
+          },
+          {
+            "ref": "É Cristo que passa, 144",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/144/",
+            "text": "Minha alma glorifica o Senhor - cantou a Virgem Maria - e meu espírito exulta de alegria em Deus, meu Salvador: porque olhou para a baixeza de sua serva. Por isso, desde agora me chamarão bem-aventurada todas as gerações, porque fez em mim grandes coisas o Todo-Poderoso, cujo nome é santo.\nA nossa oração pode acompanhar e imitar essa oração de Maria."
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Meditação, Advento de 2020",
+            "url": "https://opusdei.org/pt-br/article/audio-prelado-opus-dei-advento-2020/",
+            "text": "É impressionante como, imediatamente após a Anunciação, imediatamente depois de ter se tornado – com aquele fiat! – Mãe de Deus, a primeira coisa que, podemos dizer, vem à cabeça de Nossa Senhora é pensar em sua prima. Porque o anjo lhe havia dito que a sua prima estava esperando um bebê, mas não lhe havia dito para ir vê-la. Isso era um sinal da onipotência de Deus, porque era uma prima já idosa. E Nossa Senhora percebeu imediatamente que a sua prima precisaria de ajuda e viaja. E não para cumprimentar, ficar algumas horas ou alguns dias. Fica meses!"
+          },
+          {
+            "ref": "Mons. Javier Echevarría, Carta, 1-V-2008",
+            "url": "https://opusdei.org/pt-br/article/carta-do-prelado-maio-2008/",
+            "text": "Já tendes na imaginação a cena que contemplamos todos os dias no segundo mistério gozoso do terço: a chegada de Maria, as palavras de Isabel, os saltos de júbilo de São João Batista ainda não nascido... Depois ficou em casa da sua prima uns três meses, para ajudá-la em tudo o que fosse preciso. Quanto pode a presença de Maria!"
+          }
+        ],
+        "notes": "SR regrouped [0-1] / [2-3] / [4]. Skipped Forja 608 (source has 'Magnificat ,' stray space) and AD 96 (opens with dangling 'Que bem o entendia'). Álvaro's Visitation text 'Homens e mulheres humildes' exists only in pt-pt with several typos ('manifestou-sena', 'serva.De') — left out. Echevarría 1-V-2008 unit stops before a Santo Ambrósio quote."
+      },
+      {
+        "title": "Nascimento de Jesus",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/3/",
+            "text": "Foi promulgado um edito de César Augusto, que manda recensear toda a gente. Para isso, cada qual tem de ir à terra dos seus antepassados. - Como José é da casa e da família de Davi, vai, com a Virgem Maria, de Nazaré à cidade chamada Belém, na Judéia (Lc 2, 1-5).\nE em Belém nasce o nosso Deus: Jesus Cristo! - Não há lugar na pousada: num estábulo. - E sua Mãe envolve-O em panos e reclina-O no presépio (Lc 2, 7)."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/3/",
+            "text": "Frio. - Pobreza. - Sou um escravozinho de José. - Que bom é José! - Trata-me como um pai a seu filho. - Até me perdoa, se tomo o Menino em meus braços e fico, horas e horas, dizendo-Lhe coisas doces e ardentes!…\nE beijo-O - beija-O tu -, e O embalo, e canto para Ele, e Lhe chamo Rei, Amor, meu Deus, meu Único, meu Tudo!… Que lindo é o Menino… e que curta a dezena!"
+          },
+          {
+            "ref": "Caminho, 94",
+            "url": "https://escriva.org/pt-br/camino/94/",
+            "text": "Fez-se tão pequeno - bem vês: um Menino! - para que te aproximes dEle com confiança."
+          },
+          {
+            "ref": "Forja, 345",
+            "url": "https://escriva.org/pt-br/forja/345/",
+            "text": "Chega-te a Belém, aproxima-te do Menino, embala-O, diz-Lhe um monte de coisas ardentes, aperta-O contra o coração…\n- Não falo de criancices: falo de amor! E o amor manifesta-se com fatos: na intimidade da tua alma, bem O podes abraçar!"
+          },
+          {
+            "ref": "Forja, 549",
+            "url": "https://escriva.org/pt-br/forja/549/",
+            "text": "Natal. - Cantam: \"Venite, venite…\" - Vamos, que Ele já nasceu.\nE depois de contemplar como Maria e José cuidam do Menino, atrevo-me a sugerir-te: olha-O de novo, olha-O sem descanso."
+          },
+          {
+            "ref": "Forja, 274",
+            "url": "https://escriva.org/pt-br/forja/274/",
+            "text": "Jesus nasceu numa gruta de Belém, diz a Escritura, “porque não havia lugar para eles na estalagem”.\n- Não me afasto da verdade teológica, se te digo que Jesus continua ainda procurando pousada em teu coração."
+          },
+          {
+            "ref": "É Cristo que passa, 18",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/18/",
+            "text": "Quando chega o Natal, gosto de contemplar as imagens do Menino Jesus. Essas figuras, que nos mostram o Senhor tão humilhado, recordam-me que Deus nos chama, que o Onipotente quis apresentar-se desvalido, quis necessitar dos homens. Da gruta de Belém, Cristo diz a mim e a ti que precisa de nós; reclama de nós uma vida cristã sem hesitações, uma vida de doação, de trabalho, de alegria."
+          },
+          {
+            "ref": "É Cristo que passa, 18",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/18/",
+            "text": "O Natal também está rodeado de uma simplicidade admirável: o Senhor vem sem estrondo, desconhecido de todos. Na terra, só Maria e José participam da divina aventura. Depois, os pastores, avisados pelos Anjos. E, mais tarde, os sábios do Oriente. Assim se realiza o fato transcendente que une o céu à terra, Deus ao homem!"
+          },
+          {
+            "ref": "É Cristo que passa, 14",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/14/",
+            "text": "Ao falar diante do Presépio, sempre procurei ver Cristo Nosso Senhor desta maneira, envolto em paninhos, sobre a palha de uma mangedoura; e, enquanto ainda é Menino e não diz nada, vê-lo já como Doutor, como Mestre. Preciso considerá-lo assim, porque tenho que aprender dEle. E, para aprender dEle, é necessário conhecer a sua vida: ler o Santo Evangelho, meditar no sentido divino do caminhar terreno de Jesus."
+          },
+          {
+            "ref": "Bto. Álvaro del Portillo, Carta, 1-XII-1988",
+            "url": "https://opusdei.org/pt-br/article/textos-sobre-o-advento-3-nasceu-rodeado-de-afeto/",
+            "text": "No Natal, o nosso Fundador sabia introduzir-se no portal de Belém como um personagem mais. Às vezes imaginava que era um pastorzinho que se aproxima confiante de Jesus, oferecendo-lhe um pequeno presente; noutras ocasiões escolhia o lugar daquele outro, que — de joelhos ante o Menino Deus — só sabe adorar; colocava-se até no lugar da mula e do boi, que com o seu bafo contribuem para dar calor ao Recém-nascido, ou no de um cachorrinho fiel que está de guarda junto ao presépio..."
+          },
+          {
+            "ref": "Bto. Álvaro del Portillo, Carta, 1-XII-1988",
+            "url": "https://opusdei.org/pt-br/article/textos-sobre-o-advento-3-nasceu-rodeado-de-afeto/",
+            "text": "Que comodidades encontrou em Belém, quando veio ao mundo há vinte séculos? Nasceu numa gruta paupérrima, porque não havia lugar para eles na pousada […] mas rodeado do enormíssimo afeto de Maria e de José, que teriam limpado e arranjado o melhor possível aquele estábulo para receber Deus."
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Mensagem de Natal, 15-XII-2023",
+            "url": "https://opusdei.org/pt-br/article/mensagem-do-prelado-natal-2023/",
+            "text": "A Virgem Maria, que soube acolher com serenidade e amor todos os momentos da vida de seu Filho, vai nos ajudar a encontrar a paz e a alegria que provêm de deixar que Jesus nasça também em nossos corações."
+          }
+        ],
+        "notes": "SR regrouped [0-1] / [2-3]. Álvaro 1-XII-1988 second unit uses ' […] ' ONLY to drop the footnote marker '[7],' after 'na pousada'. Álvaro [15] ends at 'junto ao presépio...' (the sentence continues 'Eram as pequenas loucuras…'; cut kept it at the source's own ellipsis). 'Em Diálogo com o Senhor' 100–108 (Christmas) is on escriva.org pt-br but reads as pt-PT and carries inline footnote numbers — not used. ECP 18 [6] skipped (source typo 'nonerat')."
+      },
+      {
+        "title": "Purificação de Nossa Senhora",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/4/",
+            "text": "Completado o tempo da purificação da Mãe, segundo a Lei de Moisés, é preciso ir com o Menino a Jerusalém para apresentá-Lo ao Senhor (Lc 2, 22).\nE desta vez serás tu, meu amigo, quem leve a gaiola das rolas. - Estás vendo? Ela - a Imaculada! - submete-se à Lei como se estivesse imunda.\nAprenderás com este exemplo, menino bobo, a cumprir a Santa Lei de Deus, apesar de todos os sacrifícios pessoais?"
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/4/",
+            "text": "Purificação! Tu e eu, sim, é que precisamos de purificação! Expiação, e, acima da expiação, o Amor. - Um amor que seja cautério, que abrase a imundície da nossa alma, e fogo que incendeie com chamas divinas a miséria do nosso coração."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/4/",
+            "text": "Um homem justo e temente a Deus, que, conduzido pelo Espírito Santo, viera ao Templo - tinha-lhe sido revelado que não morreria antes de ver o Cristo -, toma o Messias em seus braços e diz-Lhe: - Agora, Senhor, agora já podes levar em paz deste mundo o teu servo, conforme a tua promessa…, porque meus olhos viram o Salvador (Lc 2, 25-30)."
+          },
+          {
+            "ref": "Amigos de Deus, 287",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/287/",
+            "text": "Mestra de caridade. Recordemo-nos da cena da apresentação de Jesus no templo. O ancião Simeão asseverou a Maria, sua Mãe: Eis que este Menino está posto para ruína e para ressurreição de muitos em Israel, e para ser alvo de contradição. E uma espada trespassará a tua alma, a fim de se descobrirem os pensamentos escondidos de muitos corações. A imensa caridade de Maria pela humanidade faz com que também nEla se cumpra a afirmação de Cristo: Ninguém tem maior amor que aquele que dá a vida pelos seus amigos."
+          },
+          {
+            "ref": "É Cristo que passa, 54",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/54/",
+            "text": "Quando chega o momento de apresentar o Menino no Templo, José, que leva a modesta oferenda de um par de pombas, vê Simeão e Ana proclamarem que Jesus é o Messias."
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Carta pastoral, 14-II-2017",
+            "url": "https://opusdei.org/pt-br/article/carta-pastoral-prelado-opus-dei-14-fevereiro-2017/",
+            "text": "«Senex Puerum portabat, Puer autem senem regebat» […] o ancião segurava o Menino, mas era o Menino quem sustentava o ancião e o dirigia."
+          },
+          {
+            "ref": "Mons. Javier Echevarría, Carta, 1-II-2011",
+            "url": "https://opusdei.org/pt-pt/article/carta-do-prelado-fevereiro-2011/",
+            "text": "A festa da Purificação de Nossa Senhora […] unida à Apresentação de Jesus no Templo, fala-nos precisamente da necessidade de nos purificarmos dos nossos pecados, passo primeiro e indispensável para caminharmos pela via da santidade.",
+            "lang": "pt-pt"
+          }
+        ],
+        "notes": "Thin in St. Josemaría outside Santo Rosário: scripture index gives only AD 287, ECP 54, ECP 171 (typo 'Euma espada') for Lc 2,22-40; Caminho/Sulco/Forja have nothing on the scene. ECP 54 cut to one sentence to avoid source quirk 'admiração , diz'. Ocáriz 14-II-2017 ' […] ' drops only the footnote '[38]:'; it keeps 'nesse sentido' and 'no dia 2 deste mês' (letter-bound phrasing). Echevarría 1-II-2011 is pt-pt only; ' […] ' drops ', que celebramos amanhã, dia 2 de Fevereiro,' — lead may prefer to drop this unit."
+      },
+      {
+        "title": "O Menino Perdido",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/5/",
+            "text": "Onde está Jesus? - Senhora: o Menino!… Onde está?\nMaria chora. - Bem que corremos tu e eu, de grupo em grupo, de caravana em caravana: não O viram. - José, depois de fazer esforços inúteis para não chorar, chora também… E tu… E eu.\nEu, como sou um criadinho tosco, choro sem parar e clamo ao céu e à terra…, pelas vezes em que O perdi por minha culpa e não clamei."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/5/",
+            "text": "Jesus! Que eu nunca mais Te perca… E então a desgraça e a dor nos unem, como nos uniu o pecado, e saem de todo o nosso ser gemidos de profunda contrição e frases ardentes, que a pena não pode, não deve registrar.\nE ao nos consolarmos com a alegria de encontrar Jesus - três dias de ausência! - disputando com os Mestres de Israel (Lc 2, 46), ficará bem gravada na tua alma e na minha a obrigação de deixarmos os da nossa casa para servir o Pai Celestial."
+          },
+          {
+            "ref": "Sulco, 794",
+            "url": "https://escriva.org/pt-br/surco/794/",
+            "text": "Durante três dias e três noites Maria busca o Filho que se perdeu. Oxalá possamos tu e eu dizer que a nossa vontade de encontrar Jesus também não conhece descanso."
+          },
+          {
+            "ref": "Caminho, 907",
+            "url": "https://escriva.org/pt-br/camino/907/",
+            "text": "\"Nesciebatis quia in his quae Patris mei sunt oportet me esse?\" - Não sabíeis que Eu devo ocupar-me nas coisas que dizem respeito ao serviço de meu Pai?\nResposta de Jesus adolescente. E resposta a uma mãe como a sua Mãe, que há três dias anda à sua procura, julgando-O perdido. - Resposta que tem por complemento aquelas palavras de Cristo que São Mateus transcreve: “Quem ama seu pai ou sua mãe mais do que a Mim, não é digno de Mim”."
+          },
+          {
+            "ref": "Amigos de Deus, 278",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/278/",
+            "text": "A Mãe de Deus, que buscou afanosamente o seu Filho, perdido sem culpa dEla, que experimentou a maior alegria ao encontrá-lo, ajudar-nos-á a desandar o andado, a retificar o que for preciso quando pelas nossas leviandades ou pecados não conseguirmos distinguir Cristo. Alcançaremos assim a alegria de abraçá-lo de novo, para lhe dizer que nunca mais o perderemos."
+          },
+          {
+            "ref": "Amigos de Deus, 53",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/53/",
+            "text": "Cristo é uma criança. Que dor a de sua Mãe e a de São José, porque - no regresso de Jerusalém - não vinha entre os parentes e amigos! E que alegria quando o enxergam, já de longe, doutrinando os mestres de Israel! Mas reparemos nas palavras, aparentemente duras, que saem da boca do Filho ao responder à sua Mãe: Por que me buscáveis?\nNão era razoável que o procurassem? As almas que sabem o que é perder Cristo e encontrá-lo podem compreender isto… Por que me buscáveis? Não sabíeis que devo ocupar-me nas coisas de meu Pai? Porventura não sabíeis que devo dedicar totalmente o meu tempo ao meu Pai celestial?"
+          },
+          {
+            "ref": "É Cristo que passa, 17",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/17/",
+            "text": "Jesus obedece, e obedece a José e a Maria. Deus veio à terra para obedecer, e para obedecer às criaturas. São duas criaturas perfeitíssimas: Santa Maria, nossa Mãe - mais do que Ela só Deus -, e aquele varão castíssimo, José. Mas criaturas. E Jesus, que é Deus, obedecia-lhes!"
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Carta pastoral, 10-II-2024",
+            "url": "https://opusdei.org/pt-br/article/carta-do-prelado-10-de-fevereiro2024-obediencia/",
+            "text": "É muito significativo que, depois de sua resposta aos pais no templo – “Devo estar nas coisas de meu Pai” -, Lucas acrescenta que Jesus “erat subditus illis, estava sujeito a eles” (cf. Lc 2,49-51). O seguimento da vontade de Deus, que devemos buscar sempre e em tudo, é frequentemente encontrado no seguimento confiante de algumas pessoas."
+          }
+        ],
+        "notes": "SR regrouped [0-2] / [3-4]; junk 'Prólogo e notas introdutórias' ignored. AD 278 starts at 'A Mãe de Deus…' (its opening refers to 'the Gospel of today's Mass'). Ocáriz 10-II-2024 unit starts at 'É muito significativo' (previous sentence has footnote [11] and repeats ECP 17)."
+      }
+    ],
+    "dolorosos": [
+      {
+        "title": "Oração no Horto",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/6/",
+            "text": "Orai, para não entrardes em tentação. - E Pedro adormeceu. - E os demais Apóstolos. - E adormeceste tu, meu pequeno amigo…, e eu fui também outro Pedro dorminhoco."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/6/",
+            "text": "Jesus, só e triste, sofria e empapava a terra com o seu sangue.\nDe joelhos sobre a terra dura, persevera em oração… Chora por ti… e por mim: esmaga-O o peso dos pecados dos homens.\nPater, si vis, transfer calicem istum a me. - Pai, se quiseres, faz com que se afaste de Mim este cálice… Não se faça, porém, a minha vontade, sed tua fiat, mas a tua (Lc 22, 42)."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/6/",
+            "text": "Um Anjo do céu O conforta. - Jesus está em agonia. - Continua prolixius, orando mais intensamente… Aproxima-se de nós, que dormimos: - Levantai-vos, orai - repete-nos -, para não cairdes em tentação (Lc 22, 46)."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/6/",
+            "text": "Judas, o traidor: um beijo. - A espada de Pedro brilha na noite. - Jesus fala: - Vindes buscar-Me como um ladrão? (Mc 14, 48).\nSomos covardes: seguimo-Lo de longe. Mas acordados e orando. - Oração… Oração…"
+          },
+          {
+            "ref": "Via Sacra, I estação, n. 1",
+            "url": "https://escriva.org/pt-br/via-crucis/1/",
+            "text": "Jesus sofre, para cumprir a Vontade do Pai… E eu, que quero também cumprir a Santíssima Vontade de Deus, seguindo os passos do Mestre, poderei queixar-me se encontro por companheiro de caminho o sofrimento?\nSerá esse um sinal certo da minha filiação, porque Deus me trata como ao seu Divino Filho. E então, como Ele, poderei gemer e chorar a sós no meu Getsêmani; mas, prostrado por terra, reconhecendo o meu nada, subirá até o Senhor um grito saído do íntimo de minha alma: Pater mi, Abba, Pater…, fiat! Faça-se!"
+          },
+          {
+            "ref": "Forja, 753",
+            "url": "https://escriva.org/pt-br/forja/753/",
+            "text": "Quando fores orar, e não enxergares nada, e te sentires agitado e seco, este é o caminho: não penses em ti; volta antes os teus olhos para a Paixão de Cristo, nosso Redentor.\nConvence-te de que o Senhor também pede a cada um de nós o que pedia àqueles três Apóstolos mais íntimos, no Horto das Oliveiras: “Vigiai e orai”."
+          },
+          {
+            "ref": "Forja, 487",
+            "url": "https://escriva.org/pt-br/forja/487/",
+            "text": "“Vigiai e orai, para não cairdes em tentação…”. É impressionante a experiência de ver como se pode abandonar uma tarefa divina - por uma miragem passageira!"
+          },
+          {
+            "ref": "Caminho, 734",
+            "url": "https://escriva.org/pt-br/camino/734/",
+            "text": "“Esta é a vossa hora, e o poder das trevas”. - Quer dizer que… o homem pecador tem a sua hora? - Tem, sim… E Deus, a sua eternidade!"
+          },
+          {
+            "ref": "Amigos de Deus, 25",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/25/",
+            "text": "Quando chega a hora marcada por Deus para salvar a humanidade da escravidão do pecado, contemplamos em Getsêmani Jesus Cristo que sofre dolorosamente, até derramar um suor de sangue, e que aceita espontânea e rendidamente o sacrifício que o Pai lhe reclama: Como cordeiro levado ao matadouro, como ovelha muda diante dos tosquiadores."
+          },
+          {
+            "ref": "Bto. Álvaro del Portillo, texto de 1-IV-1987",
+            "url": "https://opusdei.org/pt-br/article/textos-do-b-alvaro-sobre-a-quaresma-e-a-semana-santa/",
+            "text": "Contemplemos Jesus no Horto das Oliveiras, olhemos como busca na oração a força para enfrentar-se com os terríveis padecimentos que Ele sabe tão próximos. Naqueles momentos, a sua Humanidade Santíssima necessitava da proximidade física e espiritual dos seus amigos; e os Apóstolos deixaram-nO só: Simão, dormes? Não pudeste vigiar uma hora? (Mc 14, 37). Diz-nos o mesmo também a ti e a mim, que tantas vezes asseguramos, como Pedro, que estávamos dispostos a segui-lO até a morte e que, no entanto, com frequência O deixamos só, dormimos."
+          },
+          {
+            "ref": "Bto. Álvaro del Portillo, texto de 1-IV-1987",
+            "url": "https://opusdei.org/pt-br/article/textos-do-b-alvaro-sobre-a-quaresma-e-a-semana-santa/",
+            "text": "Continua a martelar na minha alma a impressão que me produziu, no México, a imagem de Cristo crucificado com uma chaga tremenda na face – o beijo de Judas – imaginada pela piedade do povo cristão, para simbolizar a ferida que causou no seu Coração a deserção de um dos que Ele tinha elegido pessoalmente."
+          },
+          {
+            "ref": "Mons. Javier Echevarría, palavras no Getsêmani, 1994",
+            "url": "https://opusdei.org/pt-br/article/getsemani-oracao-e-agonia-de-jesus/",
+            "text": "O lugar que o Senhor escolheu para a sua oração naquela noite é muito duro: uma pedra áspera, afiada, em que ficou horas ajoelhado, depois do esforço e cansaço da Última Ceia e do dia que havia passado. Temos que agradecer ao Senhor até estes gestos materiais que expressam seu amor com tanta clareza. Manter-se horas em oração, de joelhos, naquela pedra, não é nada fácil."
+          }
+        ],
+        "notes": "SR regrouped [0] | [1-3] | [4] | [5-6]. Via Sacra I n.1 starts mid-paragraph at 'Jesus sofre, para cumprir…' (full point incl. 'Jesus ora no horto: Pater mi…' is 685 chars, over the max). Álvaro units: opusdei.org says 'Texto do dia 1 de abril de 1987' (published in 'Caminar con Jesús'); 'Carta' is my inference (addressed 'minhas filhas e meus filhos'). Echevarría unit = his words at the rock of the Agony during Álvaro's 1994 pilgrimage, quoted in the opusdei.org Getsêmani article (cites 'Crónica, 1994'); ref label is mine. Alternative Echevarría unit (pt-pt only, from his book 'Getsemani'): 'Não desprezemos o tesouro da oração, porque se ama como se reza, e reza-se como se ama. Seguramente que, ao contemplar o Mestre em Getsemani, se abrirá passagem na nossa mente à necessidade de orar, também quando não é fácil.' — https://opusdei.org/pt-pt/article/prologo-do-autor/"
+      },
+      {
+        "title": "Flagelação do Senhor",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/7/",
+            "text": "Fala Pilatos: - Tendes o costume de que vos solte alguém pela Páscoa. Quem havemos de pôr em liberdade? Barrabás - ladrão, preso com outros por homicídio - ou Jesus? (Mt 27, 17). - Manda matar este e solta Barrabás, clama o povo incitado pelos seus príncipes (Lc 23, 18).\nPilatos fala de novo: - Então que farei de Jesus, que se chama o Cristo? (Mt 27, 22). - Crucifige eum! - Crucifica-O! (Mc 15, 14)."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/7/",
+            "text": "Diz-lhes Pilatos, pela terceira vez: - Mas que mal fez Ele? Não encontro nEle causa alguma de morte (Lc 23, 22).\nAumentava o clamor da multidão: - Crucifica-O, crucifica-O! (Mc 15, 14).\nE Pilatos, desejando contentar o povo, solta-lhes Barrabás e manda açoitar Jesus."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/7/",
+            "text": "Atado à coluna. Cheio de chagas.\nOuvem-se os golpes dos azorragues na sua carne rasgada, na sua carne sem mancha, que padece pela tua carne pecadora. - Mais golpes. Mais sanha. Mais ainda… É o cúmulo da crueldade humana.\nPor fim, rendidos, desprendem Jesus. E o corpo de Cristo rende-se também à dor e cai, como um verme, truncado e meio morto."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/7/",
+            "text": "Tu e eu não podemos falar. - Não são precisas palavras. Olha para Ele, olha para Ele… devagar.\nDepois… serás capaz de ter medo à expiação?"
+          },
+          {
+            "ref": "Via Sacra, I estação, n. 5",
+            "url": "https://escriva.org/pt-br/via-crucis/1/",
+            "text": "Olha para Jesus. Cada rasgão é uma censura; cada açoite, um motivo de dor pelas tuas ofensas e pelas minhas."
+          },
+          {
+            "ref": "Forja, 758",
+            "url": "https://escriva.org/pt-br/forja/758/",
+            "text": "Compreendo que, por Amor, desejes padecer com Cristo: interpor as tuas costas entre Ele e os algozes que O açoitam; oferecer a tua cabeça, e não a dEle, aos espinhos; e os teus pés e as tuas mãos, aos pregos; …ou, pelo menos, acompanhar a nossa Mãe Santa Maria, no Calvário, e acusar-te de deicida pelos teus pecados…, e sofrer e amar."
+          },
+          {
+            "ref": "Caminho, 296",
+            "url": "https://escriva.org/pt-br/camino/296/",
+            "text": "É duro ler nos Santos Evangelhos a pergunta de Pilatos: “Quem quereis que vos solte? Barrabás ou Jesus, que se chama Cristo?” - É mais penoso ouvir a resposta: “Barrabás!”\nE mais terrível ainda verificar que - muitas vezes! -, ao afastar-me do caminho, tenho dito também: “Barrabás!” E tenho acrescentado: “Cristo?… \"Crucifige eum!\" - Crucifica-o!”"
+          },
+          {
+            "ref": "Sulco, 369",
+            "url": "https://escriva.org/pt-br/surco/369/",
+            "text": "Passaram-se vinte séculos, e a cena se repete todos os dias: continuam levando a julgamento, flagelando e crucificando o Mestre… E muitos católicos, com o seu comportamento e com as suas palavras, continuam gritando: Esse? Não o conheço! Desejaria ir por toda a parte, recordando confidencialmente a muitos que Deus é misericordioso, e que também é muito justo! Por isso afirmou claramente: “Também Eu não reconhecerei os que não me tiveram reconhecido diante dos homens”."
+          },
+          {
+            "ref": "É Cristo que passa, 95",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/95/",
+            "text": "Devemos meditar no Senhor, ferido dos pés à cabeça por nosso amor. Com uma frase que se aproxima da realidade, embora não acabe de exprimir tudo, podemos repetir com um escritor de há séculos: O corpo de Jesus é um retábulo de dores."
+          },
+          {
+            "ref": "Bto. Álvaro del Portillo, texto de 1-IV-1987",
+            "url": "https://opusdei.org/pt-br/article/textos-do-b-alvaro-sobre-a-quaresma-e-a-semana-santa/",
+            "text": "Sofreu o martírio em todos os membros do corpo: na cabeça, a coroa de espinhos; nas mãos e pés, as feridas dos cravos; na cara, bofetadas e escarros; no resto do corpo, a flagelação. E os sofrimentos estenderam-se a todos os sentidos: no tato, as feridas; no gosto, o fel e o vinagre; no ouvido, as blasfémias e insultos; no olfato, pois crucificaram-n'O num lugar hediondo; na vista, ao ver chorar a sua Mãe... e – acrescento eu – a nossa pouca colaboração, a nossa indiferença."
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Meditação, Sexta-feira Santa 2020",
+            "url": "https://opusdei.org/pt-br/article/meditacao-do-prelado-3-cristo-espelho-da-nossa-fragilidade/",
+            "text": "Jesus, ferido e manso, é também como um espelho, no qual nos contemplamos. O Deus, que é amor, mostra-se nas chagas do Cristo dolente."
+          }
+        ],
+        "notes": "SR regrouped [0-1] Pilatos | [2-4] Pilatos/clamor/açoitar | [5-7] coluna | [8-9] olha para Ele. Álvaro unit starts 'Sofreu o martírio…' (subject Jesus implicit; preceding sentence is a St Thomas paraphrase); keeps the page's pt-pt spelling 'blasfémias'. Same Álvaro text has a wrong ref '(cfr. Mt 17, 17)' elsewhere — not used. Via Sacra I n.5 is split: last paragraph here, 'Ecce homo' part under Coroação."
+      },
+      {
+        "title": "Coroação de Espinhos",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/8/",
+            "text": "Vai ficando satisfeita a ânsia de sofrer do nosso Rei!\n- Levam o meu Senhor ao pátio do pretório, e ali convocam toda a coorte (Mc 15, 16). - A soldadesca brutal desnudou a sua carne puríssima. - Com um farrapo de púrpura, velho e sujo, cobrem Jesus. - Por cetro, uma cana na mão direita…\nA coroa de espinhos, cravada a marteladas, faz dEle um Rei de comédia… Ave Rex iudaeorum! - Salve, Rei dos judeus (Mc 15, 18). E, à força de pancadas, ferem-Lhe a cabeça. E esbofeteiam-nO… e cospem nEle."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/8/",
+            "text": "Coroado de espinhos e vestido com andrajos de púrpura, Jesus é mostrado ao povo judeu: Ecce homo! Aí tendes o homem. E de novo os pontífices e seus ministros rompem aos gritos, clamando: - Crucifica-O!, crucifica-O! (Jo 19, 5-6)."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/8/",
+            "text": "Tu e eu não teremos voltado a coroá-Lo de espinhos, a esbofeteá-Lo e a cuspir-Lhe?\nNunca mais, Jesus, nunca mais… E um propósito firme e concreto põe fim a estas dez Ave-Marias."
+          },
+          {
+            "ref": "Via Sacra, I estação, n. 4",
+            "url": "https://escriva.org/pt-br/via-crucis/1/",
+            "text": "Está para se pronunciar a sentença. Pilatos zomba: Ecce rex vester! (Jo 19,14), eis o vosso rei. Os pontífices respondem enfurecidos: Não temos outro rei senão César (Jo 19,15).\nSenhor! Onde estão os teus amigos? Onde os teus súditos? Deixaram-Te. É uma debandada que dura há vinte séculos… Fugimos todos da Cruz, da tua Santa Cruz.\nSangue, angústia, solidão e uma insaciável fome de almas… são o cortejo da tua realeza."
+          },
+          {
+            "ref": "Via Sacra, I estação, n. 5",
+            "url": "https://escriva.org/pt-br/via-crucis/1/",
+            "text": "Ecce homo! (Jo 19,5), eis o homem! Estremece o coração ao contemplar a Santíssima Humanidade do Senhor feita uma chaga.\nE então hão de perguntar-lhe: que feridas são essas que trazes em tuas mãos? E ele responderá: São feridas que recebi na casa dos que me amam (Zac 13,6)."
+          },
+          {
+            "ref": "Sulco, 989",
+            "url": "https://escriva.org/pt-br/surco/989/",
+            "text": "Não contrariaste alguma vez, em alguma coisa, os teus gostos, os teus caprichos? - Olha que Quem te pede isso está pregado numa Cruz - sofrendo em todos os seus sentidos e potências -, e uma coroa de espinhos cobre a sua cabeça… por ti."
+          },
+          {
+            "ref": "Forja, 442",
+            "url": "https://escriva.org/pt-br/forja/442/",
+            "text": "Contempla e vive a Paixão de Cristo, juntamente com Ele: expõe - com freqüência cotidiana - as tuas costas, quando O açoitam; oferece a tua cabeça à coroa de espinhos.\n- Na minha terra dizem: “Amor com amor se paga”."
+          },
+          {
+            "ref": "Sulco, 35",
+            "url": "https://escriva.org/pt-br/surco/35/",
+            "text": "Como vejo agora claramente que a “santa desvergonha” tem a sua raiz, muito profunda, no Evangelho! - Cumpre a Vontade de Deus…, lembrando-te de Jesus difamado, de Jesus cuspido e esbofeteado, de Jesus levado aos tribunais de homenzinhos…, e de Jesus calado!! - Propósito: baixar a fronte diante dos ultrajes e - contando também com as humilhações que, sem dúvida, virão - prosseguir a tarefa divina, que o Amor Misericordioso de Nosso Senhor nos quis confiar."
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Meditação, Sexta-feira Santa 2020",
+            "url": "https://opusdei.org/pt-br/article/meditacao-do-prelado-3-cristo-espelho-da-nossa-fragilidade/",
+            "text": "Na manhã da Sexta Feira Santa, Pilatos apresentou Cristo, torturado e humilhado, ao povo, dizendo: Ecce Homo “Eis o homem” (Jo 19, 5). Horas depois seria crucificado.\nEm um famoso quadro de Ticiano – o Ecce Homo – pode-se ver Jesus, destroçado como homem, mas, no entanto, fazendo brilhar sua divindade e beleza. Deus quis tornar-se visível também na vulnerabilidade."
+          }
+        ],
+        "notes": "SR regrouped [0-2] | [3] | [4-5]; the leading '- ' of SR paragraph [4] was dropped because the unit starts there (paragraph opens with a dialogue dash). Sulco 35: escriva.org reads 'baixar a fronte'; the repo's src/data/escriva_points.json has 'baixar a fonte' (corpus typo, affects the Meditação reader — out of scope)."
+      },
+      {
+        "title": "A Cruz às Costas",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/9/",
+            "text": "Com a sua Cruz às costas, caminha para o Calvário, lugar que em hebraico é chamado Gólgota (Jo 19, 17). E lançam mão de um tal Simão, natural de Cirene, que volta de uma granja, e o carregam com a Cruz, para que a leve atrás de Jesus (Lc 23, 26).\nCumpriu-se o que Isaías tinha dito (53, 12): cum sceleratis reputatus est, foi contado entre os malfeitores - porque levaram, para fazê-lo morrer com Ele, outros dois homens, que eram ladrões (Lc 23, 32)."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/9/",
+            "text": "Se alguém quiser vir após Mim… Menino amigo: estamos tristes, vivendo a Paixão de Jesus, Nosso Senhor. - Olha com que amor se abraça à Cruz. - Aprende com Ele. - Jesus leva a Cruz por ti; tu… leva-a por Jesus.\nMas não leves a Cruz de rastos… Leva-a erguida a prumo, porque a tua Cruz, levada assim, não será uma Cruz qualquer: será… a Santa Cruz. Não te resignes com a Cruz. Resignação é palavra pouco generosa. Quer a Cruz. Quando de verdade a quiseres, a tua Cruz será… uma Cruz sem Cruz.\nE, com toda a certeza, tal como Ele, encontrarás Maria no caminho."
+          },
+          {
+            "ref": "Via Sacra, II estação",
+            "url": "https://escriva.org/pt-br/via-crucis/2/",
+            "text": "Com que amor se abraça Jesus com o lenho que Lhe há de dar a morte!\nNão é verdade que, mal deixas de ter medo à Cruz, a isso que a gente chama de cruz, quando pões a tua vontade em aceitar a Vontade divina, és feliz, e passam todas as preocupações, os sofrimentos físicos ou morais?\nÉ verdadeiramente suave e amável a Cruz de Jesus. Não contam aí as penas; só a alegria de nos sabermos corredentores com Ele."
+          },
+          {
+            "ref": "Via Sacra, II estação, n. 3",
+            "url": "https://escriva.org/pt-br/via-crucis/2/",
+            "text": "Quanto mais fores de Cristo, maior graça terás para a tua eficácia na terra e para a felicidade eterna.\nMas tens de decidir-te a seguir o caminho da entrega: a Cruz às costas, com um sorriso nos lábios, com uma luz na alma."
+          },
+          {
+            "ref": "Via Sacra, IV estação",
+            "url": "https://escriva.org/pt-br/via-crucis/4/",
+            "text": "Acabava Jesus de se levantar da primeira queda, quando encontra sua Mãe Santíssima, junto do caminho por onde Ele passa.\nCom imenso amor, Maria olha para Jesus, e Jesus olha para sua Mãe; os olhos de ambos se encontram, e cada coração derrama no outro a sua própria dor. A alma de Maria fica submersa em amargura, na amargura de Jesus Cristo."
+          },
+          {
+            "ref": "Amigos de Deus, 132",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/132/",
+            "text": "Não se carrega já uma cruz qualquer, descobre-se a Cruz de Cristo, com o consolo de ver que é o Redentor quem se encarrega de suportar o peso. Nós colaboramos como Simão de Cirene que, quando regressava do trabalho na sua granja, pensando num merecido repouso, se viu forçado a oferecer os ombros para ajudar Jesus. Para uma alma enamorada, ser voluntariamente Cireneu de Cristo, acompanhar tão de perto a sua Humanidade dolente, reduzida a um farrapo, não significa uma desventura, mas a certeza da proximidade de Deus, que nos abençoa com essa eleição."
+          },
+          {
+            "ref": "Via Sacra, V estação, n. 2",
+            "url": "https://escriva.org/pt-br/via-crucis/5/",
+            "text": "Não é tarde, nem tudo está perdido… Ainda que assim te pareça. Ainda que o repitam mil vozes agoureiras. Ainda que te assediem olhares trocistas e incrédulos… Chegaste num bom momento para carregar a Cruz: a Redenção está-se fazendo — agora! — , e Jesus necessita de muitos cireneus."
+          },
+          {
+            "ref": "Via Sacra, VII estação",
+            "url": "https://escriva.org/pt-br/via-crucis/7/",
+            "text": "Jesus desfalece, mas a sua queda nos levanta, a sua morte nos ressuscita.\nÀ nossa reincidência no mal, responde Jesus com a sua insistência em redimir-nos, com abundância de perdão. E, para que ninguém desespere, torna a erguer-se, fatigosamente abraçado à Cruz."
+          },
+          {
+            "ref": "Amigos de Deus, 141",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/141/",
+            "text": "Pensa que Deus te quer contente e que, se tu fazes da tua parte o que podes, serás feliz, muito feliz, felicíssimo, ainda que em momento nenhum te falte a Cruz. Porém, essa Cruz já não será um patíbulo, mas o trono do qual reina Cristo.\nE a seu lado encontrarás Maria, sua Mãe, Mãe nossa também. A Virgem Santa te alcançará a fortaleza de que necessitas para caminhar com decisão, seguindo os passos do seu Filho."
+          },
+          {
+            "ref": "Bto. Álvaro del Portillo, Prólogo da Via Sacra, 14-IX-1980",
+            "url": "https://opusdei.org/pt-br/article/prologo-da-via-sacra-de-sao-josemaria/",
+            "text": "A Via Sacra não é um exercício triste. Mons. Escrivá ensinou muitas vezes que a alegria cristã tem as suas raízes em forma de cruz. Se a Paixão de Cristo é caminho de dor, é também a rota da esperança e da vitória certa."
+          },
+          {
+            "ref": "Mons. Javier Echevarría, Meditação, Sexta-feira Santa 2004",
+            "url": "https://opusdei.org/pt-br/article/sexta-feira-santa/",
+            "text": "Não deixemos que o Senhor leve a Cruz sozinho. Acolhamos com alegria os pequenos sacrifícios diários."
+          }
+        ],
+        "notes": "SR regrouped [0-1] | [2-4] ([3] opens with 'Mas não leves…' and [4] 'E, com toda a certeza…' only make sense after [2]). Via Sacra V n.2 keeps the site's spacing '— agora! — , e Jesus…'. Skipped: Via Sacra V main text (starts 'No conjunto da Paixão, é bem pouco o que representa esta ajuda' — dangling), Forja 252/764 (Cireneu; covered by AD 132 + Via Sacra V)."
+      },
+      {
+        "title": "Morte de Jesus",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/10/",
+            "text": "Jesus Nazareno, Rei dos judeus, já tem preparado o trono triunfador. Tu e eu não O vemos contorcer-se, ao ser pregado; sofrendo tudo quanto se pode sofrer, estende os braços com gesto de Sacerdote Eterno.\nOs soldados tomam as santas vestes e fazem quatro partes. - Para não dividirem a túnica, sorteiam-na para ver a quem tocará. - E assim, uma vez mais, se cumpre a Escritura que diz: Repartiram entre si as minhas vestes e sobre elas lançaram sortes (Jo 19, 23 e 24)."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/10/",
+            "text": "Já está no alto… - E, junto de seu Filho, ao pé da Cruz, Santa Maria… e Maria, mulher de Cléofas, e Maria Madalena. E João, o discípulo que Ele amava. Ecce mater tua! - Aí tens a tua Mãe! Dá-nos a sua Mãe por Mãe nossa."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/10/",
+            "text": "Tinham-Lhe oferecido antes vinho misturado com fel, mas, tendo-o provado, não o bebeu (Mt 27, 34).\nAgora tem sede… de amor, de almas.\nConsummatum est. - Tudo está consumado (Jo 19, 30).\nMenino bobo, olha: tudo isto…, tudo, sofreu por ti… e por mim. - Não choras?"
+          },
+          {
+            "ref": "É Cristo que passa, 101",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/101/",
+            "text": "Faz muitos anos, vi um quadro que se gravou profundamente em meu interior. Representava a Cruz de Cristo e, junto do lenho, três anjos: um chorava desconsoladamente; outro tinha um prego na mão, como que para se convencer de que tudo aquilo era verdade; o terceiro estava recolhido em oração. Um programa sempre atual para cada um de nós: chorar, crer e orar."
+          },
+          {
+            "ref": "Via Sacra, XI estação",
+            "url": "https://escriva.org/pt-br/via-crucis/11/",
+            "text": "Foi o Amor que levou Jesus ao Calvário. E já na Cruz, todos os seus gestos e todas as suas palavras são de amor, de amor sereno e forte.\nEm atitude de Sacerdote Eterno, sem pai nem mãe, sem genealogia (cfr. Heb 7, 3), abre os braços à humanidade inteira."
+          },
+          {
+            "ref": "Via Sacra, XI estação, n. 2",
+            "url": "https://escriva.org/pt-br/via-crucis/11/",
+            "text": "Amo tanto Cristo na Cruz, que cada crucifixo é como uma censura carinhosa do meu Deus: — Eu sofrendo, e tu… covarde. Eu amando-te, e tu… esquecendo-me. Eu pedindo-te, e tu… negando-me. Eu, aqui, com gesto de Sacerdote Eterno, padecendo quanto é possível por amor de ti, e tu… te queixas ante a menor incompreensão, ante a menor humilhação…"
+          },
+          {
+            "ref": "Via Sacra, XII estação, n. 4",
+            "url": "https://escriva.org/pt-br/via-crucis/12/",
+            "text": "Tenho repetido muitas vezes aquele verso do hino eucarístico: Peto quod petivit latro poenitens. E sempre me comovo: pedir como o ladrão arrependido!\nReconheceu que ele, sim, é que merecia aquele castigo atroz… E com uma palavra roubou o coração a Cristo e abriu para si as portas do Céu."
+          },
+          {
+            "ref": "Caminho, 508",
+            "url": "https://escriva.org/pt-br/camino/508/",
+            "text": "Admira a firmeza de Santa Maria: ao pé da Cruz, com a maior dor humana - não há dor como a sua dor -, cheia de fortaleza.\n- E pede-lhe dessa firmeza, para que saibas também estar junto da Cruz."
+          },
+          {
+            "ref": "Amigos de Deus, 202",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/202/",
+            "text": "Jesus, com fome e com sede de almas. Do alto da Cruz clamou: Sitio!, tenho sede. Sede de nós, do nosso amor, das nossas almas e de todas as almas que lhe devemos levar, pelo caminho da Cruz, que é o caminho da imortalidade e da glória do Céu."
+          },
+          {
+            "ref": "Caminho, 58",
+            "url": "https://escriva.org/pt-br/camino/58/",
+            "text": "Não estorves a obra do Paráclito; une-te a Cristo, para te purificares, e sente, com Ele, os insultos, e os escarros, e as bofetadas…, e os espinhos, e o peso da Cruz…, e os ferros rasgando a tua carne, e as ânsias de uma morte ao desamparo…\nE mete-te no lado aberto de Nosso Senhor Jesus, até encontrares refúgio seguro em seu Coração chagado."
+          },
+          {
+            "ref": "Mons. Javier Echevarría, Meditação, Sexta-feira Santa 2004",
+            "url": "https://opusdei.org/pt-br/article/sexta-feira-santa/",
+            "text": "Que grande é o poder da Cruz! Quando Cristo é objeto de riso e de escárnio para todo o mundo; quando está no Madeiro sem querer arrancar os cravos; quando ninguém daria nem um centavo pela sua vida, o bom ladrão – um como nós – descobre o amor de Cristo agonizante, e pede perdão. Hoje estarás comigo no Paraíso. Que força tem o sofrimento, quando se aceita junto de Nosso Senhor! É capaz de tirar – das situações mais dolorosas – momentos de glória e de vida. Esse homem que se dirige a Cristo agonizante, encontra a remissão dos seus pecados, a felicidade para sempre."
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Meditação, Sexta-feira Santa 2020",
+            "url": "https://opusdei.org/pt-br/article/meditacao-do-prelado-3-cristo-espelho-da-nossa-fragilidade/",
+            "text": "Embora não possamos compreender plenamente, a crucifixão nos revela que onde parece haver só debilidade, Deus manifesta o seu poder sem limites; onde vemos fracasso, derrota, incompreensão e ódio, aí precisamente Jesus nos revela o grande poder de Deus: transformar a Cruz em expressão de Amor e de Vitória."
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Homilia, 15-IV-2022",
+            "url": "https://opusdei.org/pt-br/article/homilias-do-prelado-do-opus-dei-durante-a-semana-santa/",
+            "text": "A sede que o Senhor tem nesses momentos é sede da nossa salvação, da nossa felicidade. E ao contemplar agora a sua Mãe, encontra nela um olhar de consolo que alivia essa sede. Apenas com sua presença Maria lhe ofereceu o maior consolo. Por isso Cristo nos entregou sua Mãe, para que nós também possamos achar nela o mesmo consolo."
+          }
+        ],
+        "notes": "SR regrouped [0-1] | [2] | [3-6]. Skipped Via Sacra XII n.3 ('amava mais do que padecia') because the site has typo 'par que tu e eu'; skipped Amigos de Deus 288 (dangling 'De novo… essa presença', and site typo 'filho.Depois'). Other good candidates not used: Caminho 503/506, Forja 29/589, Via Sacra XII n.2. Ocáriz 15-IV-2022 = Good Friday homily on the 'Homilias do Prelado… Semana Santa' page (dated 17/04/2022)."
+      }
+    ],
+    "gloriosos": [
+      {
+        "title": "Ressurreição do Senhor",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/11/",
+            "text": "Ao cair da tarde de Sábado, Maria Madalena, e Maria, mãe de Tiago, e Salomé compraram perfumes para irem embalsamar o corpo morto de Jesus. - No outro dia, de manhã cedo, chegam ao sepulcro, nascido já o sol (Mc 16, 1-2). E entrando, ficam consternadas, porque não encontram o corpo do Senhor. - Um jovem, coberto de vestes brancas, diz-lhes: - Não temais; sei que procurais Jesus Nazareno. Non est hic, surrexit enim sicut dixit - não está aqui porque ressuscitou, como tinha anunciado (Mt 28, 5)."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/11/",
+            "text": "Ressuscitou! - Jesus ressuscitou. Não está no sepulcro. A Vida pôde mais do que a morte.\nApareceu a sua Mãe Santíssima. - Apareceu a Maria de Magdala, que está louca de amor. - E a Pedro e aos demais Apóstolos. - E a ti e a mim, que somos seus discípulos e mais loucos que Madalena. Que coisas Lhe dissemos!"
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/11/",
+            "text": "Que nunca morramos pelo pecado; que seja eterna a nossa ressurreição espiritual. - E, antes de terminar a dezena, beijaste as chagas dos seus pés…, e eu, mais atrevido - por ser mais criança -, pus os meus lábios no seu lado aberto."
+          },
+          {
+            "ref": "É Cristo que passa, 102",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/102/",
+            "text": "Cristo vive. Esta é a grande verdade que enche de conteúdo a nossa fé. Jesus, que morreu na cruz, ressuscitou, triunfou da morte, do poder das trevas, da dor e da angústia. Não temais, foi a invocação com que um anjo saudou as mulheres que se dirigiam ao sepulcro. Não temais. Vindes buscar Jesus Nazareno, que foi crucificado. Já ressuscitou; não está aqui."
+          },
+          {
+            "ref": "Forja, 660",
+            "url": "https://escriva.org/pt-br/forja/660/",
+            "text": "O dia do triunfo do Senhor, da sua Ressurreição, é definitivo. Onde estão os soldados que a autoridade tinha destacado? Onde estão os selos que tinham colocado sobre a pedra do sepulcro? Onde estão os que condenaram o Mestre? Onde estão os que crucificaram Jesus?… Perante a sua vitória, produz-se a grande fuga dos pobres miseráveis.\nEnche-te de esperança: Jesus Cristo vence sempre."
+          },
+          {
+            "ref": "Forja, 625",
+            "url": "https://escriva.org/pt-br/forja/625/",
+            "text": "Quando as santas mulheres chegaram ao sepulcro, repararam que a pedra tinha sido retirada.\nÉ o que acontece sempre! Quando nos decidimos a fazer o que devemos, as dificuldades se ultrapassam facilmente."
+          },
+          {
+            "ref": "Amigos de Deus, 266",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/266/",
+            "text": "Então o discípulo que Jesus amava disse a Pedro: É o Senhor! O amor, o amor vê de longe. O amor é o primeiro a captar essas delicadezas. O Apóstolo adolescente, com o firme carinho que sentia por Jesus, pois amava a Cristo com toda a pureza e toda a ternura de um coração que nunca se corrompera, exclamou: É o Senhor!\nSimão Pedro, mal ouviu dizer que era o Senhor, vestiu a túnica e lançou-se ao mar. Pedro é a fé. E lança-se ao mar, cheio de uma audácia maravilhosa. Com o amor de João e a fé de Pedro, até onde não poderemos nós chegar!"
+          },
+          {
+            "ref": "Amigos de Deus, 145",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/145/",
+            "text": "Talvez também tu escutes neste momento a censura dirigida a Tomé: Mete aqui o teu dedo e vê as minhas mãos; aproxima também a tua mão e mete-a no meu lado; e não sejas incrédulo, mas fiel. E, com o Apóstolo, sairá da tua alma, com sincera contrição, aquele grito: Meu Senhor e meu Deus!, eu te reconheço definitivamente por Mestre, e já para sempre - com o teu auxílio - vou entesourar os teus ensinamentos e esforçar-me por segui-los com lealdade."
+          },
+          {
+            "ref": "Amigos de Deus, 314",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/314/",
+            "text": "Caminho de Emaús. O nosso Deus impregnou de doçura este nome. E Emaús é o mundo inteiro, porque o Senhor abriu os caminhos divinos da terra."
+          },
+          {
+            "ref": "É Cristo que passa, 116",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/116/",
+            "text": "Cristo, Cristo ressuscitado, é o companheiro, o Amigo. Um companheiro que se deixa ver apenas entre sombras, mas cuja realidade inunda toda a nossa vida e nos faz desejar a sua companhia definitiva."
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Meditação, 11-IV-2020",
+            "url": "https://opusdei.org/pt-br/article/meditacao-do-prelado-4-a-luz-que-o-mundo-precisa/",
+            "text": "Como as santas mulheres, anunciemos com alegria a realidade de que Cristo vive. Que esta certeza se reflita em nossas vidas: na serenidade, na esperança, na caridade com que queremos preencher os nossos dias. Recorramos para isso à intercessão de Nossa Senhora. No dia da ressurreição, contemplamo-la radiante de alegria pela volta de seu Filho. Esse momento também chegará para cada um de nós, e pelo poder de Deus, se tivermos sido fiéis, viveremos para sempre em Cristo Jesus."
+          }
+        ],
+        "notes": "SR regrouped [0] | [1,2] | [3] (para [2] 'Apareceu a sua Mãe…' needs [1] for its subject). Skipped Forja 676 (excellent but ~870 chars) and Sulco 671 (source has a stray backtick: `deter'). Echevarría 2009 is about Mary keeping the women faithful until they became witnesses of the Resurrection."
+      },
+      {
+        "title": "A Ascensão do Senhor",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/12/",
+            "text": "Mestre ensina agora os seus discípulos: abriu-lhes a inteligência, para que compreendam as\nEscrituras, e toma-os por testemunhas da sua vida e dos seus milagres, da sua paixão e morte, e da glória da sua ressurreição (Lc 24, 45.48).\nDepois, leva-os a caminho de Betânia, ergue as mãos e abençoa-os. - E, entretanto, vai-se afastando deles e eleva-se no céu (Lc 24, 50), até que uma nuvem O ocultou (At 1, 9)."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/12/",
+            "text": "Jesus foi para o Pai. - Dois Anjos de brancas vestes se aproximam de nós e nos dizem: - Homens da Galiléia, que fazeis olhando para o céu? (At 1, 11)."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/12/",
+            "text": "Pedro e os restantes voltam para Jerusalém - cum gaudio magno - com grande alegria (Lc 24, 52). - É justo que a Santa Humanidade de Cristo receba a homenagem, a aclamação e a adoração de todas as hierarquias dos Anjos e de todas as legiões dos bem-aventurados da Glória.\nMas tu e eu nos sentimos órfãos; estamos tristes, e vamos consolar-nos com Maria."
+          },
+          {
+            "ref": "É Cristo que passa, 117",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/117/",
+            "text": "Sempre me pareceu lógico - e me cumulou de alegria - que a Santíssima Humanidade de Jesus Cristo subisse à glória do Pai. Mas penso também que esta tristeza, própria do dia da Ascensão, é uma manifestação do amor que sentimos por Jesus, Senhor Nosso. Sendo perfeito Deus, Ele se fez homem, perfeito homem, carne da nossa carne e sangue do nosso sangue. E separa-se de nós, indo para o céu. Como não havíamos de notar a sua falta?"
+          },
+          {
+            "ref": "É Cristo que passa, 117",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/117/",
+            "text": "Comove-me recordar que Jesus, num gesto magnífico de amor, foi-se embora e ficou; foi para o céu e entrega-se a nós como alimento na Hóstia Santa. Sentimos, no entanto, a falta da sua palavra humana, da sua forma de atuar, de olhar, de sorrir, de fazer o bem."
+          },
+          {
+            "ref": "É Cristo que passa, 120",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/120/",
+            "text": "Jesus subiu aos céus, dizíamos. Mas, pela oração e pela Eucaristia, o cristão pode ter com Ele a mesma intimidade que tinham os primeiros Doze, inflamar-se no seu zelo apostólico, para com Ele realizar um serviço de co-redenção, que é semear a paz e a alegria."
+          },
+          {
+            "ref": "É Cristo que passa, 122",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/122/",
+            "text": "O apostolado é como a respiração do cristão; não pode um filho de Deus viver sem esse palpitar espiritual. Recorda-nos a festa de hoje que o zelo pelas almas é um mandamento amoroso do Senhor: ao subir para a sua glória, Ele nos envia pelo orbe inteiro como suas testemunhas."
+          },
+          {
+            "ref": "É Cristo que passa, 126",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/126/",
+            "text": "A festa da Ascensão do Senhor sugere-nos também outra realidade: esse Cristo que nos anima a empreender esta tarefa no mundo espera-nos no céu. Por outras palavras: a vida na terra, que nós amamos, não é a realidade definitiva; pois não temos aqui cidade permanente, mas andamos em busca da futura cidade imutável."
+          },
+          {
+            "ref": "É Cristo que passa, 126",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/126/",
+            "text": "E se, apesar de tudo, a subida de Jesus aos céus nos deixar na alma um travo de tristeza, acudamos à sua Mãe, como fizeram os Apóstolos: Tornaram então a Jerusalém… e oravam unanimemente… com Maria, a Mãe de Jesus."
+          },
+          {
+            "ref": "Sulco, 232",
+            "url": "https://escriva.org/pt-br/surco/232/",
+            "text": "Que lição tão extraordinária cada um dos ensinamentos do Novo Testamento! - Depois de o Mestre lhes ter dito, enquanto ascendia à direita de Deus Pai: “Ide e pregai a todos os povos”, os discípulos ficaram com paz. Mas ainda têm dúvidas: não sabem o que fazer, e reúnem-se com Maria, Rainha dos Apóstolos, para se converterem em zelosos pregoeiros da Verdade que salvará o mundo."
+          },
+          {
+            "ref": "Bto. Álvaro del Portillo, artigo «Sal, luz e fermento»",
+            "url": "https://opusdei.org/pt-br/article/sal-luz-e-fermento-a-tarefa-dos-leigos-na-missao-da-igreja/",
+            "text": "O encargo que um punhado de homens recebeu no Monte das Oliveiras, perto de Jerusalém, em uma manhã primaveril nos anos 30 da nossa era, tinha todas as características de uma “missão impossível”.\nRecebereis a virtude do Espírito Santo que descerá sobre vós e sereis minhas testemunhas em Jerusalém, em toda a Judeia, na Samaria e até aos confins do mundo (At 1, 8). As últimas palavras pronunciadas por Cristo antes da Ascensão pareciam uma loucura. Em um pequeno recanto esquecido do Império Romano, uns homens simples – nem ricos, nem sábios, nem influentes – tinham de levar a todo o mundo a mensagem de um justiçado."
+          },
+          {
+            "ref": "Mons. Javier Echevarría, Carta, 1-V-2008",
+            "url": "https://opusdei.org/pt-br/article/carta-do-prelado-maio-2008/",
+            "text": "Antes de partir, encarregou-nos de ir por toda a parte, sem medo, sem respeitos humanos, com fé e otimismo, para difundir os seus ensinamentos […] É evidente a desproporção entre o encargo recebido e as nossas forças: somos tão pouca coisa para tal empreendimento! Mas que segurança nos infunde a sua promessa de que não nos deixará sós, de que nos enviará o Espírito Santo para sermos suas testemunhas até os últimos confins da terra! […] A Ascensão do Senhor é, para cada uma e para cada um de nós, um desafio extraordinário e uma confiança total do Céu."
+          }
+        ],
+        "notes": "SR [0,1,2] still carries the known pt-br defect (missing 'O' + sentence split 'compreendam as\\nEscrituras') for central correction. Echevarría 1-V-2008: both […] only drop footnote markers ([3], [4]) in the source; nothing else elided — the lead may render them as plain joins. Álvaro text is from an undated article (published on opusdei.org 9-III-2018; cites Christifideles Laici, so c. 1989-94)."
+      },
+      {
+        "title": "Pentecostes",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/13/",
+            "text": "O Senhor tinha dito: - Eu rogarei ao Pai, e Ele vos dará outro Paráclito, outro Consolador, para que permaneça convosco eternamente (Jo 14, 16).\nReunidos os discípulos todos juntos num mesmo lugar, de repente sobreveio do céu um ruído como que de vento impetuoso, que invadiu toda a casa onde se encontravam. - Ao mesmo tempo, umas línguas de fogo se repartiram e pousaram sobre cada um deles (At 2, 1-3)."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/13/",
+            "text": "Cheios do Espírito Santo, os Apóstolos estavam como bêbados (At 2, 13).\nE Pedro, rodeado pelos outros onze, levantou a voz e falou. - Ouvimo-lo pessoas de cem países. - Cada um o escuta na sua língua. - Tu e eu na nossa. - Fala-nos de Cristo Jesus e do Espírito Santo e do Pai.\nNão o apedrejam nem o metem na cadeia; convertem-se e são batizados três mil dos que o ouviram."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/13/",
+            "text": "Tu e eu, depois de ajudarmos os Apóstolos a administrar os batismos, louvamos a Deus Pai, por seu Filho Jesus, e nos sentimos também ébrios do Espírito Santo."
+          },
+          {
+            "ref": "É Cristo que passa, 127",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/127/",
+            "text": "Os discípulos, que já eram testemunhas da glória do Ressuscitado, experimentam agora a força do Espírito Santo: suas inteligências e corações abrem-se a uma nova luz. […] Sabiam que só em Jesus podiam encontrar palavras de vida eterna, e estavam dispostos a segui-lo e a dar a vida por Ele; mas eram fracos e, quando chegou a hora da prova, fugiram, deixaram-no só. No dia de Pentecostes, tudo isso passou: o Espírito Santo, que é espírito de fortaleza, tornou-os firmes, seguros, audazes. A palavra dos Apóstolos ressoa agora com energia e ímpeto pelas ruas e praças de Jerusalém."
+          },
+          {
+            "ref": "É Cristo que passa, 141",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/141/",
+            "text": "Relembremos agora os dias que se seguiram à Ascensão, na expectativa do Pentecostes. Os discípulos, cheios de fé pelo triunfo de Cristo ressuscitado, e ansiosos ante a promessa do Espírito Santo, querem sentir-se unidos, e vamos encontrá-los cum Maria, Matre Iesu, com Maria, a Mãe de Jesus. A oração dos discípulos acompanha a oração de Maria; era a oração de uma família unida."
+          },
+          {
+            "ref": "É Cristo que passa, 136",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/136/",
+            "text": "Acostumemo-nos a procurar o convívio com o Espírito Santo, que é quem nos há de santificar; a confiar nEle, a pedir sua ajuda, a senti-lo perto de nós. Assim se irá dilatando o nosso pobre coração, teremos mais ânsias de amar a Deus e, por Ele, a todas as criaturas."
+          },
+          {
+            "ref": "É Cristo que passa, 137",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/137/",
+            "text": "O Espírito Santo é fruto da Cruz, da entrega total a Deus, da procura exclusiva da sua glória e da completa renúncia a nós mesmos. Só quando o homem, fiel à graça, decide colocar no centro da sua alma a Cruz, negando-se a si mesmo por amor de Deus, desprendendo-se realmente do egoísmo e de toda a falsa segurança humana, quer dizer, só quando vive verdadeiramente de fé, só então é que recebe com plenitude o grande fogo, a grande consolação do Espírito Santo."
+          },
+          {
+            "ref": "Caminho, 57",
+            "url": "https://escriva.org/pt-br/camino/57/",
+            "text": "Cultiva o trato com o Espírito Santo - o Grande Desconhecido -, que é quem te há de santificar.\nNão te esqueças de que és templo de Deus. - O Paráclito está no centro da tua alma: escuta-O e segue docilmente as suas inspirações."
+          },
+          {
+            "ref": "Sulco, 283",
+            "url": "https://escriva.org/pt-br/surco/283/",
+            "text": "Caminho seguro de humildade é meditar como, mesmo carecendo de talento, de renome e de fortuna, podemos ser instrumentos eficazes, se recorrermos ao Espírito Santo para que nos dispense os seus dons. Os Apóstolos, apesar de terem sido instruídos por Jesus durante três anos, fugiram espavoridos diante dos inimigos de Cristo. No entanto, depois de Pentecostes, deixaram-se açoitar e prender, e acabaram dando a vida em testemunho da sua fé."
+          },
+          {
+            "ref": "Sulco, 213",
+            "url": "https://escriva.org/pt-br/surco/213/",
+            "text": "Ajuda-me a pedir um novo Pentecostes, que abrase outra vez a terra."
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Mensagem, 15-V-2024",
+            "url": "https://opusdei.org/pt-br/article/mensagem-do-prelado-15-de-maio-de-2024/",
+            "text": "Com a forma de um fogo purificador e de um vento impetuoso, o Paráclito deu uma nova sabedoria aos apóstolos, um novo amor e um valente impulso evangelizador\nEle, com a graça santificante, vai nos identificando mais e mais com Cristo e, em Cristo, torna-nos mais filhos de Deus Pai."
+          }
+        ],
+        "notes": "SR regrouped [0,1] | [2,3,4] | [5] ([4] 'Não o apedrejam…' needs Pedro from [3]). ECP 127 […] skips two middle sentences to stay under ~650 chars. Ocáriz 15-V-2024: source line 1 ends WITHOUT a period ('…impulso evangelizador') — verbatim quirk, lead may decide. Skipped ECP 128 'através do Batismo, nosso Pai-Deus tomou posse…' because the Luminous Batismo SR text already has that sentence."
+      },
+      {
+        "title": "Assunção de Nossa Senhora",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/14/",
+            "text": "Assumpta est Maria in coelum: gaudent angeli! - Maria foi levada por Deus, em corpo e alma, para o céu. E os Anjos se alegram!\nAssim canta a Igreja. - E assim, com esse clamor de regozijo, começamos nós a contemplação nesta dezena do Santo Rosário."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/14/",
+            "text": "Adormeceu a Mãe de Deus. - Em volta do seu leito encontram-se os doze Apóstolos. - Matias substituiu Judas.\nE nós, por graça que todos respeitam, estamos a seu lado também."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/14/",
+            "text": "Mas Jesus quer ter a sua Mãe, em corpo e alma, na Glória. - E a Corte celestial mobiliza todo o seu esplendor para homenagear a Senhora. - Tu e eu - crianças, afinal - pegamos a cauda do esplêndido manto azul da Virgem, e assim podemos contemplar aquela maravilha.\nA Trindade Beatíssima recebe e cumula de honras a Filha, Mãe e Esposa de Deus… - E é tanta a majestade da Senhora, que os Anjos perguntam: - Quem é esta?"
+          },
+          {
+            "ref": "É Cristo que passa, 171",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/171/",
+            "text": "Assumpta est Maria in coelum, gaudent angeli. Maria foi levada por Deus aos céus, em corpo e alma. Há alegria entre os anjos e entre os homens. Por quê este gozo íntimo que hoje experimentamos, com o coração parecendo querer saltar do peito, com a alma inundada de paz? Porque celebramos a glorificação da nossa Mãe e é natural que nós, seus filhos, sintamos um júbilo especial ao vermos como é honrada pela Trindade Beatíssima."
+          },
+          {
+            "ref": "É Cristo que passa, 171",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/171/",
+            "text": "Como nos teríamos comportado se tivéssemos podido escolher a nossa mãe? Penso que teríamos escolhido a que temos, cumulando-a de todas as graças. Foi o que Cristo fez, pois, sendo Onipotente, Sapientíssimo e o próprio Amor , seu poder realizou todo o seu querer."
+          },
+          {
+            "ref": "É Cristo que passa, 176",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/176/",
+            "text": "Hoje, em união com a Igreja, celebramos o triunfo da Mãe, Filha e Esposa de Deus. E assim como nos sentíamos felizes no tempo da Páscoa da Ressurreição, três dias após a morte do Senhor, agora nos sentimos alegres porque Maria, depois de acompanhar Jesus de Belém até à Cruz, está junto dEle em corpo e alma, gozando da glória por toda a eternidade."
+          },
+          {
+            "ref": "É Cristo que passa, 177",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/177/",
+            "text": "Maria subiu aos céus em corpo e alma, os anjos se alvoroçam! Penso também no júbilo de São José, seu castíssimo Esposo, que a esperava no Paraíso."
+          },
+          {
+            "ref": "É Cristo que passa, 177",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/177/",
+            "text": "Somos ainda peregrinos, mas a nossa Mãe precedeu-nos e indica-nos já o termo do caminho: repete-nos que é possível lá chegar, e que lá chegaremos, se formos fiéis. Pois a Santíssima Virgem não é apenas nosso exemplo: é auxílio dos cristãos."
+          },
+          {
+            "ref": "Sulco, 898",
+            "url": "https://escriva.org/pt-br/surco/898/",
+            "text": "A nossa Mãe subiu em corpo e alma aos Céus. Repete-lhe que, como filhos, não queremos separar-nos dEla… Ela te escutará!"
+          },
+          {
+            "ref": "Amigos de Deus, 286",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/286/",
+            "text": "O trono de Maria, como o de seu Filho, é a Cruz. E durante o resto da sua existência, até que subiu em corpo e alma aos Céus, o que nos impressiona é a sua calada presença. São Lucas, que a conhecia bem, anota que Maria está junto dos primeiros discípulos, em oração. Assim termina os seus dias terrenos Aquela que haveria de ser louvada pelas criaturas até a eternidade."
+          },
+          {
+            "ref": "Mons. Javier Echevarría, Carta, 1-VIII-2010",
+            "url": "https://opusdei.org/pt-br/article/carta-do-prelado-agosto-2010/",
+            "text": "A grandiosa escolha que Deus fez dEla desde a eternidade, para que fosse Mãe do Verbo encarnado, chegou ao seu cume quando foi recebida gloriosamente, em corpo e alma, no Céu. A Assunção de Maria, que encerra o arco iniciado com a sua Imaculada Conceição, incita-nos vivamente a deter-nos com maior atenção na nossa Mãe, a meditar com maior profundidade no modo como Ela percorreu a sua peregrinação diária neste mundo até chegar à morada celestial."
+          },
+          {
+            "ref": "Mons. Javier Echevarría, Carta, 1-VIII-2010",
+            "url": "https://opusdei.org/pt-br/article/carta-do-prelado-agosto-2010/",
+            "text": "A extraordinária humildade de Nossa Senhora, que em cada momento quis que Deus agisse na sua alma, sem se apropriar de méritos de tipo algum, fez com que o Senhor se inclinasse para Ela cada vez com mais amor, conduzindo-a de plenitude em plenitude até recebê-la na glória."
+          },
+          {
+            "ref": "Mons. Javier Echevarría, Carta, 1-VIII-2015",
+            "url": "https://opusdei.org/pt-br/article/carta-do-prelado-agosto-2015/",
+            "text": "No centro do mês de agosto brilha a solenidade da Assunção de Nossa Senhora. Além de celebrar a glória que mereceu nossa Mãe por sua correspondência total à graça de Deus, é também uma imagem da bem aventurança que nos espera, se respondermos com fidelidade à vocação cristã."
+          }
+        ],
+        "notes": "SR regrouped [0,1] | [2,3] | [4,5]. ECP 171 'o próprio Amor , seu poder' has a source spacing quirk (space before comma). Echevarría 2015 'bem aventurança' (no hyphen) is verbatim. All successor texts checked in raw HTML: no italics/quotes, i.e. the Prelate's own words (the May-2009 letter's Assumption paragraph was rejected: it silently quotes Benedict XVI)."
+      },
+      {
+        "title": "Coroação de Nossa Senhora",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/15/",
+            "text": "És toda formosa, e não há mancha em ti. - És horto cerrado, minha irmã, Esposa, horto cerrado, fonte selada. - Veni coronaberis. - Vem, serás coroada (Cant 4, 7, 12.8).\nSe tu e eu tivéssemos tido poder, tê-la-íamos feito também Rainha e Senhora de toda a criação."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/15/",
+            "text": "Um grande sinal apareceu no céu: uma mulher com uma coroa de doze estrelas sobre a cabeça. - O vestido, de sol. - A lua a seus pés (Ap 12, 1). Maria, Virgem sem mancha, reparou a queda de Eva; e esmagou com seu pé imaculado a cabeça do dragão infernal. Filha de Deus, Mãe de Deus, Esposa de Deus."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/15/",
+            "text": "O Pai, o Filho e o Espírito Santo coroam-na como Imperatriz que é do Universo.\nE rendem-lhe preito de vassalagem os Anjos…, e os patriarcas e os profetas e os Apóstolos…, e os mártires e os confessores e as virgens e todos os santos…, e todos os pecadores, e tu e eu."
+          },
+          {
+            "ref": "Forja, 285",
+            "url": "https://escriva.org/pt-br/forja/285/",
+            "text": "É justo que o Pai e o Filho e o Espírito Santo coroem a Virgem Santíssima como Rainha e Senhora de toda a criação.\n- Aproveita-te desse poder e, com atrevimento filial, une-te a essa festa do Céu. - Eu corôo a Mãe de Deus e minha Mãe com as minhas misérias purificadas, porque não tenho pedras preciosas nem virtudes.\n- Anima-te!"
+          },
+          {
+            "ref": "Forja, 376",
+            "url": "https://escriva.org/pt-br/forja/376/",
+            "text": "Senhora, Mãe de Deus e minha Mãe, nem por sombras quero que deixes de ser a Dona e a Imperatriz de toda a criação."
+          },
+          {
+            "ref": "Amigos de Deus, 276",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/276/",
+            "text": "A Maternidade divina de Maria é a raiz de todas as perfeições e privilégios que a adornam. Por esse título, foi concebida imaculada e está cheia de graça, é sempre virgem, subiu em corpo e alma aos céus, foi coroada como Rainha da criação inteira, acima dos anjos e dos santos. Mais do que Ela, só Deus."
+          },
+          {
+            "ref": "Amigos de Deus, 288",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/288/",
+            "text": "Felix culpa, canta a Igreja, feliz culpa, porque conseguiu tal e tão grande Redentor. Feliz culpa, podemos nós acrescentar, porque nos mereceu recebermos por Mãe Santa Maria. Já estamos seguros, já nada nos deve preocupar. Porque Nossa Senhora, coroada Rainha dos céus e da terra, é a onipotência suplicante diante de Deus. Jesus não pode negar nada a Maria, e também a nós, que somos filhos da sua própria Mãe."
+          },
+          {
+            "ref": "Sulco, 443",
+            "url": "https://escriva.org/pt-br/surco/443/",
+            "text": "“Um grande sinal apareceu no Céu: uma mulher com uma coroa de doze estrelas sobre a cabeça; vestida de sol; a lua a seus pés”. - Para que tu e eu, e todos, tenhamos a certeza de que nada aperfeiçoa tanto a personalidade como a correspondência à graça. - Procura imitar a Santíssima Virgem, e serás homem - ou mulher - de uma só peça."
+          },
+          {
+            "ref": "Caminho, 496",
+            "url": "https://escriva.org/pt-br/camino/496/",
+            "text": "Como gostam os homens de que lhes recordem o seu parentesco com personagens da literatura, da política, do exército, da Igreja!…\n- Canta diante da Virgem Imaculada, recordando-lhe:\nAve, Maria, Filha de Deus Pai; Ave, Maria, Mãe de Deus Filho; Ave, Maria, Esposa de Deus Espírito Santo… Mais do que tu, só Deus!"
+          },
+          {
+            "ref": "Mons. Javier Echevarría, Carta, 1-VIII-2010",
+            "url": "https://opusdei.org/pt-br/article/carta-do-prelado-agosto-2010/",
+            "text": "A meditação dos grandes privilégios de Santa Maria certamente enche-nos de pasmo: é tão maravilhosa a nossa Mãe do Céu! Contemplamo-na, na cena do Apocalipse, vestida de sol, com a lua debaixo dos pés e coroada de estrelas […] Com efeito, Ela acompanha do Céu cada uma e cada um de nós, como se fôssemos o seu único filho, a sua única filha, e não cessa de desvelar-se por nós para que um dia cheguemos a fruir, em união com o seu Filho e com todos os anjos e santos, da eterna bem-aventurança."
+          }
+        ],
+        "notes": "SR regrouped [0,1] | [2] | [3,4]. Echevarría 1-VIII-2010: the […] drops the footnote marker [12] plus one sentence quoting Benedict XVI; the sentences kept are his. No good Álvaro/Ocáriz text on the Queenship found on opusdei.org pt-br."
+      }
+    ],
+    "luminosos": [
+      {
+        "title": "Batismo do Senhor",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/16/",
+            "text": "Então Jesus veio da Galileia ao Jordão, para ser batizado por João [...]. E uma voz dos céus disse: Este é o meu Filho, o amado, em quem pus as minhas complacências (Mt III, 13.17).\nPelo Batismo, o nosso Pai-Deus tomou posse das nossas vidas, incorporou-nos à vida de Cristo e enviou-nos o Espírito Santo."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/16/",
+            "text": "A força e o poder de Deus iluminam a face da terra.\nFaremos com que o mundo arda, nas chamas do fogo que vieste trazer à terra... E a luz da tua verdade, Jesus nosso, iluminará as inteligências, num dia sem fi m.\nOuço-te clamar, meu Rei, com voz viva, que ainda vibra: Ignem veni mittere in terram, et quid volo nisi ut accendatur? ﻿–﻿ e respondo ﻿–﻿ todo eu ﻿–﻿ com os meus sentidos e as minhas potências: Ecce ego: quia vocasti me!"
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/16/",
+            "text": "O Senhor pôs na tua alma um selo indelével, por meio do Batismo: és filho de Deus.\nMenino: não ardes em desejos de fazer que todos O amem?"
+          },
+          {
+            "ref": "É Cristo que passa, 134",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/134/",
+            "text": "Não há cristãos de segunda categoria, obrigados a pôr em prática apenas uma versão reduzida do Evangelho: todos recebemos o mesmo Batismo e, se bem que exista uma ampla diversidade de carismas e de situações humanas, um só é o Espírito que distribui os dons divinos, uma só a fé, a esperança, a caridade."
+          },
+          {
+            "ref": "É Cristo que passa, 120",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/120/",
+            "text": "A grande missão que recebemos no Batismo é a co-redenção. A caridade de Cristo nos compele a tomar sobre os ombros uma parte dessa tarefa divina de resgatar as almas."
+          },
+          {
+            "ref": "Amigos de Deus, 210",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/210/",
+            "text": "Pelo Batismo, somos portadores da palavra de Cristo, que tranqüiliza, que inflama e aquieta as consciências feridas. E para que o Senhor atue em nós, temos que dizer-lhe que estamos dispostos a lutar todos os dias, embora nos vejamos frouxos e inúteis, embora percebamos o peso imenso das nossas misérias e da nossa pobre fraqueza pessoal."
+          },
+          {
+            "ref": "Forja, 265",
+            "url": "https://escriva.org/pt-br/forja/265/",
+            "text": "Dá muitas graças a Jesus, porque por Ele, com Ele e nEle, tu podes chamar-te filho de Deus."
+          },
+          {
+            "ref": "Forja, 987",
+            "url": "https://escriva.org/pt-br/forja/987/",
+            "text": "Um filho de Deus não tem medo da vida nem medo da morte, porque o fundamento da sua vida espiritual é o sentido da filiação divina: Deus é meu Pai - pensa - e é o Autor de todo o bem, é toda a Bondade.\n- Mas será que tu e eu nos comportamos, de verdade, como filhos de Deus?"
+          },
+          {
+            "ref": "Caminho, 892",
+            "url": "https://escriva.org/pt-br/camino/892/",
+            "text": "Como é bom ser criança! - Quando um homem solicita um favor, é preciso que ao requerimento junte a folha dos seus méritos.\nQuando quem pede é um menininho, como as crianças não têm méritos, basta-lhe dizer: - Sou filho de Fulano.\nAh, Senhor - diz-Lhe com toda a tua alma! -, eu sou… filho de Deus."
+          },
+          {
+            "ref": "Bto. Álvaro del Portillo, Meditação, 1989",
+            "url": "https://opusdei.org/pt-br/article/sal-luz-e-fermento-a-tarefa-dos-leigos-na-missao-da-igreja/",
+            "text": "Todo o cristão é, pelo Batismo, assimilado a Cristo e participa da sua missão redentora. É dever de todos e de cada um dos batizados colaborar ativamente na transmissão da palavra que Jesus pregou aos homens de todos os tempos."
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Carta, 28-X-2020",
+            "url": "https://opusdei.org/pt-br/document/carta-pastoral-28-outubro-2020-vocacao-opus-dei",
+            "text": "E se a santificação do trabalho é eixo de nossa santidade, o sentido da filiação divina é fundamento. Filiação que é, pela graça santificante, nossa introdução na vida divina da Santíssima Trindade, como filhos do Pai no Filho pelo Espírito Santo."
+          }
+        ],
+        "notes": "es original \"Fuentes\": Es Cristo que pasa, n. 128. Apuntes íntimos, n. 1741. Forja, nn. 264, 300. pt-br site merges two points in para 4 (\"Ouço-te clamar… vocasti me!\" = Apuntes íntimos; \"O Senhor pôs na tua alma…\" = Forja 264, whose es original is a separate paragraph) — split at the sentence boundary here. Para 3 has the \"fi m\" ligature defect (lead corrects). U+FEFF around dashes in para 4 kept raw. Forja 265/987 and Caminho 892 are split into several <p> on escriva.org → joined with \\n. Álvaro unit: the article is his 1989 meditation (opusdei.org \"santo-eu\" page labels the same opening \"Meditação escrita em 1989. Publicada em Catholic Familyland\"); the page intro attributes the 2nd sentence (\"É dever de todos e de cada um dos batizados…\") to St. Josemaría's preaching as recalled by D. Álvaro — it is not in quotes in the body; the page also duplicates that sentence (editorial glitch), only one copy used. Ocáriz unit is his own prose (the next sentence on the page is a quotation, excluded). Skipped ECP 128 (same text as SR para 1) and Forja 264 (already in SR)."
+      },
+      {
+        "title": "As Bodas de Caná",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/17/",
+            "text": "Entre tantos convidados de uma dessas ruidosas bodas do meio rural, a que comparecem pessoas de vários povoados, Maria percebe que falta vinho (cf. Ioh II, 3). Só Ela o percebe, e imediatamente. Como se nos revelam familiares as cenas da vida de Cristo! Porque a grandeza de Deus convive com o normal e o corrente. É próprio de uma mulher e de uma diligente dona de casa notar um descuido, prestar atenção a esses pequenos detalhes que tornam agradável a existência humana: e foi assim que Maria se comportou."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/17/",
+            "text": "﻿–﻿ Fazei o que Ele vos disser (Ioh II, 5).\nImplete hydrias (Ioh II, 7), enchei as talhas, e o milagre vem. Assim, com essa simplicidade. Tudo normal. Aqueles cumpriam o seu ofício. A água estava ao alcance das mãos. E é a primeira manifestação da Divindade do Senhor. O mais vulgar converte-se em extraordinário, em sobrenatural, quando temos a boa vontade de atender ao que Deus nos pede."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/17/",
+            "text": "Quero, Senhor, abandonar todos os meus cuidados nas tuas mãos generosas. A nossa Mãe ﻿–﻿ a tua Mãe! ﻿–﻿, a estas horas, como em Caná, já fez soar aos teus ouvidos: ﻿–﻿ Não têm!..."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/17/",
+            "text": "Se a nossa fé for débil, recorramos a Maria. Conta São João que, devido ao milagre das bodas de Caná, que Cristo realizou a pedido de sua Mãe, os seus discípulos creram nEle (Ioh II, 11). A nossa Mãe intercede sempre diante do seu Filho para que nos atenda e se nos revele de tal modo que possamos confessar: Tu és o Filho de Deus.\nDá-me, ó Jesus, essa fé, que de verdade desejo! Minha Mãe e Senhora minha, Maria Santíssima, faz que eu creia!"
+          },
+          {
+            "ref": "Caminho, 502",
+            "url": "https://escriva.org/pt-br/camino/502/",
+            "text": "Maria, Mestra de oração. - Olha como pede a seu Filho em Caná. E como insiste, sem desanimar, com perseverança. - E como consegue.\n- Aprende."
+          },
+          {
+            "ref": "Sulco, 631",
+            "url": "https://escriva.org/pt-br/surco/631/",
+            "text": "No meio do júbilo da festa, em Caná, apenas Maria repara na falta de vinho… Até aos menores detalhes de serviço chega a alma se, como Ela, vive apaixonadamente pendente do próximo por Deus."
+          },
+          {
+            "ref": "É Cristo que passa, 149",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/149/",
+            "text": "Muitas conversões, muitas decisões de entrega ao serviço de Deus foram precedidas de um encontro com Maria. Nossa Senhora fomentou os desejos de procura, ativou maternalmente as inquietações da alma, fez ansiar por uma mudança, por uma vida nova. E, assim, aquele fazei o que Ele vos disser converteu-se em realidades de amorosa entrega, em vocação cristã que ilumina desde então toda a nossa vida."
+          },
+          {
+            "ref": "É Cristo que passa, 24",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/24/",
+            "text": "O amor puro e limpo dos esposos é uma realidade santa que eu, como sacerdote, abençôo com as duas mãos. Na presença de Jesus Cristo nas bodas de Caná, a tradição cristã tem visto freqüentemente uma confirmação do valor divino do matrimônio: Nosso Salvador foi às bodas - escreve São Cirilo de Alexandria - para santificar o princípio da geração humana."
+          },
+          {
+            "ref": "Mons. Javier Echevarría, Carta, 1-I-2006",
+            "url": "https://opusdei.org/pt-br/article/carta-do-prelado-do-opus-dei-sobre-a-familia/",
+            "text": "O Senhor, que em Caná da Galiléia se serviu da docilidade dos servidores para converter a água em vinho, também deseja servir-se agora dos cristãos, de nós, para renovar os seus prodígios, de modo que muitas pessoas acreditem nEle (Cfr. Jn 2, 6-11)."
+          }
+        ],
+        "notes": "es original \"Fuentes\": Es Cristo que pasa, n. 141. Carta 14-IX-1951, n. 23. Forja, n. 807. Amigos de Dios, n. 285. Forja, n. 235. Skipped as duplicates of the SR text: ECP 141, Forja 807, AD 285, Forja 235. ECP 149 para 0 skipped (has \"disser.É\" missing-space defect and \"num episódio que já consideramos antes\"); para 3 used instead. Echevarría unit ends with \"(Cfr. Jn 2, 6-11).\" — the pt-br page really writes \"Jn\" (Spanish abbreviation); kept verbatim. Only 4 new Josemaría units: his other Caná texts duplicate the SR compilation."
+      },
+      {
+        "title": "O Anúncio do Reino",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/18/",
+            "text": "Cumpriu-se o tempo e o Reino de Deus está para chegar: convertei-vos e crede no Evangelho (Mc I, 15).\nToda a multidão ia até Ele, e Ele os ensinava (Mc II, 13).\nJesus vê aquelas barcas na margem e sobe numa delas [...]. Com que naturalidade se mete Jesus na barca de cada um de nós!"
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/18/",
+            "text": "Quanto te aproximares do Senhor, pensa que Ele está muito perto de ti, em ti: regnum Dei intra vos est (Lc XVII, 21). Encontrá-lo-ás no teu coração.\nCristo deve reinar, acima de tudo, na nossa alma. Para que Ele reine em mim, preciso da sua graça em abundância: só assim é que até o último latejo do coração, até o último alento, até o olhar menos intenso, até a palavra mais intranscendente, até a sensação mais elementar se traduzirão num hosanna ao meu Cristo-Rei."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/18/",
+            "text": "Duc in altum ﻿–﻿ Mar adentro! ﻿–﻿ Repele o pessimismo que te torna covarde. Et laxate retia vestra in capturam ﻿–﻿ e lança as redes para pescar.\nDevemos confiar nessas palavras do Senhor, entrar na barca, empunhar os remos, içar as velas e lançar-nos a esse mar do mundo que Cristo nos entrega em herança."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/18/",
+            "text": "Et regni ejus non erit finis. ﻿—﻿ O seu Reino não terá fim!\nNão te dá alegria trabalhar por um reinado assim?"
+          },
+          {
+            "ref": "Amigos de Deus, 21",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/21/",
+            "text": "A tua barca - os teus talentos, as tuas aspirações, as tuas realizações - não serve para nada se não a colocas à disposição de Cristo, se não lhe permites entrar nela com liberdade, se a convertes num ídolo. Tu sozinho, com a tua barca, se prescindes do Mestre, falando sobrenaturalmente, caminhas direto para o naufrágio. Só se admites, se procuras a presença e o governo do Senhor, estarás a salvo das tempestades e dos reveses da vida."
+          },
+          {
+            "ref": "Caminho, 799",
+            "url": "https://escriva.org/pt-br/camino/799/",
+            "text": "O que a ti te maravilha, a mim parece-me razoável. - Por que foi Deus procurar-te no exercício da tua profissão?\nAssim procurou os primeiros: Pedro, André, João e Tiago, junto às redes; Mateus, sentado à mesa dos impostos…\nE - admira-te! - Paulo, na sua ânsia de acabar com a semente dos cristãos."
+          },
+          {
+            "ref": "Caminho, 978",
+            "url": "https://escriva.org/pt-br/camino/978/",
+            "text": "\"Venite post me, et faciam vos fieri piscatores hominum\" - vinde atrás de Mim, e farei de vós pescadores de homens. - Não sem mistério emprega o Senhor estas palavras: os homens - como os peixes - têm de ser apanhados pela cabeça.\nQue profundidade evangélica não encerra o “apostolado da inteligência”!"
+          },
+          {
+            "ref": "É Cristo que passa, 180",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/180/",
+            "text": "Quem compreende o reino que Cristo propõe, percebe que vale a pena arriscar tudo para consegui-lo: é a pérola que o mercador adquire à custa de vender tudo o que possui, é o tesouro achado no campo."
+          },
+          {
+            "ref": "É Cristo que passa, 182",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/182/",
+            "text": "Se deixarmos que Cristo reine na nossa alma, não nos converteremos em dominadores; seremos servidores de todos os homens.\nServiço. Como gosto dessa palavra! Servir ao meu Rei e, por Ele, a todos os que foram redimidos pelo seu sangue. Se nós, cristãos, soubéssemos servir!"
+          },
+          {
+            "ref": "É Cristo que passa, 183",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/183/",
+            "text": "Abraçar a fé cristã é comprometer-se a continuar entre as criaturas a missão de Jesus. Cada um de nós tem que ser alter Christus, ipse Christus, outro Cristo, o próprio Cristo. Só assim poderemos empreender essa tarefa grande, imensa, interminável: santificar por dentro todas as estruturas temporais, levando até elas o fermento da Redenção."
+          },
+          {
+            "ref": "É Cristo que passa, 184",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/184/",
+            "text": "O Reino de Cristo é reino de liberdade: não existem nele outros servos além dos que livremente se deixam aprisionar, por amor a Deus. Bendita escravidão de amor, que nos torna livres! Sem liberdade, não podemos corresponder à graça; sem liberdade, não nos podemos entregar livremente ao Senhor, pelo motivo mais sobrenatural de todos: porque nos apetece."
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Meditação, Cristo Rei 2017",
+            "url": "https://opusdei.org/pt-br/article/fernando-ocariz-meditacao-cristo-rei-2017/",
+            "text": "Podemos fazer esta pergunta: onde o seu Reino está, Senhor? Como podemos tornar o seu Reino mais visível, mais presente? E Ele responderá com as mesmas palavras que disse a Pilatos: O meu reino não é deste mundo. Mas já está presente entre nós, crescendo como uma semente até se tornar uma árvore frondosa"
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Carta pastoral, 10-II-2024",
+            "url": "https://opusdei.org/pt-br/article/carta-do-prelado-10-de-fevereiro2024-obediencia/",
+            "text": "Meditamos muitas vezes sobre a cena em que Pedro obedece ao Senhor, embora não fosse razoável, do ponto de vista humano, seguir as suas instruções: “Faze-te ao largo, e lançai as vossas redes para pescar” (Lc 5,4). Pensemos nisso com calma: quantas coisas boas se seguiram à obediência de Pedro a esse Duc in altum!"
+          }
+        ],
+        "notes": "es original \"Fuentes\": Apuntes de la predicación oral, 19-III-1960; 1-I-1973. Es Cristo que pasa, n. 181. Camino, n. 792. Es Cristo que pasa, n. 159. Camino, n. 906. Skipped as SR duplicates: ECP 181, ECP 159, Caminho 792, Caminho 906, AD 21 para 0. ECP 182 unit stops at \"soubéssemos servir!\": the next sentence on pt-br reads \"porque só sentindo poderemos conhecer e amar Cristo\" — a pt-br typo (es original: \"sólo sirviendo\"), so excluded. Ocáriz Cristo Rei unit ends \"árvore frondosa\" without a period (on the page the period sits after the closing quotation mark). Skipped ECP 180 paras 5/7 (upstream footnote removal leaves \" ,\" / \" ;\" artifacts). ECP 180 unit = first sentence of para 9 only (the rest has a \" ;\" artifact). Ocáriz Cristo Rei 2017 is reported oral preaching (opusdei.org news piece quoting him); unit is the text inside the quotation marks, without the marks. Ocáriz 10-II-2024 unit stops before the Caminho 629 quotation that follows it."
+      },
+      {
+        "title": "A Transfiguração",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/19/",
+            "text": "E transfigurou-se diante deles, de modo que o seu rosto se tornou resplandecente como o sol, e as suas vestes brancas como a luz (Mt XVI, 2).\nJesus: ver-Te, falar contigo! Permanecer assim, contemplando-Te, abismados na imensidade da tua formosura, e não cessar nunca, nunca, nessa contemplação! Oh, Cristo, quem Te pudesse ver! Quem Te pudesse ver, para ficar ferido de amor por Ti."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/19/",
+            "text": "E uma voz vinda da nuvem disse: Este é o meu Filho, o Amado, em quem tenho as minhas complacências; escutai-o (Mt XVII, 5).\nSenhor nosso, aqui nos tens dispostos a escutar tudo o que queiras dizer-nos. Fala-nos, estamos atentos à tua voz. Que as tuas palavras, caindo na nossa alma, abrasem a nossa vontade para que se lance fervorosamente a obedecer-Te."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/19/",
+            "text": "Vultum tuum, Domine, requiram (Ps XXVI, 8), buscarei, Senhor, o teu rosto. Encanta-me fechar os olhos e pensar que chegará o momento, quando Deus quiser, em que poderei vê-lo, não como em um espelho, e sob imagens obscuras..., mas face a face (I Cor XIII, 12). Sim, o meu coração está sedento de Deus, do Deus vivo: quando irei e contemplarei a face de Deus? (Ps XLI, 3)"
+          },
+          {
+            "ref": "Forja, 322",
+            "url": "https://escriva.org/pt-br/forja/322/",
+            "text": "Queres aprender de Cristo e tomar exemplo da sua vida? - Abre o Santo Evangelho e escuta o diálogo de Deus com os homens…, contigo."
+          },
+          {
+            "ref": "Amigos de Deus, 299",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/299/",
+            "text": "Seguir Cristo: este é o segredo. Acompanhá-lo tão de perto que vivamos com Ele, como aqueles primeiros Doze; tão de perto, que com Ele nos identifiquemos. Não demoraremos a afirmar, desde que não tenhamos levantado obstáculos à graça, que nos revestimos de Nosso Senhor Jesus Cristo. O Senhor reflete-se na nossa conduta como num espelho. Se o espelho for como deve ser, reproduzirá o semblante amabilíssimo do nosso Salvador sem o desfigurar, sem caricaturas: e os outros terão a possibilidade de admirá-lo, de segui-lo."
+          },
+          {
+            "ref": "Amigos de Deus, 310",
+            "url": "https://escriva.org/pt-br/amigos-de-dios/310/",
+            "text": "Nasce uma sede de Deus, uma ânsia de compreender as suas lágrimas; de ver o seu sorriso, o seu rosto… Julgo que o melhor modo de exprimi-lo é voltar a repetir com a Escritura: Como o cervo que anseia pelas fontes das águas, assim por Vós anela a minha alma, ó meu Deus! E a alma avança metida em Deus, endeusada: fez-se o cristão viajante sequioso, que abre a boca às águas da fonte."
+          }
+        ],
+        "notes": "es original \"Fuentes\": Apuntes de la predicación oral, 4-VI-1937; 25-VII-1937; 25-XII-1973. SR para 0 has the pt-br typo \"(Mt XVI, 2)\" — es original and pt-pt read Mt 17, 2 (lead corrects). No escriva.org scripture-index entries for Mt 17 / Mc 9 / Lc 9. Forja 738, Forja 322 and the Amigos de Deus units are the texts opusdei.org itself pairs with the Transfiguration (\"Quatro textos de São Josemaria sobre a Transfiguração\", and the Monte Tabor article cites Forja 322 for \"escutai-o\"). AD 221 = foretaste of glory; AD 299 = Christ's face reflected in us; AD 310 = longing to see His face. No successor unit: the only candidate found (opusdei.org \"Monte Tabor: Basílica da Transfiguração\", Mons. Javier Echevarría, Crónica 1994, recounting D. Álvaro on Tabor, 17-III-1994: \"Por que nosso Senhor… quis se transfigurar naquele lugar distante…? Comentou que provavelmente era para que nos ficasse gravado que, para chegar a Deus, tínhamos também que colocar no esforço humano, o esforço dos sentidos e das potências\") was dropped — ambiguous subject (\"Comentou\") and garbled syntax, not self-contained. Echevarría Carta agosto 2011 ties 7-VIII-1931 (feast of the Transfiguration, \"omnia traham\") to St. Josemaría, but the paragraph has backslash junk (\"sua\\ fraqueza\", \"com \\as doutrinas\") and depends on context — skipped. No Ocáriz Transfiguration text found in pt-br."
+      },
+      {
+        "title": "A Instituição da Eucaristia",
+        "units": [
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/20/",
+            "text": "Na véspera da festa da Páscoa, como Jesus sabia que havia chegado a sua hora de passar deste mundo para o Pai, tendo amado os seus que estavam no mundo, amou-os até o fim (Ioh XII, 1).\nCaía a noite sobre o mundo, porque os velhos ritos, os antigos sinais da misericórdia infinita de Deus para com a humanidade se iam realizar plenamente, abrindo caminho a um verdadeiro amanhecer: a nova Páscoa. A Eucaristia foi instituída durante a noite, preparando de antemão a manhã da Ressurreição."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/20/",
+            "text": "Jesus ficou na Eucaristia por amor..., por ti.\nFicou, sabendo como é que os homens O receberiam..., e como é que tu O recebes.\nFicou, para que O comas, para que O visites e Lhe contes as tuas coisas e, tratando-O com intimidade na oração junto do Sacrário e na recepção do Sacramento, te enamores mais de dia para dia, e faças que outras almas ﻿–﻿ muitas! ﻿–﻿ sigam o mesmo caminho."
+          },
+          {
+            "ref": "Santo Rosário",
+            "url": "https://escriva.org/pt-br/santo-rosario/20/",
+            "text": "Menino bom: os apaixonados desta terra, como beijam as flores, a carta, uma lembrança da pessoa que amam!...\nE tu? Poderás esquecer-te alguma vez de que O tens sempre ao teu lado..., a Ele!? ﻿–﻿ Esquecerás... que O podes comer?\n﻿–﻿ Senhor, que eu não torne a voar colado à terra!, que esteja sempre iluminado pelos raios do divino Sol ﻿–﻿ Cristo ﻿–﻿ na Eucaristia!, que o meu voo não se interrompa enquanto não alcançar o descanso do teu Coração!"
+          },
+          {
+            "ref": "É Cristo que passa, 84",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/84/",
+            "text": "A alegria da Quinta-Feira Santa nasce de compreendermos que o Criador se excedeu no carinho por suas criaturas. E como se não bastassem todas as outras provas da sua misericórdia, Nosso Senhor Jesus Cristo instituiu a Eucaristia para que pudéssemos tê-lo sempre junto de nós e porque - tanto quanto nos é possível entender -, movido por seu Amor, Ele, que de nada necessita, não quis prescindir de nós."
+          },
+          {
+            "ref": "É Cristo que passa, 83",
+            "url": "https://escriva.org/pt-br/es-cristo-que-pasa/83/",
+            "text": "Jesus Cristo, perfeito Deus e perfeito Homem, não nos deixa um símbolo, mas a própria realidade: fica Ele mesmo. Irá para o Pai, mas permanecerá com os homens. Não nos deixará um simples presente que nos lembre a sua memória, uma imagem que se dilua com o tempo, como a fotografia que em breve se esvai, amarelece e perde sentido para os que não tenham sido protagonistas daquele momento amoroso. Sob as espécies do pão e do vinho encontra-se o próprio Cristo, realmente presente com seu Corpo, seu Sangue, sua Alma e sua Divindade."
+          },
+          {
+            "ref": "Forja, 69",
+            "url": "https://escriva.org/pt-br/forja/69/",
+            "text": "Deves lutar por conseguir que o Santo Sacrifício do Altar seja o centro e a raiz da tua vida interior, de modo que todo o teu dia se converta num ato de culto - prolongamento da Missa a que assististe e preparação para a seguinte -, que vai transbordando em jaculatórias, em visitas ao Santíssimo Sacramento, em oferecimento do teu trabalho profissional e da tua vida familiar…"
+          },
+          {
+            "ref": "Sulco, 686",
+            "url": "https://escriva.org/pt-br/surco/686/",
+            "text": "Jesus ficou na Hóstia Santa por nós!: para permanecer ao nosso lado, para amparar-nos, para guiar-nos. - E amor somente com amor se paga. - Como não havemos de ir ao Sacrário, todos os dias, nem que seja apenas por uns minutos, para levar-Lhe a nossa saudação e o nosso amor de filhos e de irmãos?"
+          },
+          {
+            "ref": "Forja, 268",
+            "url": "https://escriva.org/pt-br/forja/268/",
+            "text": "Agiganta a tua fé na Sagrada Eucaristia. - Pasma-te diante dessa realidade inefável! Temos Deus conosco, podemos recebê-Lo diariamente e, se quisermos, falamos intimamente com Ele, como se fala com o amigo, como se fala com o irmão, como se fala com o pai, como se fala com o Amor."
+          },
+          {
+            "ref": "Caminho, 537",
+            "url": "https://escriva.org/pt-br/camino/537/",
+            "text": "Quando te aproximares do Sacrário, pensa que Ele!… faz vinte séculos que te espera."
+          },
+          {
+            "ref": "Forja, 827",
+            "url": "https://escriva.org/pt-br/forja/827/",
+            "text": "Gosto de chamar “prisão de amor” ao Sacrário.\n- Há vinte séculos que Ele está ali…, voluntariamente encerrado!, por mim, e por todos."
+          },
+          {
+            "ref": "Bto. Álvaro del Portillo, Carta pastoral, 1-IV-1986",
+            "url": "https://opusdei.org/pt-br/article/preparar-a-festa-do-corpus-christi/",
+            "text": "A Missa é «centro»; portanto deve ser o ponto de referência de cada um dos nossos pensamentos e de cada uma das nossas ações. Na tua vida nada deve desenvolver-se fora do Sacrifício eucarístico. Na Missa encontramos o Modelo perfeito da nossa entrega. Ali está Cristo vivo, palpitante de amor."
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Homilia, 13-IV-2017",
+            "url": "https://opusdei.org/pt-br/article/homilia-de-quinta-feira-santa-ninguem-esta-excluid/",
+            "text": "O Nosso Deus está sempre próximo. Mas na Eucaristia apresenta-se especialmente próximo do nosso coração: com o seu corpo, com o seu sangue, com a sua alma, com a sua divindade. Jesus amou-nos “até ao fim”. Ninguém está excluído deste amor."
+          },
+          {
+            "ref": "Mons. Fernando Ocáriz, Homilia, 29-III-2018",
+            "url": "https://opusdei.org/pt-br/article/homilia-do-prelado-na-quinta-feira-santa-2018/",
+            "text": "A Eucaristia é o próprio Jesus Cristo, realmente presente e entregue por nós. Neste sacramento ele nos mostra de maneira especial a sua amizade e o seu desejo de nos acompanhar todos os dias da nossa vida."
+          }
+        ],
+        "notes": "es original \"Fuentes\": Es Cristo que pasa, n. 155. Forja, nn. 887, 305, 39. SR para 0 has the pt-br typo \"(Ioh XII, 1)\" — es original and pt-pt read Jo 13, 1 (lead corrects). Skipped as SR duplicates: Forja 887, 305, 39, ECP 155. ECP 83 unit starts at a sentence boundary inside para 5 (drops the opening \"Porém, o Senhor pode o que nós não podemos.\" which leans on the preceding paragraph); it still mentions \"a fotografia\" from the previous paragraph's farewell image but reads fine alone. Álvaro 1-IV-1986 text comes from opusdei.org's \"Preparando o Corpus Christi\" selection of his texts. Ocáriz 2017 homily page is a translation (\"[Em italiano no original]\"); Holy Thursday 2017 = 13-IV-2017 (page dated 14/04/2017)."
+      }
+    ]
+  }
+}

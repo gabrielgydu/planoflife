@@ -3,7 +3,7 @@ import { ChevronLeft, X, Check } from 'lucide-react'
 import { motion } from 'motion/react'
 import rosaryRaw from '../../data/rosary_contemplation.json'
 import rosaryImagesRaw from '../../data/rosary_images.json'
-import { prayedSetForWeekday, type SetKey } from '../../data/rosary'
+import { prayedSetForWeekday, type RosarySet, type SetKey } from '../../data/rosary'
 import {
   ROSARY_STEPS,
   ROSARY_STEP_LABELS,
@@ -14,19 +14,11 @@ import {
   type RosaryStep,
 } from '../../data/rosaryEngine'
 import { HapticTapArea } from './HapticTapArea'
+import { RosaryQuoteText } from './RosaryQuoteText'
 import { MarkdownRenderer } from '../shared/MarkdownRenderer'
 import { PRACTICE_TEXT_LANG_KEY } from '../../data/bundledTexts'
 import { formatDate } from '../../utils/dates'
 
-interface RosaryMystery {
-  title: string
-  quotes: string[]
-}
-interface RosarySet {
-  label: string
-  vocalDays: number[]
-  mysteries: RosaryMystery[]
-}
 interface ImageCandidate {
   f: string // path relative to /rosary-images/
   a: string // painter (caption)
@@ -312,9 +304,7 @@ export function RosaryPrayerView({
                   <h2 className="font-heading text-xl font-semibold text-text-primary dark:text-text-primary-dark">
                     {mysteryTitle}
                   </h2>
-                  <p className="text-base italic text-text-secondary dark:text-text-secondary-dark leading-relaxed">
-                    {quote}
-                  </p>
+                  {quote && <RosaryQuoteText quote={quote} textClassName="text-base" />}
                   {img?.a && (
                     <p className="text-xs text-text-muted dark:text-text-muted-dark pt-1">Arte: {img.a}</p>
                   )}

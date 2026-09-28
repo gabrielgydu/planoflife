@@ -38,6 +38,23 @@ export function isSantoRosarioPractice(practice: Practice): boolean {
 
 export type SetKey = 'gozosos' | 'dolorosos' | 'gloriosos' | 'luminosos'
 
+// Shape of rosary_contemplation.json's sets (built by
+// scripts/build-rosary-contemplation.mjs). Each mystery carries a pool of
+// self-contained passages; the readers show one at random with its source.
+export interface RosaryQuote {
+  t: string // verbatim passage; "\n" separates paragraphs
+  ref: string // source, e.g. "Santo Rosário", "Forja, 264", "Mons. Fernando Ocáriz, Carta, 1-XI-2019"
+}
+export interface RosaryMystery {
+  title: string
+  quotes: RosaryQuote[]
+}
+export interface RosarySet {
+  label: string
+  vocalDays: number[]
+  mysteries: RosaryMystery[]
+}
+
 /** Canonical liturgical order (Joyful → Luminous → Sorrowful → Glorious). */
 export const SET_ORDER: SetKey[] = ['gozosos', 'luminosos', 'dolorosos', 'gloriosos']
 
