@@ -3,10 +3,12 @@ import { motion, AnimatePresence } from 'motion/react'
 import { X, Check, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
 import { Spinner } from '../shared/Spinner'
 import { NtBookPicker } from './NtBookPicker'
+import { ReadingTimer } from './ReadingTimer'
 import { useReadingPosition } from '../../hooks/useReadingPosition'
-import { NT_READING_ID } from '../../data/novoTestamento'
+import { NT_READING_ID, NT_TIMER_KEY, NT_TIMER_MS } from '../../data/novoTestamento'
 import { NT_BOOKS, NT_FIRST_BOOK, getNtBook, nextNtBook, prevNtBook } from '../../data/nt/books'
 import { loadNtBook, chapterNumbers, clampToBook, type NtBookText } from '../../data/nt'
+import { formatDate } from '../../utils/dates'
 
 // How long the anchor must hold still before the bookmark is written. Every write
 // marks the sync state dirty and schedules an encrypted push, so this is
@@ -44,6 +46,7 @@ function readSavedLang(): NtLang {
 
 interface NovoTestamentoViewProps {
   practiceId: string
+  viewDate: Date
   isCompleted: (practiceId: string) => boolean
   onTogglePractice: (practiceId: string) => void
   onClose: () => void
@@ -64,10 +67,13 @@ interface NovoTestamentoViewProps {
  * land on the remembered verse; a chapter tapped in the picker's grid is an explicit
  * jump and starts at its first verse.
  * Completion is MANUAL (header checkmark) — opening the reader to look something up
- * must not claim the day's reading was done.
+ * must not claim the day's reading was done. The one exception is the day's
+ * five-minute timer (bottom-left): it never starts by itself, so running it out is a
+ * reading actually done, and it checks the practice off for the viewed day.
  */
 export function NovoTestamentoView({
   practiceId,
+  viewDate,
   isCompleted,
   onTogglePractice,
   onClose,
@@ -356,7 +362,13 @@ export function NovoTestamentoView({
     return () => window.removeEventListener('keydown', onKey)
   }, [goPrev, goNext, pickerOpen])
 
+  // Only ever turns the practice ON: a day already checked by hand stays checked.
+  const handleTimerFinish = useCallback(() => {
+    if (!isCompleted(practiceId)) onTogglePractice(practiceId)
+  }, [isCompleted, onTogglePractice, practiceId])
+
   // --- render -----------------------------------------------------------------
+  const dateStr = formatDate(viewDate)
   const chapters = useMemo(() => (book ? chapterNumbers(book) : []), [book])
   const completed = isCompleted(practiceId)
   const totalChapters = meta?.chapters ?? chapters.length
@@ -499,6 +511,17 @@ export function NovoTestamentoView({
               })}
             </motion.div>
           )}
+        </div>
+
+        {/* The day's reading timer */}
+        <div className="absolute bottom-4 left-4">
+          <ReadingTimer
+            key={dateStr}
+            storageKey={NT_TIMER_KEY}
+            dateStr={dateStr}
+            durationMs={NT_TIMER_MS}
+            onFinish={handleTimerFinish}
+          />
         </div>
 
         {/* Language mode */}

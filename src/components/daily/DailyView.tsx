@@ -458,6 +458,7 @@ export function DailyView() {
         ) : openedPractice && openedIsNovoTestamento ? (
           <NovoTestamentoView
             practiceId={openedPractice.id}
+            viewDate={currentDate}
             isCompleted={isCompletedEffective}
             onTogglePractice={toggleEffective}
             onClose={() => setReaderPracticeId(null)}

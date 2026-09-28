@@ -15,6 +15,11 @@ export const NOVO_TESTAMENTO_NAME = 'Leitura do Novo Testamento'
 // Each book also gets its own bookmark row, `nt:<book>` — see useReadingPosition.
 export const NT_READING_ID = 'nt'
 
+// The reading's own countdown: five minutes, one timer per day, kept only on the
+// device (localStorage, map of date → ms already read). See useReadingTimer.
+export const NT_TIMER_MS = 5 * 60 * 1000
+export const NT_TIMER_KEY = 'ntReadingTimer'
+
 const normalizeName = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim()
 
