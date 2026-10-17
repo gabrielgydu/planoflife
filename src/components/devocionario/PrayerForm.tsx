@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useLocation, useNavigate, useParams } from 'react-router'
 import { BookX, ChevronLeft } from 'lucide-react'
 import { Spinner } from '../shared/Spinner'
 import { EmptyState } from '../shared/EmptyState'
@@ -21,6 +21,7 @@ const inputClass =
 export function PrayerForm() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
   const isEditing = Boolean(id)
   const prayer = usePrayer(id)
   const { addPrayer, updatePrayer } = usePrayers()
@@ -45,6 +46,15 @@ export function PrayerForm() {
 
   const canSave = titlePt.trim().length > 0 && textPt.trim().length > 0
 
+  // Back to the page the form was opened from — popping, not pushing a fresh copy,
+  // so that page keeps its own way back (to the search results it may have been
+  // opened from) and no stale form is left in the history. A tab opened straight
+  // on the form (the initial entry, key 'default') has nothing of the app to pop.
+  const leave = () => {
+    if (location.key !== 'default') navigate(-1)
+    else navigate(id ? `/devocionario/${id}` : '/devocionario', { replace: true })
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!canSave || saving) return
@@ -60,7 +70,7 @@ export function PrayerForm() {
         if (linkedPractice && linkedPractice.name !== title.pt) {
           await updatePractice(linkedPractice.id, { name: title.pt })
         }
-        navigate(`/devocionario/${id}`)
+        leave()
       } else {
         const created = await addPrayer({ title, texts })
         navigate(`/devocionario/${created.id}`)
@@ -95,7 +105,9 @@ export function PrayerForm() {
       <header className="sticky top-0 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark z-10">
         <div className="flex items-center px-4 h-16 mx-auto w-full max-w-2xl">
           <button
-            onClick={() => navigate(-1)}
+            onClick={leave}
+            // Leaving mid-save would let the save's own navigation pop a second page.
+            disabled={saving}
             className="p-2 -ml-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
             aria-label="Voltar"
           >

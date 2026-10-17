@@ -1,5 +1,12 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router'
+import { Fragment, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  Link,
+  createSearchParams,
+  useLocation,
+  useNavigate,
+  useNavigationType,
+  useSearchParams,
+} from 'react-router'
 import { AnimatePresence, motion } from 'motion/react'
 import {
   BookOpen,
@@ -33,22 +40,34 @@ import { CSS } from '@dnd-kit/utilities'
 import { Spinner } from '../shared/Spinner'
 import { EmptyState } from '../shared/EmptyState'
 import { usePrayers } from '../../hooks/usePrayers'
+import { useEscrivaPoints } from '../../hooks/useEscrivaPoints'
 import {
   DEVOCIONARIO_SECTIONS,
   USER_SECTION_SLUG,
   prayerTitle,
   sectionName,
 } from '../../data/devocionario'
-import {
-  MIN_QUERY_LENGTH,
-  buildSearchIndex,
-  matchSnippet,
-  searchPrayers,
-} from '../../data/prayerSearch'
+import { buildSearchIndex, matchSnippet, searchPrayers } from '../../data/prayerSearch'
+import { isSearchQuery } from '../../data/pointSearch'
+import { BOOKS } from '../../data/meditation'
+import { BookRow } from './PointRows'
+import { useBackState } from '../../hooks/useBackNavigation'
+import { PointSearchResults, usePointSearch } from './PointSearchResults'
+import { SectionHeading } from './SectionHeading'
+import { ShowMoreButton } from './ShowMoreButton'
+import { forgetResultLimits, useResultLimits } from '../../hooks/useResultLimits'
+import { forgetScrollPosition } from '../layout/ScrollMemory'
 import type { Prayer } from '../../types'
 
 /** The pinned group of favorites is a view, not a section — hence a reserved key. */
 const FAVORITES_KEY = '@favoritos'
+
+/**
+ * Prayers shown in search results before "Mostrar mais": enough for any prayer
+ * query, short enough that a broad word ("oração" — 35 prayers) still leaves the
+ * chapters and points that follow in reach.
+ */
+const PRAYER_RESULTS_FIRST_PAGE = 10
 
 /** How far the book has to scroll before the search field slides out of the header. */
 const SEARCH_REVEAL_PX = 24
@@ -83,9 +102,11 @@ function PrayerRow({
   subtitle?: string
 }) {
   const latinOnly = !prayer.title.pt
+  const backState = useBackState()
   return (
     <Link
       to={`/devocionario/${prayer.id}`}
+      state={backState}
       className="flex items-center gap-2 px-4 py-3 hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark transition-colors"
     >
       <span className="flex-1 min-w-0">
@@ -135,12 +156,14 @@ function SortablePrayerRow({ prayer }: { prayer: Prayer }) {
   )
 }
 
-function SectionHeading({ children }: { children: React.ReactNode }) {
+/** The "São Josemaria" group: Caminho, Sulco and Forja, each opening its chapters. */
+function EscrivaBooks() {
   return (
-    <div className="px-4 py-2 bg-surface-secondary dark:bg-surface-secondary-dark">
-      <span className="font-heading text-xs font-medium text-text-muted dark:text-text-muted-dark uppercase tracking-widest">
-        {children}
-      </span>
+    <div>
+      <SectionHeading>São Josemaria</SectionHeading>
+      {BOOKS.map((b) => (
+        <BookRow key={b.key} book={b.key} />
+      ))}
     </div>
   )
 }
@@ -159,17 +182,61 @@ export function DevocionarioView() {
   const navigate = useNavigate()
   const { prayers, isLoading, toggleFavorite, reorderSection } = usePrayers()
   const [reordering, setReordering] = useState(false)
-  const [query, setQuery] = useState('')
+  const { points, error: pointsError, retry: retryPoints } = useEscrivaPoints()
+
+  // A query that searches lives in the URL (?q=), so coming back from a prayer or a
+  // point opened from the results lands on the same results — and ScrollMemory,
+  // which keys on path + search, on the same scroll position in them. Only one that
+  // searches: the first letter typed still shows the whole book, and changing the
+  // URL for it would send the book to the top under your finger. The input itself
+  // is bound to local state: a controlled input fed by a router navigation per
+  // keystroke would lag behind and lose its cursor.
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { pathname } = useLocation()
+  const navigationType = useNavigationType()
+  const urlQuery = searchParams.get('q') ?? ''
+  const [query, setQueryState] = useState(urlQuery)
+  const writtenQuery = useRef(urlQuery)
+  useEffect(() => {
+    // A navigation that changed ?q (back/forward, the bottom-bar tab) wins. Never
+    // a REPLACE: those are the field's own writes below, which the router applies
+    // as a low-priority update — one landing late on a slow phone would put an
+    // older query back into the field and swallow what was typed meanwhile.
+    if (navigationType === 'REPLACE' || urlQuery === writtenQuery.current) return
+    writtenQuery.current = urlQuery
+    setQueryState(urlQuery)
+  }, [urlQuery, navigationType])
+  const setQuery = (next: string) => {
+    setQueryState(next)
+    const q = isSearchQuery(next) ? next : ''
+    if (q === writtenQuery.current) return
+    writtenQuery.current = q
+    if (q) {
+      // Typed, it is a new search, even of a query read before: it starts at the
+      // top with every group on its first page. Only coming BACK to a search
+      // (Voltar, a reload) puts it where it was left.
+      forgetScrollPosition(`${pathname}?${createSearchParams({ q })}`)
+      forgetResultLimits(q)
+    }
+    setSearchParams(q ? { q } : {}, { replace: true })
+  }
 
   const [scrolled, setScrolled] = useState(false)
   const [searchFocused, setSearchFocused] = useState(false)
 
-  const searching = query.trim().length >= MIN_QUERY_LENGTH
+  // Results trail the keystrokes by a frame when they must: 3054 points is a real
+  // amount of text to scan on a phone, and the field must never stutter.
+  const deferredQuery = useDeferredValue(query)
+  const searching = isSearchQuery(query)
+  const resultsQuery = isSearchQuery(deferredQuery) ? deferredQuery : query
   const searchIndex = useMemo(() => buildSearchIndex(prayers), [prayers])
   const results = useMemo(
-    () => (searching ? searchPrayers(searchIndex, query) : []),
-    [searchIndex, query, searching]
+    () => (searching ? searchPrayers(searchIndex, resultsQuery) : []),
+    [searchIndex, resultsQuery, searching]
   )
+  const pointSearch = usePointSearch(points, searching ? resultsQuery : '')
+  const { limit: limitOf, more } = useResultLimits(resultsQuery)
+  const prayerLimit = limitOf('prayers', PRAYER_RESULTS_FIRST_PAGE)
 
   // The search field stays out of the way until you actually start moving through
   // the book, so the top of the prayer book is just the prayer book. Once it is
@@ -294,13 +361,13 @@ export function DevocionarioView() {
                       setQuery(e.target.value)
                       // Leaving reorder mode on while a filter hides rows would let a
                       // drag renumber a partial section — see the component comment.
-                      if (e.target.value.trim().length >= MIN_QUERY_LENGTH) setReordering(false)
+                      if (isSearchQuery(e.target.value)) setReordering(false)
                     }}
                     onFocus={() => setSearchFocused(true)}
                     onBlur={() => setSearchFocused(false)}
                     className="w-full pl-9 pr-9 py-2.5 text-sm bg-surface-secondary dark:bg-surface-secondary-dark border border-border dark:border-border-dark rounded-lg text-text-primary dark:text-text-primary-dark placeholder:text-text-muted dark:placeholder:text-text-muted-dark focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    placeholder="Buscar no devocionário"
-                    aria-label="Buscar no devocionário"
+                    placeholder="Buscar orações e pontos (ex.: 238)"
+                    aria-label="Buscar orações e pontos de São Josemaria"
                     autoCapitalize="none"
                     autoCorrect="off"
                     spellCheck={false}
@@ -329,58 +396,83 @@ export function DevocionarioView() {
 
       {searching ? (
         <div className="divide-y divide-border/30 dark:divide-border-dark mx-auto w-full max-w-2xl">
-          <SectionHeading>
-            {results.length === 1 ? '1 resultado' : `${results.length} resultados`}
-          </SectionHeading>
-          {results.map(({ prayer, bodyOnly }) => (
-            <PrayerRow
-              key={prayer.id}
-              prayer={prayer}
-              onToggleFavorite={() => toggleFavorite(prayer.id)}
-              subtitle={
-                (bodyOnly ? matchSnippet(prayer, query) : null) ?? sectionName(prayer.section)
-              }
-            />
-          ))}
-          {results.length === 0 && (
-            <EmptyState icon={SearchX} message={`Nada encontrado para “${query.trim()}”`} />
+          {results.length > 0 && (
+            <div>
+              <SectionHeading>
+                {results.length === 1 ? '1 oração' : `${results.length} orações`}
+              </SectionHeading>
+              {results.slice(0, prayerLimit).map(({ prayer, bodyOnly }) => (
+                <PrayerRow
+                  key={prayer.id}
+                  prayer={prayer}
+                  onToggleFavorite={() => toggleFavorite(prayer.id)}
+                  subtitle={
+                    (bodyOnly ? matchSnippet(prayer, resultsQuery) : null) ??
+                    sectionName(prayer.section)
+                  }
+                />
+              ))}
+              {results.length > prayerLimit && (
+                <ShowMoreButton
+                  remaining={results.length - prayerLimit}
+                  onClick={() => more('prayers', prayerLimit, results.length)}
+                />
+              )}
+            </div>
+          )}
+          <PointSearchResults
+            search={pointSearch}
+            points={points}
+            query={resultsQuery}
+            error={pointsError}
+            onRetry={retryPoints}
+          />
+          {results.length === 0 && pointSearch.total === 0 && !pointSearch.pending && (
+            <EmptyState icon={SearchX} message={`Nada encontrado para “${resultsQuery.trim()}”`} />
           )}
         </div>
       ) : (
         <div className="divide-y divide-border/30 dark:divide-border-dark mx-auto w-full max-w-2xl">
+          {/* St. Josemaría's books sit right under Favoritos (or on top without
+              favorites): three rows into 3054 points. They are books, not prayers,
+              so reorder mode — which is about prayers — leaves them out. */}
+          {!reordering && !favorites.length && <EscrivaBooks />}
           {groups.map((group) => (
-            <div key={group.key}>
-              <SectionHeading>{group.name}</SectionHeading>
-              {group.key === FAVORITES_KEY || !reordering ? (
-                group.prayers.map((prayer) => (
-                  <PrayerRow
-                    key={`${group.key}:${prayer.id}`}
-                    prayer={prayer}
-                    onToggleFavorite={() => toggleFavorite(prayer.id)}
-                  />
-                ))
-              ) : (
-                <DndContext
-                  sensors={sensors}
-                  collisionDetection={closestCenter}
-                  onDragEnd={handleDragEnd(group.key)}
-                >
-                  <SortableContext
-                    items={group.prayers.map((p) => p.id)}
-                    strategy={verticalListSortingStrategy}
+            <Fragment key={group.key}>
+              <div>
+                <SectionHeading>{group.name}</SectionHeading>
+                {group.key === FAVORITES_KEY || !reordering ? (
+                  group.prayers.map((prayer) => (
+                    <PrayerRow
+                      key={`${group.key}:${prayer.id}`}
+                      prayer={prayer}
+                      onToggleFavorite={() => toggleFavorite(prayer.id)}
+                    />
+                  ))
+                ) : (
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd(group.key)}
                   >
-                    {group.prayers.map((prayer) => (
-                      <SortablePrayerRow key={prayer.id} prayer={prayer} />
-                    ))}
-                  </SortableContext>
-                </DndContext>
-              )}
-              {group.prayers.length === 0 && (
-                <p className="px-4 py-4 text-sm text-text-muted dark:text-text-muted-dark">
-                  Nenhuma oração própria ainda — toque em + para escrever uma.
-                </p>
-              )}
-            </div>
+                    <SortableContext
+                      items={group.prayers.map((p) => p.id)}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      {group.prayers.map((prayer) => (
+                        <SortablePrayerRow key={prayer.id} prayer={prayer} />
+                      ))}
+                    </SortableContext>
+                  </DndContext>
+                )}
+                {group.prayers.length === 0 && (
+                  <p className="px-4 py-4 text-sm text-text-muted dark:text-text-muted-dark">
+                    Nenhuma oração própria ainda — toque em + para escrever uma.
+                  </p>
+                )}
+              </div>
+              {!reordering && group.key === FAVORITES_KEY && <EscrivaBooks />}
+            </Fragment>
           ))}
         </div>
       )}

@@ -2,7 +2,7 @@
 // pages — an overview with the SAME number (1–1055) in all three books, then one
 // page per book (Caminho / Sulco / Forja) showing that point flanked by its
 // neighbours, like `om`'s single-book mode. The point text is bundled offline in
-// escriva_points.json (built from the om cache by scripts/build-escriva-points.mjs);
+// escriva_points.json (built from escriva.org by scripts/build-escriva-points.mjs);
 // the number is drawn once per day via the Worker's /random (random.org) with a
 // crypto fallback, then stored and synced (db.meditationDays, keyed by date + slot
 // — see meditationDayKey) so it's stable and identical across devices. There are

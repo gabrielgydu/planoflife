@@ -8,6 +8,7 @@ import { Spinner } from '../shared/Spinner'
 import { EmptyState } from '../shared/EmptyState'
 import { AddToPracticesModal } from './AddToPracticesModal'
 import { usePrayer, usePrayers } from '../../hooks/usePrayers'
+import { useGoBack } from '../../hooks/useBackNavigation'
 import { usePracticeForPrayer } from '../../hooks/usePracticeForPrayer'
 import { usePractices } from '../../hooks/usePractices'
 import { PRACTICE_TEXT_LANG_KEY } from '../../data/bundledTexts'
@@ -34,6 +35,9 @@ const LANG_LABELS: Record<PrayerLang, string> = {
 export function PrayerReader() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  // Back to where the prayer was opened from (search results keep their ?q= that
+  // way), or to the book when there is no such page.
+  const goBack = useGoBack('/devocionario')
   const prayer = usePrayer(id)
   const { toggleFavorite, deletePrayer } = usePrayers()
   const { deletePractice } = usePractices()
@@ -87,7 +91,7 @@ export function PrayerReader() {
       <header className="sticky top-0 z-10 bg-surface-card dark:bg-surface-card-dark border-b border-border dark:border-border-dark">
         <div className="flex items-center px-2 h-16 mx-auto w-full max-w-2xl">
           <button
-            onClick={() => navigate('/devocionario')}
+            onClick={goBack}
             className="p-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
             aria-label="Voltar"
           >

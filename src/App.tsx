@@ -12,6 +12,8 @@ import { DayDetail } from './components/history/DayDetail'
 import { DevocionarioView } from './components/devocionario/DevocionarioView'
 import { PrayerReader } from './components/devocionario/PrayerReader'
 import { PrayerForm } from './components/devocionario/PrayerForm'
+import { PointBookView } from './components/devocionario/PointBookView'
+import { PointReader } from './components/devocionario/PointReader'
 import { SettingsView } from './components/settings/SettingsView'
 import { PracticeList } from './components/practice/PracticeList'
 import { PracticeDetail } from './components/practice/PracticeDetail'
@@ -46,6 +48,9 @@ export function App() {
         <Route path="/devocionario/new" element={<PrayerForm />} />
         <Route path="/devocionario/:id" element={<PrayerReader />} />
         <Route path="/devocionario/:id/edit" element={<PrayerForm />} />
+        {/* St. Josemaría's books: Caminho, Sulco, Forja (see src/data/escriva.ts). */}
+        <Route path="/devocionario/pontos/:book" element={<PointBookView />} />
+        <Route path="/devocionario/pontos/:book/:n" element={<PointReader />} />
         <Route path="/history/:date" element={<DayDetail />} />
         <Route path="/examen/history" element={<ExamenHistoryView />} />
         <Route path="/examen/confession" element={<ConfessionView />} />

@@ -60,6 +60,11 @@ function remember(key: string, y: number) {
   }
 }
 
+/** Forget `key` (path + search), so its next visit starts at the top. */
+export function forgetScrollPosition(key: string) {
+  positions.delete(key)
+}
+
 function persist() {
   try {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(Object.fromEntries(positions)))
@@ -80,6 +85,10 @@ export function ScrollMemory() {
   // they would overwrite the remembered position with a clamped 0.
   const restoringRef = useRef(false)
 
+  // The page on screen, for the scroll listener. Set by the layout effect below, so
+  // it switches at the same moment the new page's own scrollTo runs.
+  const keyRef = useRef(key)
+
   useEffect(() => {
     // The browser's own restoration works off entries it recorded itself, which
     // for a pushState SPA means it lands at 0 and fights the code below.
@@ -94,8 +103,13 @@ export function ScrollMemory() {
     }
   }, [])
 
-  // Record where this page is left. Runs for the page currently on screen, so by
-  // the time a navigation happens its final position is already stored.
+  // Record where the page on screen is left, so by the time a navigation happens its
+  // final position is already stored. ONE listener for every page, reading keyRef —
+  // not one per key: a navigation's scrollTo(0, 0) fires its scroll event after the
+  // new page has committed but possibly before the old page's effects are cleaned
+  // up, and a listener still bound to the old key would record that 0 for the page
+  // just left (typing a search, ?q= changes the URL, would erase where the
+  // Devocionário was).
   useEffect(() => {
     let frame = 0
     const onScroll = () => {
@@ -106,7 +120,7 @@ export function ScrollMemory() {
         // the event and this frame, and then window.scrollY is still the 0 a
         // navigation clamped us to — exactly the value that must not be saved.
         if (restoringRef.current) return
-        remember(key, window.scrollY)
+        remember(keyRef.current, window.scrollY)
       })
     }
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -114,11 +128,12 @@ export function ScrollMemory() {
       window.removeEventListener('scroll', onScroll)
       if (frame) cancelAnimationFrame(frame)
     }
-  }, [key])
+  }, [])
 
   // Layout, not passive: the first attempt then happens before the browser
   // paints the new page, so an already-rendered page never flashes at the top.
   useLayoutEffect(() => {
+    keyRef.current = key
     const target = positions.get(key) ?? 0
     if (target <= 0) {
       window.scrollTo(0, 0)

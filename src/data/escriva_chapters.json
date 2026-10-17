@@ -1,0 +1,554 @@
+{
+ "caminho": [
+  {
+   "slug": "carater",
+   "title": "Caráter",
+   "first": 1,
+   "last": 55
+  },
+  {
+   "slug": "direcao-espiritual",
+   "title": "Direção espiritual",
+   "first": 56,
+   "last": 80
+  },
+  {
+   "slug": "oracao",
+   "title": "Oração",
+   "first": 81,
+   "last": 117
+  },
+  {
+   "slug": "santa-pureza",
+   "title": "Santa Pureza",
+   "first": 118,
+   "last": 145
+  },
+  {
+   "slug": "coracao",
+   "title": "Coração",
+   "first": 146,
+   "last": 171
+  },
+  {
+   "slug": "mortificacao",
+   "title": "Mortificação",
+   "first": 172,
+   "last": 207
+  },
+  {
+   "slug": "penitencia",
+   "title": "Penitência",
+   "first": 208,
+   "last": 234
+  },
+  {
+   "slug": "exame-de-consciencia",
+   "title": "Exame de consciência",
+   "first": 235,
+   "last": 246
+  },
+  {
+   "slug": "propositos",
+   "title": "Propósitos",
+   "first": 247,
+   "last": 257
+  },
+  {
+   "slug": "escrupulos",
+   "title": "Escrúpulos",
+   "first": 258,
+   "last": 264
+  },
+  {
+   "slug": "presenca-de-deus",
+   "title": "Presença de Deus",
+   "first": 265,
+   "last": 278
+  },
+  {
+   "slug": "vida-sobrenatural",
+   "title": "Vida sobrenatural",
+   "first": 279,
+   "last": 300
+  },
+  {
+   "slug": "mais-sobre-vida-interior",
+   "title": "Mais sobre vida interior",
+   "first": 301,
+   "last": 324
+  },
+  {
+   "slug": "tibieza",
+   "title": "Tibieza",
+   "first": 325,
+   "last": 331
+  },
+  {
+   "slug": "estudo",
+   "title": "Estudo",
+   "first": 332,
+   "last": 359
+  },
+  {
+   "slug": "formacao",
+   "title": "Formação",
+   "first": 360,
+   "last": 386
+  },
+  {
+   "slug": "o-plano-da-tua-santidade",
+   "title": "O plano da tua santidade",
+   "first": 387,
+   "last": 416
+  },
+  {
+   "slug": "amor-de-deus",
+   "title": "Amor de Deus",
+   "first": 417,
+   "last": 439
+  },
+  {
+   "slug": "caridade",
+   "title": "Caridade",
+   "first": 440,
+   "last": 469
+  },
+  {
+   "slug": "os-meios",
+   "title": "Os meios",
+   "first": 470,
+   "last": 491
+  },
+  {
+   "slug": "a-virgem-maria",
+   "title": "A Virgem Maria",
+   "first": 492,
+   "last": 516
+  },
+  {
+   "slug": "a-igreja",
+   "title": "A Igreja",
+   "first": 517,
+   "last": 527
+  },
+  {
+   "slug": "santa-missa",
+   "title": "Santa Missa",
+   "first": 528,
+   "last": 543
+  },
+  {
+   "slug": "comunhao-dos-santos",
+   "title": "Comunhão dos Santos",
+   "first": 544,
+   "last": 550
+  },
+  {
+   "slug": "devocoes",
+   "title": "Devoções",
+   "first": 551,
+   "last": 574
+  },
+  {
+   "slug": "fe",
+   "title": "Fé",
+   "first": 575,
+   "last": 588
+  },
+  {
+   "slug": "humildade",
+   "title": "Humildade",
+   "first": 589,
+   "last": 613
+  },
+  {
+   "slug": "obediencia",
+   "title": "Obediência",
+   "first": 614,
+   "last": 629
+  },
+  {
+   "slug": "pobreza",
+   "title": "Pobreza",
+   "first": 630,
+   "last": 638
+  },
+  {
+   "slug": "discricao",
+   "title": "Discrição",
+   "first": 639,
+   "last": 656
+  },
+  {
+   "slug": "alegria",
+   "title": "Alegria",
+   "first": 657,
+   "last": 666
+  },
+  {
+   "slug": "outras-virtudes",
+   "title": "Outras virtudes",
+   "first": 667,
+   "last": 684
+  },
+  {
+   "slug": "tribulacoes",
+   "title": "Tribulações",
+   "first": 685,
+   "last": 706
+  },
+  {
+   "slug": "luta-interior",
+   "title": "Luta interior",
+   "first": 707,
+   "last": 733
+  },
+  {
+   "slug": "novissimos",
+   "title": "Novíssimos",
+   "first": 734,
+   "last": 753
+  },
+  {
+   "slug": "a-vontade-de-deus",
+   "title": "A Vontade de Deus",
+   "first": 754,
+   "last": 778
+  },
+  {
+   "slug": "a-gloria-de-deus",
+   "title": "A Glória de Deus",
+   "first": 779,
+   "last": 789
+  },
+  {
+   "slug": "proselitismo",
+   "title": "Proselitismo",
+   "first": 790,
+   "last": 812
+  },
+  {
+   "slug": "pequenas-coisas",
+   "title": "Pequenas coisas",
+   "first": 813,
+   "last": 830
+  },
+  {
+   "slug": "tatica",
+   "title": "Tática",
+   "first": 831,
+   "last": 851
+  },
+  {
+   "slug": "infancia-espiritual",
+   "title": "Infância espiritual",
+   "first": 852,
+   "last": 874
+  },
+  {
+   "slug": "vida-de-infancia",
+   "title": "Vida de infância",
+   "first": 875,
+   "last": 901
+  },
+  {
+   "slug": "chamamento",
+   "title": "Chamamento",
+   "first": 902,
+   "last": 928
+  },
+  {
+   "slug": "o-apostolo",
+   "title": "O Apóstolo",
+   "first": 929,
+   "last": 959
+  },
+  {
+   "slug": "o-apostolado",
+   "title": "O Apostolado",
+   "first": 960,
+   "last": 982
+  },
+  {
+   "slug": "perseveranca",
+   "title": "Perseverança",
+   "first": 983,
+   "last": 999
+  }
+ ],
+ "sulco": [
+  {
+   "slug": "generosidade",
+   "title": "Generosidade",
+   "first": 1,
+   "last": 33
+  },
+  {
+   "slug": "respeitos-humanos",
+   "title": "Respeitos humanos",
+   "first": 34,
+   "last": 51
+  },
+  {
+   "slug": "alegria",
+   "title": "Alegria",
+   "first": 52,
+   "last": 95
+  },
+  {
+   "slug": "audacia",
+   "title": "Audácia",
+   "first": 96,
+   "last": 124
+  },
+  {
+   "slug": "lutas",
+   "title": "Lutas",
+   "first": 125,
+   "last": 180
+  },
+  {
+   "slug": "pescadores-he-homens",
+   "title": "Pescadores de homens",
+   "first": 181,
+   "last": 232
+  },
+  {
+   "slug": "sofrimento",
+   "title": "Sofrimento",
+   "first": 233,
+   "last": 258
+  },
+  {
+   "slug": "humildade",
+   "title": "Humildade",
+   "first": 259,
+   "last": 289
+  },
+  {
+   "slug": "cidadania",
+   "title": "Cidadania",
+   "first": 290,
+   "last": 322
+  },
+  {
+   "slug": "sinceridade",
+   "title": "Sinceridade",
+   "first": 323,
+   "last": 339
+  },
+  {
+   "slug": "lealdade",
+   "title": "Lealdade",
+   "first": 340,
+   "last": 371
+  },
+  {
+   "slug": "disciplina",
+   "title": "Disciplina",
+   "first": 372,
+   "last": 415
+  },
+  {
+   "slug": "personalidade",
+   "title": "Personalidade",
+   "first": 416,
+   "last": 443
+  },
+  {
+   "slug": "oracao",
+   "title": "Oração",
+   "first": 444,
+   "last": 481
+  },
+  {
+   "slug": "trabalho",
+   "title": "Trabalho",
+   "first": 482,
+   "last": 531
+  },
+  {
+   "slug": "frivolidade",
+   "title": "Frivolidade",
+   "first": 532,
+   "last": 553
+  },
+  {
+   "slug": "naturalidade",
+   "title": "Naturalidade",
+   "first": 554,
+   "last": 566
+  },
+  {
+   "slug": "veracidade",
+   "title": "Veracidade",
+   "first": 567,
+   "last": 607
+  },
+  {
+   "slug": "ambicao",
+   "title": "Ambição",
+   "first": 608,
+   "last": 631
+  },
+  {
+   "slug": "hipocrisia",
+   "title": "Hipocrisia",
+   "first": 632,
+   "last": 647
+  },
+  {
+   "slug": "vida-interior",
+   "title": "Vida interior",
+   "first": 648,
+   "last": 695
+  },
+  {
+   "slug": "soberba",
+   "title": "Soberba",
+   "first": 696,
+   "last": 726
+  },
+  {
+   "slug": "amizade",
+   "title": "Amizade",
+   "first": 727,
+   "last": 768
+  },
+  {
+   "slug": "vontade",
+   "title": "Vontade",
+   "first": 769,
+   "last": 794
+  },
+  {
+   "slug": "coracao",
+   "title": "Coração",
+   "first": 795,
+   "last": 830
+  },
+  {
+   "slug": "pureza",
+   "title": "Pureza",
+   "first": 831,
+   "last": 849
+  },
+  {
+   "slug": "paz",
+   "title": "Paz",
+   "first": 850,
+   "last": 874
+  },
+  {
+   "slug": "o-alem",
+   "title": "O Além",
+   "first": 875,
+   "last": 898
+  },
+  {
+   "slug": "a-lingua",
+   "title": "A Língua",
+   "first": 899,
+   "last": 926
+  },
+  {
+   "slug": "propaganda",
+   "title": "Propaganda",
+   "first": 927,
+   "last": 944
+  },
+  {
+   "slug": "responsabilidade",
+   "title": "Responsabilidade",
+   "first": 945,
+   "last": 977
+  },
+  {
+   "slug": "penitencia",
+   "title": "Penitência",
+   "first": 978,
+   "last": 1000
+  }
+ ],
+ "forja": [
+  {
+   "slug": "deslumbramento",
+   "title": "Deslumbramento",
+   "first": 1,
+   "last": 57
+  },
+  {
+   "slug": "luta",
+   "title": "Luta",
+   "first": 58,
+   "last": 157
+  },
+  {
+   "slug": "derrota",
+   "title": "Derrota",
+   "first": 158,
+   "last": 215
+  },
+  {
+   "slug": "pessimismo",
+   "title": "Pessimismo",
+   "first": 216,
+   "last": 285
+  },
+  {
+   "slug": "podes",
+   "title": "Podes!",
+   "first": 286,
+   "last": 376
+  },
+  {
+   "slug": "tornar-a-lutar",
+   "title": "Tornar a lutar",
+   "first": 377,
+   "last": 474
+  },
+  {
+   "slug": "ressurgir",
+   "title": "Ressurgir",
+   "first": 475,
+   "last": 587
+  },
+  {
+   "slug": "vitoria",
+   "title": "Vitória",
+   "first": 588,
+   "last": 677
+  },
+  {
+   "slug": "labor",
+   "title": "Labor",
+   "first": 678,
+   "last": 749
+  },
+  {
+   "slug": "crisol",
+   "title": "Crisol",
+   "first": 750,
+   "last": 854
+  },
+  {
+   "slug": "selecao",
+   "title": "Seleção",
+   "first": 855,
+   "last": 911
+  },
+  {
+   "slug": "fecundidade",
+   "title": "Fecundidade",
+   "first": 912,
+   "last": 986
+  },
+  {
+   "slug": "eternidade",
+   "title": "Eternidade",
+   "first": 987,
+   "last": 1055
+  }
+ ]
+}

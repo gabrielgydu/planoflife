@@ -176,6 +176,26 @@ body {
   font-weight: 700;
 }
 
+/* A point of Caminho / Sulco / Forja sits in its own padded box; the closing
+   paragraph's margin would make the box taller at the bottom than at the top. */
+.prose-point > p:last-child {
+  margin-bottom: 0;
+}
+
+/* The "Referências da Sagrada Escritura" block under an Escrivá point (the only
+   <small> in any bundled text), in the Devocionário and in Meditação alike: small
+   print, as on escriva.org, so the citations don't read as part of the text. */
+.prose-prayer small {
+  display: block;
+  font-size: 0.8em;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+:is(.dark, .black) .prose-prayer small {
+  color: var(--color-text-muted-dark);
+}
+
 /* Scripture verse numbers: small, muted, superscript-style like a missal */
 .prose-prayer .verse-num {
   font-size: 0.62em;
