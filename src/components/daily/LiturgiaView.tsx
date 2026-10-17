@@ -1,10 +1,13 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence, type PanInfo } from 'motion/react'
 import { X, Check, ChevronLeft, ChevronRight, AlertCircle } from 'lucide-react'
+import { isSaturday } from 'date-fns'
 import { MarkdownRenderer } from '../shared/MarkdownRenderer'
 import { Spinner } from '../shared/Spinner'
 import { PRACTICE_TEXT_LANG_KEY } from '../../data/bundledTexts'
 import { resolveLiturgyForDate, type LiturgyDay, type LiturgyColor } from '../../data/liturgy'
+import { ATO_DESAGRAVO_TEXT, ATO_DESAGRAVO_TITLE } from '../../data/atoDesagravo'
+import { parseDate } from '../../utils/dates'
 
 const SWIPE_THRESHOLD = 50
 const VELOCITY_THRESHOLD = 500
@@ -65,7 +68,10 @@ function markVerseNumbers(text: string): string {
 // collect/offertory/communion prayers, the communion antiphon, or the Easter
 // Vigil extra readings: this is a "follow the readings at Mass" aid, not the
 // full propers. Reading/psalm arrays carry alternates (multiple celebrations);
-// only the first is shown.
+// only the first is shown. On Saturdays the Ato de Consagração e Desagravo ao
+// Imaculado Coração de Maria closes the list — after the Gospel, or after
+// whatever is bundled on a day without one (alone if nothing is). Keyed off
+// data.date, not viewDate, so the slides always match the loaded liturgy.
 function buildSlides(data: LiturgyDay): LiturgiaSlide[] {
   const slides: LiturgiaSlide[] = []
 
@@ -121,6 +127,10 @@ function buildSlides(data: LiturgyDay): LiturgiaSlide[] {
     })
   }
 
+  if (isSaturday(parseDate(data.date))) {
+    slides.push({ key: 'ato-desagravo', label: ATO_DESAGRAVO_TITLE, textoPt: ATO_DESAGRAVO_TEXT })
+  }
+
   return slides
 }
 
@@ -137,10 +147,11 @@ interface LiturgiaViewProps {
 
 /**
  * Full-screen reader opened from "Santa Missa": the day's entrance antiphon and
- * Scripture readings (1st reading → psalm → 2nd reading → Gospel), swipeable
- * like AntiphonView. Unlike Liturgia do Dia used to, it does NOT auto-mark on
- * open — attending Mass is the plan-of-life obligation, and merely reading the
- * day's readings mustn't record it as done; the header checkmark stays manual.
+ * Scripture readings (1st reading → psalm → 2nd reading → Gospel), followed
+ * on Saturdays by the Ato de Desagravo; swipeable like AntiphonView. Unlike
+ * Liturgia do Dia used to, it does NOT auto-mark on open — attending Mass is
+ * the plan-of-life obligation, and merely reading the day's readings mustn't
+ * record it as done; the header checkmark stays manual.
  */
 export function LiturgiaView({
   practiceId,
