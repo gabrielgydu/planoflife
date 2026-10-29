@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { motion, AnimatePresence, type PanInfo } from 'motion/react'
+import { motion, AnimatePresence, useDragControls, type PanInfo } from 'motion/react'
 import { X, Check, Dices, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react'
 import { MarkdownRenderer } from '../shared/MarkdownRenderer'
 import { Spinner } from '../shared/Spinner'
@@ -123,6 +123,18 @@ export function MeditationView({
     return () => window.removeEventListener('keydown', onKey)
   }, [goPrev, goNext])
 
+  // The swipe starts from our own pointerdown instead of motion's drag listener,
+  // because that listener also sets user-select: none on the slide and the point
+  // text could not be selected or copied. A mouse drag selects text (desktop has
+  // the arrows and keys); a touch swipes unless a selection is up — that touch is
+  // the one dismissing it.
+  const dragControls = useDragControls()
+  const startSwipe = (e: React.PointerEvent) => {
+    if (e.pointerType === 'mouse') return
+    if (window.getSelection()?.isCollapsed === false) return
+    dragControls.start(e)
+  }
+
   const handleDragEnd = (_: unknown, info: PanInfo) => {
     const { offset, velocity } = info
     if (offset.x < -SWIPE_THRESHOLD || velocity.x < -VELOCITY_THRESHOLD) goNext()
@@ -239,6 +251,9 @@ export function MeditationView({
               exit="exit"
               transition={{ duration: 0.25, ease: 'easeInOut' }}
               drag="x"
+              dragListener={false}
+              dragControls={dragControls}
+              onPointerDown={startSwipe}
               dragDirectionLock
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.15}
