@@ -7,10 +7,9 @@ import { ExamenEntryCard } from './ExamenEntryCard'
 import { ExamenEntryForm } from './ExamenEntryForm'
 import { MarkdownRenderer } from '../shared/MarkdownRenderer'
 import { Spinner } from '../shared/Spinner'
-import { getEscrivaPoint, type BookKey } from '../../data/meditation'
-import { bookLabel } from '../../data/escriva'
-import { useEscrivaPoints } from '../../hooks/useEscrivaPoints'
+import { prayerText, prayerTitle } from '../../data/devocionario'
 import { useExamenEntries } from '../../hooks/useExamen'
+import { usePrayer } from '../../hooks/usePrayers'
 import { usePropositoTarget, setPropositoForDate } from '../../hooks/usePropositos'
 import { formatDate, getToday, parseDate, addDay, subDay } from '../../utils/dates'
 import { EXAMEN_COLORS, EXAMEN_LABELS } from '../../utils/constants'
@@ -29,12 +28,10 @@ const EXAMEN_LINKS = [
   { to: '/examen/questions', label: 'Perguntas', icon: HelpCircle },
 ]
 
-// "Acaba sempre o teu exame…" — the last point of Caminho's chapter on the examen,
-// at the foot of the page because that is where it tells you to end. It is read
-// from the bundled corpus rather than copied here, so a correction to the text
-// reaches it too; it appears once that chunk loads, and being a closing reminder
-// rather than the examen itself, it simply stays away if the load fails.
-const CLOSING_POINT: { book: BookKey; n: number } = { book: 'caminho', n: 246 }
+// "Acaba sempre o teu exame com um ato de Amor" (Caminho 246): the Devocionário's
+// act of love closes the page. It is the live prayer row, as in PracticeReader, so
+// an edit in the Devocionário shows here too.
+const CLOSING_PRAYER_ID = 'ato-de-caridade'
 
 export function ExamenView() {
   const { date: dateParam } = useParams<{ date: string }>()
@@ -51,8 +48,7 @@ export function ExamenView() {
   const propositoTarget = usePropositoTarget()
   const { entriesByCategory, addEntry, updateEntry, deleteEntry, toggleConfession, isLoading } =
     useExamenEntries(dateStr)
-  const { points } = useEscrivaPoints()
-  const closingText = points && getEscrivaPoint(points, CLOSING_POINT.book, CLOSING_POINT.n)
+  const closingPrayer = usePrayer(CLOSING_PRAYER_ID)
 
   const handlePrevDay = () => setCurrentDate((d) => subDay(d, 1))
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
@@ -165,12 +161,12 @@ export function ExamenView() {
           </section>
         ))}
 
-        {closingText && (
+        {closingPrayer && (
           <section>
-            <h2 className="mb-3 pb-1.5 border-b border-border/40 dark:border-border-dark/40 font-heading text-sm font-semibold uppercase tracking-wide text-text-secondary dark:text-text-secondary-dark tabular-nums">
-              {bookLabel(CLOSING_POINT.book)} {CLOSING_POINT.n}
+            <h2 className="mb-3 pb-1.5 border-b border-border/40 dark:border-border-dark/40 font-heading text-sm font-semibold uppercase tracking-wide text-text-secondary dark:text-text-secondary-dark">
+              {prayerTitle(closingPrayer, 'pt')}
             </h2>
-            <MarkdownRenderer markdown={closingText} className="prose-prayer prose-point" />
+            <MarkdownRenderer markdown={prayerText(closingPrayer, 'pt')} className="prose-prayer" />
           </section>
         )}
       </motion.div>
