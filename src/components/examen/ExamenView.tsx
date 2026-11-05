@@ -5,7 +5,11 @@ import { Plus, BookOpen, CalendarDays, HelpCircle } from 'lucide-react'
 import { Header } from '../layout/Header'
 import { ExamenEntryCard } from './ExamenEntryCard'
 import { ExamenEntryForm } from './ExamenEntryForm'
+import { MarkdownRenderer } from '../shared/MarkdownRenderer'
 import { Spinner } from '../shared/Spinner'
+import { getEscrivaPoint, type BookKey } from '../../data/meditation'
+import { bookLabel } from '../../data/escriva'
+import { useEscrivaPoints } from '../../hooks/useEscrivaPoints'
 import { useExamenEntries } from '../../hooks/useExamen'
 import { usePropositoTarget, setPropositoForDate } from '../../hooks/usePropositos'
 import { formatDate, getToday, parseDate, addDay, subDay } from '../../utils/dates'
@@ -25,6 +29,13 @@ const EXAMEN_LINKS = [
   { to: '/examen/questions', label: 'Perguntas', icon: HelpCircle },
 ]
 
+// "Acaba sempre o teu exame…" — the last point of Caminho's chapter on the examen,
+// at the foot of the page because that is where it tells you to end. It is read
+// from the bundled corpus rather than copied here, so a correction to the text
+// reaches it too; it appears once that chunk loads, and being a closing reminder
+// rather than the examen itself, it simply stays away if the load fails.
+const CLOSING_POINT: { book: BookKey; n: number } = { book: 'caminho', n: 246 }
+
 export function ExamenView() {
   const { date: dateParam } = useParams<{ date: string }>()
   const [currentDate, setCurrentDate] = useState(() =>
@@ -40,6 +51,8 @@ export function ExamenView() {
   const propositoTarget = usePropositoTarget()
   const { entriesByCategory, addEntry, updateEntry, deleteEntry, toggleConfession, isLoading } =
     useExamenEntries(dateStr)
+  const { points } = useEscrivaPoints()
+  const closingText = points && getEscrivaPoint(points, CLOSING_POINT.book, CLOSING_POINT.n)
 
   const handlePrevDay = () => setCurrentDate((d) => subDay(d, 1))
   const handleNextDay = () => setCurrentDate((d) => addDay(d, 1))
@@ -151,6 +164,15 @@ export function ExamenView() {
             )}
           </section>
         ))}
+
+        {closingText && (
+          <section>
+            <h2 className="mb-3 pb-1.5 border-b border-border/40 dark:border-border-dark/40 font-heading text-sm font-semibold uppercase tracking-wide text-text-secondary dark:text-text-secondary-dark tabular-nums">
+              {bookLabel(CLOSING_POINT.book)} {CLOSING_POINT.n}
+            </h2>
+            <MarkdownRenderer markdown={closingText} className="prose-prayer prose-point" />
+          </section>
+        )}
       </motion.div>
 
       <ExamenEntryForm
