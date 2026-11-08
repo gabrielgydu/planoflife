@@ -1,5 +1,6 @@
 import chaptersJson from './escriva_chapters.json'
-import { BOOKS, bookMax, type BookKey } from './meditation'
+import { BOOKS, bookMax, type BookKey, type EscrivaPoints } from './meditation'
+import { pointPlainText } from './escrivaText'
 
 // St. Josemaría's three books of points — Caminho, Sulco, Forja — as the Devocionário
 // shows them: whole books, chapter by chapter. The point text is the same bundled
@@ -44,6 +45,26 @@ export function chapterOf(book: BookKey, n: number): EscrivaChapter | null {
 /** In-app path of a point: the reader opens its chapter, scrolled to it. */
 export function pointPath(book: BookKey, n: number): string {
   return `/devocionario/pontos/${book}/${n}`
+}
+
+/** A point's text as one plain line — a row's subtitle, cut to width by CSS. */
+export function pointOpening(points: EscrivaPoints, book: BookKey, n: number): string {
+  const md = points[book]?.[String(n)]
+  return md ? pointPlainText(md).replace(/\s+/g, ' ').trim() : ''
+}
+
+/** Row id of a point in db.pointFavorites. */
+export function pointFavoriteId(book: BookKey, n: number): string {
+  return `${book}:${n}`
+}
+
+/** Reading order across the three books: Caminho, Sulco, Forja, each by number. */
+export function comparePoints(
+  a: { book: BookKey; n: number },
+  b: { book: BookKey; n: number }
+): number {
+  const byBook = BOOKS.findIndex((x) => x.key === a.book) - BOOKS.findIndex((x) => x.key === b.book)
+  return byBook !== 0 ? byBook : a.n - b.n
 }
 
 /** In-app path of a book's table of contents. */

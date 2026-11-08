@@ -10,6 +10,7 @@ import {
   type EscrivaChapter,
 } from '../../data/escriva'
 import { useBackState } from '../../hooks/useBackNavigation'
+import { FavoriteButton } from './FavoriteButton'
 
 // The rows the Devocionário uses for St. Josemaría's books — a book, a chapter, a
 // point — in the list, in search results and in a book's table of contents. Every
@@ -75,11 +76,16 @@ export function PointRow({
   book,
   n,
   snippet,
+  isFavorite,
+  onToggleFavorite,
 }: {
   book: BookKey
   n: number
-  /** One line of the point — around the match in search results. */
+  /** One line of the point — around the match in search results. Empty while the text loads. */
   snippet: string
+  isFavorite?: boolean
+  /** Shows the favorite star when given. */
+  onToggleFavorite?: (book: BookKey, n: number) => void
 }) {
   const state = useBackState()
   const chapter = chapterOf(book, n)
@@ -94,10 +100,19 @@ export function PointRow({
             <span className="text-text-muted dark:text-text-muted-dark"> · {chapter.title}</span>
           )}
         </span>
-        <span className="block text-xs text-text-muted dark:text-text-muted-dark truncate mt-0.5">
-          {snippet}
-        </span>
+        {snippet && (
+          <span className="block text-xs text-text-muted dark:text-text-muted-dark truncate mt-0.5">
+            {snippet}
+          </span>
+        )}
       </span>
+      {onToggleFavorite && (
+        <FavoriteButton
+          isFavorite={!!isFavorite}
+          onToggle={() => onToggleFavorite(book, n)}
+          addLabel="Marcar como favorito"
+        />
+      )}
       <ChevronRight className="w-5 h-5 shrink-0 text-text-muted" />
     </Link>
   )

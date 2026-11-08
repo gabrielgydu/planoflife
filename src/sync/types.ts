@@ -10,6 +10,7 @@ import type {
   ReadingPosition,
   Prayer,
   ExameTema,
+  PointFavorite,
 } from '../types'
 
 // Bump whenever SyncState gains or drops tables. v2 = career tables (Dexie v7).
@@ -17,7 +18,8 @@ import type {
 // v5 = prayers (Dexie v22). v6 = exameTemas (Dexie v24). v7 = career tables
 // dropped (Dexie v25) — the bump makes not-yet-reloaded schema-6 clients refuse
 // the new snapshot instead of pushing their career rows back into the cloud.
-export const SYNC_SCHEMA = 7
+// v8 = pointFavorites (Dexie v26).
+export const SYNC_SCHEMA = 8
 
 /** The decrypted payload that travels to/from the Worker (mirrors scripts/sync-core.mjs). */
 export interface SyncState {
@@ -47,6 +49,10 @@ export interface SyncState {
     // (schema 6). Same "missing key means older client, no opinion" rule again —
     // a schema-≤5 snapshot must PRESERVE the local temas, never clear them.
     exameTemas: ExameTema[]
+    // Favorite points of Caminho, Sulco and Forja (schema 8). Same "missing key
+    // means older client, no opinion" rule again — a schema-≤7 snapshot must
+    // PRESERVE the local favorites, never clear them.
+    pointFavorites: PointFavorite[]
   }
   settings: Record<string, string>
 }
@@ -78,6 +84,7 @@ export const SYNC_TABLES = [
   'readingPositions',
   'prayers',
   'exameTemas',
+  'pointFavorites',
 ] as const
 
 /** Cloud snapshot was produced by a NEWER app than this one. */

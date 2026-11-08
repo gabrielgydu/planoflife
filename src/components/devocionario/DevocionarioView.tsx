@@ -17,7 +17,6 @@ import {
   Plus,
   Search,
   SearchX,
-  Star,
   X,
 } from 'lucide-react'
 import {
@@ -41,6 +40,7 @@ import { Spinner } from '../shared/Spinner'
 import { EmptyState } from '../shared/EmptyState'
 import { usePrayers } from '../../hooks/usePrayers'
 import { useEscrivaPoints } from '../../hooks/useEscrivaPoints'
+import { usePointFavorites } from '../../hooks/usePointFavorites'
 import {
   DEVOCIONARIO_SECTIONS,
   USER_SECTION_SLUG,
@@ -50,10 +50,12 @@ import {
 import { buildSearchIndex, matchSnippet, searchPrayers } from '../../data/prayerSearch'
 import { isSearchQuery } from '../../data/pointSearch'
 import { BOOKS } from '../../data/meditation'
-import { BookRow } from './PointRows'
+import { pointOpening } from '../../data/escriva'
+import { BookRow, PointRow } from './PointRows'
 import { useBackState } from '../../hooks/useBackNavigation'
 import { PointSearchResults, usePointSearch } from './PointSearchResults'
 import { SectionHeading } from './SectionHeading'
+import { FavoriteButton } from './FavoriteButton'
 import { ShowMoreButton } from './ShowMoreButton'
 import { forgetResultLimits, useResultLimits } from '../../hooks/useResultLimits'
 import { forgetScrollPosition } from '../layout/ScrollMemory'
@@ -71,25 +73,6 @@ const PRAYER_RESULTS_FIRST_PAGE = 10
 
 /** How far the book has to scroll before the search field slides out of the header. */
 const SEARCH_REVEAL_PX = 24
-
-function FavoriteButton({ prayer, onToggle }: { prayer: Prayer; onToggle: () => void }) {
-  return (
-    <button
-      onClick={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        onToggle()
-      }}
-      className="p-2 -m-1 text-text-muted dark:text-text-muted-dark hover:text-[#A89548] transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light"
-      aria-label={prayer.isFavorite ? 'Remover dos favoritos' : 'Marcar como favorita'}
-      aria-pressed={prayer.isFavorite}
-    >
-      <Star
-        className={`w-4 h-4 ${prayer.isFavorite ? 'fill-[#A89548] text-[#A89548]' : ''}`}
-      />
-    </button>
-  )
-}
 
 function PrayerRow({
   prayer,
@@ -124,7 +107,11 @@ function PrayerRow({
           </span>
         )}
       </span>
-      <FavoriteButton prayer={prayer} onToggle={onToggleFavorite} />
+      <FavoriteButton
+        isFavorite={prayer.isFavorite}
+        onToggle={onToggleFavorite}
+        addLabel="Marcar como favorita"
+      />
       <ChevronRight className="w-5 h-5 shrink-0 text-text-muted" />
     </Link>
   )
@@ -171,7 +158,9 @@ function EscrivaBooks() {
 /**
  * The prayer book: every section in reading order, with a virtual "Favoritos" group
  * pinned on top. A favorite also keeps its place in its own section (marked with a
- * filled star) so the book itself never changes shape.
+ * filled star) so the book itself never changes shape. The favorite points of
+ * Caminho, Sulco and Forja follow the favorite prayers in that group, starred from
+ * the point reader or from search results.
  *
  * Reorder mode is per-section and deliberately excludes the favorites group — that
  * group has no order of its own, it inherits the book's. It is also mutually
@@ -183,6 +172,11 @@ export function DevocionarioView() {
   const { prayers, isLoading, toggleFavorite, reorderSection } = usePrayers()
   const [reordering, setReordering] = useState(false)
   const { points, error: pointsError, retry: retryPoints } = useEscrivaPoints()
+  const {
+    points: favoritePoints,
+    ids: favoritePointIds,
+    toggleFavorite: togglePointFavorite,
+  } = usePointFavorites()
 
   // A query that searches lives in the URL (?q=), so coming back from a prayer or a
   // point opened from the results lands on the same results — and ScrollMemory,
@@ -278,10 +272,11 @@ export function DevocionarioView() {
   }, [prayers])
 
   const favorites = useMemo(() => prayers.filter((p) => p.isFavorite), [prayers])
+  const hasFavorites = favorites.length > 0 || favoritePoints.length > 0
 
   const groups = useMemo(() => {
     const out: { key: string; name: string; prayers: Prayer[] }[] = []
-    if (favorites.length) out.push({ key: FAVORITES_KEY, name: 'Favoritos', prayers: favorites })
+    if (hasFavorites) out.push({ key: FAVORITES_KEY, name: 'Favoritos', prayers: favorites })
     for (const section of DEVOCIONARIO_SECTIONS) {
       const list = bySection.get(section.slug) ?? []
       // "Minhas orações" is shown even when empty — it is where the + button lands.
@@ -289,7 +284,7 @@ export function DevocionarioView() {
       out.push({ key: section.slug, name: section.namePt, prayers: list })
     }
     return out
-  }, [bySection, favorites])
+  }, [bySection, favorites, hasFavorites])
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { delay: 200, tolerance: 5 } }),
@@ -426,6 +421,8 @@ export function DevocionarioView() {
             query={resultsQuery}
             error={pointsError}
             onRetry={retryPoints}
+            favoriteIds={favoritePointIds}
+            onToggleFavorite={togglePointFavorite}
           />
           {results.length === 0 && pointSearch.total === 0 && !pointSearch.pending && (
             <EmptyState icon={SearchX} message={`Nada encontrado para “${resultsQuery.trim()}”`} />
@@ -436,7 +433,7 @@ export function DevocionarioView() {
           {/* St. Josemaría's books sit right under Favoritos (or on top without
               favorites): three rows into 3054 points. They are books, not prayers,
               so reorder mode — which is about prayers — leaves them out. */}
-          {!reordering && !favorites.length && <EscrivaBooks />}
+          {!reordering && !hasFavorites && <EscrivaBooks />}
           {groups.map((group) => (
             <Fragment key={group.key}>
               <div>
@@ -465,7 +462,18 @@ export function DevocionarioView() {
                     </SortableContext>
                   </DndContext>
                 )}
-                {group.prayers.length === 0 && (
+                {group.key === FAVORITES_KEY &&
+                  favoritePoints.map(({ book, n }) => (
+                    <PointRow
+                      key={`${FAVORITES_KEY}:${book}:${n}`}
+                      book={book}
+                      n={n}
+                      snippet={points ? pointOpening(points, book, n) : ''}
+                      isFavorite
+                      onToggleFavorite={togglePointFavorite}
+                    />
+                  ))}
+                {group.key === USER_SECTION_SLUG && group.prayers.length === 0 && (
                   <p className="px-4 py-4 text-sm text-text-muted dark:text-text-muted-dark">
                     Nenhuma oração própria ainda — toque em + para escrever uma.
                   </p>

@@ -11,6 +11,7 @@ import type {
   ReadingPosition,
   Prayer,
   ExameTema,
+  PointFavorite,
 } from '../types'
 import { generateId } from '../utils/id'
 import { defaultPrayers } from '../data/devocionario'
@@ -829,6 +830,7 @@ export class PlanOfLifeDB extends Dexie {
   readingPositions!: EntityTable<ReadingPosition, 'id'>
   prayers!: EntityTable<Prayer, 'id'>
   exameTemas!: EntityTable<ExameTema, 'id'>
+  pointFavorites!: EntityTable<PointFavorite, 'id'>
 
   constructor() {
     super('PlanOfLifeDB')
@@ -1149,6 +1151,14 @@ export class PlanOfLifeDB extends Dexie {
           // localStorage unavailable — see the v14 note above.
         }
       })
+
+    // Favorite points of Caminho, Sulco and Forja (listed under the Devocionário's
+    // "Favoritos"). A bare new store: nothing is seeded, moved or deleted, so no
+    // upgrade and no reconciliation flag. The rows' id is the point itself
+    // ('caminho:238'), so both devices converge on one row per point. The table
+    // syncs, so the sync schema bumps to 8 — see src/sync/types.ts and
+    // scripts/sync-core.mjs.
+    this.version(26).stores({ pointFavorites: 'id' })
   }
 }
 

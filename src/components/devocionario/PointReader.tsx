@@ -13,10 +13,13 @@ import {
   chapterIndexOf,
   isBookKey,
   isPointInBook,
+  pointFavoriteId,
   pointPath,
 } from '../../data/escriva'
 import { useEscrivaPoints } from '../../hooks/useEscrivaPoints'
+import { usePointFavorites } from '../../hooks/usePointFavorites'
 import { useBackState, useGoBack, type BackState } from '../../hooks/useBackNavigation'
+import { FavoriteButton } from './FavoriteButton'
 
 // Pixels of the preceding point left in view above the one opened, as in the
 // Meditação reader: it lands at the top, with a sliver hinting at what's above.
@@ -35,7 +38,8 @@ interface ReaderState extends BackState {
 /**
  * A point of Caminho, Sulco or Forja, read in its chapter: the whole chapter as one
  * scroll, opened at the point (marked), so reading on is just scrolling. The footer
- * walks chapter by chapter, as does ←/→ on a keyboard.
+ * walks chapter by chapter, as does ←/→ on a keyboard. Every point carries a star
+ * that adds it to the Devocionário's Favoritos.
  *
  * It scrolls inside its own full-screen container, not the window: ScrollMemory
  * restores WINDOW positions per path, and a remembered offset would fight the jump
@@ -47,6 +51,7 @@ export function PointReader() {
   const navigate = useNavigate()
   const location = useLocation()
   const { points, error, retry } = useEscrivaPoints()
+  const { ids: favoriteIds, toggleFavorite } = usePointFavorites()
   const book = isBookKey(params.book) ? params.book : null
   const goBack = useGoBack(book ? bookPath(book) : '/devocionario')
   const tocState = useBackState()
@@ -225,15 +230,24 @@ export function PointReader() {
                     opened ? 'bg-surface-secondary dark:bg-surface-secondary-dark' : ''
                   }`}
                 >
-                  <h2
-                    className={`mb-2 font-heading text-xs uppercase tracking-widest tabular-nums ${
-                      opened
-                        ? 'text-primary dark:text-primary-light font-semibold'
-                        : 'text-text-muted dark:text-text-muted-dark'
-                    }`}
-                  >
-                    № {num}
-                  </h2>
+                  <div className="mb-2 flex items-center gap-2">
+                    <h2
+                      className={`flex-1 font-heading text-xs uppercase tracking-widest tabular-nums ${
+                        opened
+                          ? 'text-primary dark:text-primary-light font-semibold'
+                          : 'text-text-muted dark:text-text-muted-dark'
+                      }`}
+                    >
+                      № {num}
+                    </h2>
+                    {/* Pulled into the heading's line, so the star moves no text. */}
+                    <FavoriteButton
+                      isFavorite={favoriteIds.has(pointFavoriteId(book, num))}
+                      onToggle={() => toggleFavorite(book, num)}
+                      addLabel={`Marcar ${bookLabel(book)} ${num} como favorito`}
+                      className="-my-2 -mr-2"
+                    />
+                  </div>
                   {text ? (
                     <MarkdownRenderer markdown={text} className="prose-prayer prose-point" />
                   ) : (

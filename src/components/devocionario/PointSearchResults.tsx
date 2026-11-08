@@ -1,7 +1,6 @@
 import { memo, useEffect, useMemo } from 'react'
 import { BOOKS, type BookKey, type EscrivaPoints } from '../../data/meditation'
-import { bookLabel } from '../../data/escriva'
-import { pointPlainText } from '../../data/escrivaText'
+import { bookLabel, pointFavoriteId, pointOpening } from '../../data/escriva'
 import {
   parsePointRef,
   pointSnippet,
@@ -60,23 +59,38 @@ export function usePointSearch(points: EscrivaPoints | null, query: string): Poi
   }, [points, query])
 }
 
-/** First line of a point, for a number hit (there is no match to quote around). */
-function opening(points: EscrivaPoints, book: BookKey, n: number): string {
-  const md = points[book]?.[String(n)]
-  return md ? pointPlainText(md).replace(/\s+/g, ' ').trim() : ''
-}
-
 /**
  * A text hit with its one-line quote. Memoized per hit: quoting means folding the
- * whole point, and "Mostrar mais" should only pay for the rows it adds.
+ * whole point, and "Mostrar mais" should only pay for the rows it adds — and a
+ * star toggled on one row re-renders that row only (onToggleFavorite is stable).
  */
-const PointHitRow = memo(function PointHitRow({ hit, query }: { hit: PointHit; query: string }) {
-  return <PointRow book={hit.entry.book} n={hit.entry.n} snippet={pointSnippet(hit, query)} />
+const PointHitRow = memo(function PointHitRow({
+  hit,
+  query,
+  isFavorite,
+  onToggleFavorite,
+}: {
+  hit: PointHit
+  query: string
+  isFavorite: boolean
+  onToggleFavorite: (book: BookKey, n: number) => void
+}) {
+  const snippet = useMemo(() => pointSnippet(hit, query), [hit, query])
+  return (
+    <PointRow
+      book={hit.entry.book}
+      n={hit.entry.n}
+      snippet={snippet}
+      isFavorite={isFavorite}
+      onToggleFavorite={onToggleFavorite}
+    />
+  )
 })
 
 /**
  * Memoized, and every prop is stable while the query is (`search` is a memo, the
- * points a module cache, onRetry a callback): a keystroke renders the Devocionário
+ * points a module cache, onRetry and onToggleFavorite callbacks, favoriteIds a
+ * memo that only changes when a star does): a keystroke renders the Devocionário
  * at once with the OLD deferred query, and must not re-quote every hit for it.
  */
 export const PointSearchResults = memo(function PointSearchResults({
@@ -85,12 +99,16 @@ export const PointSearchResults = memo(function PointSearchResults({
   query,
   error,
   onRetry,
+  favoriteIds,
+  onToggleFavorite,
 }: {
   search: PointSearch
   points: EscrivaPoints | null
   query: string
   error: boolean
   onRetry: () => void
+  favoriteIds: ReadonlySet<string>
+  onToggleFavorite: (book: BookKey, n: number) => void
 }) {
   const { limit: limitOf, more } = useResultLimits(query)
 
@@ -110,7 +128,14 @@ export const PointSearchResults = memo(function PointSearchResults({
         <div>
           <SectionHeading>{search.refs.length === 1 ? 'Ponto' : 'Pontos'}</SectionHeading>
           {search.refs.map(({ book, n }) => (
-            <PointRow key={`${book}:${n}`} book={book} n={n} snippet={opening(points, book, n)} />
+            <PointRow
+              key={`${book}:${n}`}
+              book={book}
+              n={n}
+              snippet={pointOpening(points, book, n)}
+              isFavorite={favoriteIds.has(pointFavoriteId(book, n))}
+              onToggleFavorite={onToggleFavorite}
+            />
           ))}
         </div>
       )}
@@ -145,7 +170,13 @@ export const PointSearchResults = memo(function PointSearchResults({
               {bookLabel(key)} · {hits.length === 1 ? '1 ponto' : `${hits.length} pontos`}
             </SectionHeading>
             {hits.slice(0, limit).map((hit) => (
-              <PointHitRow key={hit.entry.n} hit={hit} query={query} />
+              <PointHitRow
+                key={hit.entry.n}
+                hit={hit}
+                query={query}
+                isFavorite={favoriteIds.has(pointFavoriteId(key, hit.entry.n))}
+                onToggleFavorite={onToggleFavorite}
+              />
             ))}
             {hits.length > limit && (
               <ShowMoreButton

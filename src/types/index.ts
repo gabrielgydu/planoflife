@@ -182,6 +182,21 @@ export interface ReadingPosition {
 // so a prayer with no Portuguese at all is normal, not a defect. Read them through
 // prayerTitle()/prayerLangs() in src/data/devocionario.ts rather than reaching for
 // `.pt` directly. Synced (schema 5).
+// A point of Caminho, Sulco or Forja marked as a favorite, listed under the
+// Devocionário's "Favoritos" after the favorite prayers. The id is the point
+// itself ('caminho:238'), so marking the same point on two devices yields the
+// same row. Un-marking keeps the row with isFavorite false instead of deleting
+// it: the push-conflict merge has no tombstones, so a deleted row would come
+// back from the other device's snapshot, while a newer `false` wins on
+// updatedAt (see src/sync/merge.ts). Synced (schema 8).
+export interface PointFavorite {
+  id: string // `${book}:${n}`, see pointFavoriteId in src/data/escriva.ts
+  book: string // BookKey — 'caminho' | 'sulco' | 'forja'; validated on read
+  n: number
+  isFavorite: boolean
+  updatedAt: string
+}
+
 export interface Prayer {
   id: string // fixed slug for the defaults, generateId() for user-written ones
   section: string // section slug; 'minhas' for user-written prayers

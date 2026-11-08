@@ -106,6 +106,15 @@ export function mergeStates(
       // independent migrations into one. `?? []` tolerates a schema-≤5
       // snapshot (preserve ours).
       exameTemas: mergeById(base.data.exameTemas ?? [], ours.data.exameTemas ?? [], newerUpdatedAt),
+      // Favorite points: one row per point under its own id ('caminho:238'), so the
+      // union collapses a point marked on both devices into one row. Un-marking
+      // flips isFavorite and bumps updatedAt rather than deleting, so the newer
+      // choice wins either way. `?? []` tolerates a schema-≤7 snapshot (preserve ours).
+      pointFavorites: mergeById(
+        base.data.pointFavorites ?? [],
+        ours.data.pointFavorites ?? [],
+        newerUpdatedAt,
+      ),
     },
     settings,
   }

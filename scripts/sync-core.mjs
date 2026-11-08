@@ -52,15 +52,20 @@ export const PRAYER_TABLES = ['prayers']
 // schema-≤5 snapshots lack this key entirely; validateSyncState allows it missing.
 export const EXAME_TABLES = ['exameTemas']
 
+// Added in sync schema 8 (favorite points of Caminho/Sulco/Forja). Same rule again:
+// schema-≤7 snapshots lack this key entirely; validateSyncState allows it missing.
+export const POINT_TABLES = ['pointFavorites']
+
 export const TABLES = [
   ...LEGACY_TABLES,
   ...MEDITATION_TABLES,
   ...READING_TABLES,
   ...PRAYER_TABLES,
   ...EXAME_TABLES,
+  ...POINT_TABLES,
 ]
 
-export const SYNC_SCHEMA = 7
+export const SYNC_SCHEMA = 8
 
 export function b64(bytes) {
   return Buffer.from(bytes).toString('base64')
@@ -154,6 +159,7 @@ export function validateSyncState(state) {
     ...READING_TABLES,
     ...PRAYER_TABLES,
     ...EXAME_TABLES,
+    ...POINT_TABLES,
   ]) {
     if (state.data[t] !== undefined && !Array.isArray(state.data[t])) {
       throw new Error(`state.data.${t} must be an array when present`)
