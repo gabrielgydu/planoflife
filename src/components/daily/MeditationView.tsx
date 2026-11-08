@@ -14,6 +14,9 @@ import {
   type MeditacaoSlot,
 } from '../../data/meditation'
 import { useMeditationDay } from '../../hooks/useMeditationDay'
+import { usePointFavorites } from '../../hooks/usePointFavorites'
+import { isPointInBook, pointFavoriteId } from '../../data/escriva'
+import { FavoriteButton } from '../shared/FavoriteButton'
 import { formatDate } from '../../utils/dates'
 
 const SWIPE_THRESHOLD = 50
@@ -62,7 +65,8 @@ interface MeditationViewProps {
  * one is the overview — the number in Caminho, Sulco and Forja stacked (the `om`
  * CLI's three boxes). Swiping on walks book by book, each showing that point with
  * the two before and the two after it, the drawn one highlighted — `om`'s
- * single-book mode. "Sortear" redraws the slot's number for the day.
+ * single-book mode. "Sortear" redraws the slot's number for the day. Every point
+ * carries a star that adds it to the Devocionário's Favoritos.
  */
 export function MeditationView({
   practiceId,
@@ -79,6 +83,7 @@ export function MeditationView({
   const [loadError, setLoadError] = useState(false)
   const [index, setIndex] = useState(0)
   const [direction, setDirection] = useState(0)
+  const { ids: favoriteIds, toggleFavorite } = usePointFavorites()
 
   // Lazy-load the bundled point text. Retryable: a failed dynamic import clears
   // its cached promise (see loadEscrivaPoints), so loadPoints() re-imports.
@@ -262,9 +267,21 @@ export function MeditationView({
             >
               <div className="mx-auto w-full max-w-2xl px-5 py-5 pb-24">
                 {page.book === null ? (
-                  <OverviewPage points={points} pointNumber={pointNumber} />
+                  <OverviewPage
+                    points={points}
+                    pointNumber={pointNumber}
+                    favoriteIds={favoriteIds}
+                    onToggleFavorite={toggleFavorite}
+                  />
                 ) : (
-                  <BookPage book={page.book} label={page.label} points={points} pointNumber={pointNumber} />
+                  <BookPage
+                    book={page.book}
+                    label={page.label}
+                    points={points}
+                    pointNumber={pointNumber}
+                    favoriteIds={favoriteIds}
+                    onToggleFavorite={toggleFavorite}
+                  />
                 )}
               </div>
             </motion.div>
@@ -330,8 +347,40 @@ export function MeditationView({
   )
 }
 
+interface FavoriteProps {
+  favoriteIds: ReadonlySet<string>
+  onToggleFavorite: (book: BookKey, n: number) => void
+}
+
+/**
+ * The star of one point, pulled into its heading's line so it moves no text. It
+ * keeps its pointerdown from the slide: a tap on the star must not start a swipe.
+ */
+function PointStar({
+  book,
+  n,
+  favoriteIds,
+  onToggleFavorite,
+}: { book: BookKey; n: number } & FavoriteProps) {
+  return (
+    <span className="ml-auto flex" onPointerDown={(e) => e.stopPropagation()}>
+      <FavoriteButton
+        isFavorite={favoriteIds.has(pointFavoriteId(book, n))}
+        onToggle={() => onToggleFavorite(book, n)}
+        addLabel={`Marcar ${BOOKS.find((b) => b.key === book)?.label} ${n} como favorito`}
+        className="-my-2 -mr-2"
+      />
+    </span>
+  )
+}
+
 /** Page one: the drawn number in all three books, stacked. */
-function OverviewPage({ points, pointNumber }: { points: EscrivaPoints; pointNumber: number }) {
+function OverviewPage({
+  points,
+  pointNumber,
+  favoriteIds,
+  onToggleFavorite,
+}: { points: EscrivaPoints; pointNumber: number } & FavoriteProps) {
   return (
     <>
       <p className="mb-6 text-center text-sm text-text-muted dark:text-text-muted-dark tabular-nums">
@@ -342,9 +391,19 @@ function OverviewPage({ points, pointNumber }: { points: EscrivaPoints; pointNum
         const text = getEscrivaPoint(points, b.key, pointNumber)
         return (
           <section key={b.key} className={i > 0 ? 'mt-8' : undefined}>
-            <h2 className="mb-3 pb-1.5 border-b border-border/40 dark:border-border-dark/40 font-heading text-sm font-semibold uppercase tracking-wide text-text-secondary dark:text-text-secondary-dark">
-              {b.label}
-            </h2>
+            <div className="mb-3 pb-1.5 flex items-center border-b border-border/40 dark:border-border-dark/40">
+              <h2 className="font-heading text-sm font-semibold uppercase tracking-wide text-text-secondary dark:text-text-secondary-dark">
+                {b.label}
+              </h2>
+              {isPointInBook(b.key, pointNumber) && (
+                <PointStar
+                  book={b.key}
+                  n={pointNumber}
+                  favoriteIds={favoriteIds}
+                  onToggleFavorite={onToggleFavorite}
+                />
+              )}
+            </div>
             {text ? (
               <MarkdownRenderer markdown={text} className="prose-prayer" />
             ) : (
@@ -367,12 +426,14 @@ function BookPage({
   label,
   points,
   pointNumber,
+  favoriteIds,
+  onToggleFavorite,
 }: {
   book: BookKey
   label: string
   points: EscrivaPoints
   pointNumber: number
-}) {
+} & FavoriteProps) {
   const { numbers, hasDrawn } = getBookWindow(book, pointNumber)
 
   return (
@@ -396,16 +457,26 @@ function BookPage({
             }
           >
             {/* All five headings read the same; only the chip marks the drawn point. */}
-            <h2 className="mb-3 flex items-center gap-2 font-heading text-xs uppercase tracking-widest">
-              <span className="tabular-nums text-text-muted dark:text-text-muted-dark">
-                № {n}
-              </span>
-              {drawn && (
-                <span className="rounded-full bg-surface-secondary dark:bg-surface-secondary-dark px-2 py-0.5 text-[10px] tracking-wide text-text-secondary dark:text-text-secondary-dark">
-                  ponto do dia
+            <div className="mb-3 flex items-center">
+              <h2 className="flex items-center gap-2 font-heading text-xs uppercase tracking-widest">
+                <span className="tabular-nums text-text-muted dark:text-text-muted-dark">
+                  № {n}
                 </span>
+                {drawn && (
+                  <span className="rounded-full bg-surface-secondary dark:bg-surface-secondary-dark px-2 py-0.5 text-[10px] tracking-wide text-text-secondary dark:text-text-secondary-dark">
+                    ponto do dia
+                  </span>
+                )}
+              </h2>
+              {text && (
+                <PointStar
+                  book={book}
+                  n={n}
+                  favoriteIds={favoriteIds}
+                  onToggleFavorite={onToggleFavorite}
+                />
               )}
-            </h2>
+            </div>
             {/* Every point reads at full contrast — the drawn one is marked by its
                 heading, not by dimming the neighbours. */}
             {text ? (

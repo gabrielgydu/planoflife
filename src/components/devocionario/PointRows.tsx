@@ -10,7 +10,7 @@ import {
   type EscrivaChapter,
 } from '../../data/escriva'
 import { useBackState } from '../../hooks/useBackNavigation'
-import { FavoriteButton } from './FavoriteButton'
+import { FavoriteButton } from '../shared/FavoriteButton'
 
 // The rows the Devocionário uses for St. Josemaría's books — a book, a chapter, a
 // point — in the list, in search results and in a book's table of contents. Every

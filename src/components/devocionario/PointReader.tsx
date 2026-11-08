@@ -19,7 +19,7 @@ import {
 import { useEscrivaPoints } from '../../hooks/useEscrivaPoints'
 import { usePointFavorites } from '../../hooks/usePointFavorites'
 import { useBackState, useGoBack, type BackState } from '../../hooks/useBackNavigation'
-import { FavoriteButton } from './FavoriteButton'
+import { FavoriteButton } from '../shared/FavoriteButton'
 
 // Pixels of the preceding point left in view above the one opened, as in the
 // Meditação reader: it lands at the top, with a sliver hinting at what's above.
