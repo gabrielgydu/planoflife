@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
 import { Link, useParams } from 'react-router'
-import { Plus, BookOpen, CalendarDays, HelpCircle } from 'lucide-react'
+import { Plus, BookOpen, CalendarDays, HelpCircle, Eye, EyeOff } from 'lucide-react'
 import { Header } from '../layout/Header'
 import { ExamenEntryCard } from './ExamenEntryCard'
 import { ExamenEntryForm } from './ExamenEntryForm'
@@ -41,6 +41,10 @@ export function ExamenView() {
   const [showEntryForm, setShowEntryForm] = useState(false)
   const [formCategory, setFormCategory] = useState<ExamenCategory>('gracias')
   const [editingEntry, setEditingEntry] = useState<ExamenEntry | null>(null)
+  // The Perdón entries are the page's faults: hidden until asked for, so the
+  // page can be open on a phone others can see. Deliberately plain component
+  // state, not a persisted preference — every visit starts hidden again.
+  const [showFaults, setShowFaults] = useState(false)
 
   const dateStr = formatDate(currentDate)
   // Keyed off the clock, not the viewed day: a propósito is for the day you can
@@ -113,53 +117,79 @@ export function ExamenView() {
         transition={{ duration: 0.2 }}
         key={dateStr}
       >
-        {(['gracias', 'perdon', 'ayudame'] as ExamenCategory[]).map((category) => (
-          <section key={category}>
-            <div
-              className="flex items-center justify-between mb-3 pb-2 border-b-2"
-              style={{ borderColor: EXAMEN_COLORS[category] }}
-            >
-              <h2
-                className="font-heading text-sm font-semibold uppercase tracking-widest"
-                style={{ color: EXAMEN_COLORS[category] }}
+        {(['gracias', 'perdon', 'ayudame'] as ExamenCategory[]).map((category) => {
+          const entries = entriesByCategory[category]
+          const canHide = category === 'perdon' && entries.length > 0
+          const isHidden = canHide && !showFaults
+          return (
+            <section key={category}>
+              <div
+                className="flex items-center justify-between mb-3 pb-2 border-b-2"
+                style={{ borderColor: EXAMEN_COLORS[category] }}
               >
-                {EXAMEN_LABELS[category]}
-              </h2>
-              <button
-                onClick={() => handleAddEntry(category)}
-                className="p-1 hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded transition-colors"
-                style={{ color: EXAMEN_COLORS[category] }}
-              >
-                <Plus className="w-5 h-5" />
-              </button>
-            </div>
-
-            {entriesByCategory[category].length === 0 ? (
-              <button
-                onClick={() => handleAddEntry(category)}
-                className="w-full py-4 text-sm text-text-muted dark:text-text-muted-dark border border-dashed border-border dark:border-border-dark rounded-lg hover:border-text-muted dark:hover:border-text-muted-dark transition-colors"
-              >
-                Toque para adicionar
-              </button>
-            ) : (
-              <div className="space-y-2">
-                {entriesByCategory[category].map((entry) => (
-                  <ExamenEntryCard
-                    key={entry.id}
-                    entry={entry}
-                    onEdit={() => handleEditEntry(entry)}
-                    onDelete={() => deleteEntry(entry.id)}
-                    onToggleConfession={() => toggleConfession(entry.id)}
-                    onMakeProposito={
-                      category === 'ayudame' ? () => handleMakeProposito(entry) : undefined
-                    }
-                    propositoTargetLabel={propositoTarget.isTomorrow ? 'amanhã' : 'hoje'}
-                  />
-                ))}
+                <h2
+                  className="font-heading text-sm font-semibold uppercase tracking-widest"
+                  style={{ color: EXAMEN_COLORS[category] }}
+                >
+                  {EXAMEN_LABELS[category]}
+                </h2>
+                <div className="flex items-center gap-1">
+                  {canHide && (
+                    <button
+                      onClick={() => setShowFaults((v) => !v)}
+                      className="p-1 hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded transition-colors"
+                      style={{ color: EXAMEN_COLORS[category] }}
+                      aria-label={showFaults ? 'Ocultar' : 'Mostrar'}
+                      aria-pressed={showFaults}
+                    >
+                      {showFaults ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  )}
+                  <button
+                    onClick={() => handleAddEntry(category)}
+                    className="p-1 hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded transition-colors"
+                    style={{ color: EXAMEN_COLORS[category] }}
+                  >
+                    <Plus className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
-            )}
-          </section>
-        ))}
+
+              {entries.length === 0 ? (
+                <button
+                  onClick={() => handleAddEntry(category)}
+                  className="w-full py-4 text-sm text-text-muted dark:text-text-muted-dark border border-dashed border-border dark:border-border-dark rounded-lg hover:border-text-muted dark:hover:border-text-muted-dark transition-colors"
+                >
+                  Toque para adicionar
+                </button>
+              ) : isHidden ? (
+                <button
+                  onClick={() => setShowFaults(true)}
+                  className="w-full py-4 flex items-center justify-center gap-2 text-sm text-text-muted dark:text-text-muted-dark border border-dashed border-border dark:border-border-dark rounded-lg hover:border-text-muted dark:hover:border-text-muted-dark transition-colors"
+                >
+                  <EyeOff className="w-4 h-4" />
+                  {entries.length === 1 ? '1 item oculto' : `${entries.length} itens ocultos`}
+                </button>
+              ) : (
+                <div className="space-y-2">
+                  {entries.map((entry) => (
+                    <ExamenEntryCard
+                      key={entry.id}
+                      entry={entry}
+                      onEdit={() => handleEditEntry(entry)}
+                      onDelete={() => deleteEntry(entry.id)}
+                      onToggleConfession={() => toggleConfession(entry.id)}
+                      onMakeProposito={
+                        category === 'ayudame' ? () => handleMakeProposito(entry) : undefined
+                      }
+                      propositoTargetLabel={propositoTarget.isTomorrow ? 'amanhã' : 'hoje'}
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
+          )
+        })}
 
         {closingPrayer && (
           <section>
