@@ -56,29 +56,46 @@ function formatVerses(verses) {
  * chapter-onward citation) isn't exercised by any citation in the
  * harvested corpus for these books; handled as a best-effort — map just
  * `from`, then run to the end of *that* Vulgate chapter.
+ *
+ * A map may return an ARRAY (one modern verse = two Vulgate verses, John 6,51)
+ * and several modern verses may land on the same Vulgate verse (Mt 17,14-15) —
+ * a repeat is dropped here, and a repeat ACROSS segments ("Mc 8,34-9,1": modern
+ * 9,1 is Vulgate 8,39, already the tail of the first segment) by the caller.
+ * Returns { runs, changed } — `changed` is false when every verse kept its own
+ * coordinates, so a book that is mapped only in one chapter doesn't warn on all
+ * the others.
  */
 function expandModernRange(mapFn, chapter, from, to) {
+  const asList = (m) => (m == null ? null : Array.isArray(m) ? m : [m])
   if (to === 'end') {
-    const start = mapFn(chapter, from)
+    const start = asList(mapFn(chapter, from))?.[0]
     if (!start) return null
-    return [{ chapter: start.chapter, from: start.verse, to: 'end' }]
+    return {
+      runs: [{ chapter: start.chapter, from: start.verse, to: 'end' }],
+      changed: start.chapter !== chapter || start.verse !== from,
+    }
   }
   const mapped = []
+  let changed = false
   for (let v = from; v <= to; v++) {
-    const m = mapFn(chapter, v)
-    if (!m) return null
-    mapped.push(m)
+    const list = asList(mapFn(chapter, v))
+    if (!list) return null
+    for (const m of list) {
+      if (m.chapter !== chapter || m.verse !== v) changed = true
+      mapped.push(m)
+    }
   }
   const runs = []
   for (const m of mapped) {
     const last = runs[runs.length - 1]
+    if (last && last.chapter === m.chapter && m.verse >= last.from && m.verse <= last.to) continue
     if (last && last.chapter === m.chapter && m.verse === last.to + 1) {
       last.to = m.verse
     } else {
       runs.push({ chapter: m.chapter, from: m.verse, to: m.verse })
     }
   }
-  return runs
+  return { runs, changed }
 }
 
 /**
@@ -87,7 +104,7 @@ function expandModernRange(mapFn, chapter, from, to) {
  * resolved, so callers can distinguish "resolved but empty" (shouldn't
  * happen) from a missing lookup (also surfaced via warnings either way).
  */
-async function resolveSegment(segment) {
+async function resolveSegment(segment, emitted) {
   const warnings = []
   const addition = estherAdditionFor(segment)
   if (addition) {
@@ -102,24 +119,35 @@ async function resolveSegment(segment) {
 
   const versifyMap = BOOK_VERSE_MAPS[segment.bookId]
   if (versifyMap) {
-    warnings.push(
-      `versification-remapped: ${segment.bookId} ${segment.chapter} uses a Hebrew/Vulgate chapter split — verses remapped to Vulgate coordinates (see README)`,
-    )
     const parts = []
+    let changed = false
     for (const { from, to } of segment.verses) {
-      const runs = expandModernRange(versifyMap, segment.chapter, from, to)
-      if (!runs) {
+      const expanded = expandModernRange(versifyMap, segment.chapter, from, to)
+      if (!expanded) {
         warnings.push(`versification-unmapped: ${segment.bookId} ${segment.chapter}:${from}-${to} has no known Vulgate mapping`)
         continue
       }
-      for (const run of runs) {
+      changed ||= expanded.changed
+      for (const run of expanded.runs) {
         const verses = await getVerses(segment.bookId, run.chapter, run.from, run.to)
         if (!verses || verses.length === 0) {
           warnings.push(`no verses found (after versification mapping): ${segment.bookId} ${run.chapter}:${run.from}-${run.to}`)
           continue
         }
-        parts.push(formatVerses(verses))
+        // A Vulgate verse an earlier segment of the same citation already gave.
+        const fresh = verses.filter((v) => {
+          const key = `${segment.bookId}:${run.chapter}:${v.verse}`
+          if (emitted.has(key)) return false
+          emitted.add(key)
+          return true
+        })
+        if (fresh.length) parts.push(formatVerses(fresh))
       }
+    }
+    if (changed) {
+      warnings.push(
+        `versification-remapped: ${segment.bookId} ${segment.chapter} is numbered differently in the Vulgate — verses remapped to Vulgate coordinates (see README)`,
+      )
     }
     return { latin: parts.join(' '), warnings }
   }
@@ -160,8 +188,10 @@ export async function resolveLatin(referencia) {
 
   const warnings = [...(parseWarnings ?? [])]
   const latinParts = []
+  // Vulgate verses already given by this citation (versification-mapped books only).
+  const emitted = new Set()
   for (const segment of segments) {
-    const { latin, warnings: segWarnings } = await resolveSegment(segment)
+    const { latin, warnings: segWarnings } = await resolveSegment(segment, emitted)
     if (latin) latinParts.push(latin)
     warnings.push(...segWarnings)
   }

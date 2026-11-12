@@ -15,7 +15,8 @@ time, so the shipped bundle contains plain resolved strings.
   `resolvePsalmRef()`.
 - `lib/versification.mjs` — per-book Hebrew↔Vulgate chapter/verse maps for
   Zechariah, Joel, and Malachi (the three non-psalm books whose chapter
-  splits differ between the two traditions).
+  splits differ between the two traditions), plus the modern↔Clementine
+  verse maps for Matthew 17, Mark 4 and 9, John 6 and Acts 7.
 - `lib/ref-parse.mjs` — parses a `referencia` string into
   `[{bookId, chapter, verses:[{from,to}]}]` segments. Never throws.
 - `lib/resolve-latin.mjs` — `resolveLatin(referencia)` → `{latin, segments,
@@ -184,6 +185,42 @@ Implemented in `lib/versification.mjs`, wired into `resolve-latin.mjs`:
 verse ranges are expanded verse-by-verse through the map and re-grouped into
 Vulgate chapter runs, so a range straddling the boundary (`Ml 3,13-20`)
 correctly splits into two Vulgate chapters.
+
+## Versification — New Testament (added 2026-11-12)
+
+Until this was added, the Latin of every Mc 9 Gospel and of several Mt 17, Jo 6 and At 7 readings was one verse off: `Mc 9,2-10` (the Transfiguration) opened on "Et vestimenta ejus", its second verse.
+
+Non-empty Latin hid it, exactly like the Zechariah case above.
+
+The NT differences are verse divisions, not chapter splits: in a few chapters the Clementine Vulgate joins two modern verses into one, or splits one in two, and the rest of the chapter shifts by one.
+
+**How they were found:** every inline-numbered verse of every NT reading's pt `texto` (977 readings, modern numbering) was matched by shared content words against the Matos Soares translation in `src/data/nt/books/` (Clementine numbering — translated from the Vulgate, verse-for-verse identical to it, see `scripts/nt/`).
+
+A whole run of consecutive verses matching the neighbouring verse instead of its own appeared in exactly these chapters; elsewhere only isolated single-verse look-alikes (e.g. Jo 3,15/16), which the Latin confirms are right.
+
+| Modern (lectionary) | Clementine Vulgate | Confirmed against |
+|---|---|---|
+| Mt 17,14-15 | 17,14 | `Mt 17,14-20`, `Mt 17,22-27` |
+| Mt 17,16-27 | 17,15-26 | |
+| Mc 4,40-41 | 4,40 | `Mc 4,35-41` |
+| Mc 9,1 | 8,39 | `Mc 8,34-9,1` |
+| Mc 9,2-50 | 9,1-49 | every Mc 9 citation in the corpus |
+| Jo 6,51 | 6,51-52 | `Jo 6,41-51`, `Jo 6,44-51`, `Jo 6,51-58` |
+| Jo 6,52-71 | 6,53-72 | `Jo 6,52-59`, `Jo 6,60-69` |
+| At 7,55-56 | 7,55 | `At 6,8-10;7,54-59` (St. Stephen) |
+| At 7,57-60 | 7,56-59 | |
+
+Vulgate 7,59 also holds modern 8,1a.
+
+Modern 8,1 still maps to Vulgate 8,1 (= modern 8,1b), because the parser drops verse letters and the only citations are `7,51-8,1a` and `8,1b-8`: the second is exact, the first keeps the whole-verse overrun every half-verse citation has.
+
+Mt 5,4/5 (the two beatitudes in the opposite order) is deliberately NOT mapped: no citation starts or ends between them, and remapping would print Jerome's verses out of his order.
+
+**Resolver changes:** a map may return two Vulgate verses for one modern verse (Jo 6,51), several modern verses may land on one Vulgate verse (Mt 17,14-15), and a citation never repeats a Vulgate verse across its segments (`Mc 8,34-9,1`: modern 9,1 is Vulgate 8,39, already the end of the first segment).
+
+The `versification-remapped` warning now fires only when a verse actually moved, so the rest of Matthew, Mark, John and Acts stays quiet.
+
+**Verified:** rebuilding the propers changed only `textoLatim`, only for those 19 referências; an independent check that each NT reading's Latin starts and ends on the Clementine verse its first/last pt verse corresponds to went from 32 to 15 failures, and the 15 left are 11 matcher look-alikes, 2 endings on modern Jo 6,51 (the check expects one Vulgate verse there, the right answer is two), the `7,51-8,1a` overrun above, and `Jo 11,45-56`, whose Latin includes v.57 because of a separate upstream defect in scrollmapper's Vulgate (11,57 glued onto 11,56 — repaired in `scripts/nt/lib/latin.mjs` but not here).
 
 ## Reference-parser coverage
 
