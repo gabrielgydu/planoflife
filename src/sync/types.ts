@@ -12,6 +12,8 @@ import type {
   ExameTema,
   PointFavorite,
   Jaculatoria,
+  VerseHighlight,
+  VerseNote,
 } from '../types'
 
 // Bump whenever SyncState gains or drops tables. v2 = career tables (Dexie v7).
@@ -20,7 +22,8 @@ import type {
 // dropped (Dexie v25) — the bump makes not-yet-reloaded schema-6 clients refuse
 // the new snapshot instead of pushing their career rows back into the cloud.
 // v8 = pointFavorites (Dexie v26). v9 = jaculatorias (Dexie v27).
-export const SYNC_SCHEMA = 9
+// v10 = verseHighlights + verseNotes (Dexie v28).
+export const SYNC_SCHEMA = 10
 
 /** The decrypted payload that travels to/from the Worker (mirrors scripts/sync-core.mjs). */
 export interface SyncState {
@@ -58,6 +61,11 @@ export interface SyncState {
     // key means older client, no opinion" rule again — a schema-≤8 snapshot must
     // PRESERVE the local jaculatórias, never clear them.
     jaculatorias: Jaculatoria[]
+    // Verse highlights and notes in the NT reader (schema 10). Same "missing key
+    // means older client, no opinion" rule again — a schema-≤9 snapshot must
+    // PRESERVE the local highlights and notes, never clear them.
+    verseHighlights: VerseHighlight[]
+    verseNotes: VerseNote[]
   }
   settings: Record<string, string>
 }
@@ -91,6 +99,8 @@ export const SYNC_TABLES = [
   'exameTemas',
   'pointFavorites',
   'jaculatorias',
+  'verseHighlights',
+  'verseNotes',
 ] as const
 
 /** Cloud snapshot was produced by a NEWER app than this one. */

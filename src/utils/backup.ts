@@ -13,6 +13,8 @@ import type {
   ExameTema,
   PointFavorite,
   Jaculatoria,
+  VerseHighlight,
+  VerseNote,
 } from '../types'
 import { encryptData, decryptData } from './crypto'
 import { generateId } from './id'
@@ -47,6 +49,10 @@ export interface BackupData {
     // Optional, like the keys above: absent from backups exported before the
     // jaculatórias; an ABSENT array preserves the local table on import.
     jaculatorias?: Jaculatoria[]
+    // Optional, like the keys above: absent from backups exported before verse
+    // highlights and notes; an ABSENT array preserves the local table on import.
+    verseHighlights?: VerseHighlight[]
+    verseNotes?: VerseNote[]
   }
 }
 
@@ -65,6 +71,8 @@ export async function exportBackup(): Promise<BackupData> {
     exameTemas,
     pointFavorites,
     jaculatorias,
+    verseHighlights,
+    verseNotes,
   ] = await Promise.all([
     db.categories.toArray(),
     db.practices.toArray(),
@@ -79,6 +87,8 @@ export async function exportBackup(): Promise<BackupData> {
     db.exameTemas.toArray(),
     db.pointFavorites.toArray(),
     db.jaculatorias.toArray(),
+    db.verseHighlights.toArray(),
+    db.verseNotes.toArray(),
   ])
 
   return {
@@ -98,6 +108,8 @@ export async function exportBackup(): Promise<BackupData> {
       exameTemas,
       pointFavorites,
       jaculatorias,
+      verseHighlights,
+      verseNotes,
     },
   }
 }
@@ -123,6 +135,8 @@ export async function importBackup(backup: BackupData): Promise<void> {
       db.exameTemas,
       db.pointFavorites,
       db.jaculatorias,
+      db.verseHighlights,
+      db.verseNotes,
     ],
     async () => {
       const d = backup.data
@@ -145,6 +159,8 @@ export async function importBackup(backup: BackupData): Promise<void> {
         replace(db.exameTemas, d.exameTemas),
         replace(db.pointFavorites, d.pointFavorites),
         replace(db.jaculatorias, d.jaculatorias),
+        replace(db.verseHighlights, d.verseHighlights),
+        replace(db.verseNotes, d.verseNotes),
       ])
     }
   )

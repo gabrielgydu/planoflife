@@ -61,6 +61,11 @@ export const POINT_TABLES = ['pointFavorites']
 // it missing.
 export const JACULATORIA_TABLES = ['jaculatorias']
 
+// Added in sync schema 10 (verse highlights and notes in the NT reader). Same rule
+// again: schema-≤9 snapshots lack these keys entirely; validateSyncState allows
+// them missing.
+export const VERSE_MARK_TABLES = ['verseHighlights', 'verseNotes']
+
 export const TABLES = [
   ...LEGACY_TABLES,
   ...MEDITATION_TABLES,
@@ -69,9 +74,10 @@ export const TABLES = [
   ...EXAME_TABLES,
   ...POINT_TABLES,
   ...JACULATORIA_TABLES,
+  ...VERSE_MARK_TABLES,
 ]
 
-export const SYNC_SCHEMA = 9
+export const SYNC_SCHEMA = 10
 
 export function b64(bytes) {
   return Buffer.from(bytes).toString('base64')
@@ -167,6 +173,7 @@ export function validateSyncState(state) {
     ...EXAME_TABLES,
     ...POINT_TABLES,
     ...JACULATORIA_TABLES,
+    ...VERSE_MARK_TABLES,
   ]) {
     if (state.data[t] !== undefined && !Array.isArray(state.data[t])) {
       throw new Error(`state.data.${t} must be an array when present`)

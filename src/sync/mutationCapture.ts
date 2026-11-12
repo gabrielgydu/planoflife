@@ -62,6 +62,8 @@ export function installMutationCapture(): void {
     db.exameTemas,
     db.pointFavorites,
     db.jaculatorias,
+    db.verseHighlights,
+    db.verseNotes,
   ]
   for (const t of tables) {
     t.hook('creating', () => {

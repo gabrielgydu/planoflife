@@ -226,3 +226,50 @@ export interface Jaculatoria {
   createdAt: string
   updatedAt: string
 }
+
+// --- Leitura do Novo Testamento: highlights and notes ---------------------------
+//
+// Marks the user makes on the NT reader's verses. Both are whole-verse: the pt and
+// the Vulgate share their versification (see src/data/nt/index.ts), so a mark made
+// in one language mode shows in all four. Personal content: it lives only in the
+// user's own synced data and backups, never in the public bundle. Rows are synced
+// data, so a book key or chapter this build doesn't know is skipped on read, not
+// rendered.
+
+// Stored as a semantic key, never as a color value, so the palette can be retuned
+// per theme without a migration. A key this build doesn't know (written by a newer
+// build) renders as 'amarelo' rather than disappearing.
+export type HighlightColor = 'amarelo' | 'verde' | 'azul' | 'rosa' | 'roxo'
+
+// One highlighted verse. The id is the verse itself ('Matt:5:3'), so the same verse
+// highlighted on two devices yields one row, like PointFavorite, and "a verse has
+// at most one color" holds by construction. Clearing keeps the row with color null
+// instead of deleting it, for the no-tombstone reason: a newer null wins on
+// updatedAt instead of the other device's snapshot bringing the color back.
+// Synced (schema 10).
+export interface VerseHighlight {
+  id: string // `${book}:${chapter}:${verse}`, e.g. 'Matt:5:3'
+  book: string // NT book key (src/data/nt/books.ts); validated on read
+  chapter: number
+  verse: number
+  color: HighlightColor | null // null = cleared; the row is kept
+  updatedAt: string
+}
+
+// A note on a passage of the NT: one verse, or a range that may cross a chapter
+// boundary (start and end inclusive; equal for a one-verse note). The id is a
+// generateId() UUID, since two notes on the same passage are legitimate. Deleting
+// keeps the row with isDeleted true, the same no-tombstone rule as Jaculatoria.
+// Synced (schema 10).
+export interface VerseNote {
+  id: string
+  book: string // NT book key; validated on read
+  chapter: number // first verse of the passage
+  verse: number
+  endChapter: number // last verse of the passage, inclusive
+  endVerse: number
+  text: string // plain text; "\n" separates lines
+  isDeleted: boolean
+  createdAt: string
+  updatedAt: string
+}

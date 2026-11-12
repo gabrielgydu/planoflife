@@ -13,6 +13,8 @@ import type {
   ExameTema,
   PointFavorite,
   Jaculatoria,
+  VerseHighlight,
+  VerseNote,
 } from '../types'
 import { generateId } from '../utils/id'
 import { defaultPrayers } from '../data/devocionario'
@@ -833,6 +835,8 @@ export class PlanOfLifeDB extends Dexie {
   exameTemas!: EntityTable<ExameTema, 'id'>
   pointFavorites!: EntityTable<PointFavorite, 'id'>
   jaculatorias!: EntityTable<Jaculatoria, 'id'>
+  verseHighlights!: EntityTable<VerseHighlight, 'id'>
+  verseNotes!: EntityTable<VerseNote, 'id'>
 
   constructor() {
     super('PlanOfLifeDB')
@@ -1168,6 +1172,15 @@ export class PlanOfLifeDB extends Dexie {
     // reach a device only through sync. The table syncs, so the sync schema bumps
     // to 9 — see src/sync/types.ts and scripts/sync-core.mjs.
     this.version(27).stores({ jaculatorias: 'id' })
+
+    // Verse highlights and notes in the New Testament reader. Two bare new stores
+    // like v26/v27: nothing is seeded, so no upgrade and no reconciliation flag.
+    // Highlights are keyed by the verse itself ('Matt:5:3'), so both devices
+    // converge on one row per verse; notes carry generateId() UUIDs. `book` is
+    // indexed because the reader loads one book's marks at a time. Both tables
+    // sync, so the sync schema bumps to 10 — see src/sync/types.ts and
+    // scripts/sync-core.mjs.
+    this.version(28).stores({ verseHighlights: 'id, book', verseNotes: 'id, book' })
   }
 }
 

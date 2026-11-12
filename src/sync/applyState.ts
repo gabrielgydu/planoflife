@@ -19,11 +19,13 @@ const ALL_TABLES = [
   db.exameTemas,
   db.pointFavorites,
   db.jaculatorias,
+  db.verseHighlights,
+  db.verseNotes,
 ]
 
 /** Tables that are NEVER seeded — non-empty here means real user data exists. */
 export async function hasUserData(): Promise<boolean> {
-  const [records, examen, missed, props, temas, pointFavorites, jaculatorias] = await Promise.all([
+  const counts = await Promise.all([
     db.dailyRecords.count(),
     db.examenEntries.count(),
     db.missedReasons.count(),
@@ -31,8 +33,10 @@ export async function hasUserData(): Promise<boolean> {
     db.exameTemas.count(),
     db.pointFavorites.count(),
     db.jaculatorias.count(),
+    db.verseHighlights.count(),
+    db.verseNotes.count(),
   ])
-  return records + examen + missed + props + temas + pointFavorites + jaculatorias > 0
+  return counts.some((n) => n > 0)
 }
 
 /** Build a SyncState from the current local DB + synced settings. */
@@ -51,6 +55,8 @@ export async function snapshotLocal(): Promise<SyncState> {
     exameTemas,
     pointFavorites,
     jaculatorias,
+    verseHighlights,
+    verseNotes,
   ] = await Promise.all([
     db.categories.toArray(),
     db.practices.toArray(),
@@ -65,6 +71,8 @@ export async function snapshotLocal(): Promise<SyncState> {
     db.exameTemas.toArray(),
     db.pointFavorites.toArray(),
     db.jaculatorias.toArray(),
+    db.verseHighlights.toArray(),
+    db.verseNotes.toArray(),
   ])
   return {
     schema: SYNC_SCHEMA,
@@ -82,6 +90,8 @@ export async function snapshotLocal(): Promise<SyncState> {
       exameTemas,
       pointFavorites,
       jaculatorias,
+      verseHighlights,
+      verseNotes,
     },
     settings: collectSettings(),
   }
@@ -128,6 +138,8 @@ async function clearAndBulkAdd(state: SyncState): Promise<boolean> {
     replace(db.exameTemas, d.exameTemas),
     replace(db.pointFavorites, d.pointFavorites),
     replace(db.jaculatorias, d.jaculatorias),
+    replace(db.verseHighlights, d.verseHighlights),
+    replace(db.verseNotes, d.verseNotes),
   ])
   return preserved
 }

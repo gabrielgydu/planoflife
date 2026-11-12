@@ -123,6 +123,24 @@ export function mergeStates(
         ours.data.jaculatorias ?? [],
         newerUpdatedAt,
       ),
+      // Verse highlights: one row per verse under its own id ('Matt:5:3'), so a
+      // verse colored on both devices collapses into one row and the newer color
+      // wins. Clearing writes color null and bumps updatedAt rather than deleting,
+      // so a newer clear beats an older color. `?? []` tolerates a schema-≤9
+      // snapshot (preserve ours).
+      verseHighlights: mergeById(
+        base.data.verseHighlights ?? [],
+        ours.data.verseHighlights ?? [],
+        newerUpdatedAt,
+      ),
+      // Verse notes: UUID rows, like the jaculatórias — edits and deletions
+      // (isDeleted, never a real delete) bump updatedAt, so the newer version of
+      // each note wins. `?? []` tolerates a schema-≤9 snapshot (preserve ours).
+      verseNotes: mergeById(
+        base.data.verseNotes ?? [],
+        ours.data.verseNotes ?? [],
+        newerUpdatedAt,
+      ),
     },
     settings,
   }
