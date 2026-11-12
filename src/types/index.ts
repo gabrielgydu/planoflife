@@ -182,6 +182,18 @@ export interface ReadingPosition {
 // so a prayer with no Portuguese at all is normal, not a defect. Read them through
 // prayerTitle()/prayerLangs() in src/data/devocionario.ts rather than reaching for
 // `.pt` directly. Synced (schema 5).
+export interface Prayer {
+  id: string // fixed slug for the defaults, generateId() for user-written ones
+  section: string // section slug; 'minhas' for user-written prayers
+  title: { pt?: string; la?: string }
+  texts: { pt?: string; la?: string } // markdown, rendered by MarkdownRenderer
+  source: 'default' | 'user'
+  isFavorite: boolean
+  sortOrder: number // position within its section
+  createdAt: string
+  updatedAt: string
+}
+
 // A point of Caminho, Sulco or Forja marked as a favorite, listed under the
 // Devocionário's "Favoritos" after the favorite prayers. The id is the point
 // itself ('caminho:238'), so marking the same point on two devices yields the
@@ -197,14 +209,20 @@ export interface PointFavorite {
   updatedAt: string
 }
 
-export interface Prayer {
-  id: string // fixed slug for the defaults, generateId() for user-written ones
-  section: string // section slug; 'minhas' for user-written prayers
-  title: { pt?: string; la?: string }
-  texts: { pt?: string; la?: string } // markdown, rendered by MarkdownRenderer
-  source: 'default' | 'user'
-  isFavorite: boolean
-  sortOrder: number // position within its section
+// --- Contemplação do Rosário ----------------------------------------------------
+//
+// A jaculatória the user wrote for one rosary mystery. The contemplation reader
+// shows it above the mystery's passage (one at random when the mystery has
+// several), as an alternative meditation. Personal content: it lives only in the
+// user's own synced data, never in the public bundle. The id is a generateId()
+// UUID. Deleting keeps the row with isDeleted true, for the same no-tombstone
+// reason as PointFavorite: a newer deletion wins on updatedAt instead of the
+// other device's snapshot bringing the row back. Synced (schema 9).
+export interface Jaculatoria {
+  id: string
+  mystery: string // `${SetKey}:${n}`, n 1-based — see mysteryKey in src/data/rosary.ts
+  text: string // plain text; "\n" separates lines
+  isDeleted: boolean
   createdAt: string
   updatedAt: string
 }

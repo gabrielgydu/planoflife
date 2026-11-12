@@ -12,6 +12,7 @@ import type {
   Prayer,
   ExameTema,
   PointFavorite,
+  Jaculatoria,
 } from '../types'
 import { encryptData, decryptData } from './crypto'
 import { generateId } from './id'
@@ -43,6 +44,9 @@ export interface BackupData {
     // Optional, like the keys above: absent from backups exported before favorite
     // points; an ABSENT array preserves the local table on import.
     pointFavorites?: PointFavorite[]
+    // Optional, like the keys above: absent from backups exported before the
+    // jaculatórias; an ABSENT array preserves the local table on import.
+    jaculatorias?: Jaculatoria[]
   }
 }
 
@@ -60,6 +64,7 @@ export async function exportBackup(): Promise<BackupData> {
     prayers,
     exameTemas,
     pointFavorites,
+    jaculatorias,
   ] = await Promise.all([
     db.categories.toArray(),
     db.practices.toArray(),
@@ -73,6 +78,7 @@ export async function exportBackup(): Promise<BackupData> {
     db.prayers.toArray(),
     db.exameTemas.toArray(),
     db.pointFavorites.toArray(),
+    db.jaculatorias.toArray(),
   ])
 
   return {
@@ -91,6 +97,7 @@ export async function exportBackup(): Promise<BackupData> {
       prayers,
       exameTemas,
       pointFavorites,
+      jaculatorias,
     },
   }
 }
@@ -115,6 +122,7 @@ export async function importBackup(backup: BackupData): Promise<void> {
       db.prayers,
       db.exameTemas,
       db.pointFavorites,
+      db.jaculatorias,
     ],
     async () => {
       const d = backup.data
@@ -136,6 +144,7 @@ export async function importBackup(backup: BackupData): Promise<void> {
         replace(db.prayers, d.prayers),
         replace(db.exameTemas, d.exameTemas),
         replace(db.pointFavorites, d.pointFavorites),
+        replace(db.jaculatorias, d.jaculatorias),
       ])
     }
   )

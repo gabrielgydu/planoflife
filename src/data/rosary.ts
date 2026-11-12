@@ -67,6 +67,15 @@ const setByWeekday = (Object.keys(vocalSets) as SetKey[]).reduce<Record<number, 
   {},
 )
 
+/**
+ * Key of a mystery in db.jaculatorias: 'gozosos:1' … 'luminosos:5'. `index` is the
+ * 0-based position within the set; the key is 1-based, like the mysteries are
+ * numbered when prayed.
+ */
+export function mysteryKey(setKey: SetKey, index: number): string {
+  return `${setKey}:${index + 1}`
+}
+
 /** The set prayed vocally on the given date's weekday, per the traditional schedule. */
 export function prayedSetForWeekday(date: Date): SetKey {
   return setByWeekday[date.getDay()]

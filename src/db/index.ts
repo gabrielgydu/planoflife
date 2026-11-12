@@ -12,6 +12,7 @@ import type {
   Prayer,
   ExameTema,
   PointFavorite,
+  Jaculatoria,
 } from '../types'
 import { generateId } from '../utils/id'
 import { defaultPrayers } from '../data/devocionario'
@@ -831,6 +832,7 @@ export class PlanOfLifeDB extends Dexie {
   prayers!: EntityTable<Prayer, 'id'>
   exameTemas!: EntityTable<ExameTema, 'id'>
   pointFavorites!: EntityTable<PointFavorite, 'id'>
+  jaculatorias!: EntityTable<Jaculatoria, 'id'>
 
   constructor() {
     super('PlanOfLifeDB')
@@ -1159,6 +1161,13 @@ export class PlanOfLifeDB extends Dexie {
     // syncs, so the sync schema bumps to 8 — see src/sync/types.ts and
     // scripts/sync-core.mjs.
     this.version(26).stores({ pointFavorites: 'id' })
+
+    // The user's own jaculatórias for the rosary mysteries (shown in the
+    // Contemplação do Rosário). A bare new store like v26: nothing is seeded, so no
+    // upgrade and no reconciliation flag. The rows are the user's personal text and
+    // reach a device only through sync. The table syncs, so the sync schema bumps
+    // to 9 — see src/sync/types.ts and scripts/sync-core.mjs.
+    this.version(27).stores({ jaculatorias: 'id' })
   }
 }
 

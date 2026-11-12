@@ -1,16 +1,19 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { ChevronLeft, ChevronRight, Shuffle, BookOpen, X, Check } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Shuffle, BookOpen, X, Check, Pencil, Plus } from 'lucide-react'
 import { motion, AnimatePresence, type PanInfo } from 'motion/react'
 import rosaryRaw from '../../data/rosary_contemplation.json'
 import rosaryImagesRaw from '../../data/rosary_images.json'
 import {
+  mysteryKey,
   prayedSetForWeekday,
   SET_ORDER,
   type RosaryMystery,
   type RosarySet,
   type SetKey,
 } from '../../data/rosary'
+import { useJaculatorias } from '../../hooks/useJaculatorias'
 import { RosaryQuoteText } from './RosaryQuoteText'
+import { JaculatoriasSheet } from './JaculatoriasSheet'
 
 interface RosaryData {
   prologo: { title: string; author: string; date: string | null; paragraphs: string[] }
@@ -43,6 +46,7 @@ interface Slide {
   setKey: SetKey
   setLabel: string
   mysteryIndex: number // position within its group (0-based)
+  mysteryId: string // its key in db.jaculatorias, e.g. 'gozosos:1'
   groupSize: number
   mystery: RosaryMystery
   imageCandidates: ImageCandidate[]
@@ -63,7 +67,9 @@ interface RosaryContemplationViewProps {
  * viewed day. The three remaining sets are flattened into one continuous sequence
  * of 15 mysteries; swiping left/right walks from the first group to the last. One
  * random passage (St. Josemaría or his successors, with its source) and one random
- * painting per mystery, re-rolled on every open and on demand (↻).
+ * painting per mystery, re-rolled on every open and on demand (↻). Above the
+ * passage, one of the user's own jaculatórias for the mystery, when it has any —
+ * also picked at random.
  */
 export function RosaryContemplationView({
   practiceId,
@@ -90,6 +96,7 @@ export function RosaryContemplationView({
           setKey: key,
           setLabel: set.label,
           mysteryIndex: i,
+          mysteryId: mysteryKey(key, i),
           groupSize: set.mysteries.length,
           mystery,
           imageCandidates: imgs[i] ?? [],
@@ -100,11 +107,14 @@ export function RosaryContemplationView({
   }, [nonDaySets])
 
   // One random quote AND one random image per slide, re-rolled fresh on every open
-  // (mount) and on demand via the shuffle button.
+  // (mount) and on demand via the shuffle button. The jaculatória is rolled as a
+  // number in [0, 1) rather than an item, because the user's list can change while
+  // the reader is open (the sheet below edits it): the pick then stays valid.
   const roll = useCallback(
     () => ({
       quotes: slides.map((s) => randomItem(s.mystery.quotes)),
       imgs: slides.map((s) => (s.imageCandidates.length ? randomItem(s.imageCandidates) : undefined)),
+      jaculatorias: slides.map(() => Math.random()),
     }),
     [slides],
   )
@@ -112,6 +122,8 @@ export function RosaryContemplationView({
   const [index, setIndex] = useState(0)
   const [direction, setDirection] = useState(0)
   const [showPrologo, setShowPrologo] = useState(false)
+  const [showJaculatorias, setShowJaculatorias] = useState(false)
+  const { byMystery, addJaculatoria, updateJaculatoria, deleteJaculatoria } = useJaculatorias()
 
   // Lock body scroll: this is a full-screen reader.
   useEffect(() => {
@@ -133,15 +145,17 @@ export function RosaryContemplationView({
   const goPrev = useCallback(() => goTo(index - 1), [goTo, index])
   const goNext = useCallback(() => goTo(index + 1), [goTo, index])
 
-  // Arrow-key navigation (desktop / PWA on laptop).
+  // Arrow-key navigation (desktop / PWA on laptop). Not while the jaculatórias
+  // sheet is open: its arrows move the caret, and the sheet belongs to this slide.
   useEffect(() => {
+    if (showJaculatorias) return
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') goPrev()
       else if (e.key === 'ArrowRight') goNext()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [goPrev, goNext])
+  }, [goPrev, goNext, showJaculatorias])
 
   const handleDragEnd = (_: unknown, info: PanInfo) => {
     const { offset, velocity } = info
@@ -157,6 +171,10 @@ export function RosaryContemplationView({
   const slide = slides[index]
   const quote = picks.quotes[index]
   const img = picks.imgs[index]
+  const jaculatorias = byMystery.get(slide.mysteryId) ?? []
+  const jaculatoria = jaculatorias.length
+    ? jaculatorias[Math.floor(picks.jaculatorias[index] * jaculatorias.length)]
+    : undefined
   const imgSrc = img ? `${import.meta.env.BASE_URL}rosary-images/${img.f}` : undefined
   const completed = isCompleted(practiceId)
 
@@ -196,7 +214,7 @@ export function RosaryContemplationView({
           <button
             onClick={reshuffle}
             className="p-2 text-text-secondary dark:text-text-secondary-dark hover:bg-surface-secondary dark:hover:bg-surface-secondary-dark rounded-full transition-colors"
-            aria-label="Trocar citações e imagens"
+            aria-label="Trocar citações, jaculatórias e imagens"
           >
             <Shuffle className="w-5 h-5" />
           </button>
@@ -255,12 +273,35 @@ export function RosaryContemplationView({
                 <h2 className="font-heading text-2xl font-semibold text-text-primary dark:text-text-primary-dark">
                   {slide.mystery.title}
                 </h2>
+                {jaculatoria && (
+                  <p className="text-lg font-medium leading-relaxed text-text-primary dark:text-text-primary-dark whitespace-pre-line border-l-2 border-primary/40 dark:border-primary-light/40 pl-4">
+                    {jaculatoria.text}
+                  </p>
+                )}
                 <RosaryQuoteText quote={quote} textClassName="text-lg" />
                 {img?.a && (
                   <p className="text-xs text-text-muted dark:text-text-muted-dark pt-1">
                     Arte: {img.a}
                   </p>
                 )}
+                <div className="pt-3">
+                  <button
+                    onClick={() => setShowJaculatorias(true)}
+                    className="-ml-2 px-2 py-1.5 inline-flex items-center gap-1.5 text-xs text-text-muted dark:text-text-muted-dark hover:text-text-secondary dark:hover:text-text-secondary-dark rounded-full transition-colors"
+                  >
+                    {jaculatorias.length ? (
+                      <>
+                        <Pencil className="w-3.5 h-3.5" />
+                        Jaculatórias ({jaculatorias.length})
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="w-3.5 h-3.5" />
+                        Adicionar jaculatória
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -299,7 +340,8 @@ export function RosaryContemplationView({
                 <p className="text-xs text-text-muted dark:text-text-muted-dark leading-relaxed mt-6 pt-4 border-t border-border dark:border-border-dark">
                   Textos de São Josemaria — «Santo Rosário» e outras obras — e dos seus sucessores à
                   frente do Opus Dei, com a fonte de cada um. Um texto e uma pintura ao acaso por
-                  mistério — toque em ↻ para trocar. Contemplam-se hoje os mistérios que não são
+                  mistério — toque em ↻ para trocar. Acima do texto, uma das suas jaculatórias para
+                  o mistério, quando houver. Contemplam-se hoje os mistérios que não são
                   rezados no dia. Os mistérios luminosos foram acrescentados após o texto original de
                   1934.
                 </p>
@@ -356,6 +398,21 @@ export function RosaryContemplationView({
           </button>
         </div>
       </footer>
+
+      {/* The current mystery's jaculatórias: add, edit, delete */}
+      <AnimatePresence>
+        {showJaculatorias && (
+          <JaculatoriasSheet
+            key={slide.mysteryId}
+            mysteryTitle={slide.mystery.title}
+            items={jaculatorias}
+            onAdd={(text) => addJaculatoria(slide.mysteryId, text)}
+            onUpdate={updateJaculatoria}
+            onDelete={deleteJaculatoria}
+            onClose={() => setShowJaculatorias(false)}
+          />
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }

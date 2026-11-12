@@ -18,19 +18,21 @@ const ALL_TABLES = [
   db.prayers,
   db.exameTemas,
   db.pointFavorites,
+  db.jaculatorias,
 ]
 
 /** Tables that are NEVER seeded — non-empty here means real user data exists. */
 export async function hasUserData(): Promise<boolean> {
-  const [records, examen, missed, props, temas, pointFavorites] = await Promise.all([
+  const [records, examen, missed, props, temas, pointFavorites, jaculatorias] = await Promise.all([
     db.dailyRecords.count(),
     db.examenEntries.count(),
     db.missedReasons.count(),
     db.propositos.count(),
     db.exameTemas.count(),
     db.pointFavorites.count(),
+    db.jaculatorias.count(),
   ])
-  return records + examen + missed + props + temas + pointFavorites > 0
+  return records + examen + missed + props + temas + pointFavorites + jaculatorias > 0
 }
 
 /** Build a SyncState from the current local DB + synced settings. */
@@ -48,6 +50,7 @@ export async function snapshotLocal(): Promise<SyncState> {
     prayers,
     exameTemas,
     pointFavorites,
+    jaculatorias,
   ] = await Promise.all([
     db.categories.toArray(),
     db.practices.toArray(),
@@ -61,6 +64,7 @@ export async function snapshotLocal(): Promise<SyncState> {
     db.prayers.toArray(),
     db.exameTemas.toArray(),
     db.pointFavorites.toArray(),
+    db.jaculatorias.toArray(),
   ])
   return {
     schema: SYNC_SCHEMA,
@@ -77,6 +81,7 @@ export async function snapshotLocal(): Promise<SyncState> {
       prayers,
       exameTemas,
       pointFavorites,
+      jaculatorias,
     },
     settings: collectSettings(),
   }
@@ -122,6 +127,7 @@ async function clearAndBulkAdd(state: SyncState): Promise<boolean> {
     replace(db.prayers, d.prayers),
     replace(db.exameTemas, d.exameTemas),
     replace(db.pointFavorites, d.pointFavorites),
+    replace(db.jaculatorias, d.jaculatorias),
   ])
   return preserved
 }

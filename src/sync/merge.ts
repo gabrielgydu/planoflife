@@ -115,6 +115,14 @@ export function mergeStates(
         ours.data.pointFavorites ?? [],
         newerUpdatedAt,
       ),
+      // Jaculatórias: UUID rows; edits and deletions (isDeleted, never a real
+      // delete) bump updatedAt, so the newer version of each one wins. `?? []`
+      // tolerates a schema-≤8 snapshot (preserve ours).
+      jaculatorias: mergeById(
+        base.data.jaculatorias ?? [],
+        ours.data.jaculatorias ?? [],
+        newerUpdatedAt,
+      ),
     },
     settings,
   }
