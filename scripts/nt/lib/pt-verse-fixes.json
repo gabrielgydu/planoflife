@@ -1899,6 +1899,13 @@
    "why": "punctuation: period breaks the conditional sentence (Se ... Deus a veste assim, quanto mais)"
   }
  ],
+ "Luke 12:33": [
+  {
+   "from": "provei-vos de bolsas",
+   "to": "provede-vos de bolsas",
+   "why": "typo: wrong verb form: 'prover-se de' (imperative 'provede-vos') governs both 'de bolsas' and 'de um tesouro'; 'provei' is from 'provar'"
+  }
+ ],
  "Luke 12:45": [
   {
    "from": "coração: \"O meu senhor",
@@ -2252,6 +2259,13 @@
    "from": "pedra do sepulcro,",
    "to": "pedra do sepulcro.",
    "why": "punctuation: sentence ends; 24:3 starts 'Entrando'"
+  }
+ ],
+ "Luke 24:15": [
+  {
+   "from": "discorrendo entre si,",
+   "to": "Enquanto iam conversando e discorrendo entre si,",
+   "why": "reconstruction: reconstruction (all online copies share the OCR; no print available): opening lost (Greek ἐν τῷ ὁμιλεῖν αὐτοὺς καὶ συζητεῖν, Vulgate 'dum fabularentur, et secum quaererent'); Ave-Maria has the same surviving words: 'Enquanto iam conversando e discorrendo entre si'"
   }
  ],
  "Luke 24:16": [
@@ -2622,6 +2636,20 @@
    "why": "punctuation: missing final period; 6:66 starts 'Depois'"
   }
  ],
+ "John 7:1": [
+  {
+   "from": "os Judeus queriam matar.",
+   "to": "os Judeus o queriam matar.",
+   "why": "reconstruction: reconstruction (all online copies share the OCR; no print available): object pronoun lost (Greek ἐζήτουν αὐτὸν… ἀποκτεῖναι, Vulgate 'quaerebant eum… interficere'); cf. Jo 5,18 'matá-lo'"
+  }
+ ],
+ "John 7:6": [
+  {
+   "from": "Ainda não chegou o meu tempo",
+   "to": "Jesus disse-lhes: \"Ainda não chegou o meu tempo",
+   "why": "reconstruction: reconstruction (all online copies share the OCR; no print available): speech tag lost (Greek λέγει οὖν αὐτοῖς ὁ Ἰησοῦς, Vulgate 'Dicit ergo eis Jesus'); 'Jesus disse-lhes:' is the translator's formula (11x in John); the closing quote is in 7,8"
+  }
+ ],
  "John 7:20": [
   {
    "from": "matar-me? \"O povo",
@@ -2873,6 +2901,13 @@
    "from": "eu sai de ti",
    "to": "eu saí de ti",
    "why": "accent: past tense 1st person (Vulgate: a te exivi)"
+  }
+ ],
+ "John 17:23": [
+  {
+   "from": "a sua seriedade seja perfeita",
+   "to": "a sua unidade seja perfeita",
+   "why": "reconstruction: reconstruction (all online copies share the OCR; no print available): Greek τετελειωμένοι εἰς ἕν, Vulgate 'consummati in unum', Douay 'made perfect in one', Ave-Maria 'perfeitos na unidade'; 'unidade' is the translator's word in Ef 4,3.13"
   }
  ],
  "John 18:4": [
@@ -4240,6 +4275,13 @@
    "why": "punctuation: sentence ends; 7:16 starts a new sentence 'Eu me alegro'"
   }
  ],
+ "2Cor 8:8": [
+  {
+   "from": "como quem manda, experimentar",
+   "to": "como quem manda, mas para experimentar",
+   "why": "reconstruction: reconstruction (all online copies share the OCR; no print available): contrast lost (Greek ἀλλὰ… δοκιμάζων, Vulgate 'sed… comprobans', Douay 'but… approving')"
+  }
+ ],
  "2Cor 8:13": [
   {
    "from": "alivio",
@@ -4355,6 +4397,13 @@
    "from": "sejam com",
    "to": "seja com",
    "why": "wrong-word: agrees with singular 'a graça'"
+  }
+ ],
+ "Eph 1:10": [
+  {
+   "from": "para o realizar sua plenitude",
+   "to": "para o realizar na plenitude",
+   "why": "reconstruction: reconstruction (all online copies share the OCR; no print available): 'sua' misread for 'na' (Greek εἰς οἰκονομίαν τοῦ πληρώματος, Vulgate 'in dispensatione plenitudinis'); Ave-Maria 'para realizá-lo na plenitude dos tempos'"
   }
  ],
  "Eph 1:12": [
@@ -5391,6 +5440,13 @@
    "from": "Aquele que vencei",
    "to": "Aquele que vencer",
    "why": "ocr: vencer (cf. 3:5, 3:21)"
+  }
+ ],
+ "Rev 3:9": [
+  {
+   "from": "e não o são mentirosos! eis que farei",
+   "to": "e não o são, mas são mentirosos; eis que farei",
+   "why": "reconstruction: reconstruction (all online copies share the OCR; no print available): 'but' clause lost (Greek καὶ οὐκ εἰσὶν ἀλλὰ ψεύδονται, Vulgate 'et non sunt, sed mentiuntur', Ave-Maria 'e não o são, mas mentem'); the surviving 'mentirosos' kept"
   }
  ],
  "Rev 3:17": [
