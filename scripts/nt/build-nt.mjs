@@ -7,6 +7,12 @@
 //   node scripts/nt/verify-pt.mjs       # alignment + oracle + shape
 //   node scripts/nt/build-nt.mjs        # -> src/data/nt/books/*.json + chunks.ts
 //
+// The Portuguese passes through lib/pt-corrections.mjs on the way: the harvested
+// text is an OCR digitization with OCR errors and European spellings, corrected by
+// whole-word rules plus verse-specific fixes (lib/pt-verse-fixes.json). Those came
+// from a 2026-11-20 proofreading pass that used bibliacatolica.com.br as a second
+// witness (`node scripts/nt/fetch-oracle.mjs` caches its 260 chapters).
+//
 // One chunk per book (not per season like the liturgy store) because that is the
 // unit the reader actually loads: you stay inside one book for weeks of 5-minute
 // readings, and the largest book is ~200 KB.
@@ -20,6 +26,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { NT_BOOKS } from '../../src/data/nt/books.ts'
 import { loadLatinNt } from './lib/latin.mjs'
+import { correctVerse, assertAllVerseFixesApplied } from './lib/pt-corrections.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const PT_DIR = path.join(__dirname, '.cache', 'pt')
@@ -43,7 +50,9 @@ async function main() {
   let totalBytes = 0
   let totalVerses = 0
   let missingLatin = 0
+  let changedVerses = 0
   const rows = []
+  const fixStats = { verse: new Set(), words: new Map() }
 
   for (const book of NT_BOOKS) {
     let pt
@@ -69,7 +78,9 @@ async function main() {
         if (!la) missingLatin++
         // `la` omitted rather than empty-stringed: the reader tests presence to
         // decide whether a verse can be shown in Latin at all.
-        return la ? { v, pt: ptChapter[v], la } : { v, pt: ptChapter[v] }
+        const ptText = correctVerse(book.key, c, v, ptChapter[v], fixStats)
+        if (ptText !== ptChapter[v]) changedVerses++
+        return la ? { v, pt: ptText, la } : { v, pt: ptText }
       })
       bookVerses += verseNums.length
     }
@@ -81,6 +92,7 @@ async function main() {
     totalVerses += bookVerses
     rows.push({ key: book.key, name: book.name, chapters: book.chapters, verses: bookVerses, bytes: json.length })
   }
+  assertAllVerseFixesApplied(fixStats)
 
   const loaderEntries = NT_BOOKS.map((b) => `  '${b.key}': () => import('./books/${b.key}.json'),`).join('\n')
   await writeFile(
@@ -110,6 +122,11 @@ ${loaderEntries}
     missingLatin === 0
       ? '[build-nt] every verse has both Portuguese and Latin'
       : `[build-nt] ${missingLatin} verse(s) have no Latin (reader falls back to Portuguese)`
+  )
+  const wordTotal = [...fixStats.words.values()].reduce((a, b) => a + b, 0)
+  console.log(
+    `[build-nt] pt corrections: ${changedVerses} verses changed — ${fixStats.verse.size} verse fixes, ` +
+      `${wordTotal} word replacements (${fixStats.words.size} kinds)`
   )
   console.log(`[build-nt] wrote ${OUT_DIR}`)
   console.log(`[build-nt] wrote ${CHUNKS_PATH}`)

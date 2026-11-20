@@ -1,0 +1,5721 @@
+{
+ "Matt 1:3": [
+  {
+   "from": "gerou Arâo,",
+   "to": "gerou Arão,",
+   "why": "ocr: Arão spelled with ã in 1:4"
+  }
+ ],
+ "Matt 1:10": [
+  {
+   "from": "Ezequias gerou, Manassés",
+   "to": "Ezequias gerou Manassés",
+   "why": "punctuation: stray comma between verb and object"
+  }
+ ],
+ "Matt 1:11": [
+  {
+   "from": "seus Irmãos",
+   "to": "seus irmãos",
+   "why": "typo: spurious capital"
+  }
+ ],
+ "Matt 1:12": [
+  {
+   "from": "Salatíel,",
+   "to": "Salatiel,",
+   "why": "name: Salatiel unaccented in the same verse"
+  }
+ ],
+ "Matt 1:15": [
+  {
+   "from": "Jacòb",
+   "to": "Jacob",
+   "why": "typo: stray grave accent; Jacob elsewhere"
+  }
+ ],
+ "Matt 1:20": [
+  {
+   "from": "lhe disse; José",
+   "to": "lhe disse: José",
+   "why": "punctuation: colon introducing speech"
+  }
+ ],
+ "Matt 1:24": [
+  {
+   "from": "sua esposa,",
+   "to": "sua esposa.",
+   "why": "punctuation: sentence ends; 1:25 starts with capital E (Vulgate also ends here)"
+  }
+ ],
+ "Matt 1:25": [
+  {
+   "from": "pos-lhe",
+   "to": "pôs-lhe",
+   "why": "accent: pôs (verb pôr)"
+  }
+ ],
+ "Matt 2:1": [
+  {
+   "from": "Judá, tempo do rei",
+   "to": "Judá, no tempo do rei",
+   "why": "typo: missing 'no' (in diebus Herodis)"
+  }
+ ],
+ "Matt 2:2": [
+  {
+   "from": "dizendo; \"",
+   "to": "dizendo: \"",
+   "why": "punctuation: colon introducing speech"
+  }
+ ],
+ "Matt 2:8": [
+  {
+   "from": "disse; \"",
+   "to": "disse: \"",
+   "why": "punctuation: colon introducing speech"
+  }
+ ],
+ "Matt 2:13": [
+  {
+   "from": "foge para Egito",
+   "to": "foge para o Egito",
+   "why": "typo: missing article; 'para o Egito' in 2:14"
+  }
+ ],
+ "Matt 2:17": [
+  {
+   "from": "(Jr 31, 15);",
+   "to": "(Jr 31, 15):",
+   "why": "punctuation: colon introducing the quotation in 2:18"
+  }
+ ],
+ "Matt 2:23": [
+  {
+   "from": "Nasareno",
+   "to": "Nazareno",
+   "why": "ocr: s/z misreading"
+  }
+ ],
+ "Matt 3:7": [
+  {
+   "from": "viboras",
+   "to": "víboras",
+   "why": "accent: missing accent"
+  }
+ ],
+ "Matt 4:6": [
+  {
+   "from": "Filho de Deus. lança-te",
+   "to": "Filho de Deus, lança-te",
+   "why": "punctuation: period inside a running sentence"
+  }
+ ],
+ "Matt 4:14": [
+  {
+   "from": "Is. 9, 1);",
+   "to": "Is. 9, 1):",
+   "why": "punctuation: colon introducing the quotation in 4:15"
+  }
+ ],
+ "Matt 4:15": [
+  {
+   "from": "pais além",
+   "to": "país além",
+   "why": "accent: país (region), not pais"
+  }
+ ],
+ "Matt 4:18": [
+  {
+   "from": "Pedro, e, André",
+   "to": "Pedro, e André",
+   "why": "punctuation: stray comma after 'e'"
+  }
+ ],
+ "Matt 4:21": [
+  {
+   "from": "consertando se suas redes",
+   "to": "consertando as suas redes",
+   "why": "ocr: 'se' misread for 'as'"
+  }
+ ],
+ "Matt 5:4": [
+  {
+   "from": "possuirão a Terra",
+   "to": "possuirão a terra",
+   "why": "typo: spurious capital; 'terra' lowercase throughout"
+  }
+ ],
+ "Matt 5:23": [
+  {
+   "from": "contra ti.",
+   "to": "contra ti,",
+   "why": "punctuation: sentence continues in 5:24 (lowercase 'deixa')"
+  }
+ ],
+ "Matt 5:29": [
+  {
+   "from": "Por isso, o teu olho",
+   "to": "Por isso, se o teu olho",
+   "why": "typo: missing 'se' (Quod si); parallel to 5:30"
+  }
+ ],
+ "Matt 5:37": [
+  {
+   "from": "Sim. sim; não não.",
+   "to": "Sim, sim; não, não.",
+   "why": "punctuation: period for comma; missing comma in 'não, não'"
+  }
+ ],
+ "Matt 5:46": [
+  {
+   "from": "vos amara,",
+   "to": "vos amam,",
+   "why": "ocr: rn/m misreading: amam"
+  }
+ ],
+ "Matt 6:18": [
+  {
+   "from": "secreto. e teu Pai",
+   "to": "secreto, e teu Pai",
+   "why": "punctuation: period before lowercase continuation"
+  }
+ ],
+ "Matt 7:8": [
+  {
+   "from": "recebe o que busca",
+   "to": "recebe; o que busca",
+   "why": "punctuation: missing break between 'recebe' and 'o que busca, encontra'"
+  }
+ ],
+ "Matt 8:8": [
+  {
+   "from": "o centurião, respondeu",
+   "to": "o centurião respondeu",
+   "why": "punctuation: comma between subject and verb"
+  }
+ ],
+ "Matt 8:20": [
+  {
+   "from": "disse-lhe: As raposas",
+   "to": "disse-lhe: \"As raposas",
+   "why": "punctuation: opening quote missing; closing quote at end of verse"
+  }
+ ],
+ "Matt 8:24": [
+  {
+   "from": "a barca, Ele,",
+   "to": "a barca. Ele,",
+   "why": "punctuation: new sentence starts with capital Ele"
+  }
+ ],
+ "Matt 8:29": [
+  {
+   "from": "conosco. Filho de Deus?",
+   "to": "conosco, Filho de Deus?",
+   "why": "punctuation: period before vocative"
+  }
+ ],
+ "Matt 8:32": [
+  {
+   "from": "\"Ide\" Eles",
+   "to": "\"Ide.\" Eles",
+   "why": "punctuation: missing period inside quote"
+  }
+ ],
+ "Matt 9:6": [
+  {
+   "from": "para que saibas",
+   "to": "para que saibais",
+   "why": "typo: plural addressed to the scribes (ut sciatis)"
+  },
+  {
+   "from": "vai para tua casa.",
+   "to": "vai para tua casa.\"",
+   "why": "punctuation: speech ends here; closing quote misplaced into 9:7"
+  }
+ ],
+ "Matt 9:7": [
+  {
+   "from": "sua casa.\"",
+   "to": "sua casa.",
+   "why": "punctuation: 9:7 is narrative; closing quote belongs to 9:6"
+  }
+ ],
+ "Matt 9:10": [
+  {
+   "from": "Acontecem que",
+   "to": "Aconteceu que",
+   "why": "ocr: garbled verb"
+  }
+ ],
+ "Matt 9:14": [
+  {
+   "from": "nós os fariseus",
+   "to": "nós e os fariseus",
+   "why": "typo: missing 'e' (nos, et pharisaei)"
+  }
+ ],
+ "Matt 9:22": [
+  {
+   "from": "disse: 'Tem",
+   "to": "disse: \"Tem",
+   "why": "punctuation: single quote for double opening quote"
+  }
+ ],
+ "Matt 9:27": [
+  {
+   "from": "seguiram-no, dois cegos",
+   "to": "seguiram-no dois cegos",
+   "why": "punctuation: stray comma between verb and subject"
+  },
+  {
+   "from": "de nós. Filho de David",
+   "to": "de nós, Filho de David",
+   "why": "punctuation: period before vocative"
+  }
+ ],
+ "Matt 9:33": [
+  {
+   "from": "em Israel\"",
+   "to": "em Israel.\"",
+   "why": "punctuation: missing final period"
+  }
+ ],
+ "Matt 9:37": [
+  {
+   "from": "\" A messe",
+   "to": "\"A messe",
+   "why": "punctuation: space after opening quote"
+  }
+ ],
+ "Matt 10:4": [
+  {
+   "from": "Cannaneu",
+   "to": "Cananeu",
+   "why": "name: spelled Cananeu in Mark 3:18"
+  }
+ ],
+ "Matt 10:11": [
+  {
+   "from": "ficai ai até",
+   "to": "ficai aí até",
+   "why": "accent: aí (there)"
+  }
+ ],
+ "Matt 10:24": [
+  {
+   "from": "Não é O discípulo",
+   "to": "Não é o discípulo",
+   "why": "typo: spurious capital"
+  }
+ ],
+ "Matt 10:41": [
+  {
+   "from": "um profeta; na qualidade",
+   "to": "um profeta na qualidade",
+   "why": "punctuation: stray semicolon; parallel 'um justo na qualidade de justo'"
+  }
+ ],
+ "Matt 11:21": [
+  {
+   "from": "cilísio",
+   "to": "cilício",
+   "why": "ocr: s/c misreading"
+  },
+  {
+   "from": "em cinza,",
+   "to": "em cinza.",
+   "why": "punctuation: sentence ends; 11:22 starts 'Por isso'"
+  }
+ ],
+ "Matt 12:4": [
+  {
+   "from": "era licito",
+   "to": "era lícito",
+   "why": "accent: missing accent"
+  }
+ ],
+ "Matt 12:35": [
+  {
+   "from": "tirá más coisas",
+   "to": "tira más coisas",
+   "why": "accent: spurious accent on 'tira'"
+  }
+ ],
+ "Matt 12:37": [
+  {
+   "from": "será justificado",
+   "to": "serás justificado",
+   "why": "typo: second person with 'tuas palavras' (justificaberis)"
+  }
+ ],
+ "Matt 12:38": [
+  {
+   "from": "prodígio teu.",
+   "to": "prodígio teu.\"",
+   "why": "punctuation: closing quote missing; 12:39 opens a new quote"
+  }
+ ],
+ "Matt 13:15": [
+  {
+   "from": "os- seus ouvidos",
+   "to": "os seus ouvidos",
+   "why": "typo: stray hyphen"
+  }
+ ],
+ "Matt 13:24": [
+  {
+   "from": "Propôs-lhe outra",
+   "to": "Propôs-lhes outra",
+   "why": "typo: plural (illis), as in 13:31"
+  },
+  {
+   "from": "\" O reino",
+   "to": "\"O reino",
+   "why": "punctuation: space after opening quote"
+  }
+ ],
+ "Matt 13:29": [
+  {
+   "from": "Não. para que",
+   "to": "Não, para que",
+   "why": "punctuation: period before lowercase continuation"
+  }
+ ],
+ "Matt 13:31": [
+  {
+   "from": "dizendo: O reino",
+   "to": "dizendo: \"O reino",
+   "why": "punctuation: opening quote missing; closing quote at end of 13:32"
+  }
+ ],
+ "Matt 13:32": [
+  {
+   "from": "pequena,de",
+   "to": "pequena de",
+   "why": "punctuation: stray comma, missing space"
+  },
+  {
+   "from": "tornar- se",
+   "to": "tornar-se",
+   "why": "typo: space inside hyphenated form"
+  }
+ ],
+ "Matt 13:33": [
+  {
+   "from": "parábola; \"",
+   "to": "parábola: \"",
+   "why": "punctuation: colon introducing speech"
+  }
+ ],
+ "Matt 13:35": [
+  {
+   "from": "que diz; Abrirei",
+   "to": "que diz: Abrirei",
+   "why": "punctuation: colon introducing quotation"
+  },
+  {
+   "from": "(Sl 77, 2).\"",
+   "to": "(Sl 77, 2).",
+   "why": "punctuation: stray closing quote; Jesus' speech closed in 13:33, 13:34-35 are narrative"
+  }
+ ],
+ "Matt 13:52": [
+  {
+   "from": "disse-lhes; \"",
+   "to": "disse-lhes: \"",
+   "why": "punctuation: colon introducing speech"
+  }
+ ],
+ "Matt 13:54": [
+  {
+   "from": "diziam; \"",
+   "to": "diziam: \"",
+   "why": "punctuation: colon introducing speech"
+  }
+ ],
+ "Matt 13:56": [
+  {
+   "from": "Donde vem, pois,",
+   "to": "Donde vêm, pois,",
+   "why": "accent: plural subject 'todas estas coisas'"
+  },
+  {
+   "from": "estas coisas?",
+   "to": "estas coisas?\"",
+   "why": "punctuation: townspeople's speech ends here; quote misplaced into 13:57"
+  }
+ ],
+ "Matt 13:57": [
+  {
+   "from": "a seu respeito.\"",
+   "to": "a seu respeito.",
+   "why": "punctuation: narrative sentence; closing quote belongs to 13:56"
+  }
+ ],
+ "Matt 13:58": [
+  {
+   "from": "incredulidade deles,",
+   "to": "incredulidade deles.",
+   "why": "bc: end of chapter; BC has the period"
+  }
+ ],
+ "Matt 14:4": [
+  {
+   "from": "é licito",
+   "to": "é lícito",
+   "why": "accent: missing accent"
+  }
+ ],
+ "Matt 14:12": [
+  {
+   "from": "a notícia, a Jesus",
+   "to": "a notícia a Jesus",
+   "why": "punctuation: stray comma"
+  }
+ ],
+ "Matt 14:17": [
+  {
+   "from": "dois peixes.",
+   "to": "dois peixes.\"",
+   "why": "punctuation: closing quote missing; 14:18 opens a new quote"
+  }
+ ],
+ "Matt 14:28": [
+  {
+   "from": "disse; \"",
+   "to": "disse: \"",
+   "why": "punctuation: colon introducing speech"
+  }
+ ],
+ "Matt 14:29": [
+  {
+   "from": "\"Vem\" Descendo",
+   "to": "\"Vem.\" Descendo",
+   "why": "punctuation: missing period inside quote"
+  }
+ ],
+ "Matt 14:30": [
+  {
+   "from": "Senhor salva-me",
+   "to": "Senhor, salva-me",
+   "why": "punctuation: missing vocative comma"
+  }
+ ],
+ "Matt 14:31": [
+  {
+   "from": "lhe disse; \"",
+   "to": "lhe disse: \"",
+   "why": "punctuation: colon introducing speech"
+  }
+ ],
+ "Matt 15:23": [
+  {
+   "from": "Despede-;",
+   "to": "Despede-a;",
+   "why": "ocr: dropped pronoun (Dimitte eam)"
+  }
+ ],
+ "Matt 15:27": [
+  {
+   "from": "Assim é. Senhor,",
+   "to": "Assim é, Senhor,",
+   "why": "punctuation: period before vocative"
+  }
+ ],
+ "Matt 15:32": [
+  {
+   "from": "há jã três",
+   "to": "há já três",
+   "why": "ocr: ã for á"
+  }
+ ],
+ "Matt 16:7": [
+  {
+   "from": "\"'É que",
+   "to": "\"É que",
+   "why": "punctuation: stray apostrophe"
+  }
+ ],
+ "Matt 16:11": [
+  {
+   "from": "dos saduceus?",
+   "to": "dos saduceus?\"",
+   "why": "punctuation: speech ends here; quote misplaced into 16:12"
+  }
+ ],
+ "Matt 16:12": [
+  {
+   "from": "dos saduceus.\"",
+   "to": "dos saduceus.",
+   "why": "punctuation: 16:12 is narrative; closing quote belongs to 16:11"
+  }
+ ],
+ "Matt 16:22": [
+  {
+   "from": "permita. Senhor;",
+   "to": "permita, Senhor;",
+   "why": "punctuation: period before vocative"
+  }
+ ],
+ "Matt 16:23": [
+  {
+   "from": "de mim. Satanás!",
+   "to": "de mim, Satanás!",
+   "why": "punctuation: period before vocative"
+  }
+ ],
+ "Matt 17:5": [
+  {
+   "from": "dizia: 'Este",
+   "to": "dizia: \"Este",
+   "why": "punctuation: single quote for double opening quote"
+  }
+ ],
+ "Matt 17:7": [
+  {
+   "from": "Jesus, aproximou-se",
+   "to": "Jesus aproximou-se",
+   "why": "punctuation: comma between subject and verb"
+  }
+ ],
+ "Matt 17:12": [
+  {
+   "from": "mãos. \"",
+   "to": "mãos.\"",
+   "why": "punctuation: space before closing quote"
+  }
+ ],
+ "Matt 17:18": [
+  {
+   "from": "lançá-lo fora?",
+   "to": "lançá-lo fora?\"",
+   "why": "punctuation: closing quote missing; Jesus answers in 17:19"
+  }
+ ],
+ "Matt 17:19": [
+  {
+   "from": "disse-lhes: Por causa",
+   "to": "disse-lhes: \"Por causa",
+   "why": "punctuation: opening quote missing; speech closes in 17:20"
+  }
+ ],
+ "Matt 17:20": [
+  {
+   "from": "o jejum,\"",
+   "to": "o jejum.\"",
+   "why": "punctuation: speech ends: period, not comma"
+  }
+ ],
+ "Matt 17:26": [
+  {
+   "from": "por mim e por ti.",
+   "to": "por mim e por ti.\"",
+   "why": "punctuation: closing quote missing for the speech opened in 17:25"
+  }
+ ],
+ "Matt 18:1": [
+  {
+   "from": "reino dos céus?",
+   "to": "reino dos céus?\"",
+   "why": "punctuation: closing quote missing; 18:3 opens Jesus' reply"
+  }
+ ],
+ "Matt 18:3": [
+  {
+   "from": "entrareis\" no reino",
+   "to": "entrareis no reino",
+   "why": "punctuation: stray quote inside the sentence; speech runs to 18:20"
+  }
+ ],
+ "Matt 18:11": [
+  {
+   "from": "o filho do homem",
+   "to": "o Filho do homem",
+   "why": "typo: capitalised everywhere else"
+  }
+ ],
+ "Matt 18:20": [
+  {
+   "from": "no nome deles",
+   "to": "no meio deles",
+   "why": "wrong-word: in medio eorum"
+  }
+ ],
+ "Matt 18:26": [
+  {
+   "from": "lhe suplicou. Tem",
+   "to": "lhe suplicou: Tem",
+   "why": "punctuation: colon introducing speech, as in 18:29"
+  }
+ ],
+ "Matt 19:25": [
+  {
+   "from": "salvar-se?",
+   "to": "salvar-se?\"",
+   "why": "punctuation: closing quote missing; 19:26 opens Jesus' reply"
+  }
+ ],
+ "Matt 20:4": [
+  {
+   "from": "Ide vós também, para",
+   "to": "Ide vós também para",
+   "why": "punctuation: stray comma; same phrase in 20:7 has none"
+  }
+ ],
+ "Matt 20:23": [
+  {
+   "from": "habeis de beber",
+   "to": "haveis de beber",
+   "why": "ocr: b/v"
+  }
+ ],
+ "Matt 20:30": [
+  {
+   "from": "tem piedade de nós!",
+   "to": "tem piedade de nós!\"",
+   "why": "punctuation: closing quote missing; 20:31 opens a new quote"
+  }
+ ],
+ "Matt 21:9": [
+  {
+   "from": "dos céus! \"",
+   "to": "dos céus!\"",
+   "why": "punctuation: space before closing quote"
+  }
+ ],
+ "Matt 21:12": [
+  {
+   "from": "vendiam pombas.",
+   "to": "vendiam pombas,",
+   "why": "punctuation: sentence continues in 21:13 (lowercase 'e disse-lhes')"
+  }
+ ],
+ "Matt 21:13": [
+  {
+   "from": "vós fizeste dela",
+   "to": "vós fizestes dela",
+   "why": "typo: second person plural with 'vós'"
+  }
+ ],
+ "Matt 21:15": [
+  {
+   "from": "indignaram-se.",
+   "to": "indignaram-se,",
+   "why": "punctuation: sentence continues in 21:16 (lowercase 'e disseram-lhe')"
+  }
+ ],
+ "Matt 21:21": [
+  {
+   "from": "assim se fará",
+   "to": "assim se fará.",
+   "why": "punctuation: missing final period; 21:22 starts a new sentence"
+  }
+ ],
+ "Matt 21:23": [
+  {
+   "from": "tal direito? \"",
+   "to": "tal direito?\"",
+   "why": "punctuation: space before closing quote"
+  }
+ ],
+ "Matt 21:30": [
+  {
+   "from": "E, ele, respondeu",
+   "to": "E ele respondeu",
+   "why": "punctuation: stray commas around the subject"
+  }
+ ],
+ "Matt 21:33": [
+  {
+   "from": "(Is 6, 1-2)",
+   "to": "(Is 5, 1-2)",
+   "why": "ref: reference: the vineyard song is Is 5"
+  }
+ ],
+ "Matt 22:4": [
+  {
+   "from": "dizendo; Dizei",
+   "to": "dizendo: Dizei",
+   "why": "punctuation: colon introducing speech"
+  }
+ ],
+ "Matt 22:5": [
+  {
+   "from": "desprezaram convite",
+   "to": "desprezaram o convite",
+   "why": "typo: missing article"
+  }
+ ],
+ "Matt 22:17": [
+  {
+   "from": "ou não? \"",
+   "to": "ou não?\"",
+   "why": "punctuation: space before closing quote"
+  }
+ ],
+ "Matt 22:19": [
+  {
+   "from": "\"Mostrai-me",
+   "to": "Mostrai-me",
+   "why": "punctuation: duplicate opening quote; speech opened in 22:18 continues"
+  }
+ ],
+ "Matt 22:29": [
+  {
+   "from": "Jesus, respondeu-lhes",
+   "to": "Jesus respondeu-lhes",
+   "why": "punctuation: comma between subject and verb"
+  }
+ ],
+ "Matt 22:32": [
+  {
+   "from": "Jacob, (Ex",
+   "to": "Jacob (Ex",
+   "why": "punctuation: stray comma before reference"
+  }
+ ],
+ "Matt 22:37": [
+  {
+   "from": "espirito",
+   "to": "espírito",
+   "why": "accent: missing accent"
+  }
+ ],
+ "Matt 22:45": [
+  {
+   "from": "seu filho? \"",
+   "to": "seu filho?\"",
+   "why": "punctuation: space before closing quote"
+  }
+ ],
+ "Matt 23:39": [
+  {
+   "from": "tomareis a ver",
+   "to": "tornareis a ver",
+   "why": "ocr: rn/m misreading"
+  }
+ ],
+ "Matt 24:3": [
+  {
+   "from": "aproximaram- se",
+   "to": "aproximaram-se",
+   "why": "typo: space inside hyphenated form"
+  }
+ ],
+ "Matt 24:13": [
+  {
+   "from": "o que se perseverar",
+   "to": "o que perseverar",
+   "why": "typo: spurious 'se' (qui perseveraverit); cf. 10:22"
+  }
+ ],
+ "Matt 24:39": [
+  {
+   "from": "e se levou a todos",
+   "to": "e os levou a todos",
+   "why": "wrong-word: tulit omnes: 'os levou', not 'se levou'"
+  }
+ ],
+ "Matt 25:8": [
+  {
+   "from": "lámpadas",
+   "to": "lâmpadas",
+   "why": "accent: wrong accent"
+  }
+ ],
+ "Matt 25:29": [
+  {
+   "from": "der-se-lhe-á",
+   "to": "dar-se-lhe-á",
+   "why": "typo: e/a: dar-se-lhe-á"
+  }
+ ],
+ "Matt 25:36": [
+  {
+   "from": "visitar-me,",
+   "to": "visitar-me.",
+   "why": "punctuation: sentence ends; 25:37 starts 'Então'"
+  }
+ ],
+ "Matt 25:37": [
+  {
+   "from": "os justos, lhe",
+   "to": "os justos lhe",
+   "why": "punctuation: comma between subject and verb"
+  }
+ ],
+ "Matt 25:39": [
+  {
+   "from": "quando té vimos",
+   "to": "quando te vimos",
+   "why": "accent: spurious accent"
+  }
+ ],
+ "Matt 25:44": [
+  {
+   "from": "eles, também",
+   "to": "eles também",
+   "why": "punctuation: comma between subject and verb"
+  }
+ ],
+ "Matt 26:13": [
+  {
+   "from": "mundo—,",
+   "to": "mundo —,",
+   "why": "punctuation: missing space before dash (dash pair spaced)"
+  }
+ ],
+ "Matt 26:23": [
+  {
+   "from": "respondeu; \"",
+   "to": "respondeu: \"",
+   "why": "punctuation: colon introducing speech"
+  }
+ ],
+ "Matt 26:25": [
+  {
+   "from": "respondeu-lhe; \"",
+   "to": "respondeu-lhe: \"",
+   "why": "punctuation: colon introducing speech"
+  }
+ ],
+ "Matt 26:32": [
+  {
+   "from": "Galielia",
+   "to": "Galileia",
+   "why": "typo: transposed letters"
+  }
+ ],
+ "Matt 26:48": [
+  {
+   "from": "prendrei-o",
+   "to": "prendei-o",
+   "why": "typo: extra r"
+  }
+ ],
+ "Matt 26:49": [
+  {
+   "from": "Salve Mestre",
+   "to": "Salve, Mestre",
+   "why": "punctuation: missing vocative comma (cf. 'Salve, ó rei' 27:29)"
+  }
+ ],
+ "Matt 26:65": [
+  {
+   "from": "Eis acabais",
+   "to": "Eis que acabais",
+   "why": "manual: dropped 'que' (the text writes 'eis que' 135x)"
+  }
+ ],
+ "Matt 27:6": [
+  {
+   "from": "é licito",
+   "to": "é lícito",
+   "why": "accent: missing accent"
+  }
+ ],
+ "Matt 27:21": [
+  {
+   "from": "disse-lhes: Qual",
+   "to": "disse-lhes: \"Qual",
+   "why": "punctuation: opening quote missing; closing quote in same verse"
+  }
+ ],
+ "Matt 27:23": [
+  {
+   "from": "disse-lhes; \"",
+   "to": "disse-lhes: \"",
+   "why": "punctuation: colon introducing speech"
+  }
+ ],
+ "Matt 27:51": [
+  {
+   "from": "duas parles",
+   "to": "duas partes",
+   "why": "ocr: l/t misreading"
+  }
+ ],
+ "Matt 27:53": [
+  {
+   "from": "foram a cidade",
+   "to": "foram à cidade",
+   "why": "accent: crase: foram à cidade"
+  }
+ ],
+ "Matt 27:61": [
+  {
+   "from": "supulcro",
+   "to": "sepulcro",
+   "why": "typo: u/e"
+  }
+ ],
+ "Matt 27:65": [
+  {
+   "from": "como entenderdes.",
+   "to": "como entenderdes.\"",
+   "why": "punctuation: closing quote missing; 27:66 is narrative"
+  }
+ ],
+ "Matt 28:9": [
+  {
+   "from": "disse: 'Eu",
+   "to": "disse: \"Eu",
+   "why": "punctuation: single quote for double opening quote"
+  }
+ ],
+ "Matt 28:14": [
+  {
+   "from": "seguros. \"",
+   "to": "seguros.\"",
+   "why": "punctuation: space before closing quote"
+  }
+ ],
+ "Matt 28:20": [
+  {
+   "from": "fim do mundo.",
+   "to": "fim do mundo.\"",
+   "why": "punctuation: closing quote missing for the speech opened in 28:18 (end of book)"
+  }
+ ],
+ "Mark 1:7": [
+  {
+   "from": "correia doa sapatos",
+   "to": "correia dos sapatos",
+   "why": "typo: doa -> dos"
+  }
+ ],
+ "Mark 1:15": [
+  {
+   "from": "crede no Evangelho.",
+   "to": "crede no Evangelho.\"",
+   "why": "punctuation: closing quote missing; speech opened in same verse, 1:16 is narrative"
+  }
+ ],
+ "Mark 1:44": [
+  {
+   "from": "de testemunho.",
+   "to": "de testemunho.\"",
+   "why": "punctuation: closing quote missing; speech opened in same verse, 1:45 is narrative"
+  }
+ ],
+ "Mark 2:14": [
+  {
+   "from": "disse-lhe; \"Segue-me",
+   "to": "disse-lhe: \"Segue-me",
+   "why": "punctuation: semicolon for colon before speech"
+  }
+ ],
+ "Mark 3:16": [
+  {
+   "from": "a quem pós o nome",
+   "to": "a quem pôs o nome",
+   "why": "accent: pós -> pôs (verb), as in 3:17"
+  },
+  {
+   "from": "de Pedro.",
+   "to": "de Pedro,",
+   "why": "punctuation: list of the twelve continues in 3:17-19"
+  }
+ ],
+ "Mark 3:25": [
+  {
+   "from": "de pé,",
+   "to": "de pé.",
+   "why": "punctuation: sentence ends; 3:26 starts a new one ('Se pois')"
+  }
+ ],
+ "Mark 3:33": [
+  {
+   "from": "Ele, respondeu-lhes",
+   "to": "Ele respondeu-lhes",
+   "why": "punctuation: stray comma between subject and verb"
+  }
+ ],
+ "Mark 4:3": [
+  {
+   "from": "Eis saiu",
+   "to": "Eis que saiu",
+   "why": "manual: dropped 'que' (the text writes 'eis que' 135x)"
+  }
+ ],
+ "Mark 4:9": [
+  {
+   "from": "acrescentava; \"Quem",
+   "to": "acrescentava: \"Quem",
+   "why": "punctuation: semicolon for colon before speech"
+  }
+ ],
+ "Mark 4:11": [
+  {
+   "from": "Disse-lhes; \"A vós",
+   "to": "Disse-lhes: \"A vós",
+   "why": "punctuation: semicolon for colon before speech"
+  }
+ ],
+ "Mark 4:20": [
+  {
+   "from": "cem por um.",
+   "to": "cem por um.\"",
+   "why": "punctuation: speech from 4:13 ends; 4:21 is narrative opening a new quote"
+  }
+ ],
+ "Mark 4:23": [
+  {
+   "from": "ouvir, ouça.",
+   "to": "ouvir, ouça.\"",
+   "why": "punctuation: speech from 4:21 ends; 4:24 is narrative opening a new quote"
+  }
+ ],
+ "Mark 4:38": [
+  {
+   "from": "que pereçamos?",
+   "to": "que pereçamos?\"",
+   "why": "punctuation: closing quote missing; opened in same verse, 4:39 is narrative"
+  }
+ ],
+ "Mark 5:10": [
+  {
+   "from": "daquele pais.",
+   "to": "daquele país.",
+   "why": "accent: pais -> país (region)"
+  }
+ ],
+ "Mark 5:13": [
+  {
+   "from": "despinhadeiro",
+   "to": "despenhadeiro",
+   "why": "typo: despinhadeiro -> despenhadeiro (as Luke 8:33)"
+  }
+ ],
+ "Mark 5:14": [
+  {
+   "from": "a noticia",
+   "to": "a notícia",
+   "why": "accent: noticia -> notícia (noun)"
+  }
+ ],
+ "Mark 5:20": [
+  {
+   "from": "lhe linha feito",
+   "to": "lhe tinha feito",
+   "why": "ocr: linha -> tinha"
+  }
+ ],
+ "Mark 5:39": [
+  {
+   "from": "Por ­que",
+   "to": "Porque",
+   "why": "typo: stray space + soft hyphen splitting 'Porque'"
+  }
+ ],
+ "Mark 6:10": [
+  {
+   "from": "dizía-lhes",
+   "to": "dizia-lhes",
+   "why": "accent: spurious accent"
+  },
+  {
+   "from": "\"E m qualquer",
+   "to": "\"Em qualquer",
+   "why": "typo: split word 'Em'"
+  }
+ ],
+ "Mark 6:17": [
+  {
+   "from": "(ilicitamente),",
+   "to": "(ilicitamente).",
+   "why": "punctuation: sentence ends (Vg 'quia duxerat eam.'); 6:18 starts 'Porque João dizia'"
+  }
+ ],
+ "Mark 6:24": [
+  {
+   "from": "sua mãe\" \"Que",
+   "to": "sua mãe: \"Que",
+   "why": "punctuation: quote mark for colon before speech"
+  }
+ ],
+ "Mark 6:45": [
+  {
+   "from": "o povo,",
+   "to": "o povo.",
+   "why": "punctuation: sentence ends; 6:46 starts 'Depois'"
+  }
+ ],
+ "Mark 7:5": [
+  {
+   "from": "escrivas",
+   "to": "escribas",
+   "why": "ocr: b/v: escribas"
+  }
+ ],
+ "Mark 7:6": [
+  {
+   "from": "longe de mim",
+   "to": "longe de mim.",
+   "why": "punctuation: verse ends a sentence; 7:7 starts 'É vão'"
+  }
+ ],
+ "Mark 7:11": [
+  {
+   "from": "dizeis; Se alguém",
+   "to": "dizeis: Se alguém",
+   "why": "punctuation: semicolon for colon before quoted words"
+  }
+ ],
+ "Mark 7:25": [
+  {
+   "from": "do espirito imundo",
+   "to": "do espírito imundo",
+   "why": "accent: espirito -> espírito"
+  }
+ ],
+ "Mark 7:30": [
+  {
+   "from": "demônio saindo dela",
+   "to": "demônio saído dela",
+   "why": "typo: saindo -> saído (Vg 'exiisse')"
+  }
+ ],
+ "Mark 7:37": [
+  {
+   "from": "falar os mudos!",
+   "to": "falar os mudos!\"",
+   "why": "punctuation: closing quote missing; opened in same verse, 8:1 is narrative"
+  }
+ ],
+ "Mark 8:10": [
+  {
+   "from": "seus discipulos",
+   "to": "seus discípulos",
+   "why": "accent: discipulos -> discípulos"
+  }
+ ],
+ "Mark 8:17": [
+  {
+   "from": "refletiste nem",
+   "to": "refletistes nem",
+   "why": "typo: 2nd person plural, as 'entendestes'"
+  }
+ ],
+ "Mark 8:23": [
+  {
+   "from": "pós-lhe saliva",
+   "to": "pôs-lhe saliva",
+   "why": "accent: pós -> pôs (verb)"
+  }
+ ],
+ "Mark 8:24": [
+  {
+   "from": "árvores ­que",
+   "to": "árvores que",
+   "why": "typo: stray soft hyphen"
+  }
+ ],
+ "Mark 8:27": [
+  {
+   "from": "os seus discipulos pelas",
+   "to": "os seus discípulos pelas",
+   "why": "accent: discipulos -> discípulos"
+  }
+ ],
+ "Mark 8:29": [
+  {
+   "from": "que eu sou? Pedro",
+   "to": "que eu sou?\" Pedro",
+   "why": "punctuation: closing quote missing before narration 'Pedro respondeu'"
+  }
+ ],
+ "Mark 9:16": [
+  {
+   "from": "um espirito mudo",
+   "to": "um espírito mudo",
+   "why": "accent: espirito -> espírito"
+  }
+ ],
+ "Mark 9:23": [
+  {
+   "from": "exclamou; \"Eu",
+   "to": "exclamou: \"Eu",
+   "why": "punctuation: semicolon for colon before speech"
+  }
+ ],
+ "Mark 9:32": [
+  {
+   "from": "pelo caminho?",
+   "to": "pelo caminho?\"",
+   "why": "punctuation: closing quote missing; opened in same verse, 9:33 is narrative"
+  }
+ ],
+ "Mark 9:41": [
+  {
+   "from": "pequeninos que, creem",
+   "to": "pequeninos que creem",
+   "why": "punctuation: stray comma inside relative clause"
+  }
+ ],
+ "Mark 10:1": [
+  {
+   "from": "alem do Jordão",
+   "to": "além do Jordão",
+   "why": "accent: alem -> além"
+  },
+  {
+   "from": "seu costume,",
+   "to": "seu costume.",
+   "why": "punctuation: sentence ends; 10:2 starts 'Aproximando-se os fariseus'"
+  }
+ ],
+ "Mark 10:6": [
+  {
+   "from": "criação. Deus",
+   "to": "criação, Deus",
+   "why": "punctuation: period where the sentence continues"
+  }
+ ],
+ "Mark 10:15": [
+  {
+   "from": "digo: \"Todo",
+   "to": "digo: Todo",
+   "why": "punctuation: stray opening quote inside speech already opened in 10:14 and closed at end of 10:15"
+  }
+ ],
+ "Mark 10:18": [
+  {
+   "from": "Porque, me chamas",
+   "to": "Porque me chamas",
+   "why": "punctuation: stray comma"
+  }
+ ],
+ "Mark 10:34": [
+  {
+   "from": "ressuscitará.",
+   "to": "ressuscitará.\"",
+   "why": "punctuation: speech opened in 10:33 ends; 10:35 is narrative"
+  }
+ ],
+ "Mark 10:51": [
+  {
+   "from": "'Rabbanni",
+   "to": "\"Rabbouni",
+   "why": "name: single quote for double; garbled Rabbouni (spelling used in John 20:16; Vg 'Rabboni')"
+  }
+ ],
+ "Mark 11:11": [
+  {
+   "from": "e. tendo",
+   "to": "e, tendo",
+   "why": "punctuation: period for comma"
+  }
+ ],
+ "Mark 12:10": [
+  {
+   "from": "nunca leste",
+   "to": "nunca lestes",
+   "why": "typo: 2nd person plural with 'Vós'"
+  }
+ ],
+ "Mark 12:37": [
+  {
+   "from": "seu filho? A grande",
+   "to": "seu filho?\" A grande",
+   "why": "punctuation: speech opened in 12:35 ends before narration 'A grande multidão'"
+  }
+ ],
+ "Mark 13:6": [
+  {
+   "from": "dizendo; Sou eu",
+   "to": "dizendo: Sou eu",
+   "why": "punctuation: semicolon for colon before quoted words"
+  }
+ ],
+ "Mark 13:9": [
+  {
+   "from": "Hão de-vos entregar",
+   "to": "Hão de vos entregar",
+   "why": "punctuation: leftover hyphen from hão-de-vos"
+  }
+ ],
+ "Mark 13:34": [
+  {
+   "from": "autoridade, aos",
+   "to": "autoridade aos",
+   "why": "punctuation: stray comma between object and indirect object"
+  }
+ ],
+ "Mark 14:5": [
+  {
+   "from": "aos pobres. E irritavam",
+   "to": "aos pobres.\" E irritavam",
+   "why": "punctuation: speech opened in 14:4 ends before narration"
+  }
+ ],
+ "Mark 14:18": [
+  {
+   "from": "me há de entregar.",
+   "to": "me há de entregar.\"",
+   "why": "punctuation: closing quote missing; opened in same verse, 14:19 is narrative"
+  }
+ ],
+ "Mark 14:20": [
+  {
+   "from": "disse-lhes: É um",
+   "to": "disse-lhes: \"É um",
+   "why": "punctuation: opening quote missing; its closing quote ends 14:21"
+  }
+ ],
+ "Mark 14:26": [
+  {
+   "from": "das Oliveiras,",
+   "to": "das Oliveiras.",
+   "why": "punctuation: sentence ends; 14:27 starts 'Então'"
+  }
+ ],
+ "Mark 14:27": [
+  {
+   "from": "Jesus, disse-lhes",
+   "to": "Jesus disse-lhes",
+   "why": "punctuation: stray comma between subject and verb"
+  },
+  {
+   "from": "(Zc 3, 7)",
+   "to": "(Zc 13, 7)",
+   "why": "ref: reference: 'Percutiam pastorem' is Zc 13, 7"
+  }
+ ],
+ "Mark 14:31": [
+  {
+   "from": "ele, insistia",
+   "to": "ele insistia",
+   "why": "punctuation: stray comma between subject and verb"
+  }
+ ],
+ "Mark 14:38": [
+  {
+   "from": "O espirito",
+   "to": "O espírito",
+   "why": "accent: espirito -> espírito"
+  }
+ ],
+ "Mark 14:53": [
+  {
+   "from": "os escribas,",
+   "to": "os escribas.",
+   "why": "punctuation: sentence ends; 14:54 starts 'Pedro foi-o seguindo'"
+  }
+ ],
+ "Mark 14:55": [
+  {
+   "from": "o encontravam,",
+   "to": "o encontravam.",
+   "why": "punctuation: sentence ends (Vg 'nec inveniebant.'); 14:56 starts 'Porque'"
+  }
+ ],
+ "Mark 14:62": [
+  {
+   "from": "sentado á direita",
+   "to": "sentado à direita",
+   "why": "accent: á -> à (crase)"
+  }
+ ],
+ "Mark 15:11": [
+  {
+   "from": "sacerdotes, incitaram",
+   "to": "sacerdotes incitaram",
+   "why": "punctuation: stray comma between subject and verb"
+  }
+ ],
+ "Mark 15:21": [
+  {
+   "from": "Obrigarem",
+   "to": "Obrigaram",
+   "why": "typo: past tense: Obrigaram (Vg 'angariaverunt')"
+  },
+  {
+   "from": "que a a passar",
+   "to": "que ia a passar",
+   "why": "ocr: 'a a' -> 'ia a' (Vg 'praetereuntem')"
+  }
+ ],
+ "Mark 15:34": [
+  {
+   "from": "Deus meu. Deus meu,",
+   "to": "Deus meu, Deus meu,",
+   "why": "punctuation: period for comma inside the cry"
+  }
+ ],
+ "Mark 15:40": [
+  {
+   "from": "mulheres vindo de longe",
+   "to": "mulheres vendo de longe",
+   "why": "ocr: Vg 'de longe aspicientes': vendo, not vindo"
+  }
+ ],
+ "Mark 16:3": [
+  {
+   "from": "do sepulcro?",
+   "to": "do sepulcro?\"",
+   "why": "punctuation: closing quote missing; opened in same verse, 16:4 is narrative"
+  }
+ ],
+ "Luke 1:55": [
+  {
+   "from": "Conforme tinha",
+   "to": "conforme tinha",
+   "why": "punctuation: capital after the semicolon ending 1:54; sentence continues"
+  }
+ ],
+ "Luke 1:61": [
+  {
+   "from": "Disseram-lhe; \"Ninguém",
+   "to": "Disseram-lhe: \"Ninguém",
+   "why": "punctuation: semicolon for colon before speech"
+  }
+ ],
+ "Luke 2:19": [
+  {
+   "from": "seu coração,",
+   "to": "seu coração.",
+   "why": "punctuation: sentence ends; 2:20 starts 'Os pastores'"
+  }
+ ],
+ "Luke 2:22": [
+  {
+   "from": "Senhor Lv. 12, 6,",
+   "to": "Senhor (Lv 12, 6),",
+   "why": "punctuation: reference lost its parentheses; normalized to the text's form"
+  }
+ ],
+ "Luke 2:43": [
+  {
+   "from": "seus país",
+   "to": "seus pais",
+   "why": "accent: país -> pais (parents)"
+  }
+ ],
+ "Luke 2:51": [
+  {
+   "from": "submisso, Sua",
+   "to": "submisso. Sua",
+   "why": "punctuation: comma where a new sentence starts"
+  }
+ ],
+ "Luke 3:1": [
+  {
+   "from": "tetrarca da Abilina.",
+   "to": "tetrarca da Abilina,",
+   "why": "punctuation: sentence continues in 3:2 ('sendo pontífices...')"
+  }
+ ],
+ "Luke 3:4": [
+  {
+   "from": "deserto; Preparai",
+   "to": "deserto: Preparai",
+   "why": "punctuation: semicolon for colon before the cry (as Mark 1:3)"
+  }
+ ],
+ "Luke 3:5": [
+  {
+   "from": "toda o vale",
+   "to": "todo o vale",
+   "why": "typo: toda -> todo"
+  }
+ ],
+ "Luke 3:6": [
+  {
+   "from": "de Deus,",
+   "to": "de Deus.",
+   "why": "punctuation: quotation and sentence end; 3:7 starts 'Dizia pois'"
+  }
+ ],
+ "Luke 3:16": [
+  {
+   "from": "a todos; \"Eu",
+   "to": "a todos: \"Eu",
+   "why": "punctuation: semicolon for colon before speech"
+  }
+ ],
+ "Luke 3:17": [
+  {
+   "from": "queimá-la-à",
+   "to": "queimá-la-á",
+   "why": "accent: à -> á (future)"
+  }
+ ],
+ "Luke 3:26": [
+  {
+   "from": "Matalías",
+   "to": "Matatias",
+   "why": "name: garbled Matatias (as 3:25; Vg Mathathiae)"
+  }
+ ],
+ "Luke 3:32": [
+  {
+   "from": "Naaason",
+   "to": "Naasson",
+   "why": "name: extra a; Naasson as in Matt 1:4 (Vg Naasson)"
+  }
+ ],
+ "Luke 3:37": [
+  {
+   "from": "Heuocb",
+   "to": "Henoch",
+   "why": "name: garbled Henoch"
+  }
+ ],
+ "Luke 4:8": [
+  {
+   "from": "Jesus, respondeu-lhe",
+   "to": "Jesus respondeu-lhe",
+   "why": "punctuation: stray comma between subject and verb"
+  }
+ ],
+ "Luke 4:11": [
+  {
+   "from": "magoares ó teu pé",
+   "to": "magoares o teu pé",
+   "why": "accent: ó -> o (article)"
+  }
+ ],
+ "Luke 4:12": [
+  {
+   "from": "Jesus, respondeu-lhe",
+   "to": "Jesus respondeu-lhe",
+   "why": "punctuation: stray comma between subject and verb"
+  }
+ ],
+ "Luke 4:18": [
+  {
+   "from": "do coração.",
+   "to": "do coração,",
+   "why": "punctuation: sentence continues in 4:19 ('a anunciar...')"
+  }
+ ],
+ "Luke 4:22": [
+  {
+   "from": "que saiam da",
+   "to": "que saíam da",
+   "why": "accent: saiam -> saíam (imperfect)"
+  }
+ ],
+ "Luke 4:33": [
+  {
+   "from": "na sinanoga",
+   "to": "na sinagoga",
+   "why": "ocr: sinanoga -> sinagoga"
+  },
+  {
+   "from": "em alta voz",
+   "to": "em alta voz:",
+   "why": "punctuation: colon missing before the speech in 4:34"
+  }
+ ],
+ "Luke 4:34": [
+  {
+   "from": "o Santo de Deus.",
+   "to": "o Santo de Deus.\"",
+   "why": "punctuation: closing quote missing; opened in same verse, 4:35 is narrative"
+  }
+ ],
+ "Luke 4:35": [
+  {
+   "from": "nenhum mal,",
+   "to": "nenhum mal.",
+   "why": "punctuation: sentence ends; 4:36 starts 'Todos'"
+  }
+ ],
+ "Luke 4:36": [
+  {
+   "from": "e estes saem?",
+   "to": "e estes saem?\"",
+   "why": "punctuation: closing quote missing; opened in same verse, 4:37 is narrative"
+  }
+ ],
+ "Luke 5:8": [
+  {
+   "from": "pecador\"",
+   "to": "pecador.\"",
+   "why": "punctuation: final period missing inside the quote"
+  }
+ ],
+ "Luke 5:14": [
+  {
+   "from": "dissesse. Mas vai",
+   "to": "dissesse. \"Mas vai",
+   "why": "punctuation: opening quote missing; its closing quote ends the verse"
+  }
+ ],
+ "Luke 5:30": [
+  {
+   "from": "com os pecadores?",
+   "to": "com os pecadores?\"",
+   "why": "punctuation: closing quote missing; opened in same verse, 5:31 is narrative"
+  }
+ ],
+ "Luke 6:3": [
+  {
+   "from": "Não leste",
+   "to": "Não lestes",
+   "why": "typo: 2nd person plural (Vg 'legistis')"
+  },
+  {
+   "from": "estavam?\"",
+   "to": "estavam?",
+   "why": "punctuation: stray closing quote: the question continues in 6:4, which closes it"
+  }
+ ],
+ "Luke 6:9": [
+  {
+   "from": "Jesus disse-lhe:",
+   "to": "Jesus disse-lhes:",
+   "why": "wrong-word: addressed to them (Pergunto-vos; Vg 'ad illos')"
+  }
+ ],
+ "Luke 6:13": [
+  {
+   "from": "os seus discipulos",
+   "to": "os seus discípulos",
+   "why": "accent: discipulos -> discípulos"
+  }
+ ],
+ "Luke 6:17": [
+  {
+   "from": "dos seus discipulos",
+   "to": "dos seus discípulos",
+   "why": "accent: discipulos -> discípulos"
+  }
+ ],
+ "Luke 6:27": [
+  {
+   "from": "vos odeiam",
+   "to": "vos odeiam,",
+   "why": "punctuation: list of commands continues in 6:28"
+  }
+ ],
+ "Luke 6:38": [
+  {
+   "from": "dar-se-vos-à",
+   "to": "dar-se-vos-á",
+   "why": "accent: à -> á (future)"
+  }
+ ],
+ "Luke 6:40": [
+  {
+   "from": "todo o discipulo",
+   "to": "todo o discípulo",
+   "why": "accent: discipulo -> discípulo"
+  }
+ ],
+ "Luke 7:15": [
+  {
+   "from": "Jesus, entregou-o",
+   "to": "Jesus entregou-o",
+   "why": "punctuation: stray comma between subject and verb"
+  }
+ ],
+ "Luke 7:27": [
+  {
+   "from": "diante de ti Ml. 3, 1.",
+   "to": "diante de ti (Ml 3, 1).",
+   "why": "punctuation: reference lost its parentheses; normalized to the text's form"
+  }
+ ],
+ "Luke 7:32": [
+  {
+   "from": "dizendo; Tocamos",
+   "to": "dizendo: Tocamos",
+   "why": "punctuation: semicolon for colon before quoted words"
+  }
+ ],
+ "Luke 8:19": [
+  {
+   "from": "da multidão,",
+   "to": "da multidão.",
+   "why": "punctuation: sentence ends; 8:20 starts 'Foram dizer-lhe'"
+  }
+ ],
+ "Luke 8:21": [
+  {
+   "from": "Ele, respondeu-lhes",
+   "to": "Ele respondeu-lhes",
+   "why": "punctuation: stray comma between subject and verb"
+  }
+ ],
+ "Luke 8:22": [
+  {
+   "from": "disse-lhes; \"Passemos",
+   "to": "disse-lhes: \"Passemos",
+   "why": "punctuation: semicolon for colon before speech"
+  }
+ ],
+ "Luke 8:35": [
+  {
+   "from": "em seu juizo",
+   "to": "em seu juízo",
+   "why": "accent: juizo -> juízo"
+  }
+ ],
+ "Luke 8:42": [
+  {
+   "from": "pelo povo,",
+   "to": "pelo povo.",
+   "why": "punctuation: sentence ends; 8:43 starts 'Uma mulher'"
+  }
+ ],
+ "Luke 8:45": [
+  {
+   "from": "Pedro (os que",
+   "to": "Pedro (e os que",
+   "why": "bc: 'e' dropped (BC and Vg 'et qui cum illo erant')"
+  }
+ ],
+ "Luke 9:22": [
+  {
+   "from": "príncipes doe sacerdotes",
+   "to": "príncipes dos sacerdotes",
+   "why": "typo: doe -> dos"
+  },
+  {
+   "from": "ao terceiro dia.",
+   "to": "ao terceiro dia.\"",
+   "why": "punctuation: speech opened in this verse never closed; 9:23 opens a new one"
+  }
+ ],
+ "Luke 9:29": [
+  {
+   "from": "branco () resplandecente",
+   "to": "branco (e) resplandecente",
+   "why": "bc: empty parentheses; BC has (e)"
+  }
+ ],
+ "Luke 9:38": [
+  {
+   "from": "clamou; \"Mestre",
+   "to": "clamou: \"Mestre",
+   "why": "punctuation: semicolon before quoted speech"
+  }
+ ],
+ "Luke 9:43": [
+  {
+   "from": "aos seus discípulos;",
+   "to": "aos seus discípulos:",
+   "why": "punctuation: semicolon introducing speech in 9:44"
+  }
+ ],
+ "Luke 9:62": [
+  {
+   "from": "respondeu-lhe; \"Ninguém",
+   "to": "respondeu-lhe: \"Ninguém",
+   "why": "punctuation: semicolon before quoted speech"
+  },
+  {
+   "from": "para o reino de Deus.",
+   "to": "para o reino de Deus.\"",
+   "why": "punctuation: speech opened in this verse never closed (chapter end)"
+  }
+ ],
+ "Luke 10:1": [
+  {
+   "from": "setenta e dois mandou-os",
+   "to": "setenta e dois, e mandou-os",
+   "why": "typo: missing conjunction; Latin 'et misit illos'"
+  }
+ ],
+ "Luke 10:10": [
+  {
+   "from": "praças dizei;",
+   "to": "praças dizei:",
+   "why": "punctuation: semicolon introducing quoted words"
+  }
+ ],
+ "Luke 10:30": [
+  {
+   "from": "disse; \"Um homem",
+   "to": "disse: \"Um homem",
+   "why": "punctuation: semicolon before quoted speech"
+  }
+ ],
+ "Luke 10:35": [
+  {
+   "from": "eu to satisferei",
+   "to": "eu to satisfarei",
+   "why": "typo: future of satisfazer is satisfarei"
+  }
+ ],
+ "Luke 10:40": [
+  {
+   "from": "na continua lida",
+   "to": "na contínua lida",
+   "why": "accent: adjective contínua, not verb continua"
+  }
+ ],
+ "Luke 10:41": [
+  {
+   "from": "O Senhor, respondeu-lhe",
+   "to": "O Senhor respondeu-lhe",
+   "why": "punctuation: stray comma between subject and verb"
+  }
+ ],
+ "Luke 11:5": [
+  {
+   "from": "dizer: \"Amigo",
+   "to": "dizer: Amigo",
+   "why": "punctuation: stray nested opening quote never closed; outer speech closes in 11:13 and inner speech is unquoted elsewhere (11:7)"
+  }
+ ],
+ "Luke 11:7": [
+  {
+   "from": "disser; Não",
+   "to": "disser: Não",
+   "why": "punctuation: semicolon introducing quoted words"
+  }
+ ],
+ "Luke 11:9": [
+  {
+   "from": "dár-se-vos-á",
+   "to": "dar-se-vos-á",
+   "why": "accent: spurious accent"
+  }
+ ],
+ "Luke 11:24": [
+  {
+   "from": "donde sai.",
+   "to": "donde saí.",
+   "why": "accent: 1st-person preterite (Latin unde exivi)"
+  }
+ ],
+ "Luke 12:17": [
+  {
+   "from": "consigo; Que farei",
+   "to": "consigo: Que farei",
+   "why": "punctuation: semicolon introducing quoted thought"
+  }
+ ],
+ "Luke 12:28": [
+  {
+   "from": "no forno. Deus a veste",
+   "to": "no forno, Deus a veste",
+   "why": "punctuation: period breaks the conditional sentence (Se ... Deus a veste assim, quanto mais)"
+  }
+ ],
+ "Luke 12:45": [
+  {
+   "from": "coração: \"O meu senhor",
+   "to": "coração: O meu senhor",
+   "why": "punctuation: stray nested opening quote never closed; outer speech (12:42) closes in 12:53"
+  }
+ ],
+ "Luke 12:47": [
+  {
+   "from": "muitos açoutes,",
+   "to": "muitos açoutes.",
+   "why": "punctuation: sentence ends; 12:48 starts new sentence 'Quanto àquele'"
+  }
+ ],
+ "Luke 12:52": [
+  {
+   "from": "e duas contra três,",
+   "to": "e duas contra três.",
+   "why": "punctuation: sentence ends; 12:53 starts with capital 'Estarão'"
+  }
+ ],
+ "Luke 13:2": [
+  {
+   "from": "respondeu-lhes; \"Vós",
+   "to": "respondeu-lhes: \"Vós",
+   "why": "punctuation: semicolon before quoted speech"
+  }
+ ],
+ "Luke 13:12": [
+  {
+   "from": "disse-lhe; \"Mulher",
+   "to": "disse-lhe: \"Mulher",
+   "why": "punctuation: semicolon before quoted speech"
+  },
+  {
+   "from": "da tua enfermidade.",
+   "to": "da tua enfermidade.\"",
+   "why": "punctuation: speech opened in this verse never closed; 13:13 is narration"
+  }
+ ],
+ "Luke 13:13": [
+  {
+   "from": "impôs-lhe as mãos",
+   "to": "Impôs-lhe as mãos",
+   "why": "typo: verse starts a new sentence after a period"
+  }
+ ],
+ "Luke 13:19": [
+  {
+   "from": "nos seus ramos.",
+   "to": "nos seus ramos.\"",
+   "why": "punctuation: speech opened in 13:18 not closed before 13:20 'Disse outra vez' opens a new one"
+  }
+ ],
+ "Luke 13:20": [
+  {
+   "from": "vez: 'A que",
+   "to": "vez: \"A que",
+   "why": "punctuation: single quote where a double quote opens the speech closed in 13:21"
+  }
+ ],
+ "Luke 13:35": [
+  {
+   "from": "Eis vos será",
+   "to": "Eis que vos será",
+   "why": "manual: dropped 'que' (the text writes 'eis que' 135x)"
+  }
+ ],
+ "Luke 14:3": [
+  {
+   "from": "É licito",
+   "to": "É lícito",
+   "why": "accent: adjective lícito"
+  }
+ ],
+ "Luke 14:16": [
+  {
+   "from": "convidou muitos,",
+   "to": "convidou muitos.",
+   "why": "punctuation: sentence ends; 14:17 starts 'À hora da ceia'"
+  }
+ ],
+ "Luke 15:9": [
+  {
+   "from": "dizendo: \"Congratulai-vos",
+   "to": "dizendo: Congratulai-vos",
+   "why": "punctuation: stray nested opening quote never closed (outer speech closes 15:10; parallel 15:6 is unquoted)"
+  }
+ ],
+ "Luke 15:32": [
+  {
+   "from": "encontrado\".",
+   "to": "encontrado.\"",
+   "why": "punctuation: period outside closing quote, against the text's convention"
+  }
+ ],
+ "Luke 16:1": [
+  {
+   "from": "discípulos; \"Um homem",
+   "to": "discípulos: \"Um homem",
+   "why": "punctuation: semicolon before quoted speech"
+  }
+ ],
+ "Luke 16:2": [
+  {
+   "from": "meu feitor,",
+   "to": "meu feitor.",
+   "why": "punctuation: sentence ends; 16:3 starts 'Então'"
+  }
+ ],
+ "Luke 16:8": [
+  {
+   "from": "feitor iníquio",
+   "to": "feitor iníquo",
+   "why": "typo: iníquio -> iníquo"
+  }
+ ],
+ "Luke 16:21": [
+  {
+   "from": "que caiam da mesa",
+   "to": "que caíam da mesa",
+   "why": "accent: imperfect caíam, not subjunctive caiam"
+  }
+ ],
+ "Luke 16:24": [
+  {
+   "from": "exclamou; Pai Abraão",
+   "to": "exclamou: Pai Abraão",
+   "why": "punctuation: semicolon introducing quoted words"
+  }
+ ],
+ "Luke 16:30": [
+  {
+   "from": "basta isso pai Abraão",
+   "to": "basta isso, pai Abraão",
+   "why": "punctuation: missing comma before vocative"
+  }
+ ],
+ "Luke 17:20": [
+  {
+   "from": "\" O reino",
+   "to": "\"O reino",
+   "why": "punctuation: space after opening quote"
+  }
+ ],
+ "Luke 18:12": [
+  {
+   "from": "o que possuo,",
+   "to": "o que possuo.",
+   "why": "punctuation: prayer ends; 18:13 starts 'O publicano, porém'"
+  }
+ ],
+ "Luke 19:27": [
+  {
+   "from": "na minha presença.",
+   "to": "na minha presença.\"",
+   "why": "punctuation: parable (opened 19:12) ends here; 19:28 'Dito isto' is narration"
+  }
+ ],
+ "Luke 19:29": [
+  {
+   "from": "Belfagé",
+   "to": "Betfagé",
+   "why": "name: t read as l; Matt/Mark have Betfagé"
+  }
+ ],
+ "Luke 19:30": [
+  {
+   "from": "jumentinho alado",
+   "to": "jumentinho atado",
+   "why": "ocr: t read as l; Latin alligatum"
+  }
+ ],
+ "Luke 19:36": [
+  {
+   "from": "Á sua passagem",
+   "to": "À sua passagem",
+   "why": "accent: crase, not acute"
+  }
+ ],
+ "Luke 19:37": [
+  {
+   "from": "tinham visto.",
+   "to": "tinham visto,",
+   "why": "punctuation: sentence continues: 19:38 begins lowercase 'dizendo:'"
+  }
+ ],
+ "Luke 19:38": [
+  {
+   "from": "e gloria nas",
+   "to": "e glória nas",
+   "why": "accent: noun glória"
+  }
+ ],
+ "Luke 20:1": [
+  {
+   "from": "com os de Jesus, anciães,",
+   "to": "com os anciães,",
+   "why": "manual: stray 'de Jesus,' (Latin 'cum senioribus')"
+  }
+ ],
+ "Luke 20:2": [
+  {
+   "from": "neste termos",
+   "to": "nestes termos",
+   "why": "typo: agreement with termos"
+  }
+ ],
+ "Luke 20:5": [
+  {
+   "from": "não creste nele",
+   "to": "não crestes nele",
+   "why": "typo: vós form; Latin credidistis"
+  }
+ ],
+ "Luke 20:8": [
+  {
+   "from": "Jesus, disse-lhes",
+   "to": "Jesus disse-lhes",
+   "why": "punctuation: stray comma between subject and verb"
+  }
+ ],
+ "Luke 20:39": [
+  {
+   "from": "falaste bem\"",
+   "to": "falaste bem.\"",
+   "why": "punctuation: missing period before closing quote"
+  }
+ ],
+ "Luke 20:42": [
+  {
+   "from": "meu Senhor; Senta-te",
+   "to": "meu Senhor: Senta-te",
+   "why": "punctuation: semicolon introducing quoted words"
+  }
+ ],
+ "Luke 21:5": [
+  {
+   "from": "Jesus disse;",
+   "to": "Jesus disse:",
+   "why": "punctuation: semicolon introducing speech in 21:6"
+  }
+ ],
+ "Luke 21:16": [
+  {
+   "from": "e amigos e farão",
+   "to": "e amigos, e farão",
+   "why": "punctuation: missing comma before new clause"
+  }
+ ],
+ "Luke 21:23": [
+  {
+   "from": "Aí das mulheres",
+   "to": "Ai das mulheres",
+   "why": "accent: interjection ai, not adverb aí"
+  }
+ ],
+ "Luke 21:24": [
+  {
+   "from": "dos gentios.1",
+   "to": "dos gentios.",
+   "why": "ocr: stray footnote digit (BC: '(ver nota)')"
+  }
+ ],
+ "Luke 21:31": [
+  {
+   "from": "reino de Deus,",
+   "to": "reino de Deus.",
+   "why": "punctuation: sentence ends; 21:32 starts 'Em verdade'"
+  }
+ ],
+ "Luke 22:19": [
+  {
+   "from": "memória de mim.",
+   "to": "memória de mim.\"",
+   "why": "punctuation: speech opened in this verse never closed; 22:20 opens a new one"
+  }
+ ],
+ "Luke 22:34": [
+  {
+   "from": "disse-lhe: Digo-te",
+   "to": "disse-lhe: \"Digo-te",
+   "why": "punctuation: missing opening quote; its closing quote is in this verse"
+  }
+ ],
+ "Luke 22:38": [
+  {
+   "from": "responderam; \"Senhor",
+   "to": "responderam: \"Senhor",
+   "why": "punctuation: semicolon before quoted speech"
+  }
+ ],
+ "Luke 22:58": [
+  {
+   "from": "\" Ó homem",
+   "to": "\"Ó homem",
+   "why": "punctuation: space after opening quote"
+  }
+ ],
+ "Luke 23:14": [
+  {
+   "from": "Vós apresentaste-me",
+   "to": "Vós apresentastes-me",
+   "why": "typo: vós form"
+  }
+ ],
+ "Luke 23:18": [
+  {
+   "from": "solta-nos Barrabás;",
+   "to": "solta-nos Barrabás\";",
+   "why": "punctuation: speech opened in this verse never closed; 23:19 is narration"
+  }
+ ],
+ "Luke 23:19": [
+  {
+   "from": "por homicidio",
+   "to": "por homicídio",
+   "why": "accent: homicídio (as in 23:25)"
+  }
+ ],
+ "Luke 23:40": [
+  {
+   "from": "mesmo suplício?\"",
+   "to": "mesmo suplício?",
+   "why": "punctuation: speech continues into 23:41; closing quote belongs at end of 23:41"
+  }
+ ],
+ "Luke 23:41": [
+  {
+   "from": "nenhum mal.",
+   "to": "nenhum mal.\"",
+   "why": "punctuation: end of the good thief's speech begun in 23:40"
+  }
+ ],
+ "Luke 23:44": [
+  {
+   "from": "a hora, sexta",
+   "to": "a hora sexta",
+   "why": "punctuation: stray comma"
+  }
+ ],
+ "Luke 23:53": [
+  {
+   "from": "sido sepultado,",
+   "to": "sido sepultado.",
+   "why": "punctuation: sentence ends; 23:54 starts 'Era o dia'"
+  }
+ ],
+ "Luke 24:2": [
+  {
+   "from": "pedra do sepulcro,",
+   "to": "pedra do sepulcro.",
+   "why": "punctuation: sentence ends; 24:3 starts 'Entrando'"
+  }
+ ],
+ "Luke 24:16": [
+  {
+   "from": "não o reconheram",
+   "to": "não o reconheceram",
+   "why": "typo: missing syllable"
+  }
+ ],
+ "Luke 24:17": [
+  {
+   "from": "estais tristes?",
+   "to": "estais tristes?\"",
+   "why": "punctuation: speech opened in this verse never closed; 24:18 opens a new one"
+  }
+ ],
+ "Luke 24:24": [
+  {
+   "from": "não o encontraram.",
+   "to": "não o encontraram.\"",
+   "why": "punctuation: disciples' speech (opened 24:19) ends; 24:25 'Então Jesus disse-lhes' opens a new one"
+  }
+ ],
+ "Luke 24:25": [
+  {
+   "from": "anunciaram os profetas",
+   "to": "anunciaram os profetas!",
+   "why": "punctuation: missing end punctuation; 24:26 starts new sentence (Latin ends with !)"
+  }
+ ],
+ "Luke 24:37": [
+  {
+   "from": "algum espirito",
+   "to": "algum espírito",
+   "why": "accent: espírito"
+  }
+ ],
+ "Luke 24:50": [
+  {
+   "from": "os abençoou,",
+   "to": "os abençoou.",
+   "why": "punctuation: sentence ends; 24:51 starts 'Enquanto'"
+  }
+ ],
+ "Luke 24:52": [
+  {
+   "from": "grande júbilo.",
+   "to": "grande júbilo,",
+   "why": "punctuation: sentence continues: 24:53 begins lowercase 'e estavam'"
+  }
+ ],
+ "John 1:2": [
+  {
+   "from": "junto de Deus, [ii]",
+   "to": "junto de Deus. [ii]",
+   "why": "punctuation: sentence ends; 1:3 starts 'Todas'"
+  }
+ ],
+ "John 1:8": [
+  {
+   "from": "testemunho da luz,",
+   "to": "testemunho da luz.",
+   "why": "punctuation: sentence ends; 1:9 starts 'O Verbo'"
+  }
+ ],
+ "John 1:19": [
+  {
+   "from": "Quem és tu\"?",
+   "to": "Quem és tu?\"",
+   "why": "punctuation: question mark outside the quote"
+  }
+ ],
+ "John 1:20": [
+  {
+   "from": "o Cristo\".",
+   "to": "o Cristo.\"",
+   "why": "punctuation: period outside the quote, against the text's convention"
+  }
+ ],
+ "John 1:21": [
+  {
+   "from": "Elias\"?",
+   "to": "Elias?\"",
+   "why": "punctuation: question mark outside the quote"
+  },
+  {
+   "from": "\"Não sou\".",
+   "to": "\"Não sou.\"",
+   "why": "punctuation: period outside the quote"
+  },
+  {
+   "from": "o profeta\"?",
+   "to": "o profeta?\"",
+   "why": "punctuation: question mark outside the quote"
+  },
+  {
+   "from": "\"Não\".",
+   "to": "\"Não.\"",
+   "why": "punctuation: period outside the quote"
+  }
+ ],
+ "John 1:23": [
+  {
+   "from": "então: Eu sou",
+   "to": "então: \"Eu sou",
+   "why": "punctuation: missing opening quote; closing quote is in this verse"
+  }
+ ],
+ "John 2:3": [
+  {
+   "from": "disse-lhe; \"Não",
+   "to": "disse-lhe: \"Não",
+   "why": "punctuation: semicolon before quoted speech"
+  }
+ ],
+ "John 2:7": [
+  {
+   "from": "disse-lhes: Enchei as talhas de água.",
+   "to": "disse-lhes: \"Enchei as talhas de água.\"",
+   "why": "punctuation: speech unquoted, unlike every other line of dialogue (cf. 2:8)"
+  }
+ ],
+ "John 3:8": [
+  {
+   "from": "nasceu do Espírito.",
+   "to": "nasceu do Espírito.\"",
+   "why": "punctuation: Jesus' words opened in 3:5 end here; 3:9 'Nicodemos disse-lhe' is narration"
+  }
+ ],
+ "John 3:9": [
+  {
+   "from": "Com se pode",
+   "to": "Como se pode",
+   "why": "typo: missing letter"
+  }
+ ],
+ "John 3:28": [
+  {
+   "from": "Vós mesmo me",
+   "to": "Vós mesmos me",
+   "why": "typo: agreement with vós (Latin ipsi vos)"
+  }
+ ],
+ "John 4:11": [
+  {
+   "from": "disse-lhe; \"Senhor",
+   "to": "disse-lhe: \"Senhor",
+   "why": "punctuation: semicolon before quoted speech"
+  }
+ ],
+ "John 4:15": [
+  {
+   "from": "pára eu não",
+   "to": "para eu não",
+   "why": "accent: preposition para, not verb pára"
+  }
+ ],
+ "John 4:38": [
+  {
+   "from": "não trabalhaste",
+   "to": "não trabalhastes",
+   "why": "typo: vós form"
+  }
+ ],
+ "John 4:45": [
+  {
+   "from": "tinham ido à festa",
+   "to": "tinham ido à festa.",
+   "why": "punctuation: missing final period; 4:46 starts new sentence"
+  }
+ ],
+ "John 4:49": [
+  {
+   "from": "meu filho morra\"",
+   "to": "meu filho morra.\"",
+   "why": "punctuation: missing period before closing quote"
+  }
+ ],
+ "John 4:50": [
+  {
+   "from": "lhe disse, e partiu",
+   "to": "lhe disse, e partiu.",
+   "why": "punctuation: missing final period; 4:51 starts new sentence"
+  }
+ ],
+ "John 4:53": [
+  {
+   "from": "Teu filho vive\".",
+   "to": "Teu filho vive.\"",
+   "why": "punctuation: period outside the quote, against the text's convention"
+  }
+ ],
+ "John 5:2": [
+  {
+   "from": "cinco pórticos",
+   "to": "cinco pórticos.",
+   "why": "punctuation: missing final period; 5:3 starts 'Nestes'"
+  }
+ ],
+ "John 5:7": [
+  {
+   "from": "respondeu- lhe",
+   "to": "respondeu-lhe",
+   "why": "typo: space inside hyphenated form"
+  }
+ ],
+ "John 5:9": [
+  {
+   "from": "era um sábado,",
+   "to": "era um sábado.",
+   "why": "punctuation: sentence ends; 5:10 starts 'Por isso'"
+  }
+ ],
+ "John 5:10": [
+  {
+   "from": "não te é licito",
+   "to": "não te é lícito",
+   "why": "accent: adjective lícito"
+  }
+ ],
+ "John 5:12": [
+  {
+   "from": "Perguntaram- lhe",
+   "to": "Perguntaram-lhe",
+   "why": "typo: space inside hyphenated form"
+  }
+ ],
+ "John 5:18": [
+  {
+   "from": "igual a Deus, Jesus respondeu",
+   "to": "igual a Deus. Jesus respondeu",
+   "why": "punctuation: new sentence (Latin 5:19 'Respondit itaque Jesus')"
+  }
+ ],
+ "John 5:19": [
+  {
+   "from": "Em verdade, em verdade vos digo: O Filho",
+   "to": "\"Em verdade, em verdade vos digo: O Filho",
+   "why": "punctuation: missing opening quote after 5:18 'disse-lhes:'; speech closes in 5:47"
+  }
+ ],
+ "John 5:21": [
+  {
+   "from": "àqueles que quer",
+   "to": "àqueles que quer.",
+   "why": "punctuation: missing final period; 5:22 starts 'O Pai'"
+  }
+ ],
+ "John 5:23": [
+  {
+   "from": "afim de que",
+   "to": "a fim de que",
+   "why": "typo: a fim de (purpose), not afim"
+  }
+ ],
+ "John 5:27": [
+  {
+   "from": "porque é Filho do homem",
+   "to": "porque é Filho do homem.",
+   "why": "punctuation: missing final period; 5:28 starts 'Não vos admireis'"
+  }
+ ],
+ "John 6:1": [
+  {
+   "from": "de Tiberíades?",
+   "to": "de Tiberíades.",
+   "why": "punctuation: statement, not a question"
+  }
+ ],
+ "John 6:3": [
+  {
+   "from": "com seus discípulos",
+   "to": "com seus discípulos.",
+   "why": "punctuation: missing final period; 6:4 starts 'Ora'"
+  }
+ ],
+ "John 6:11": [
+  {
+   "from": "os pães. e,",
+   "to": "os pães, e,",
+   "why": "punctuation: period inside the sentence (lowercase 'e' follows)"
+  }
+ ],
+ "John 6:25": [
+  {
+   "from": "disseram lhe",
+   "to": "disseram-lhe",
+   "why": "typo: missing hyphen"
+  }
+ ],
+ "John 6:31": [
+  {
+   "from": "Deu-lhes a, comer",
+   "to": "Deu-lhes a comer",
+   "why": "punctuation: stray comma"
+  }
+ ],
+ "John 6:34": [
+  {
+   "from": "desse pão\"",
+   "to": "desse pão.\"",
+   "why": "punctuation: missing period before closing quote"
+  }
+ ],
+ "John 6:42": [
+  {
+   "from": "Por ventura não",
+   "to": "Porventura não",
+   "why": "typo: split word; the text writes porventura elsewhere"
+  },
+  {
+   "from": "Descido céu",
+   "to": "Desci do céu",
+   "why": "ocr: word boundary misplaced (Latin de caelo descendi)"
+  }
+ ],
+ "John 6:45": [
+  {
+   "from": "do Pai; vem a mim",
+   "to": "do Pai, vem a mim",
+   "why": "punctuation: semicolon splits subject from verb"
+  }
+ ],
+ "John 6:50": [
+  {
+   "from": "não morra,",
+   "to": "não morra.",
+   "why": "punctuation: sentence ends; 6:51 starts 'Eu sou'"
+  }
+ ],
+ "John 6:58": [
+  {
+   "from": "viverá por mim",
+   "to": "viverá por mim.",
+   "why": "punctuation: missing final period; 6:59 starts 'Este é'"
+  }
+ ],
+ "John 6:60": [
+  {
+   "from": "na Sinagoga",
+   "to": "na Sinagoga.",
+   "why": "punctuation: missing final period; 6:61 starts new sentence"
+  }
+ ],
+ "John 6:62": [
+  {
+   "from": "escandaliza- vos",
+   "to": "escandaliza-vos",
+   "why": "typo: space inside hyphenated form"
+  }
+ ],
+ "John 6:64": [
+  {
+   "from": "E o espírito que vivifica",
+   "to": "É o espírito que vivifica",
+   "why": "accent: verb é (Latin Spiritus est qui vivificat)"
+  }
+ ],
+ "John 6:65": [
+  {
+   "from": "não crêem. Com efeito",
+   "to": "não crêem.\" Com efeito",
+   "why": "punctuation: Jesus' words end before the narrator's 'Com efeito'; 6:66 reopens the speech"
+  },
+  {
+   "from": "de o entregar",
+   "to": "de o entregar.",
+   "why": "punctuation: missing final period; 6:66 starts 'Depois'"
+  }
+ ],
+ "John 7:20": [
+  {
+   "from": "matar-me? \"O povo",
+   "to": "matar-me?\" O povo",
+   "why": "punctuation: closing quote on the wrong side"
+  }
+ ],
+ "John 7:37": [
+  {
+   "from": "No ultimo dia",
+   "to": "No último dia",
+   "why": "accent: último"
+  }
+ ],
+ "John 7:42": [
+  {
+   "from": "David?.\"",
+   "to": "David?\"",
+   "why": "punctuation: doubled end punctuation"
+  }
+ ],
+ "John 7:47": [
+  {
+   "from": "Por ventura também",
+   "to": "Porventura também",
+   "why": "typo: split word; the text writes porventura elsewhere"
+  }
+ ],
+ "John 8:5": [
+  {
+   "from": "tais mulheres, Que dizes",
+   "to": "tais mulheres. Que dizes",
+   "why": "punctuation: comma before a new capitalized sentence (Vulgate: ...lapidare. Tu ergo quid dicis?)"
+  }
+ ],
+ "John 8:8": [
+  {
+   "from": "escrevia na terra,",
+   "to": "escrevia na terra.",
+   "why": "punctuation: sentence ends; 8:9 starts 'Mas eles'"
+  }
+ ],
+ "John 8:10": [
+  {
+   "from": "levantando-se. disse-lhe",
+   "to": "levantando-se, disse-lhe",
+   "why": "punctuation: period inside the sentence"
+  },
+  {
+   "from": "Ninguém te condenou?",
+   "to": "Ninguém te condenou?\"",
+   "why": "punctuation: speech opened in this verse is never closed; 8:11 starts narration"
+  }
+ ],
+ "John 8:18": [
+  {
+   "from": "dã testemunho",
+   "to": "dá testemunho",
+   "why": "typo: dã is not a word"
+  }
+ ],
+ "John 8:41": [
+  {
+   "from": "pai. \"Eles disseram-lhe",
+   "to": "pai.\" Eles disseram-lhe",
+   "why": "punctuation: quotation mark on the wrong side"
+  }
+ ],
+ "John 8:51": [
+  {
+   "from": "voz digo;",
+   "to": "vos digo:",
+   "why": "wrong-word: voz -> vos; colon before the saying, as in 8:58"
+  }
+ ],
+ "John 8:56": [
+  {
+   "from": "(por meio da, revelação)",
+   "to": "(por meio da revelação)",
+   "why": "punctuation: stray comma"
+  }
+ ],
+ "John 9:27": [
+  {
+   "from": "Respondeu-lhes;",
+   "to": "Respondeu-lhes:",
+   "why": "punctuation: semicolon for colon before a quotation"
+  }
+ ],
+ "John 9:41": [
+  {
+   "from": "disse- lhes",
+   "to": "disse-lhes",
+   "why": "typo: stray space in hyphenated form"
+  },
+  {
+   "from": "Fica, pois subsistindo",
+   "to": "Fica, pois, subsistindo",
+   "why": "punctuation: unbalanced comma around 'pois'"
+  }
+ ],
+ "John 10:24": [
+  {
+   "from": "A té quando",
+   "to": "Até quando",
+   "why": "typo: split word"
+  }
+ ],
+ "John 10:26": [
+  {
+   "from": "não sois das minhas ovelhas,",
+   "to": "não sois das minhas ovelhas.",
+   "why": "punctuation: sentence ends; 10:27 starts 'As minhas ovelhas' (Vulgate: ...ex ovibus meis. Oves meae...)"
+  }
+ ],
+ "John 11:11": [
+  {
+   "from": "'Nosso amigo",
+   "to": "\"Nosso amigo",
+   "why": "punctuation: single quote for opening double quote (closing \" at verse end)"
+  }
+ ],
+ "John 11:32": [
+  {
+   "from": "disse-lhe:\"Senhor",
+   "to": "disse-lhe: \"Senhor",
+   "why": "punctuation: missing space after colon"
+  }
+ ],
+ "John 11:44": [
+  {
+   "from": "deixai-o ir.",
+   "to": "deixai-o ir.\"",
+   "why": "punctuation: speech opened in this verse never closed; 11:45 is narration"
+  }
+ ],
+ "John 11:54": [
+  {
+   "from": "e lã esteve",
+   "to": "e lá esteve",
+   "why": "accent: lã (wool) for lá (there)"
+  }
+ ],
+ "John 12:21": [
+  {
+   "from": "aproximaram-sé",
+   "to": "aproximaram-se",
+   "why": "accent: spurious accent on the pronoun"
+  }
+ ],
+ "John 12:25": [
+  {
+   "from": "para a vida eterna,",
+   "to": "para a vida eterna.",
+   "why": "punctuation: sentence ends; 12:26 starts 'Se alguém' (Vulgate: ...custodit eam. Si quis...)"
+  }
+ ],
+ "John 12:27": [
+  {
+   "from": "a minha alma, está turbada",
+   "to": "a minha alma está turbada",
+   "why": "punctuation: stray comma between subject and verb"
+  }
+ ],
+ "John 12:28": [
+  {
+   "from": "nome. \" Então",
+   "to": "nome.\" Então",
+   "why": "punctuation: space inside closing quotation"
+  }
+ ],
+ "John 12:29": [
+  {
+   "from": "que linha sido",
+   "to": "que tinha sido",
+   "why": "ocr: linha for tinha"
+  },
+  {
+   "from": "diziam: Um anjo",
+   "to": "diziam: \"Um anjo",
+   "why": "punctuation: missing opening quote; the closing one is at verse end"
+  }
+ ],
+ "John 12:30": [
+  {
+   "from": "Jesus respondeu;",
+   "to": "Jesus respondeu:",
+   "why": "punctuation: semicolon for colon before a quotation"
+  }
+ ],
+ "John 13:26": [
+  {
+   "from": "Jesus respondeu;",
+   "to": "Jesus respondeu:",
+   "why": "punctuation: semicolon for colon before a quotation"
+  }
+ ],
+ "John 13:33": [
+  {
+   "from": "Filhinhos já",
+   "to": "Filhinhos, já",
+   "why": "punctuation: missing vocative comma"
+  }
+ ],
+ "John 13:38": [
+  {
+   "from": "respondeu-lhe:\"Darás",
+   "to": "respondeu-lhe: \"Darás",
+   "why": "punctuation: missing space after colon"
+  }
+ ],
+ "John 14:28": [
+  {
+   "from": "Ouviste que eu vos disse",
+   "to": "Ouvistes que eu vos disse",
+   "why": "typo: plural addressees (Vulgate: Audistis; 'vos disse')"
+  }
+ ],
+ "John 15:9": [
+  {
+   "from": "Permanecei no meu amor,",
+   "to": "Permanecei no meu amor.",
+   "why": "punctuation: sentence ends; 15:10 starts 'Se observardes' (Vulgate: Manete in dilectione mea. Si...)"
+  }
+ ],
+ "John 16:17": [
+  {
+   "from": "nos diz; Um pouco",
+   "to": "nos diz: Um pouco",
+   "why": "punctuation: semicolon for colon before the quoted words"
+  }
+ ],
+ "John 16:27": [
+  {
+   "from": "vós me amaste",
+   "to": "vós me amastes",
+   "why": "typo: plural (Vulgate: vos me amastis; 'e crestes')"
+  }
+ ],
+ "John 16:32": [
+  {
+   "from": "Eis vem a hora",
+   "to": "Eis que vem a hora",
+   "why": "manual: dropped 'que' (the text writes 'eis que' 135x)"
+  }
+ ],
+ "John 17:8": [
+  {
+   "from": "eu sai de ti",
+   "to": "eu saí de ti",
+   "why": "accent: past tense 1st person (Vulgate: a te exivi)"
+  }
+ ],
+ "John 18:4": [
+  {
+   "from": "Jesus que sabia",
+   "to": "Jesus, que sabia",
+   "why": "punctuation: relative clause has a closing comma but no opening one"
+  }
+ ],
+ "John 18:10": [
+  {
+   "from": "orelha direita, Este servo",
+   "to": "orelha direita. Este servo",
+   "why": "punctuation: comma before a new capitalized sentence"
+  }
+ ],
+ "John 18:30": [
+  {
+   "from": "Responderam;",
+   "to": "Responderam:",
+   "why": "punctuation: semicolon for colon before a quotation"
+  }
+ ],
+ "John 18:31": [
+  {
+   "from": "então: Tomai-o",
+   "to": "então: \"Tomai-o",
+   "why": "punctuation: missing opening quote; its closing quote follows in the same verse"
+  }
+ ],
+ "John 18:35": [
+  {
+   "from": "respondeu:\"Porventura",
+   "to": "respondeu: \"Porventura",
+   "why": "punctuation: missing space after colon"
+  }
+ ],
+ "John 19:6": [
+  {
+   "from": "tendo-o visto gritaram",
+   "to": "tendo-o visto, gritaram",
+   "why": "punctuation: participial clause opened with a comma is not closed"
+  }
+ ],
+ "John 19:13": [
+  {
+   "from": "em hebraica Gabhatha",
+   "to": "em hebraico Gabbatha",
+   "why": "name: hebraica -> hebraico (cf. 19:17 'em hebraico Gólgotha'); Gabbatha (Vulgate), b read as h"
+  }
+ ],
+ "John 19:17": [
+  {
+   "from": "Tomaram pois, Jesus",
+   "to": "Tomaram, pois, Jesus",
+   "why": "punctuation: unbalanced comma around 'pois'"
+  }
+ ],
+ "John 20:15": [
+  {
+   "from": "Senhor se tu o levaste",
+   "to": "Senhor, se tu o levaste",
+   "why": "punctuation: missing vocative comma"
+  }
+ ],
+ "John 21:6": [
+  {
+   "from": "e encontrareis. Lançaram",
+   "to": "e encontrareis.\" Lançaram",
+   "why": "punctuation: speech not closed before the narration"
+  }
+ ],
+ "John 21:7": [
+  {
+   "from": "cingiu-Se",
+   "to": "cingiu-se",
+   "why": "typo: capital S in enclitic pronoun"
+  }
+ ],
+ "John 21:8": [
+  {
+   "from": "côvados foram",
+   "to": "côvados, foram",
+   "why": "punctuation: the clause 'que não estavam distantes ... côvados' is not closed before the main verb"
+  }
+ ],
+ "John 21:16": [
+  {
+   "from": "outra vez;",
+   "to": "outra vez:",
+   "why": "punctuation: semicolon for colon before a quotation"
+  }
+ ],
+ "John 21:18": [
+  {
+   "from": "Em verdade, em verdade te digo",
+   "to": "\"Em verdade, em verdade te digo",
+   "why": "punctuation: missing opening quote: 21:17 closes its quote and this verse ends with a closing one"
+  }
+ ],
+ "Acts 1:11": [
+  {
+   "from": "o viste ir",
+   "to": "o vistes ir",
+   "why": "typo: plural addressees (Vulgate: vidistis)"
+  }
+ ],
+ "Acts 1:15": [
+  {
+   "from": "cerca cento; vinte",
+   "to": "cerca cento e vinte",
+   "why": "bc: 'e' misread as ';' (BC: cento e vinte; Vulgate centum viginti)"
+  }
+ ],
+ "Acts 2:9": [
+  {
+   "from": "o Ponto e a Asia",
+   "to": "o Ponto e a Ásia",
+   "why": "accent: missing accent on Ásia"
+  }
+ ],
+ "Acts 2:10": [
+  {
+   "from": "a Frigia e",
+   "to": "a Frígia e",
+   "why": "accent: missing accent on Frígia"
+  }
+ ],
+ "Acts 2:12": [
+  {
+   "from": "Que quer isto dizer?",
+   "to": "Que quer isto dizer?\"",
+   "why": "punctuation: speech not closed; 2:13 is narration"
+  }
+ ],
+ "Acts 2:37": [
+  {
+   "from": "Que devemos fazer irmãos?",
+   "to": "Que devemos fazer, irmãos?",
+   "why": "punctuation: missing vocative comma"
+  }
+ ],
+ "Acts 2:38": [
+  {
+   "from": "então, dom do Espírito",
+   "to": "então, o dom do Espírito",
+   "why": "manual: dropped article (Latin 'accipietis donum')"
+  }
+ ],
+ "Acts 2:40": [
+  {
+   "from": "geração perversa\"",
+   "to": "geração perversa.\"",
+   "why": "punctuation: missing period at end of sentence"
+  }
+ ],
+ "Acts 4:2": [
+  {
+   "from": "ressurreição dos mortos,",
+   "to": "ressurreição dos mortos.",
+   "why": "punctuation: 4:3 starts a new sentence with capital 'Lançaram'"
+  }
+ ],
+ "Acts 4:7": [
+  {
+   "from": "em nome de quem fizeste isto",
+   "to": "em nome de quem fizestes isto",
+   "why": "typo: plural addressees (Vulgate: fecistis hoc vos)"
+  }
+ ],
+ "Acts 5:21": [
+  {
+   "from": "Eles obedecendo a esta ordem,",
+   "to": "Eles, obedecendo a esta ordem,",
+   "why": "punctuation: participial clause closed by a comma but not opened"
+  }
+ ],
+ "Acts 5:23": [
+  {
+   "from": "abrindo-as não encontramos",
+   "to": "abrindo-as, não encontramos",
+   "why": "punctuation: clause opened with 'mas,' not closed"
+  }
+ ],
+ "Acts 5:39": [
+  {
+   "from": "não correie o risco",
+   "to": "não correis o risco",
+   "why": "ocr: correie is not a word"
+  }
+ ],
+ "Acts 6:9": [
+  {
+   "from": "e da Asia,",
+   "to": "e da Ásia,",
+   "why": "accent: missing accent on Ásia"
+  }
+ ],
+ "Acts 7:3": [
+  {
+   "from": "([Gn. 12,1])",
+   "to": "(Gn 12,1)",
+   "why": "ref: stray brackets in the reference"
+  }
+ ],
+ "Acts 7:7": [
+  {
+   "from": "neste lugar. (Gn 16,13-14).",
+   "to": "neste lugar (Gn 15,13-14).",
+   "why": "ref: reference is Gn 15,13-14; stray period before it"
+  }
+ ],
+ "Acts 7:8": [
+  {
+   "from": "(gerou; circuncidou)",
+   "to": "(gerou e circuncidou)",
+   "why": "bc: 'e' misread as ';' (BC: gerou e circuneidou)"
+  }
+ ],
+ "Acts 7:16": [
+  {
+   "from": "para Siquiem",
+   "to": "para Siquem",
+   "why": "name: garbled; same verse has Siquem"
+  },
+  {
+   "from": "em Siquem,",
+   "to": "em Siquem.",
+   "why": "punctuation: sentence ends; 7:17 starts 'Mas, aproximando-se'"
+  }
+ ],
+ "Acts 7:20": [
+  {
+   "from": "trés meses",
+   "to": "três meses",
+   "why": "accent: wrong accent"
+  }
+ ],
+ "Acts 7:28": [
+  {
+   "from": "Quereis porventura",
+   "to": "Queres porventura",
+   "why": "typo: singular addressee (Vulgate: tu vis; 'mataste')"
+  },
+  {
+   "from": "o egipcio",
+   "to": "o egípcio",
+   "why": "accent: missing accent (cf. 7:24 egípcio)"
+  }
+ ],
+ "Acts 7:32": [
+  {
+   "from": "teus pais, O Deus",
+   "to": "teus pais, o Deus",
+   "why": "typo: capital after comma mid-sentence"
+  }
+ ],
+ "Acts 7:38": [
+  {
+   "from": "nossos país",
+   "to": "nossos pais",
+   "why": "accent: país (country) for pais (fathers)"
+  }
+ ],
+ "Acts 7:40": [
+  {
+   "from": "a Aarão;",
+   "to": "a Aarão:",
+   "why": "punctuation: semicolon for colon before the quoted words"
+  },
+  {
+   "from": "Moisés,' que",
+   "to": "Moisés, que",
+   "why": "punctuation: stray apostrophe"
+  },
+  {
+   "from": "(Ex 32,t-23)",
+   "to": "(Ex 32,1-23)",
+   "why": "ocr: t for 1 in the reference (Ex 32,1.23)"
+  }
+ ],
+ "Acts 7:42": [
+  {
+   "from": "da milicia do céu",
+   "to": "da milícia do céu",
+   "why": "accent: missing accent"
+  },
+  {
+   "from": "algumas vitimas",
+   "to": "algumas vítimas",
+   "why": "accent: noun vítimas"
+  }
+ ],
+ "Acts 7:46": [
+  {
+   "from": "O qual achou graça",
+   "to": "o qual achou graça",
+   "why": "typo: continues the sentence of 7:45 (which ends in a comma); Vulgate: qui invenit"
+  },
+  {
+   "from": "Deus, o pediu",
+   "to": "Deus, e pediu",
+   "why": "ocr: o for e (Vulgate: et petiit)"
+  }
+ ],
+ "Acts 7:48": [
+  {
+   "from": "como diz o profeta;",
+   "to": "como diz o profeta:",
+   "why": "punctuation: semicolon for colon introducing the quotation in 7:49"
+  }
+ ],
+ "Acts 7:50": [
+  {
+   "from": "todas estas coisas (Is 66, 12).",
+   "to": "todas estas coisas? (Is 66, 1-2).",
+   "why": "ref: a question (Latin 'nonne'); reference is Is 66, 1-2"
+  }
+ ],
+ "Acts 7:58": [
+  {
+   "from": "o meu espirito",
+   "to": "o meu espírito",
+   "why": "accent: missing accent"
+  }
+ ],
+ "Acts 8:19": [
+  {
+   "from": "Espírito Santo. Pedro",
+   "to": "Espírito Santo.\" Pedro",
+   "why": "punctuation: speech not closed before the narration"
+  }
+ ],
+ "Acts 9:5": [
+  {
+   "from": "Ele (respondeu);",
+   "to": "Ele (respondeu):",
+   "why": "punctuation: semicolon for colon before a quotation"
+  },
+  {
+   "from": "a quem tu persegues,",
+   "to": "a quem tu persegues.",
+   "why": "punctuation: 9:6 starts a new sentence 'Levanta-te'"
+  }
+ ],
+ "Acts 9:6": [
+  {
+   "from": "e ai te será dito",
+   "to": "e aí te será dito",
+   "why": "accent: ai (interjection) for aí (there)"
+  }
+ ],
+ "Acts 9:21": [
+  {
+   "from": "príncipes dos sacerdotes\"",
+   "to": "príncipes dos sacerdotes?\"",
+   "why": "punctuation: question ('Não é este...') lacks its question mark"
+  }
+ ],
+ "Acts 9:30": [
+  {
+   "from": "e dai o enviaram",
+   "to": "e daí o enviaram",
+   "why": "accent: dai (imperative) for daí (from there)"
+  }
+ ],
+ "Acts 9:35": [
+  {
+   "from": "em Sarou",
+   "to": "em Saron",
+   "why": "name: u for n (Vulgate: Saronae)"
+  }
+ ],
+ "Acts 9:38": [
+  {
+   "from": "vir ter convosco",
+   "to": "vir ter conosco",
+   "why": "ocr: the disciples ask Peter to come to them (Vulgate: ad nos); connosco misread"
+  }
+ ],
+ "Acts 10:14": [
+  {
+   "from": "De nenhum modo. Senhor,",
+   "to": "De nenhum modo, Senhor,",
+   "why": "punctuation: period inside the sentence (cf. 11:8 'De nenhum modo, Senhor, porque')"
+  }
+ ],
+ "Acts 11:6": [
+  {
+   "from": "quadrúpedes, eras, répteis",
+   "to": "quadrúpedes, feras, répteis",
+   "why": "ocr: missing letter (Vulgate: bestias)"
+  }
+ ],
+ "Acts 11:19": [
+  {
+   "from": "à Fenicia",
+   "to": "à Fenícia",
+   "why": "accent: missing accent"
+  }
+ ],
+ "Acts 13:13": [
+  {
+   "from": "Panfilia, Aqui",
+   "to": "Panfília. Aqui",
+   "why": "punctuation: missing accent (cf. Acts 2:10 Panfília) and comma before a new sentence"
+  }
+ ],
+ "Acts 13:21": [
+  {
+   "from": "Filho de Cie",
+   "to": "filho de Cis",
+   "why": "name: Cis (Vulgate: filium Cis), s read as e; 'filho' is not capitalized"
+  }
+ ],
+ "Acts 13:33": [
+  {
+   "from": "([Ps. 2,7)",
+   "to": "(Sl 2,7)",
+   "why": "punctuation: unbalanced stray bracket; reference written as elsewhere in the text (cf. 13:35 '(Sl 16,10)')"
+  }
+ ],
+ "Acts 13:34": [
+  {
+   "from": "a David ().",
+   "to": "a David (Is 55, 3).",
+   "why": "ref: empty reference; the citation is Is 55, 3"
+  }
+ ],
+ "Acts 13:42": [
+  {
+   "from": "eles saiam da sinagoga",
+   "to": "eles saíam da sinagoga",
+   "why": "accent: imperfect saíam"
+  }
+ ],
+ "Acts 13:46": [
+  {
+   "from": "resolutamente;",
+   "to": "resolutamente:",
+   "why": "punctuation: semicolon for colon before a quotation"
+  }
+ ],
+ "Acts 13:47": [
+  {
+   "from": "Eu te constitui",
+   "to": "Eu te constituí",
+   "why": "accent: past tense 1st person (Vulgate: posui te)"
+  }
+ ],
+ "Acts 14:6": [
+  {
+   "from": "Licaóuia",
+   "to": "Licaônia",
+   "why": "ocr: garbled name (n read as u)"
+  }
+ ],
+ "Acts 14:10": [
+  {
+   "from": "pós-se a andar",
+   "to": "pôs-se a andar",
+   "why": "accent: verb pôr, past tense"
+  }
+ ],
+ "Acts 15:21": [
+  {
+   "from": "lido todos sábados",
+   "to": "lido todos os sábados",
+   "why": "typo: dropped article; Latin per omne sabbatum; cf. 18:4 todos os sábados"
+  }
+ ],
+ "Acts 15:41": [
+  {
+   "from": "Cilicia",
+   "to": "Cilícia",
+   "why": "accent: spelled Cilícia elsewhere (15:23, 21:39)"
+  }
+ ],
+ "Acts 16:14": [
+  {
+   "from": "Lidia",
+   "to": "Lídia",
+   "why": "name: same name spelled Lídia in 16:40"
+  }
+ ],
+ "Acts 16:16": [
+  {
+   "from": "advinhações",
+   "to": "adivinhações",
+   "why": "typo: missing letter"
+  }
+ ],
+ "Acts 16:18": [
+  {
+   "from": "mulher\" E ele, na mesma hora saiu.",
+   "to": "mulher.\" E ele, na mesma hora, saiu.",
+   "why": "punctuation: missing period closing the command; unbalanced comma around 'na mesma hora'"
+  }
+ ],
+ "Acts 16:21": [
+  {
+   "from": "licito",
+   "to": "lícito",
+   "why": "accent: missing accent"
+  }
+ ],
+ "Acts 16:33": [
+  {
+   "from": "e, imediatamente foi",
+   "to": "e, imediatamente, foi",
+   "why": "punctuation: unbalanced comma; cf. 21:30 'e, imediatamente, foram'"
+  }
+ ],
+ "Acts 17:1": [
+  {
+   "from": "sinagoga, dos Judeus",
+   "to": "sinagoga dos Judeus",
+   "why": "punctuation: stray comma; cf. 17:10 'na sinagoga dos Judeus'"
+  }
+ ],
+ "Acts 17:18": [
+  {
+   "from": "Uns diziam;",
+   "to": "Uns diziam:",
+   "why": "punctuation: semicolon for colon before quoted speech"
+  }
+ ],
+ "Acts 17:22": [
+  {
+   "from": "Aréopago",
+   "to": "Areópago",
+   "why": "accent: misplaced accent; Areópago in 17:19"
+  }
+ ],
+ "Acts 18:5": [
+  {
+   "from": "chegaram a Macedônia",
+   "to": "chegaram da Macedônia",
+   "why": "wrong-word: Paul is in Corinth; Latin 'venissent de Macedonia'"
+  }
+ ],
+ "Acts 18:6": [
+  {
+   "from": "para os gentios\"",
+   "to": "para os gentios.\"",
+   "why": "punctuation: missing period at end of speech"
+  }
+ ],
+ "Acts 18:15": [
+  {
+   "from": "de tais coisas\"",
+   "to": "de tais coisas.\"",
+   "why": "punctuation: missing period at end of speech"
+  }
+ ],
+ "Acts 18:23": [
+  {
+   "from": "Frigia",
+   "to": "Frígia",
+   "why": "accent: spelled Frígia in 16:6"
+  }
+ ],
+ "Acts 18:27": [
+  {
+   "from": "ir a Acaia",
+   "to": "ir à Acaia",
+   "why": "accent: missing crase (a + a Acaia); cf. 20:1 'ir à Macedônia'"
+  }
+ ],
+ "Acts 18:28": [
+  {
+   "from": "püblicamente",
+   "to": "publicamente",
+   "why": "ocr: spurious diaeresis; spelled publicamente in 16:37, 20:20"
+  }
+ ],
+ "Acts 19:2": [
+  {
+   "from": "a fé? \"Responderam-lhe",
+   "to": "a fé?\" Responderam-lhe",
+   "why": "punctuation: closing quotation mark on the wrong side of the space"
+  }
+ ],
+ "Acts 19:17": [
+  {
+   "from": "em Êfeso",
+   "to": "em Éfeso",
+   "why": "accent: wrong accent (circumflex for acute)"
+  },
+  {
+   "from": "era glorificado,",
+   "to": "era glorificado.",
+   "why": "punctuation: sentence ends; 19:18 begins a new sentence"
+  }
+ ],
+ "Acts 19:22": [
+  {
+   "from": "na Asia",
+   "to": "na Ásia",
+   "why": "accent: missing accent; Ásia elsewhere"
+  }
+ ],
+ "Acts 19:31": [
+  {
+   "from": "asíarcas",
+   "to": "asiarcas",
+   "why": "accent: spurious accent"
+  }
+ ],
+ "Acts 20:4": [
+  {
+   "from": "Tíquito",
+   "to": "Tíquico",
+   "why": "name: Tychicus is Tíquico everywhere else (Eph, Col, 2Tim, Tit)"
+  }
+ ],
+ "Acts 20:7": [
+  {
+   "from": "Paulo que devia",
+   "to": "Paulo, que devia",
+   "why": "punctuation: unbalanced comma around explanatory relative clause"
+  }
+ ],
+ "Acts 20:15": [
+  {
+   "from": "a Mileto;",
+   "to": "a Mileto.",
+   "why": "punctuation: sentence ends; 20:16 begins 'Com efeito'"
+  }
+ ],
+ "Acts 20:25": [
+  {
+   "from": "não tomareis mais",
+   "to": "não tornareis mais",
+   "why": "ocr: rn read as m; cf. 20:38 'não tornariam mais a ver'"
+  }
+ ],
+ "Acts 21:2": [
+  {
+   "from": "Fenicia",
+   "to": "Fenícia",
+   "why": "accent: spelled Fenícia in 15:3"
+  }
+ ],
+ "Acts 21:3": [
+  {
+   "from": "Chegados a vista",
+   "to": "Chegados à vista",
+   "why": "accent: missing crase; cf. 27:7 'chegado à vista de Gnido'"
+  }
+ ],
+ "Acts 21:6": [
+  {
+   "from": "despedido-uns",
+   "to": "despedido uns",
+   "why": "typo: spurious hyphen"
+  }
+ ],
+ "Acts 21:20": [
+  {
+   "from": "disseram-lhe;",
+   "to": "disseram-lhe:",
+   "why": "punctuation: semicolon for colon before quoted speech"
+  }
+ ],
+ "Acts 21:37": [
+  {
+   "from": "É me permitido",
+   "to": "É-me permitido",
+   "why": "punctuation: missing enclitic hyphen; cf. 26:1 'É-te permitido'"
+  }
+ ],
+ "Acts 22:3": [
+  {
+   "from": "Cilicia",
+   "to": "Cilícia",
+   "why": "accent: spelled Cilícia elsewhere"
+  }
+ ],
+ "Acts 22:5": [
+  {
+   "from": "Jerúsalem",
+   "to": "Jerusalém",
+   "why": "name: misplaced accent in name"
+  }
+ ],
+ "Acts 22:25": [
+  {
+   "from": "É vos permitido",
+   "to": "É-vos permitido",
+   "why": "punctuation: missing enclitic hyphen; cf. 26:1 'É-te permitido'"
+  }
+ ],
+ "Acts 22:29": [
+  {
+   "from": "imediatamente afastaram-se",
+   "to": "Imediatamente afastaram-se",
+   "why": "typo: sentence start needs capital; 22:28 ends with period"
+  }
+ ],
+ "Acts 23:12": [
+  {
+   "from": "matassem contra Paulo",
+   "to": "matassem Paulo",
+   "why": "wrong-word: stray 'contra' (ungrammatical); Latin 'donec occiderent Paulum'"
+  }
+ ],
+ "Acts 23:26": [
+  {
+   "from": "Lisias",
+   "to": "Lísias",
+   "why": "name: spelled Lísias in 24:7, 24:22"
+  }
+ ],
+ "Acts 23:34": [
+  {
+   "from": "Cilicia",
+   "to": "Cilícia",
+   "why": "accent: spelled Cilícia elsewhere"
+  }
+ ],
+ "Acts 26:14": [
+  {
+   "from": "persegües",
+   "to": "persegues",
+   "why": "ocr: spurious diaeresis"
+  },
+  {
+   "from": "recaleitrar",
+   "to": "recalcitrar",
+   "why": "ocr: c/e and l/i misreading"
+  }
+ ],
+ "Acts 26:15": [
+  {
+   "from": "és tu Senhor?",
+   "to": "és tu, Senhor?",
+   "why": "punctuation: missing vocative comma; cf. 22:8 'Quem és tu, Senhor?'"
+  },
+  {
+   "from": "persegües",
+   "to": "persegues",
+   "why": "ocr: spurious diaeresis"
+  }
+ ],
+ "Acts 26:22": [
+  {
+   "from": "contínuo a dar",
+   "to": "continuo a dar",
+   "why": "accent: verb continuar, not adjective"
+  }
+ ],
+ "Acts 26:29": [
+  {
+   "from": "estes grilhões.",
+   "to": "estes grilhões.\"",
+   "why": "punctuation: missing closing quote; 26:30 is narration"
+  }
+ ],
+ "Acts 26:32": [
+  {
+   "from": "a Festo. \"Ele",
+   "to": "a Festo: \"Ele",
+   "why": "punctuation: period for colon before quoted speech"
+  }
+ ],
+ "Acts 27:1": [
+  {
+   "from": "chamado Júlio,",
+   "to": "chamado Júlio.",
+   "why": "punctuation: sentence ends; 27:2 begins a new sentence"
+  }
+ ],
+ "Acts 27:18": [
+  {
+   "from": "balidos",
+   "to": "batidos",
+   "why": "ocr: l for t; beaten by the storm"
+  }
+ ],
+ "Acts 27:20": [
+  {
+   "from": "perdida Ioda",
+   "to": "perdida toda",
+   "why": "ocr: I for t"
+  }
+ ],
+ "Acts 27:21": [
+  {
+   "from": "meus amigos seguindo",
+   "to": "meus amigos, seguindo",
+   "why": "punctuation: unclosed vocative"
+  }
+ ],
+ "Acts 27:31": [
+  {
+   "from": "aos soldados. \"Se",
+   "to": "aos soldados: \"Se",
+   "why": "punctuation: period for colon before quoted speech"
+  }
+ ],
+ "Acts 27:42": [
+  {
+   "from": "Á resolução",
+   "to": "A resolução",
+   "why": "accent: spurious accent on article"
+  }
+ ],
+ "Acts 28:17": [
+  {
+   "from": "disse-lhes;",
+   "to": "disse-lhes:",
+   "why": "punctuation: semicolon for colon before quoted speech"
+  },
+  {
+   "from": "Jesusalém",
+   "to": "Jerusalém",
+   "why": "name: garbled name"
+  }
+ ],
+ "Acts 28:22": [
+  {
+   "from": "dá tua boca",
+   "to": "da tua boca",
+   "why": "accent: preposition da, not verb dá"
+  }
+ ],
+ "Rom 2:20": [
+  {
+   "from": "ciência a da verdade",
+   "to": "ciência e da verdade",
+   "why": "wrong-word: conjunction needed; Latin scientiae et veritatis"
+  }
+ ],
+ "Rom 3:22": [
+  {
+   "from": "(é infundada)",
+   "to": "(é infundida)",
+   "why": "wrong-word: 'infundada' (unfounded) makes no sense; justice infused in all who believe"
+  }
+ ],
+ "Rom 4:14": [
+  {
+   "from": "inutil",
+   "to": "inútil",
+   "why": "accent: missing accent"
+  }
+ ],
+ "Rom 4:15": [
+  {
+   "from": "trangressão",
+   "to": "transgressão",
+   "why": "typo: missing letter"
+  }
+ ],
+ "Rom 4:17": [
+  {
+   "from": "Eu te constitui",
+   "to": "Eu te constituí",
+   "why": "accent: 1st person past tense needs accent"
+  }
+ ],
+ "Rom 7:6": [
+  {
+   "from": "novo espirito",
+   "to": "novo espírito",
+   "why": "accent: missing accent"
+  }
+ ],
+ "Rom 7:23": [
+  {
+   "from": "vejo dos meus",
+   "to": "vejo nos meus",
+   "why": "wrong-word: Latin 'in membris meis'; 'dos' ungrammatical here"
+  }
+ ],
+ "Rom 8:18": [
+  {
+   "from": "se manifestara em nós",
+   "to": "se manifestará em nós",
+   "why": "accent: future tense (revelabitur), not pluperfect"
+  }
+ ],
+ "Rom 9:7": [
+  {
+   "from": "teu nome. (Gn 21, 12).",
+   "to": "teu nome (Gn 21, 12).",
+   "why": "punctuation: doubled period around reference; other refs precede the final period"
+  }
+ ],
+ "Rom 9:13": [
+  {
+   "from": "(Ml 1, 1-3)",
+   "to": "(Ml 1, 2-3)",
+   "why": "ref: reference: 'Jacob dilexi' is Ml 1, 2-3"
+  }
+ ],
+ "Rom 9:25": [
+  {
+   "from": "Oseias(Os",
+   "to": "Oseias (Os",
+   "why": "punctuation: missing space before parenthesis"
+  }
+ ],
+ "Rom 9:31": [
+  {
+   "from": "à lei da justiça,",
+   "to": "à lei da justiça.",
+   "why": "punctuation: sentence ends; 9:32 begins 'Por que causa?'"
+  }
+ ],
+ "Rom 10:3": [
+  {
+   "from": "sujeitaram a justiça",
+   "to": "sujeitaram à justiça",
+   "why": "accent: missing crase (sujeitar-se a + a justiça)"
+  }
+ ],
+ "Rom 10:6": [
+  {
+   "from": "céu?— e",
+   "to": "céu? — e",
+   "why": "punctuation: missing space before dash; cf. 10:7 'abismo? — e'"
+  }
+ ],
+ "Rom 11:7": [
+  {
+   "from": "obsecados",
+   "to": "obcecados",
+   "why": "typo: misspelling"
+  },
+  {
+   "from": "malicia",
+   "to": "malícia",
+   "why": "accent: missing accent"
+  }
+ ],
+ "Rom 11:8": [
+  {
+   "from": "espirito de torpor",
+   "to": "espírito de torpor",
+   "why": "accent: missing accent"
+  }
+ ],
+ "Rom 11:9": [
+  {
+   "from": "seu justo castigo",
+   "to": "seu justo castigo.",
+   "why": "punctuation: missing period; 11:10 begins a new sentence"
+  }
+ ],
+ "Rom 11:14": [
+  {
+   "from": "alguns deles",
+   "to": "alguns deles.",
+   "why": "punctuation: missing period; 11:15 begins 'Porque'"
+  }
+ ],
+ "Rom 11:33": [
+  {
+   "from": "O profundidade",
+   "to": "Ó profundidade",
+   "why": "accent: interjection Ó"
+  }
+ ],
+ "Rom 13:5": [
+  {
+   "from": "É pois, necessário",
+   "to": "É, pois, necessário",
+   "why": "punctuation: unbalanced comma around 'pois'"
+  }
+ ],
+ "Rom 13:6": [
+  {
+   "from": "seu oficio",
+   "to": "seu ofício",
+   "why": "accent: missing accent"
+  }
+ ],
+ "Rom 14:15": [
+  {
+   "from": "contrístado",
+   "to": "contristado",
+   "why": "accent: spurious accent"
+  }
+ ],
+ "Rom 14:16": [
+  {
+   "from": "de critica",
+   "to": "de crítica",
+   "why": "accent: noun crítica"
+  }
+ ],
+ "Rom 15:3": [
+  {
+   "from": "(S. 68,10)",
+   "to": "(Sl 68,10)",
+   "why": "ocr: garbled Psalm abbreviation; text uses 'Sl' elsewhere"
+  }
+ ],
+ "Rom 15:10": [
+  {
+   "from": "(Dt 22,43)",
+   "to": "(Dt 32,43)",
+   "why": "ref: reference: the Song of Moses, Dt 32,43"
+  }
+ ],
+ "Rom 15:11": [
+  {
+   "from": "(Sl 116, 1):",
+   "to": "(Sl 116, 1).",
+   "why": "punctuation: sentence ends; 15:12 begins a new sentence"
+  }
+ ],
+ "Rom 15:14": [
+  {
+   "from": "convencido. Irmãos",
+   "to": "convencido, Irmãos",
+   "why": "punctuation: period breaks the sentence before the vocative"
+  }
+ ],
+ "Rom 16:3": [
+  {
+   "from": "Prisca e Aquila",
+   "to": "Prisca e Áquila",
+   "why": "accent: the text spells the name Áquila everywhere else (Acts 18, 2Tim 4:19)"
+  }
+ ],
+ "Rom 16:7": [
+  {
+   "from": "Audronico",
+   "to": "Andronico",
+   "why": "ocr: u/n misread; Latin Andronicum"
+  }
+ ],
+ "Rom 16:15": [
+  {
+   "from": "Nereve sua irmã",
+   "to": "Nereu e sua irmã",
+   "why": "name: garbled 'Nereu e'; Latin 'Nereum, et sororem ejus'"
+  }
+ ],
+ "Rom 16:19": [
+  {
+   "from": "em,vós",
+   "to": "em vós",
+   "why": "punctuation: stray comma inside 'em vós'"
+  }
+ ],
+ "Rom 16:22": [
+  {
+   "from": "no Senhor,",
+   "to": "no Senhor.",
+   "why": "punctuation: sentence ends; 16:23 starts a new sentence 'Saúda-vos'"
+  }
+ ],
+ "1Cor 1:26": [
+  {
+   "from": "(vereis)",
+   "to": "(e vereis)",
+   "why": "bc: BC keeps the conjunction our copy dropped (same systematic drop as in 1Cor 9:25, Eph 4:18)"
+  }
+ ],
+ "1Cor 3:1": [
+  {
+   "from": "mim. Irmãos",
+   "to": "mim, Irmãos",
+   "why": "punctuation: period inside the sentence before the vocative"
+  }
+ ],
+ "1Cor 3:6": [
+  {
+   "from": "Eu plantei. Apolo",
+   "to": "Eu plantei, Apolo",
+   "why": "punctuation: one sentence (Latin 'Ego plantavi, Apollo rigavit'); comma read as period"
+  }
+ ],
+ "1Cor 3:22": [
+  {
+   "from": "a vida ou seja",
+   "to": "a vida, ou seja",
+   "why": "punctuation: missing comma in the 'ou seja X, ou seja Y' series"
+  }
+ ],
+ "1Cor 5:8": [
+  {
+   "from": "perversidade. mas",
+   "to": "perversidade, mas",
+   "why": "punctuation: period inside the sentence before lowercase 'mas'"
+  }
+ ],
+ "1Cor 5:12": [
+  {
+   "from": "estão, fora?",
+   "to": "estão fora?",
+   "why": "punctuation: stray comma; parallel 'aqueles que estão dentro'"
+  }
+ ],
+ "1Cor 7:10": [
+  {
+   "from": "Quanto aqueles",
+   "to": "Quanto àqueles",
+   "why": "accent: crase required after 'quanto a'"
+  }
+ ],
+ "1Cor 7:11": [
+  {
+   "from": "marido, E o marido",
+   "to": "marido. E o marido",
+   "why": "punctuation: comma before a capitalized new sentence"
+  }
+ ],
+ "1Cor 7:29": [
+  {
+   "from": "digo. Irmãos:",
+   "to": "digo, Irmãos:",
+   "why": "punctuation: period inside the sentence before the vocative"
+  }
+ ],
+ "1Cor 8:5": [
+  {
+   "from": "(assim sejam muitos os deuses; muitos os senhores)",
+   "to": "(e assim sejam muitos os deuses e muitos os senhores)",
+   "why": "bc: BC keeps both 'e's; Latin 'dii multi, et domini multi'"
+  }
+ ],
+ "1Cor 9:15": [
+  {
+   "from": "titulo",
+   "to": "título",
+   "why": "accent: missing accent on the noun"
+  }
+ ],
+ "1Cor 9:25": [
+  {
+   "from": "(fazem-no)",
+   "to": "(e fazem-no)",
+   "why": "bc: BC keeps the conjunction our copy dropped"
+  }
+ ],
+ "1Cor 10:10": [
+  {
+   "from": "(Anjo), exterminador",
+   "to": "(Anjo) exterminador",
+   "why": "punctuation: stray comma between noun and adjective"
+  }
+ ],
+ "1Cor 10:18": [
+  {
+   "from": "vitimas",
+   "to": "vítimas",
+   "why": "accent: missing accent on the noun"
+  }
+ ],
+ "1Cor 10:28": [
+  {
+   "from": "atenção aquele",
+   "to": "atenção àquele",
+   "why": "accent: crase required: 'em atenção a aquele'"
+  }
+ ],
+ "1Cor 11:31": [
+  {
+   "from": "seriamos",
+   "to": "seríamos",
+   "why": "accent: conditional of ser needs the accent"
+  }
+ ],
+ "1Cor 12:24": [
+  {
+   "from": "honra aquele",
+   "to": "honra àquele",
+   "why": "accent: crase required: 'dar honra a aquele'"
+  }
+ ],
+ "1Cor 12:30": [
+  {
+   "from": "Falam todas",
+   "to": "Falam todos",
+   "why": "wrong-word: refers to persons, parallel to 'Têm todos'; Latin 'omnes'"
+  }
+ ],
+ "1Cor 14:1": [
+  {
+   "from": "espituais",
+   "to": "espirituais",
+   "why": "typo: missing letters"
+  }
+ ],
+ "1Cor 14:6": [
+  {
+   "from": "pois. Irmãos",
+   "to": "pois, Irmãos",
+   "why": "punctuation: period inside the sentence before the vocative"
+  }
+ ],
+ "1Cor 14:7": [
+  {
+   "from": "ou a citara",
+   "to": "ou a cítara",
+   "why": "accent: missing accent on cítara"
+  },
+  {
+   "from": "na citara?",
+   "to": "na cítara?",
+   "why": "accent: missing accent on cítara"
+  }
+ ],
+ "1Cor 14:39": [
+  {
+   "from": "proibaís",
+   "to": "proibais",
+   "why": "accent: misplaced accent"
+  }
+ ],
+ "1Cor 15:23": [
+  {
+   "from": "primícias. Cristo",
+   "to": "primícias, Cristo",
+   "why": "punctuation: period inside the clause 'como primícias, Cristo; depois...'"
+  }
+ ],
+ "1Cor 15:28": [
+  {
+   "from": "sujeito aquele",
+   "to": "sujeito àquele",
+   "why": "accent: crase required: 'sujeito a aquele'"
+  }
+ ],
+ "1Cor 16:1": [
+  {
+   "from": "beneficio",
+   "to": "benefício",
+   "why": "accent: missing accent on the noun"
+  }
+ ],
+ "1Cor 16:3": [
+  {
+   "from": "tíverdes",
+   "to": "tiverdes",
+   "why": "accent: spurious accent"
+  }
+ ],
+ "1Cor 16:15": [
+  {
+   "from": "recomendação. Irmãos",
+   "to": "recomendação, Irmãos",
+   "why": "punctuation: period inside the sentence before the vocative"
+  }
+ ],
+ "1Cor 16:19": [
+  {
+   "from": "da Asia",
+   "to": "da Ásia",
+   "why": "accent: missing accent; Ásia elsewhere"
+  },
+  {
+   "from": "Âquila",
+   "to": "Áquila",
+   "why": "accent: wrong accent; the text spells Áquila elsewhere"
+  }
+ ],
+ "2Cor 1:16": [
+  {
+   "from": "Judeia,",
+   "to": "Judeia.",
+   "why": "punctuation: sentence ends; 1:17 starts a new sentence 'Tendo eu'"
+  }
+ ],
+ "2Cor 1:20": [
+  {
+   "from": "por isso é também",
+   "to": "por isso, é também",
+   "why": "punctuation: closing comma of the parenthetical ', por isso,' is missing"
+  }
+ ],
+ "2Cor 2:2": [
+  {
+   "from": "Porquê, se",
+   "to": "Porque, se",
+   "why": "accent: causal conjunction, not the noun/interrogative 'porquê'; Latin 'Si enim'"
+  }
+ ],
+ "2Cor 2:13": [
+  {
+   "from": "noticias",
+   "to": "notícias",
+   "why": "accent: missing accent on the noun"
+  }
+ ],
+ "2Cor 3:15": [
+  {
+   "from": "posto, sobre",
+   "to": "posto sobre",
+   "why": "punctuation: stray comma between verb and its complement"
+  }
+ ],
+ "2Cor 4:16": [
+  {
+   "from": "E’ por isto",
+   "to": "É por isto",
+   "why": "accent: typewriter E’ for É"
+  }
+ ],
+ "2Cor 4:17": [
+  {
+   "from": "de gloria",
+   "to": "de glória",
+   "why": "accent: missing accent on the noun"
+  }
+ ],
+ "2Cor 5:2": [
+  {
+   "from": "da nossa, habitação",
+   "to": "da nossa habitação",
+   "why": "punctuation: stray comma between possessive and noun"
+  }
+ ],
+ "2Cor 5:10": [
+  {
+   "from": "mal.­",
+   "to": "mal.",
+   "why": "typo: stray soft hyphen (U+00AD) after the final period"
+  }
+ ],
+ "2Cor 5:12": [
+  {
+   "from": "se gloriara",
+   "to": "se gloriam",
+   "why": "ocr: m misread as 'ra'; present tense required (Latin 'gloriantur')"
+  }
+ ],
+ "2Cor 5:19": [
+  {
+   "from": "reconciliação,",
+   "to": "reconciliação.",
+   "why": "punctuation: sentence ends; 5:20 starts a new sentence 'Logo,'"
+  }
+ ],
+ "2Cor 5:20": [
+  {
+   "from": "exortando-voe",
+   "to": "exortando-vos",
+   "why": "ocr: s misread as e"
+  }
+ ],
+ "2Cor 6:17": [
+  {
+   "from": "Portanto, sai do",
+   "to": "Portanto, saí do",
+   "why": "accent: plural imperative paired with 'separai-vos' (Latin 'exite')"
+  }
+ ],
+ "2Cor 7:1": [
+  {
+   "from": "carissimos",
+   "to": "caríssimos",
+   "why": "accent: missing accent"
+  }
+ ],
+ "2Cor 7:15": [
+  {
+   "from": "tremor,",
+   "to": "tremor.",
+   "why": "punctuation: sentence ends; 7:16 starts a new sentence 'Eu me alegro'"
+  }
+ ],
+ "2Cor 8:13": [
+  {
+   "from": "alivio",
+   "to": "alívio",
+   "why": "accent: missing accent on the noun"
+  }
+ ],
+ "2Cor 8:14": [
+  {
+   "from": "está escrito;",
+   "to": "está escrito:",
+   "why": "punctuation: introduces the quotation in 8:15"
+  }
+ ],
+ "2Cor 10:2": [
+  {
+   "from": "Suplico-vos pois,",
+   "to": "Suplico-vos, pois,",
+   "why": "punctuation: opening comma of ', pois,' is missing"
+  }
+ ],
+ "2Cor 10:7": [
+  {
+   "from": "como é, de Cristo",
+   "to": "como é de Cristo",
+   "why": "punctuation: stray comma splitting 'é de Cristo'"
+  }
+ ],
+ "2Cor 11:12": [
+  {
+   "from": "Mas O que",
+   "to": "Mas o que",
+   "why": "typo: stray capital mid-sentence"
+  },
+  {
+   "from": "para dai se",
+   "to": "para daí se",
+   "why": "accent: adverb 'daí' (from there), not the imperative 'dai'"
+  }
+ ],
+ "2Cor 12:10": [
+  {
+   "from": "minhas, enfermidades",
+   "to": "minhas enfermidades",
+   "why": "punctuation: stray comma between possessive and noun"
+  }
+ ],
+ "2Cor 13:4": [
+  {
+   "from": "Também. nós",
+   "to": "Também nós",
+   "why": "punctuation: stray period mid-sentence"
+  }
+ ],
+ "Gal 1:3": [
+  {
+   "from": "Graças a vós",
+   "to": "Graça a vós",
+   "why": "wrong-word: greeting 'Graça ... e paz' (Latin 'Gratia vobis'), not 'thanks'"
+  }
+ ],
+ "Gal 2:9": [
+  {
+   "from": "e ele aos circuncidados",
+   "to": "e eles aos circuncidados",
+   "why": "wrong-word: refers to Tiago, Cefas and João (Latin 'ipsi')"
+  }
+ ],
+ "Gal 3:1": [
+  {
+   "from": "Os Gálatas",
+   "to": "Ó Gálatas",
+   "why": "ocr: vocative interjection (Latin 'O insensati Galatae')"
+  }
+ ],
+ "Gal 3:13": [
+  {
+   "from": "(D l. 21,23)",
+   "to": "(Dt 21,23)",
+   "why": "ocr: garbled reference abbreviation for Deuteronomy"
+  }
+ ],
+ "Gal 4:17": [
+  {
+   "from": "apóstolos)mostram-se",
+   "to": "apóstolos) mostram-se",
+   "why": "punctuation: missing space after the parenthesis"
+  }
+ ],
+ "Gal 5:11": [
+  {
+   "from": "perseguido. Logo",
+   "to": "perseguido? Logo",
+   "why": "punctuation: question introduced by 'por que' (Latin 'quid ... patior?')"
+  }
+ ],
+ "Gal 5:17": [
+  {
+   "from": "(a carne; o espirito)",
+   "to": "(a carne e o espírito)",
+   "why": "bc: BC has 'e' where ours has ';'; plus missing accent on espírito"
+  }
+ ],
+ "Gal 5:21": [
+  {
+   "from": "reino de Deus,",
+   "to": "reino de Deus.",
+   "why": "punctuation: sentence ends; 5:22 starts a new sentence 'Ao contrário,'"
+  }
+ ],
+ "Gal 6:18": [
+  {
+   "from": "sejam com",
+   "to": "seja com",
+   "why": "wrong-word: agrees with singular 'a graça'"
+  }
+ ],
+ "Eph 1:12": [
+  {
+   "from": "em Cristo,",
+   "to": "em Cristo.",
+   "why": "punctuation: sentence ends; 1:13 starts a new sentence 'Nele também vós'"
+  }
+ ],
+ "Eph 1:17": [
+  {
+   "from": "o Deus Nosso Senhor",
+   "to": "o Deus de Nosso Senhor",
+   "why": "typo: dropped 'de'; Latin 'Deus Domini nostri Jesu Christi'"
+  }
+ ],
+ "Eph 4:1": [
+  {
+   "from": "digno de vocação",
+   "to": "digno da vocação",
+   "why": "typo: definite vocation 'a que fostes chamados'; dropped article"
+  }
+ ],
+ "Eph 4:18": [
+  {
+   "from": "(estão)",
+   "to": "(e estão)",
+   "why": "bc: BC keeps the conjunction; without it the clause doesn't connect"
+  },
+  {
+   "from": "ceguira",
+   "to": "cegueira",
+   "why": "typo: missing letter"
+  }
+ ],
+ "Eph 6:7": [
+  {
+   "from": "e não os homens.",
+   "to": "e não os homens,",
+   "why": "punctuation: sentence continues: Eph 6:8 starts lowercase 'sabendo que'"
+  }
+ ],
+ "Phil 2:19": [
+  {
+   "from": "noticias",
+   "to": "notícias",
+   "why": "accent: missing accent (cf. 'notícia' Phil 2:26)"
+  },
+  {
+   "from": "no Senhor Jesus enviar-vos",
+   "to": "no Senhor Jesus, enviar-vos",
+   "why": "punctuation: closing comma of the parenthetical 'no Senhor Jesus' opened after 'Espero,'"
+  }
+ ],
+ "Phil 3:12": [
+  {
+   "from": "(que andava fugido; o perseguia)",
+   "to": "(que andava fugido e o perseguia)",
+   "why": "bc: ';' is an OCR misreading of 'e'; BC reads 'e o perseguia'"
+  }
+ ],
+ "Phil 3:15": [
+  {
+   "from": "diferentes. Deus",
+   "to": "diferentes, Deus",
+   "why": "punctuation: period breaks the conditional sentence 'se ... tendes pensamentos diferentes, Deus ... vos esclarecerá'"
+  }
+ ],
+ "Phil 3:16": [
+  {
+   "from": "Quanto, porém, aquilo",
+   "to": "Quanto, porém, àquilo",
+   "why": "accent: crase: quanto a + aquilo"
+  }
+ ],
+ "Phil 4:3": [
+  {
+   "from": "peio Evangelho",
+   "to": "pelo Evangelho",
+   "why": "ocr: l misread as i"
+  }
+ ],
+ "Phil 4:5": [
+  {
+   "from": "(contempla-vos)",
+   "to": "(e contempla-vos)",
+   "why": "bc: missing 'e'; BC reads '(e contempla-vos)'"
+  }
+ ],
+ "Phil 4:15": [
+  {
+   "from": "quando partida Macedônia",
+   "to": "quando parti da Macedônia",
+   "why": "ocr: word split misplaced: 'parti da' (Lat. 'quando profectus sum a Macedonia')"
+  }
+ ],
+ "Col 1:14": [
+  {
+   "from": "o qual, (pelo",
+   "to": "no qual, (pelo",
+   "why": "wrong-word: 'o qual ... temos a redenção' is ungrammatical; Lat. 'in quo habemus redemptionem'"
+  }
+ ],
+ "Col 1:28": [
+  {
+   "from": "E’ ele",
+   "to": "É ele",
+   "why": "bc: typographic E’ for É; BC reads 'É'"
+  }
+ ],
+ "Col 1:29": [
+  {
+   "from": "E’ para",
+   "to": "É para",
+   "why": "bc: typographic E’ for É; BC reads 'É'"
+  }
+ ],
+ "Col 2:1": [
+  {
+   "from": "Laodiceia, pelas e por todos",
+   "to": "Laodiceia, e por todos",
+   "why": "ocr: stray word 'pelas'; Lat. 'qui sunt Laodiciae, et quicumque non viderunt'"
+  }
+ ],
+ "Col 2:5": [
+  {
+   "from": "ausente quanto Cristo, ao corpo,",
+   "to": "ausente quanto ao corpo,",
+   "why": "ocr: stray 'Cristo,' inside 'quanto ao corpo'; Lat. 'etsi corpore absens sum'"
+  }
+ ],
+ "Col 2:10": [
+  {
+   "from": "(de graça; de ciência)",
+   "to": "(de graça e de ciência)",
+   "why": "bc: ';' is an OCR misreading of 'e'; BC reads 'e'"
+  }
+ ],
+ "Col 2:23": [
+  {
+   "from": "(supersticioso dos anjos)",
+   "to": "(e supersticioso dos anjos)",
+   "why": "bc: missing 'e'; BC reads '(e supersticioso dos anjos)'"
+  }
+ ],
+ "Col 3:3": [
+  {
+   "from": "e a nossa vida",
+   "to": "e a vossa vida",
+   "why": "ocr: v/n confusion: 'estais mortos ... e a vossa vida' (Lat. 'vita vestra'; cf. 3:4 'a vossa vida')"
+  }
+ ],
+ "Col 3:14": [
+  {
+   "from": "porém tende",
+   "to": "porém, tende",
+   "why": "punctuation: closing comma of parenthetical 'porém'"
+  }
+ ],
+ "1Thess 1:4": [
+  {
+   "from": "beneficias",
+   "to": "benefícios",
+   "why": "ocr: non-word; 'dos benefícios da Redenção'"
+  }
+ ],
+ "1Thess 1:10": [
+  {
+   "from": "Jesus o qual",
+   "to": "Jesus, o qual",
+   "why": "punctuation: missing comma before appositive relative clause"
+  }
+ ],
+ "1Thess 3:1": [
+  {
+   "from": "noticias",
+   "to": "notícias",
+   "why": "accent: missing accent"
+  }
+ ],
+ "1Thess 3:8": [
+  {
+   "from": "vivem os,",
+   "to": "vivemos,",
+   "why": "ocr: split word; Lat. 'vivimus'"
+  }
+ ],
+ "1Thess 3:12": [
+  {
+   "from": "Senhor vos faça",
+   "to": "O Senhor vos faça",
+   "why": "ocr: missing article at start of sentence (Lat. 'Vos autem Dominus multiplicet')"
+  }
+ ],
+ "1Thess 5:3": [
+  {
+   "from": "segurança\" então",
+   "to": "segurança\", então",
+   "why": "punctuation: missing comma after the quoted clause before 'então'"
+  }
+ ],
+ "1Thess 5:8": [
+  {
+   "from": "(isto é da luz",
+   "to": "(isto é, da luz",
+   "why": "punctuation: missing comma after explanatory 'isto é' (text's usual form)"
+  }
+ ],
+ "1Thess 5:10": [
+  {
+   "from": "afim de que",
+   "to": "a fim de que",
+   "why": "typo: 'a fim de que' (as everywhere else in the text)"
+  }
+ ],
+ "2Thess 1:4": [
+  {
+   "from": "na igrejas",
+   "to": "nas igrejas",
+   "why": "typo: missing s: plural agreement"
+  }
+ ],
+ "2Thess 1:6": [
+  {
+   "from": "tribulação aqueles",
+   "to": "tribulação àqueles",
+   "why": "accent: crase: dar ... a + aqueles"
+  }
+ ],
+ "2Thess 2:8": [
+  {
+   "from": "boca; aniquilará",
+   "to": "boca e aniquilará",
+   "why": "bc: ';' is an OCR misreading of 'e'; BC reads 'e aniquilará'"
+  }
+ ],
+ "2Thess 2:12": [
+  {
+   "from": "mas puserem",
+   "to": "mas puseram",
+   "why": "typo: past tense parallel to 'não deram crédito' (Lat. 'consenserunt')"
+  }
+ ],
+ "2Thess 3:9": [
+  {
+   "from": "modelo a imitar,",
+   "to": "modelo a imitar.",
+   "why": "punctuation: sentence ends; 3:10 starts a new sentence 'Desta sorte'"
+  }
+ ],
+ "1Tim 1:2": [
+  {
+   "from": "Jesus Cristo Nosso Senhor,",
+   "to": "Jesus Cristo Nosso Senhor.",
+   "why": "punctuation: greeting ends; 1:3 starts new sentence 'Recomendei-te' (cf. 2Tim 1:2)"
+  }
+ ],
+ "1Tim 1:12": [
+  {
+   "from": "Dou graças aquele",
+   "to": "Dou graças àquele",
+   "why": "accent: crase: dar graças a + aquele"
+  }
+ ],
+ "1Tim 2:15": [
+  {
+   "from": "salvar-se-a pela (legitima)",
+   "to": "salvar-se-á pela (legítima)",
+   "why": "accent: missing accents: future 'salvar-se-á', 'legítima'"
+  }
+ ],
+ "1Tim 4:16": [
+  {
+   "from": "fazendo isto te salvarás",
+   "to": "fazendo isto, te salvarás",
+   "why": "punctuation: closing comma of gerund clause opened after 'porque,'"
+  }
+ ],
+ "1Tim 5:4": [
+  {
+   "from": "receberam porque isto",
+   "to": "receberam, porque isto",
+   "why": "punctuation: missing comma before causal 'porque'"
+  }
+ ],
+ "1Tim 5:11": [
+  {
+   "from": "voltar a casar-se.",
+   "to": "voltar a casar-se,",
+   "why": "punctuation: sentence continues: 5:12 starts lowercase 'e tornam-se'"
+  }
+ ],
+ "1Tim 6:17": [
+  {
+   "from": "para nosso uso.",
+   "to": "para nosso uso,",
+   "why": "punctuation: sentence continues: 6:18 starts lowercase 'que façam bem'"
+  }
+ ],
+ "2Tim 1:3": [
+  {
+   "from": "sem cessar faço",
+   "to": "sem cessar, faço",
+   "why": "punctuation: closing comma of parenthetical 'sem cessar' opened after 'quando,'"
+  }
+ ],
+ "2Tim 1:10": [
+  {
+   "from": "o qual destruía a morte",
+   "to": "o qual destruiu a morte",
+   "why": "typo: perfect parallel to 'fez brilhar' (Lat. 'destruxit')"
+  }
+ ],
+ "2Tim 1:16": [
+  {
+   "from": "Onesífero",
+   "to": "Onesíforo",
+   "why": "name: text spells it 'Onesíforo' in 2Tim 4:19"
+  }
+ ],
+ "2Tim 1:18": [
+  {
+   "from": "os vivos; os mortos",
+   "to": "os vivos e os mortos",
+   "why": "bc: ';' is an OCR misreading of 'e'; BC reads 'e os mortos'"
+  }
+ ],
+ "2Tim 2:2": [
+  {
+   "from": "capazes combater de instruir",
+   "to": "capazes de instruir",
+   "why": "ocr: stray word 'combater' (Lat. 'qui idonei erunt et alios docere')"
+  }
+ ],
+ "2Tim 2:3": [
+  {
+   "from": "soldado de Jesus Cristo,",
+   "to": "soldado de Jesus Cristo.",
+   "why": "punctuation: sentence ends; 2:4 starts new sentence 'Ninguém'"
+  }
+ ],
+ "2Tim 2:12": [
+  {
+   "from": "ele também nos negará a nós",
+   "to": "ele também nos negará a nós;",
+   "why": "punctuation: missing ';' between the parallel clauses (2:13 continues 'se formos infiéis')"
+  }
+ ],
+ "2Tim 2:14": [
+  {
+   "from": "os que as ouvem,",
+   "to": "os que as ouvem.",
+   "why": "punctuation: sentence ends; 2:15 starts new sentence 'Esforça-te'"
+  }
+ ],
+ "2Tim 2:19": [
+  {
+   "from": "O senhor conhece",
+   "to": "O Senhor conhece",
+   "why": "typo: 'Senhor' (God) capitalized as elsewhere, incl. later in the same verse"
+  },
+  {
+   "from": "Afaste se",
+   "to": "Afaste-se",
+   "why": "punctuation: missing hyphen in enclitic"
+  }
+ ],
+ "2Tim 4:21": [
+  {
+   "from": "Pudente. Lino",
+   "to": "Pudente, Lino",
+   "why": "punctuation: period inside a list of names"
+  }
+ ],
+ "Titus 1:12": [
+  {
+   "from": "seu próprio profeta disse",
+   "to": "seu próprio profeta, disse",
+   "why": "punctuation: closing comma of the appositive 'seu próprio profeta'"
+  }
+ ],
+ "Titus 3:7": [
+  {
+   "from": "possuir um dia)",
+   "to": "possuir um dia).",
+   "why": "punctuation: sentence ends; 3:8 starts new sentence 'Esta é'"
+  }
+ ],
+ "Titus 3:12": [
+  {
+   "from": "Nicópoiis",
+   "to": "Nicópolis",
+   "why": "ocr: l misread as i"
+  }
+ ],
+ "Titus 3:13": [
+  {
+   "from": "à viagem Zenas",
+   "to": "à viagem de Zenas",
+   "why": "ocr: missing 'de' (parallel 'e de Apolo')"
+  }
+ ],
+ "Phlm 1:22": [
+  {
+   "from": "A o mesmo tempo",
+   "to": "Ao mesmo tempo",
+   "why": "typo: spurious space"
+  }
+ ],
+ "Heb 1:8": [
+  {
+   "from": "O teu trono ó Deus,",
+   "to": "O teu trono, ó Deus,",
+   "why": "punctuation: vocative 'ó Deus' needs opening comma (closing one present)"
+  }
+ ],
+ "Heb 1:9": [
+  {
+   "from": "por isso. Deus",
+   "to": "por isso, Deus",
+   "why": "punctuation: period breaks 'por isso, Deus, o teu Deus, te ungiu'"
+  }
+ ],
+ "Heb 1:10": [
+  {
+   "from": "e o céus",
+   "to": "e os céus",
+   "why": "typo: plural agreement 'os céus são'"
+  }
+ ],
+ "Heb 3:7": [
+  {
+   "from": "Espírito Santo; Se",
+   "to": "Espírito Santo: Se",
+   "why": "punctuation: quotation is introduced by a colon, not ';'"
+  }
+ ],
+ "Heb 3:11": [
+  {
+   "from": "(S. 95,8-11)",
+   "to": "(Sl 95,8-11)",
+   "why": "ref: garbled 'Sl' abbreviation (as fixed in Rom 15:3)"
+  }
+ ],
+ "Heb 3:13": [
+  {
+   "from": "se chama. Hoje,",
+   "to": "se chama Hoje,",
+   "why": "punctuation: stray period: 'o tempo que se chama Hoje' (Lat. 'donec Hodie cognominatur')"
+  }
+ ],
+ "Heb 4:3": [
+  {
+   "from": "(S. 95,11)",
+   "to": "(Sl 95,11)",
+   "why": "ref: garbled 'Sl' abbreviation (as fixed in Rom 15:3)"
+  }
+ ],
+ "Heb 4:4": [
+  {
+   "from": "de todos as suas obras",
+   "to": "de todas as suas obras",
+   "why": "typo: gender agreement 'todas as suas obras'"
+  }
+ ],
+ "Heb 4:7": [
+  {
+   "from": "(que ele chama). Hoje, dizendo",
+   "to": "(que ele chama) Hoje, dizendo",
+   "why": "punctuation: stray period: 'um certo dia (que ele chama) Hoje' (Lat. 'diem quemdam, Hodie')"
+  }
+ ],
+ "Heb 4:11": [
+  {
+   "from": "Apressemos-nos",
+   "to": "Apressemo-nos",
+   "why": "typo: the -s drops before -nos (cf. 'Aproximemo-nos' 4:16)"
+  }
+ ],
+ "Heb 4:15": [
+  {
+   "from": "á nossa semelhança",
+   "to": "à nossa semelhança",
+   "why": "accent: crase grave, not acute"
+  }
+ ],
+ "Heb 5:8": [
+  {
+   "from": "(conhecesse tudo)",
+   "to": "(e conhecesse tudo)",
+   "why": "bc: missing 'e'; BC reads '(e conhecesse tudo)'"
+  }
+ ],
+ "Heb 5:12": [
+  {
+   "from": "tornaste-vos",
+   "to": "tornastes-vos",
+   "why": "typo: 2nd person plural 'tornastes-vos' (vós)"
+  }
+ ],
+ "Heb 6:18": [
+  {
+   "from": "(promessa; juramento)",
+   "to": "(promessa e juramento)",
+   "why": "bc: ';' is an OCR misreading of 'e'; BC reads 'e'"
+  }
+ ],
+ "Heb 7:3": [
+  {
+   "from": "Filho do Deus",
+   "to": "Filho de Deus",
+   "why": "typo: 'Filho de Deus' (Lat. 'Filio Dei')"
+  }
+ ],
+ "Heb 7:5": [
+  {
+   "from": "sangue de Abraão,",
+   "to": "sangue de Abraão.",
+   "why": "punctuation: sentence ends; 7:6 starts new sentence 'Mas este'"
+  }
+ ],
+ "Heb 7:23": [
+  {
+   "from": "durar (sempre)",
+   "to": "durar (sempre),",
+   "why": "punctuation: missing comma before 7:24 'mas este'"
+  }
+ ],
+ "Heb 7:26": [
+  {
+   "from": "acima dos céus.",
+   "to": "acima dos céus,",
+   "why": "punctuation: sentence continues: 7:27 starts lowercase 'que não tem'"
+  }
+ ],
+ "Heb 8:8": [
+  {
+   "from": "Eis virão dias",
+   "to": "Eis que virão dias",
+   "why": "ocr: missing 'que' (Lat. 'Ecce dies venient')"
+  }
+ ],
+ "Heb 8:10": [
+  {
+   "from": "no seu espirito",
+   "to": "no seu espírito",
+   "why": "accent: missing accent"
+  },
+  {
+   "from": "grava-las-ei",
+   "to": "gravá-las-ei",
+   "why": "accent: missing accent in mesoclitic future"
+  }
+ ],
+ "Heb 9:5": [
+  {
+   "from": "Toda via",
+   "to": "Todavia",
+   "why": "typo: spurious space in 'Todavia'"
+  }
+ ],
+ "Heb 10:8": [
+  {
+   "from": "as vitimas",
+   "to": "as vítimas",
+   "why": "accent: missing accent"
+  }
+ ],
+ "Heb 10:15": [
+  {
+   "from": "testifica, por que,",
+   "to": "testifica, porque,",
+   "why": "wrong-word: causal conjunction 'porque', not interrogative 'por que'"
+  }
+ ],
+ "Heb 10:20": [
+  {
+   "from": "isto é através",
+   "to": "isto é, através",
+   "why": "punctuation: missing comma after explanatory 'isto é' (text's usual form)"
+  }
+ ],
+ "Heb 10:31": [
+  {
+   "from": "E coisa horrenda",
+   "to": "É coisa horrenda",
+   "why": "accent: verb 'É' (Lat. 'Horrendum est')"
+  }
+ ],
+ "Heb 11:7": [
+  {
+   "from": "se obtêm pela fé",
+   "to": "se obtém pela fé",
+   "why": "accent: singular (a justiça ... se obtém); 'obtêm' is plural"
+  }
+ ],
+ "Heb 11:12": [
+  {
+   "from": "amortecido(pela",
+   "to": "amortecido (pela",
+   "why": "punctuation: missing space before parenthesis"
+  }
+ ],
+ "Heb 11:32": [
+  {
+   "from": "Jeflé",
+   "to": "Jefté",
+   "why": "name: garbled name Jefté (Jephte)"
+  }
+ ],
+ "Heb 11:34": [
+  {
+   "from": "extinguíram",
+   "to": "extinguiram",
+   "why": "accent: spurious accent"
+  }
+ ],
+ "Heb 11:40": [
+  {
+   "from": "(do felicidade)",
+   "to": "(da felicidade)",
+   "why": "typo: gender agreement 'da felicidade'"
+  }
+ ],
+ "Heb 12:7": [
+  {
+   "from": "E para vossa emenda",
+   "to": "É para vossa emenda",
+   "why": "accent: verb 'É' (cleft 'É para ... que sofreis')"
+  }
+ ],
+ "Heb 12:11": [
+  {
+   "from": "foram exercitados,",
+   "to": "foram exercitados.",
+   "why": "punctuation: sentence ends; 12:12 starts new sentence 'Por isso'"
+  }
+ ],
+ "Heb 12:20": [
+  {
+   "from": "(Ex 19,121)",
+   "to": "(Ex 19,12-13)",
+   "why": "ref: garbled reference (the stoning command is Ex 19,12-13)"
+  }
+ ],
+ "Heb 13:2": [
+  {
+   "from": "(como Abraão; Lot)",
+   "to": "(como Abraão e Lot)",
+   "why": "bc: ';' is an OCR misreading of 'e'; BC reads 'e Lot'"
+  }
+ ],
+ "Heb 13:6": [
+  {
+   "from": "meu auxilio",
+   "to": "meu auxílio",
+   "why": "accent: missing accent"
+  }
+ ],
+ "Heb 13:13": [
+  {
+   "from": "(sigamos-lhes",
+   "to": "(e sigamos-lhes",
+   "why": "bc: missing 'e'; BC reads '(e sigamos-lhes'"
+  }
+ ],
+ "Jas 2:24": [
+  {
+   "from": "vedes, pois,",
+   "to": "Vedes, pois,",
+   "why": "typo: verse starts a new sentence after a period"
+  }
+ ],
+ "Jas 3:12": [
+  {
+   "from": "dar água doce,",
+   "to": "dar água doce.",
+   "why": "punctuation: sentence ends; next verse starts a new question"
+  }
+ ],
+ "Jas 4:2": [
+  {
+   "from": "tendes(o",
+   "to": "tendes (o",
+   "why": "punctuation: missing space before parenthesis"
+  }
+ ],
+ "Jas 4:5": [
+  {
+   "from": "o espirito",
+   "to": "o espírito",
+   "why": "accent: espírito"
+  }
+ ],
+ "Jas 4:6": [
+  {
+   "from": "(Pv. 3, 34),",
+   "to": "(Pv. 3, 34).",
+   "why": "punctuation: sentence ends; next verse 'Sede, pois' starts a new one"
+  }
+ ],
+ "Jas 4:8": [
+  {
+   "from": "duplos de espirito",
+   "to": "duplos de espírito",
+   "why": "accent: espírito"
+  }
+ ],
+ "Jas 4:16": [
+  {
+   "from": "Toda a gloriola",
+   "to": "Toda a gloríola",
+   "why": "accent: gloríola (vainglory) is proparoxytone"
+  }
+ ],
+ "1Pet 1:1": [
+  {
+   "from": "Bilínia",
+   "to": "Bitínia",
+   "why": "name: Bithyniae; OCR l for t"
+  }
+ ],
+ "1Pet 1:18": [
+  {
+   "from": "resgastados",
+   "to": "resgatados",
+   "why": "typo: extra s"
+  }
+ ],
+ "1Pet 1:19": [
+  {
+   "from": "sem mancha.",
+   "to": "sem mancha,",
+   "why": "punctuation: sentence continues: next verse starts lowercase 'designado'"
+  }
+ ],
+ "1Pet 1:22": [
+  {
+   "from": "Do intimo",
+   "to": "Do íntimo",
+   "why": "accent: íntimo"
+  }
+ ],
+ "1Pet 1:23": [
+  {
+   "from": "(para um a vida nova)",
+   "to": "(para uma vida nova)",
+   "why": "typo: split word 'uma'"
+  }
+ ],
+ "1Pet 2:3": [
+  {
+   "from": "(Sl 33, 9)",
+   "to": "(Sl 33, 9).",
+   "why": "punctuation: sentence ends (Latin 'Dominus.'); next verse starts new sentence 'Aproximai-vos'"
+  }
+ ],
+ "1Pet 2:11": [
+  {
+   "from": "Carrissimos",
+   "to": "Caríssimos",
+   "why": "typo: Caríssimos"
+  }
+ ],
+ "1Pet 2:25": [
+  {
+   "from": "convertestes aos pastor",
+   "to": "convertestes ao pastor",
+   "why": "typo: singular 'ao pastor'"
+  }
+ ],
+ "1Pet 3:10": [
+  {
+   "from": "não prefiram engano,",
+   "to": "não profiram engano.",
+   "why": "ocr: 'ne loquantur dolum' = não profiram; sentence ends, next verse 'Aparte-se' starts new one"
+  }
+ ],
+ "1Pet 3:12": [
+  {
+   "from": "o mal Ps. 33, 13-17.",
+   "to": "o mal (Sl 33, 13-17).",
+   "why": "ref: reference in the text's own form (as Lc 2,22 and 7,27)"
+  }
+ ],
+ "1Pet 4:18": [
+  {
+   "from": "ao impio",
+   "to": "ao ímpio",
+   "why": "accent: ímpio"
+  }
+ ],
+ "1Pet 5:1": [
+  {
+   "from": "manifestada um dia",
+   "to": "manifestada um dia:",
+   "why": "punctuation: missing punctuation before 'Apascentai' (Latin colon)"
+  }
+ ],
+ "2Pet 1:2": [
+  {
+   "from": "peio conhecimento",
+   "to": "pelo conhecimento",
+   "why": "ocr: peio -> pelo"
+  }
+ ],
+ "2Pet 1:4": [
+  {
+   "from": "magnificas",
+   "to": "magníficas",
+   "why": "accent: magníficas"
+  }
+ ],
+ "2Pet 1:6": [
+  {
+   "from": "a constância a piedade",
+   "to": "à constância a piedade",
+   "why": "accent: parallel series 'à virtude a ciência, à ciência a temperança...'"
+  }
+ ],
+ "2Pet 1:13": [
+  {
+   "from": "tabernáculo, (do meu corpo)",
+   "to": "tabernáculo (do meu corpo)",
+   "why": "punctuation: stray comma before explanatory parenthesis"
+  },
+  {
+   "from": "com admoestações.",
+   "to": "com admoestações,",
+   "why": "punctuation: sentence continues: next verse starts lowercase 'sabendo'"
+  }
+ ],
+ "2Pet 2:8": [
+  {
+   "from": "vendo; ouvindo",
+   "to": "vendo e ouvindo",
+   "why": "bc: BC 'vendo e ouvindo'; Latin aspectu et auditu"
+  }
+ ],
+ "2Pet 2:13": [
+  {
+   "from": "nas delicias",
+   "to": "nas delícias",
+   "why": "accent: delícias"
+  }
+ ],
+ "2Pet 3:2": [
+  {
+   "from": "vossos Apóstolos,",
+   "to": "vossos Apóstolos.",
+   "why": "punctuation: sentence ends; next verse 'Sabei antes de tudo' starts new one"
+  }
+ ],
+ "2Pet 3:7": [
+  {
+   "from": "homens impios",
+   "to": "homens ímpios",
+   "why": "accent: ímpios"
+  }
+ ],
+ "2Pet 3:8": [
+  {
+   "from": "Há porém, uma",
+   "to": "Há, porém, uma",
+   "why": "punctuation: missing comma before parenthetical 'porém'"
+  }
+ ],
+ "2Pet 3:10": [
+  {
+   "from": "a terra como as obras",
+   "to": "a terra com as obras",
+   "why": "wrong-word: Latin 'terra autem et quae in ipsa sunt opera' = com as obras"
+  }
+ ],
+ "2Pet 3:15": [
+  {
+   "from": "irmão carissimo",
+   "to": "irmão caríssimo",
+   "why": "accent: caríssimo"
+  }
+ ],
+ "1John 1:7": [
+  {
+   "from": "(da verdade; da santidade)",
+   "to": "(da verdade e da santidade)",
+   "why": "bc: BC reading; semicolon is OCR for 'e'"
+  }
+ ],
+ "1John 1:9": [
+  {
+   "from": "(com humildade; arrependimento)",
+   "to": "(com humildade e arrependimento)",
+   "why": "bc: BC reading; semicolon is OCR for 'e'"
+  }
+ ],
+ "1John 2:19": [
+  {
+   "from": "todos são dos nossos,",
+   "to": "todos são dos nossos.",
+   "why": "punctuation: verse ends sentence; next verse 'Porém vós' starts new one"
+  }
+ ],
+ "1John 4:6": [
+  {
+   "from": "e do espírito do erro",
+   "to": "e o espírito do erro",
+   "why": "manual: object of 'reconhecemos' (Latin 'et spiritum erroris')"
+  }
+ ],
+ "1John 5:1": [
+  {
+   "from": "de Deus, E todo",
+   "to": "de Deus. E todo",
+   "why": "punctuation: capital E starts a new sentence"
+  }
+ ],
+ "1John 5:5": [
+  {
+   "from": "(procede segundo",
+   "to": "(e procede segundo",
+   "why": "bc: BC reading '(e procede segundo esta fé)'"
+  }
+ ],
+ "1John 5:19": [
+  {
+   "from": "(jugo do espirito)",
+   "to": "(jugo do espírito)",
+   "why": "accent: espírito"
+  }
+ ],
+ "1John 5:20": [
+  {
+   "from": "(Deus), Ora",
+   "to": "(Deus). Ora",
+   "why": "punctuation: capital 'Ora' starts a new sentence"
+  }
+ ],
+ "3John 1:10": [
+  {
+   "from": "pairando com palavras",
+   "to": "palrando com palavras",
+   "why": "ocr: Latin 'garriens' = palrando (chattering)"
+  }
+ ],
+ "3John 1:12": [
+  {
+   "from": "Demétrío",
+   "to": "Demétrio",
+   "why": "name: stray accent on i"
+  }
+ ],
+ "3John 1:14": [
+  {
+   "from": "ver-te, era breve",
+   "to": "ver-te, em breve",
+   "why": "ocr: em breve"
+  }
+ ],
+ "Jude 1:7": [
+  {
+   "from": "circunvizínhas",
+   "to": "circunvizinhas",
+   "why": "typo: stray accent"
+  }
+ ],
+ "Jude 1:15": [
+  {
+   "from": "todos, é a confundir",
+   "to": "todos, e a confundir",
+   "why": "wrong-word: conjunction e, not verb é"
+  },
+  {
+   "from": "pecadores impios",
+   "to": "pecadores ímpios",
+   "why": "accent: ímpios"
+  }
+ ],
+ "Rev 1:1": [
+  {
+   "from": "acontecer. Deus lhe fez",
+   "to": "acontecer, Deus lhe fez",
+   "why": "punctuation: relative clause 'que, para descobrir..., Deus lhe fez' continues"
+  },
+  {
+   "from": "servo João.",
+   "to": "servo João,",
+   "why": "punctuation: sentence continues: next verse starts lowercase 'o qual'"
+  }
+ ],
+ "Rev 1:4": [
+  {
+   "from": "Ásia; Graça",
+   "to": "Ásia: Graça",
+   "why": "punctuation: semicolon before capital; colon (OCR ; for :)"
+  }
+ ],
+ "Rev 1:5": [
+  {
+   "from": "A’quele",
+   "to": "Àquele",
+   "why": "accent: old typographic A’ for À"
+  }
+ ],
+ "Rev 1:12": [
+  {
+   "from": "voltando-me vi",
+   "to": "voltando-me, vi",
+   "why": "punctuation: missing closing comma of 'e, voltando-me,'"
+  }
+ ],
+ "Rev 2:2": [
+  {
+   "from": "experímentaste",
+   "to": "experimentaste",
+   "why": "typo: stray accent"
+  }
+ ],
+ "Rev 2:18": [
+  {
+   "from": "semelhantes ao bronze.",
+   "to": "semelhantes ao bronze:",
+   "why": "manual: every 'Isto diz…' opening in Rev 2-3 ends with a colon"
+  }
+ ],
+ "Rev 2:23": [
+  {
+   "from": "corações; \"darei",
+   "to": "corações; darei",
+   "why": "punctuation: stray quotation mark inside a speech opened in 2:18"
+  }
+ ],
+ "Rev 2:26": [
+  {
+   "from": "Aquele que vencei",
+   "to": "Aquele que vencer",
+   "why": "ocr: vencer (cf. 3:5, 3:21)"
+  }
+ ],
+ "Rev 3:17": [
+  {
+   "from": "Dizes; sou rico",
+   "to": "Dizes: sou rico",
+   "why": "punctuation: colon introducing the quoted claim"
+  }
+ ],
+ "Rev 4:8": [
+  {
+   "from": "e que vem.",
+   "to": "e que vem.\"",
+   "why": "punctuation: missing closing quote; quotation opened in same verse, 4:9 is narrative"
+  }
+ ],
+ "Rev 5:8": [
+  {
+   "from": "uma citara",
+   "to": "uma cítara",
+   "why": "accent: cítara"
+  }
+ ],
+ "Rev 6:9": [
+  {
+   "from": "tinham (dado),",
+   "to": "tinham (dado).",
+   "why": "punctuation: sentence ends; next verse 'Clamaram' starts a new one"
+  }
+ ],
+ "Rev 6:10": [
+  {
+   "from": "Até guando. Senhor,",
+   "to": "Até quando, Senhor,",
+   "why": "ocr: guando -> quando; period before vocative Senhor should be comma"
+  }
+ ],
+ "Rev 8:13": [
+  {
+   "from": "\"Ai, aí, aí dos",
+   "to": "\"Ai, ai, ai dos",
+   "why": "accent: interjection ai, not adverb aí"
+  }
+ ],
+ "Rev 9:4": [
+  {
+   "from": "dano á erva",
+   "to": "dano à erva",
+   "why": "accent: crase à"
+  }
+ ],
+ "Rev 9:17": [
+  {
+   "from": "fumo e enxofre,",
+   "to": "fumo e enxofre.",
+   "why": "punctuation: sentence ends; next verse 'Por estas três pragas' starts a new one"
+  }
+ ],
+ "Rev 11:12": [
+  {
+   "from": "nuvem, á vista",
+   "to": "nuvem, à vista",
+   "why": "accent: crase à"
+  }
+ ],
+ "Rev 11:17": [
+  {
+   "from": "Graças te damos. Senhor",
+   "to": "Graças te damos, Senhor",
+   "why": "punctuation: vocative; period should be comma"
+  }
+ ],
+ "Rev 11:18": [
+  {
+   "from": "peque-nos e grandes",
+   "to": "pequenos e grandes",
+   "why": "typo: stray hyphen from line break"
+  },
+  {
+   "from": "destruíam a terra.",
+   "to": "destruíam a terra.\"",
+   "why": "punctuation: missing closing quote of speech opened in 11:17; 11:19 is narrative"
+  }
+ ],
+ "Rev 12:2": [
+  {
+   "from": "para dar a luz",
+   "to": "para dar à luz",
+   "why": "accent: dar à luz (cf. 12:4)"
+  }
+ ],
+ "Rev 13:13": [
+  {
+   "from": "terra, á vista",
+   "to": "terra, à vista",
+   "why": "accent: crase à"
+  }
+ ],
+ "Rev 14:2": [
+  {
+   "from": "tocadores de citara",
+   "to": "tocadores de cítara",
+   "why": "accent: cítara"
+  }
+ ],
+ "Rev 14:6": [
+  {
+   "from": "voando para. o zênite",
+   "to": "voando para o zênite",
+   "why": "punctuation: stray period"
+  }
+ ],
+ "Rev 14:20": [
+  {
+   "from": "de mil. e seiscentos",
+   "to": "de mil e seiscentos",
+   "why": "punctuation: stray period inside number"
+  }
+ ],
+ "Rev 16:3": [
+  {
+   "from": "existia no mar,",
+   "to": "existia no mar.",
+   "why": "punctuation: sentence ends; next verse 'O terceiro (anjo)' starts a new one"
+  }
+ ],
+ "Rev 16:15": [
+  {
+   "from": "(da graça; da fé)",
+   "to": "(da graça e da fé)",
+   "why": "bc: BC reading; semicolon is OCR for 'e'"
+  }
+ ],
+ "Rev 16:17": [
+  {
+   "from": "dizia; \"Está feito\"",
+   "to": "dizia: \"Está feito.\"",
+   "why": "punctuation: colon before speech; missing final period (next verse starts new sentence)"
+  }
+ ],
+ "Rev 17:1": [
+  {
+   "from": "muitas águas,1",
+   "to": "muitas águas,",
+   "why": "typo: stray footnote digit (BC has '(ver nota)' here)"
+  }
+ ],
+ "Rev 17:2": [
+  {
+   "from": "sua impudicícia.",
+   "to": "sua impudicícia.\"",
+   "why": "punctuation: missing closing quote of speech opened in 17:1; 17:3 is narrative"
+  }
+ ],
+ "Rev 17:7": [
+  {
+   "from": "disse-me: Por que",
+   "to": "disse-me: \"Por que",
+   "why": "punctuation: missing opening quote; its closing quote is at the end of 17:14"
+  }
+ ],
+ "Rev 17:9": [
+  {
+   "from": "E’ aqui",
+   "to": "É aqui",
+   "why": "accent: old typographic E’ for É (cf. Rev 10:11)"
+  }
+ ],
+ "Rev 17:17": [
+  {
+   "from": "o seu desígnio o executarem",
+   "to": "o seu desígnio, o executarem",
+   "why": "punctuation: missing comma in series of three infinitive clauses"
+  }
+ ],
+ "Rev 17:18": [
+  {
+   "from": "reis da terra.",
+   "to": "reis da terra.\"",
+   "why": "punctuation: missing closing quote of speech opened in 17:15; 18:1 is narrative"
+  }
+ ],
+ "Rev 18:2": [
+  {
+   "from": "com vós forte",
+   "to": "com voz forte",
+   "why": "wrong-word: voz, not vós"
+  }
+ ],
+ "Rev 18:10": [
+  {
+   "from": "dirão; \"Ai",
+   "to": "dirão: \"Ai",
+   "why": "punctuation: colon before speech"
+  }
+ ],
+ "Rev 18:13": [
+  {
+   "from": "de ciuamomo, amorno,",
+   "to": "de cinamomo, amomo,",
+   "why": "ocr: cinamomo (u/n), amomo (rn/m)"
+  }
+ ],
+ "Rev 18:19": [
+  {
+   "from": "\"Aí, ai daquela",
+   "to": "\"Ai, ai daquela",
+   "why": "accent: interjection ai"
+  }
+ ],
+ "Rev 18:22": [
+  {
+   "from": "tocadores de citara",
+   "to": "tocadores de cítara",
+   "why": "accent: cítara"
+  }
+ ],
+ "Rev 19:3": [
+  {
+   "from": "disseram; \"Aleluia",
+   "to": "disseram: \"Aleluia",
+   "why": "punctuation: colon before speech"
+  }
+ ],
+ "Rev 19:4": [
+  {
+   "from": "dizendo; \"Amen",
+   "to": "dizendo: \"Amen",
+   "why": "punctuation: colon before speech"
+  }
+ ],
+ "Rev 19:9": [
+  {
+   "from": "disse-me; \"Escreve",
+   "to": "disse-me: \"Escreve",
+   "why": "punctuation: colon before speech"
+  },
+  {
+   "from": "Bem-aventura-dos",
+   "to": "Bem-aventurados",
+   "why": "typo: stray hyphen from line break"
+  }
+ ],
+ "Rev 20:5": [
+  {
+   "from": "E’ a primeira",
+   "to": "É a primeira",
+   "why": "accent: old typographic E’ for É"
+  }
+ ],
+ "Rev 20:7": [
+  {
+   "from": "mil anos. Satanás",
+   "to": "mil anos, Satanás",
+   "why": "punctuation: subordinate clause continues into main clause"
+  }
+ ],
+ "Rev 20:10": [
+  {
+   "from": "séculos doe séculos",
+   "to": "séculos dos séculos",
+   "why": "ocr: doe -> dos"
+  }
+ ],
+ "Rev 21:2": [
+  {
+   "from": "adornada Como",
+   "to": "adornada como",
+   "why": "typo: stray capital mid-sentence"
+  }
+ ],
+ "Rev 21:4": [
+  {
+   "from": "coisas passaram.",
+   "to": "coisas passaram.\"",
+   "why": "punctuation: missing closing quote of speech opened in 21:3; 21:5 is narrative"
+  }
+ ],
+ "Rev 21:10": [
+  {
+   "from": "cidade santa. Jerusalém,",
+   "to": "cidade santa, Jerusalém,",
+   "why": "punctuation: apposition; sentence continues"
+  }
+ ],
+ "Rev 21:17": [
+  {
+   "from": "medida de anjo,",
+   "to": "medida de anjo.",
+   "why": "punctuation: sentence ends; next verse 'O muro' starts a new one"
+  }
+ ],
+ "Rev 22:7": [
+  {
+   "from": "Bem aventurado",
+   "to": "Bem-aventurado",
+   "why": "typo: missing hyphen"
+  }
+ ],
+ "Rev 22:16": [
+  {
+   "from": "Jesus,enviei",
+   "to": "Jesus, enviei",
+   "why": "punctuation: missing space after comma"
+  }
+ ],
+ "Rev 22:17": [
+  {
+   "from": "\"Vem! E o que ouve, diga; \"Vem!\"",
+   "to": "\"Vem!\" E o que ouve, diga: \"Vem!\"",
+   "why": "punctuation: first quotation closes after 'Vem!'; colon before second speech"
+  }
+ ],
+ "Rev 22:18": [
+  {
+   "from": "(algum a coisa)",
+   "to": "(alguma coisa)",
+   "why": "typo: split word 'alguma'"
+  }
+ ],
+ "Rev 22:19": [
+  {
+   "from": "deste livro. Deus lhe",
+   "to": "deste livro, Deus lhe",
+   "why": "punctuation: conditional clause continues into main clause"
+  }
+ ]
+}
